@@ -6,7 +6,6 @@
 #include "../headers/deck.hpp"
 #include "../headers/board.hpp"
 
-//implement click functionality on each pile (drag and drop)
 struct Board
 {
 	static constexpr auto total_piles = 13;

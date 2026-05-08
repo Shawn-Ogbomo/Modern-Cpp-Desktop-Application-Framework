@@ -8,7 +8,7 @@
 #include "../headers/suit.hpp"
 #include "../headers/state.hpp"
 
-class Card : public sf::Sprite
+class Card : public sf::Drawable
 {
 public:
 	Card() = default;

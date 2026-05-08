@@ -35,7 +35,7 @@ auto game() -> void
 			for (size_t j = 0; j < b.cards_pile; ++j)
 			{
 				auto& [card, rank] = b.piles[i][j];
-				window.draw(card);
+				window.draw(card); 
 			}
 		}
 
