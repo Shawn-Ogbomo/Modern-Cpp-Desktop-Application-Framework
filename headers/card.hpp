@@ -7,10 +7,10 @@
 #include "../headers/rank.hpp"
 #include "../headers/suit.hpp"
 #include "../headers/state.hpp"
+#include "../headers/texture_manager.hpp"
 
 class Card : public sf::Drawable
 {
-	sf::Texture empty;
 public:
 	Card() = default;
 	explicit Card(Suit s, Rank_lib::Rank r, const sf::Texture& f, const sf::Texture& re, State st = State::face_down);
@@ -21,8 +21,8 @@ public:
 private:
 	Suit suit{};
 	Rank_lib::Rank rank{};
-	sf::Sprite face{ empty };
-	sf::Sprite reverse{ empty };
+	sf::Sprite face{ get_texture_manager().textures.back()};
+	sf::Sprite reverse{ get_texture_manager().textures.back() };
 	State state{};
 };
 
