@@ -26,10 +26,10 @@ auto game() -> void
 				window.close();
 		}
 
-		//// clear the window with black color
+		// clear the window with black color
 		window.clear(sf::Color{ 33,46,82 });
 
-		//draw to the screen here...
+		// draw to the screen here...
 		for (size_t i = 0; i < b.total_piles; ++i)
 		{
 			for (size_t j = 0; j < b.cards_pile; ++j)
@@ -39,7 +39,7 @@ auto game() -> void
 			}
 		}
 
-		//// end the current frame
+		// end the current frame
 		window.display();
 	}
 }

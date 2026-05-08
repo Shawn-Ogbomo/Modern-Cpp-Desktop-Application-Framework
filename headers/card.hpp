@@ -10,6 +10,7 @@
 
 class Card : public sf::Drawable
 {
+	sf::Texture empty;
 public:
 	Card() = default;
 	explicit Card(Suit s, Rank_lib::Rank r, const sf::Texture& f, const sf::Texture& re, State st = State::face_down);
@@ -20,8 +21,8 @@ public:
 private:
 	Suit suit{};
 	Rank_lib::Rank rank{};
-	sf::Sprite face;
-	sf::Sprite reverse;
+	sf::Sprite face{ empty };
+	sf::Sprite reverse{ empty };
 	State state{};
 };
 
