@@ -1,3 +1,13 @@
+//sf::RectangleShape rectangle{ sf::Vector2f{265.f,140.f} };
+//rectangle.setFillColor(sf::Color{ 246, 220, 175 });
+//rectangle.setOutlineThickness(5.f);
+//rectangle.setOutlineColor(sf::Color(133, 27, 19));
+//
+//
+//rectangle.setOrigin(sf::Vector2f{ 120,0 });
+//rectangle.setPosition(sf::Vector2f{ 130.107,645.277 });
+//window.draw(rectangle);
+
 #ifndef DASHBOARD_HPP
 #define DASHBOARD_HPP
 

@@ -13,6 +13,7 @@ auto game() -> void
 	window.setFramerateLimit(60);
 
 	Deck de;
+	
 	Board b{ de };
 
 	// run the program as long as the window is open
@@ -39,12 +40,7 @@ auto game() -> void
 			}
 		}
 
-		/*sf::RectangleShape rectangle{ sf::Vector2f{120.f,50.f} };
-		rectangle.setFillColor(sf::Color{ 246, 220, 175 });
-		window.draw(rectangle);*/
-
 		// end the current frame
-
 		window.display();
 	}
 }
