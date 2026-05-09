@@ -13,7 +13,7 @@ auto game() -> void
 	window.setFramerateLimit(60);
 
 	Deck de;
-	
+
 	Board b{ de };
 
 	// run the program as long as the window is open
@@ -36,7 +36,7 @@ auto game() -> void
 			for (size_t j = 0; j < b.cards_pile; ++j)
 			{
 				auto& [card, rank] = b.piles[i][j];
-				window.draw(card); 
+				window.draw(card);
 			}
 		}
 
