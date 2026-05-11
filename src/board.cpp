@@ -6,7 +6,7 @@
 Board::Board(Deck& d)
 {
 	auto index = 0;
-	auto r = sf::Angle{ sf::degrees(30)};
+	auto r = sf::Angle{ sf::degrees(30) };
 
 	for (auto& pile : piles)
 	{
@@ -39,14 +39,14 @@ Board::Board(Deck& d)
 				reverse.setPosition(coords_bottom_right);
 			}
 
-			face.setOrigin(sf::Vector2f{ 0,144 } );
+			face.setOrigin(sf::Vector2f{ 0,144 });
 			reverse.setOrigin(sf::Vector2f{ 0,144 });
 
 			reverse.rotate(r);
 			face.rotate(r);
 		}
 
-		r += sf::Angle{ sf::degrees(30)};
+		r += sf::Angle{ sf::degrees(30) };
 		++index;
 	}
 
