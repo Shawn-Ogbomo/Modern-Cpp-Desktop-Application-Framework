@@ -13,8 +13,12 @@ public:
 	Deck();
 	Deck(const Deck&) = delete;
 	auto operator = (const Deck&)->Deck & = delete;
-	auto shuffle() -> void;
 	auto draw() -> Card;
+
+	auto shuffle() -> void {
+		std::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g);
+	}
+
 private:
 	std::vector<Card> cards;
 };

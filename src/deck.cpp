@@ -28,11 +28,6 @@ Deck::Deck()
 	shuffle();
 }
 
-void Deck::shuffle()
-{
-	std::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g);
-}
-
 auto Deck::draw() ->Card
 {
 	if (cards.empty())

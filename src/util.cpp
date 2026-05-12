@@ -1,6 +1,6 @@
 #include "../headers/util.hpp"
 
-auto Util::check_stream(std::istream& is, const std::string& message, const std::string& message2) -> void
+auto Util::check_stream(const std::istream& is, const std::string& message, const std::string& message2) -> void
 {
 	if (is.eof())
 	{

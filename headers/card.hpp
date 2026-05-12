@@ -14,10 +14,15 @@ class Card : public sf::Drawable
 public:
 	Card() = default;
 	explicit Card(Suit s, Rank_lib::Rank r, const sf::Texture& f, const sf::Texture& re, State st = State::face_down);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	auto position() -> State& { return state; };
 	auto value()const -> Rank_lib::Rank { return rank; }
 	auto img() -> std::pair<sf::Sprite&, sf::Sprite&> { return{ std::ref(face),std::ref(reverse) }; }
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		state == State::face_up ? target.draw(face) : target.draw(reverse);
+	}
+
 private:
 	Suit suit{};
 	Rank_lib::Rank rank{};

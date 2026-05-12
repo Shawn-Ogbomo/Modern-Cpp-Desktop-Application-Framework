@@ -7,7 +7,7 @@
 #include "../headers/exceptions.hpp"
 
 namespace Util {
-	auto check_stream(std::istream& is, const std::string& message, const std::string& message2 = "") -> void;
+	auto check_stream(const std::istream& is, const std::string& message, const std::string& message2 = "") -> void;
 
 	//returns the previous pile on the board
 	auto prev(int pos, std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>& piles) -> std::array < std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>::iterator;
