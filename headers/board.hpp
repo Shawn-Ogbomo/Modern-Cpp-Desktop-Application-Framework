@@ -9,12 +9,12 @@
 struct Board
 {
 	static constexpr auto total_piles = 13;
-	static constexpr auto cards_pile = 4;
+	//static constexpr auto cards_pile = 4;
 public:
 	explicit Board(Deck& d);
 	Board(const Board&) = delete;
-	auto operator = (const Deck& d) = delete;
-	std::array<std::array<std::pair<Card, Rank_lib::Rank>, cards_pile>, total_piles> piles;
+	//auto operator = (const Deck&) = delete;
+	std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, total_piles> piles{};
 };
 
 #endif //BOARD

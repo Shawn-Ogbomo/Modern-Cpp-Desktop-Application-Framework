@@ -41,11 +41,13 @@ auto game() -> void
 		window.clear(sf::Color{ 33,46,82 });
 
 		// draw to the screen here...
-		for (size_t i = 0; i < b.total_piles; ++i)
+		for (size_t i = 0; i < Board::total_piles; ++i)
 		{
-			for (size_t j = 0; j < b.cards_pile; ++j)
+			auto sz = b.piles[i].size();
+
+			for (size_t j = 0; j < sz; ++j)
 			{
-				auto& [card, rank] = b.piles[i][j];
+				const auto& [card, rank] = b.piles[i][j];
 				window.draw(card);
 			}
 		}

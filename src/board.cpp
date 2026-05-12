@@ -4,12 +4,20 @@
 #include "../headers/board.hpp"
 
 Board::Board(Deck& d)
+//	piles{..function call here to allocate storage for inner piles and initialize each card in the pile to default}
 {
 	auto index = 0;
 	auto r = sf::Angle{ sf::degrees(30) };
 
 	for (auto& pile : piles)
 	{
+		pile.reserve(4);
+
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+
 		for (auto& [card, rank] : pile)
 		{
 			card = d.draw();
@@ -18,7 +26,7 @@ Board::Board(Deck& d)
 
 			if (rank == Rank_lib::Rank::ace)
 			{
-				auto coords_ace_pile = sf::Vector2f{ 543.245 , 194 };
+				auto coords_ace_pile = sf::Vector2f{ 543.245f , 194 };
 				face.setPosition(coords_ace_pile);
 				reverse.setPosition(coords_ace_pile);
 			}

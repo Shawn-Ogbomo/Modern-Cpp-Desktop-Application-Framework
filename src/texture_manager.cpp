@@ -34,5 +34,5 @@ auto Texture_manager::load_textures() ->void
 		textures.emplace_back(t);
 	}
 
-	textures.emplace_back(sf::Texture{}); //empty texture to initialize sprite::card
+	textures.emplace_back(); //empty texture to initialize sprite::card
 }
