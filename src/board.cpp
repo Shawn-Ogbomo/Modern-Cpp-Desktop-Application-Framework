@@ -3,20 +3,27 @@
 #include "../headers/util.hpp"
 #include "../headers/board.hpp"
 
-Board::Board(Deck& d)
+auto Board::allocate()->void
 {
+	for (auto& pile : piles)
+	{
+		pile.reserve(4);
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+		pile.emplace_back(Card{}, Rank_lib::Rank{});
+	}
+}
+
+Board::Board(Deck& d)
+	:piles{ }
+{
+	allocate();
 	auto index = 0;
 	auto r = sf::Angle{ sf::degrees(30) };
 
 	for (auto& pile : piles)
 	{
-		pile.reserve(4);
-
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-
 		for (auto& [card, rank] : pile)
 		{
 			card = d.draw();

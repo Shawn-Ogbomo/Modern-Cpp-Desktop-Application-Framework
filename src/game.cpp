@@ -25,7 +25,9 @@ auto game() -> void
 	{
 		//clock
 		sf::Time elapsed = clock1.getElapsedTime();
-		std::cout << elapsed.asSeconds() << "\n";
+		//s = elapsed.asSeconds();
+		//std::cout << std::chrono::duration_cast<std::chrono::minutes>(s).count() << " minutes\n";
+		//std::cout << "H " << h << ": " << "M " << m << ": " << "S " << s << "\n";
 
 		// check all the window's events that were triggered since the last iteration of the loop
 
