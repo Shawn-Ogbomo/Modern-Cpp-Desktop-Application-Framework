@@ -3,27 +3,22 @@
 #include "../headers/util.hpp"
 #include "../headers/board.hpp"
 
-auto Board::allocate()->void
+auto Board::allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack)->void
 {
-	for (auto& pile : piles)
-	{
-		pile.reserve(4);
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-		pile.emplace_back(Card{}, Rank_lib::Rank{});
-	}
+	stack.reserve(4);
+	std::fill_n(std::back_inserter(stack), 4, std::pair{ Card{}, Rank_lib::Rank{} });
 }
 
 Board::Board(Deck& d)
 	:piles{ }
 {
-	allocate();
 	auto index = 0;
 	auto r = sf::Angle{ sf::degrees(30) };
 
 	for (auto& pile : piles)
 	{
+		allocate(pile);
+
 		for (auto& [card, rank] : pile)
 		{
 			card = d.draw();

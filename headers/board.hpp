@@ -12,7 +12,7 @@ struct Board
 public:
 	explicit Board(Deck& d);
 	Board(const Board&) = delete;
-	auto allocate() -> void;
+	auto allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack) -> void;
 	std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, total_piles> piles{};
 };
 
