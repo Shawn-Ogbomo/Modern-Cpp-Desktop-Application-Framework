@@ -1,5 +1,7 @@
 #include <iostream>
 #include <iterator>
+#include <algorithm>
+
 #include "../headers/util.hpp"
 #include "../headers/board.hpp"
 
