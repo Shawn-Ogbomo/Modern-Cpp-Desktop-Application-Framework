@@ -12,7 +12,6 @@ auto Board::allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack)->void
 }
 
 Board::Board(Deck& d)
-	:piles{ }
 {
 	auto index = 0;
 	auto r = sf::Angle{ sf::degrees(30) };
