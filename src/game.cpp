@@ -4,6 +4,7 @@
 #include "../headers/game.hpp"
 #include "../headers/deck.hpp"
 #include "../headers/board.hpp"
+#include "../headers/dashboard.hpp"
 
 #include <iostream>
 #include <chrono>
@@ -18,7 +19,7 @@ static auto show_elapsed(sf::Time& elapsed)
 	auto m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
 	elapsed -= m;
 
-	//std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
+	std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
 	//chrono literal of sf time object will hold hours minutes and seconds in dashboard
 }
 
@@ -26,13 +27,16 @@ sf::Clock clock1;
 
 auto game() -> void
 {
+	sf::ContextSettings settings;
+	settings.antiAliasingLevel = 16;
+
 	// create the window
-	sf::RenderWindow window(sf::VideoMode({ 1000, 800 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode({ 1000, 800 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed, settings);
 	window.setFramerateLimit(60);
 
 	Deck de;
-
 	Board b{ de };
+	DashBoard db{  };
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -55,17 +59,8 @@ auto game() -> void
 		// clear the window with black color
 		window.clear(sf::Color{ 33,46,82 });
 
-		// draw to the screen here...
-		for (size_t i = 0; i < Board::total_piles; ++i)
-		{
-			auto sz = b.piles[i].size();
-
-			for (size_t j = 0; j < sz; ++j)
-			{
-				const auto& [card, rank] = b.piles[i][j];
-				window.draw(card);
-			}
-		}
+		window.draw(b);
+		window.draw(db);
 
 		// end the current frame
 		window.display();

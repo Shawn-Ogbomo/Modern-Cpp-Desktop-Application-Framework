@@ -11,6 +11,17 @@ auto Board::allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack)->void
 	std::fill_n(std::back_inserter(stack), 4, std::pair{ Card{}, Rank_lib::Rank{} });
 }
 
+void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	for (auto& pile : piles)
+	{
+		for (auto& [card, rank] : pile)
+		{
+			target.draw(card);
+		}
+	}
+}
+
 Board::Board(Deck& d)
 {
 	auto index = 0;
