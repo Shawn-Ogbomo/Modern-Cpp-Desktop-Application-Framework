@@ -8,6 +8,27 @@
 #include <iostream>
 #include <chrono>
 
+using namespace std::chrono_literals;
+
+static auto show_elapsed(sf::Time& elapsed)
+{
+	auto h = (std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed)));
+
+	if (h.count())
+	{
+		elapsed -= h;
+	}
+
+	auto m = (std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed)));
+
+	if (m.count())
+	{
+		elapsed -= m;
+	}
+
+	std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
+}
+
 sf::Clock clock1;
 
 auto game() -> void
@@ -24,12 +45,25 @@ auto game() -> void
 	while (window.isOpen())
 	{
 		//clock
-		sf::Time elapsed = clock1.getElapsedTime();
-		//s = elapsed.asSeconds();
-		//std::cout << std::chrono::duration_cast<std::chrono::minutes>(s).count() << " minutes\n";
-		//std::cout << "H " << h << ": " << "M " << m << ": " << "S " << s << "\n";
+		sf::Time elapsed = std::chrono::microseconds(clock1.getElapsedTime());
+		/*	std::cout << std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed)).count() << ": "
+				<< std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed)).count() << ": " <<
+				std::chrono::duration_cast<std::chrono::seconds>(static_cast<std::chrono::microseconds>(elapsed)).count() << "\n";*/
 
-		// check all the window's events that were triggered since the last iteration of the loop
+		sf::Time t4{ sf::microseconds(22920000000) };
+		show_elapsed(t4);
+		show_elapsed(elapsed);
+
+		/*	sf::Time h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
+			sf::Time m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
+			sf::Time s = std::chrono::duration_cast<std::chrono::seconds>(static_cast<std::chrono::microseconds>(elapsed));*/
+
+			//std::cout << hours.count() << ": " << minutes.count() << ": " << seconds.count() << "\n";
+			//s = elapsed.asSeconds();
+			//std::cout << std::chrono::duration_cast<std::chrono::minutes>(s).count() << " minutes\n";
+			//std::cout << "H " << h << ": " << "M " << m << ": " << "S " << s << "\n";
+
+			// check all the window's events that were triggered since the last iteration of the loop
 
 		while (const std::optional event = window.pollEvent())
 		{
