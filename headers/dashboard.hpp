@@ -20,13 +20,11 @@ public:
 private:
 	//sf::Music song;
 	//sf::Text song_name;
-
 	sf::Text game_id{ font };
 	sf::Text move_count{ font };	//successful moves...
 	sf::Text state{ font };			//playing, paused
-	sf::Text elapsed_time{ font };
 	sf::Text date{ font };
-
+	sf::Text elapsed_time{ font };
 	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
 };
 

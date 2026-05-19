@@ -27,29 +27,32 @@ DashBoard::DashBoard(sf::Clock& c)
 	dash.setOrigin(sf::Vector2f{ 0.f,0.f });
 	dash.setPosition(sf::Vector2f{ 0.f,700.f });
 
-	move_count.setFont(font);
-	move_count.setString("Move: " + std::to_string(0));
-	move_count.setPosition(sf::Vector2f{ 0,500 });
-	move_count.setFillColor(font_color);
-
 	game_id.setFont(font);
+	game_id.setCharacterSize(26);
 	game_id.setString("Game Id: #" + std::to_string(Random_Number_Gen::g()));
-	game_id.setPosition(sf::Vector2f{ 0,740 });
-	//game_id.setCharacterSize(30);
+	game_id.setPosition(sf::Vector2f{ 0,670 });
 	game_id.setFillColor(font_color);
 
+	move_count.setFont(font);
+	move_count.setCharacterSize(26);
+	move_count.setString("Move: " + std::to_string(0));
+	move_count.setPosition(sf::Vector2f{ 0,696 });
+	move_count.setFillColor(font_color);
+
 	state.setFont(font);
+	state.setCharacterSize(26);
 	state.setString("State: Playing");
-	state.setPosition(sf::Vector2f{ 0,710 });
+	state.setPosition(sf::Vector2f{ 0,722 });
 	state.setFillColor(font_color);
 
 	date.setFont(font);
+	date.setCharacterSize(26);
 
 	std::time_t result = std::time(nullptr);
 	std::string date_today = (std::ctime(&result));
 
 	date.setString(date_today);
-	date.setPosition(sf::Vector2f{ 0,650 });
+	date.setPosition(sf::Vector2f{ 0,748 });
 	date.setFillColor(font_color);
 
 	sf::Time elapsed = std::chrono::microseconds(c.getElapsedTime());
@@ -61,9 +64,11 @@ DashBoard::DashBoard(sf::Clock& c)
 	elapsed -= m;
 
 	elapsed_time.setFont(font);
+	elapsed_time.setCharacterSize(26);
+
 	elapsed_time.setString(std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
 		+ " seconds");
-	elapsed_time.setPosition(sf::Vector2f{ 0,770 });
+	elapsed_time.setPosition(sf::Vector2f{ 0,774 });
 	elapsed_time.setFillColor(sf::Color{ font_color });
 
 	//song.setVolume(0);

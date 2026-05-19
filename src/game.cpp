@@ -35,7 +35,6 @@ auto game() -> void
 	sf::RenderWindow window(sf::VideoMode({ 1000, 800 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed, settings);
 	window.setFramerateLimit(60);
 
-	DashBoard db{ clock1 };
 	Deck de;
 	Board b{ de };
 
@@ -43,23 +42,25 @@ auto game() -> void
 	while (window.isOpen())
 	{
 		//clock
-	/*	sf::Time elapsed = std::chrono::microseconds(clock1.getElapsedTime());
-		auto h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
-		elapsed -= h;
+		DashBoard db{ clock1 };
 
-		auto m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
-		elapsed -= m;
+		/*	sf::Time elapsed = std::chrono::microseconds(clock1.getElapsedTime());
+			auto h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
+			elapsed -= h;
 
-		sf::Font font_test{ "../../../../fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" };
-		sf::Text elapsed_time{ font_test,std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
-			+ " seconds" };
+			auto m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
+			elapsed -= m;
 
-		elapsed_time.setPosition(sf::Vector2f{ 0,770 });
-		elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });*/
-		//std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
-		//show_elapsed(elapsed);
+			sf::Font font_test{ "../../../../fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" };
+			sf::Text elapsed_time{ font_test,std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
+				+ " seconds" };
 
-		// check all the window's events that were triggered since the last iteration of the loop
+			elapsed_time.setPosition(sf::Vector2f{ 0,770 });
+			elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });*/
+			//std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
+			//show_elapsed(elapsed);
+
+			// check all the window's events that were triggered since the last iteration of the loop
 
 		while (const std::optional event = window.pollEvent())
 		{
