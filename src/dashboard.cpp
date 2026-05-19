@@ -16,9 +16,9 @@
 //		throw invalid_file{ "The music file does not exist...\n" };
 //	}*/
 //
-//	dash.setOrigin(500, 50);
+//	/*dash.setOrigin(500, 50);
 //	dash.setPosition(500, 650);
-//	dash.setFillColor(sf::Color(128, 126, 120));
+//	dash.setFillColor(sf::Color(128, 126, 120));*/
 //
 //	/*name.setFont(font);
 //	name.setString(p.name);
@@ -53,7 +53,7 @@
 //	game_id.setPosition(940, 662);
 //
 //	song.setVolume(0);
-//	song.setLoop(true);
+//	song.setLoop(true);S
 //	song.play();
 //
 //	song_status.setFont(font);
