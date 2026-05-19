@@ -5,7 +5,7 @@
 #include "../headers/exceptions.hpp"
 #include"../headers/random_number_gen.hpp"
 
-DashBoard::DashBoard()
+DashBoard::DashBoard(sf::Clock& c)
 {
 	if (!font.openFromFile("../../../../fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"))
 	{
@@ -17,15 +17,15 @@ DashBoard::DashBoard()
 	//	throw Invalid_file{ "The music file does not exist...\n" };
 	//}
 
-	dash.setFillColor(sf::Color{ 228, 193, 156 });
-	dash.setOrigin(sf::Vector2f{ 0.f,0.f });
-	dash.setPosition(sf::Vector2f{ 0.f,700.f });
-
 	//song_name.setFont(font);
 	//song_name.setString("Song name: Ray Bryant Invitation");
 	//song_name.setCharacterSize(30);
 	//song_name.setFillColor(font_color);
 	//song_name.setPosition(sf::Vector2f{ 0, 588 });
+
+	dash.setFillColor(sf::Color{ 228, 193, 156 });
+	dash.setOrigin(sf::Vector2f{ 0.f,0.f });
+	dash.setPosition(sf::Vector2f{ 0.f,700.f });
 
 	move_count.setFont(font);
 	move_count.setString("Move: " + std::to_string(0));
@@ -42,6 +42,30 @@ DashBoard::DashBoard()
 	state.setString("State: Playing");
 	state.setPosition(sf::Vector2f{ 0,710 });
 	state.setFillColor(font_color);
+
+	date.setFont(font);
+
+	std::time_t result = std::time(nullptr);
+	std::string date_today = (std::ctime(&result));
+
+	date.setString(date_today);
+	date.setPosition(sf::Vector2f{ 0,650 });
+	date.setFillColor(font_color);
+
+	sf::Time elapsed = std::chrono::microseconds(c.getElapsedTime());
+
+	auto h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
+	elapsed -= h;
+
+	auto m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
+	elapsed -= m;
+
+	elapsed_time.setFont(font);
+	elapsed_time.setString(std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
+		+ " seconds");
+	elapsed_time.setPosition(sf::Vector2f{ 0,770 });
+	elapsed_time.setFillColor(sf::Color{ font_color });
+
 	//song.setVolume(0);
 	//song.setLoop(true);
 	//song.play();
@@ -60,5 +84,5 @@ void DashBoard::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(move_count);
 	target.draw(state);
 	target.draw(date);
-	//target.draw(song_name);
+	target.draw(elapsed_time);
 }

@@ -35,15 +35,15 @@ auto game() -> void
 	sf::RenderWindow window(sf::VideoMode({ 1000, 800 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed, settings);
 	window.setFramerateLimit(60);
 
+	DashBoard db{ clock1 };
 	Deck de;
 	Board b{ de };
-	DashBoard db{  };
 
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
 		//clock
-		sf::Time elapsed = std::chrono::microseconds(clock1.getElapsedTime());
+	/*	sf::Time elapsed = std::chrono::microseconds(clock1.getElapsedTime());
 		auto h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
 		elapsed -= h;
 
@@ -55,7 +55,7 @@ auto game() -> void
 			+ " seconds" };
 
 		elapsed_time.setPosition(sf::Vector2f{ 0,770 });
-		elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });
+		elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });*/
 		//std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
 		//show_elapsed(elapsed);
 
@@ -74,7 +74,7 @@ auto game() -> void
 
 		window.draw(b);
 		window.draw(db);
-		window.draw(elapsed_time);
+		//window.draw(elapsed_time);
 
 		// end the current frame
 		window.display();
