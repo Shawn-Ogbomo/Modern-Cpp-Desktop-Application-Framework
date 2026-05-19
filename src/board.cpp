@@ -15,7 +15,7 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (auto& pile : piles)
 	{
-		for (auto& [card, rank] : pile)
+		for (const auto& [card, rank] : pile)
 		{
 			target.draw(card);
 		}
@@ -72,5 +72,5 @@ Board::Board(Deck& d)
 	}
 
 	auto& [card, rank] = piles[12].back();
-	card.position() = State::face_up;
+	card.position() = State_lib::Card_State::face_up;
 }

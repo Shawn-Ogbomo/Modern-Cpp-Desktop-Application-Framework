@@ -10,7 +10,7 @@
 class DashBoard : public sf::Drawable
 {
 	sf::Font font{ };
-	sf::Color font_color{ 255, 250, 250 }; //fix
+	sf::Color font_color{ sf::Color{63, 59, 147} };
 public:
 	DashBoard();
 	DashBoard(const DashBoard&) = delete;
@@ -20,10 +20,11 @@ private:
 	//sf::Music song;
 	//sf::Text song_name;
 
-	sf::Text state{ font };			//playing, paused
 	sf::Text game_id{ font };
 	sf::Text move_count{ font };	//successful moves...
+	sf::Text state{ font };			//playing, paused
 	sf::Text time{ font };
+	sf::Text date{ font };
 
 	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
 };
