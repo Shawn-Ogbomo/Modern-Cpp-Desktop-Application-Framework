@@ -42,7 +42,7 @@ DashBoard::DashBoard(sf::Clock& c)
 	std::time_t result = std::time(nullptr);
 	std::string date_today = (std::ctime(&result));
 
-	date.setString(date_today);
+	date.setString("Date: " + date_today);
 	date.setPosition(sf::Vector2f{ 0,748 });
 	date.setFillColor(font_color);
 
@@ -57,7 +57,7 @@ DashBoard::DashBoard(sf::Clock& c)
 	elapsed_time.setFont(font);
 	elapsed_time.setCharacterSize(26);
 
-	elapsed_time.setString(std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
+	elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
 		+ " seconds");
 	elapsed_time.setPosition(sf::Vector2f{ 0,774 });
 	elapsed_time.setFillColor(sf::Color{ font_color });
