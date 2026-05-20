@@ -7,8 +7,6 @@ auto main() -> int
 {
 	try
 	{
-		//splash screen then switch case with game...
-		//another splash screen
 		game();
 	}
 
