@@ -7,10 +7,9 @@
 
 DashBoard::DashBoard(sf::Clock& c)
 {
-	//replace the directory separators with
-	// path::preferred_separator
+	std::filesystem::path root{ "..\\..\\..\\..\\" };
 
-	if (!font.openFromFile("../../../../fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"))
+	if (!font.openFromFile(root.string() + "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"))
 	{
 		throw Invalid_file{ "The file does not exist...\n" };
 	}
