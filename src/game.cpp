@@ -11,19 +11,6 @@
 
 using namespace std::chrono_literals;
 
-static auto show_elapsed(sf::Time& elapsed)
-{
-	auto h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
-	elapsed -= h;
-
-	auto m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
-	elapsed -= m;
-
-	std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
-	//draw this to the window
-	//chrono literal of sf time object will hold hours minutes and seconds in dashboard
-}
-
 sf::Clock clock1;
 
 auto game() -> void
@@ -44,23 +31,7 @@ auto game() -> void
 		//clock
 		DashBoard db{ clock1 };
 
-		/*	sf::Time elapsed = std::chrono::microseconds(clock1.getElapsedTime());
-			auto h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
-			elapsed -= h;
-
-			auto m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
-			elapsed -= m;
-
-			sf::Font font_test{ "../../../../fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" };
-			sf::Text elapsed_time{ font_test,std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
-				+ " seconds" };
-
-			elapsed_time.setPosition(sf::Vector2f{ 0,770 });
-			elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });*/
-			//std::cout << h.count() << " hours: " << m.count() << " minutes: " << static_cast<int>(elapsed.asSeconds()) << " seconds\n";
-			//show_elapsed(elapsed);
-
-			// check all the window's events that were triggered since the last iteration of the loop
+		// check all the window's events that were triggered since the last iteration of the loop
 
 		while (const std::optional event = window.pollEvent())
 		{
@@ -73,9 +44,9 @@ auto game() -> void
 		// clear the window with black color
 		window.clear(sf::Color{ 33,46,82 });
 
+		//draw to window
 		window.draw(b);
 		window.draw(db);
-		//window.draw(elapsed_time);
 
 		// end the current frame
 		window.display();
