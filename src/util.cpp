@@ -13,7 +13,8 @@ auto Util::check_stream(const std::istream& is, const std::string& message, cons
 	}
 }
 
-auto Util::prev(int pos, std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>& piles) -> std::array < std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>::iterator
+auto Util::prev(int pos, std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>& piles)
+-> std::array < std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>::iterator
 {
 	if (pos < 0 || pos > static_cast<int>(Rank_lib::Rank::queen))
 	{
