@@ -7,21 +7,13 @@
 
 DashBoard::DashBoard(sf::Clock& c)
 {
+	//replace the directory separators with
+	// path::preferred_separator
+
 	if (!font.openFromFile("../../../../fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"))
 	{
 		throw Invalid_file{ "The file does not exist...\n" };
 	}
-
-	//if (!song.openFromFile("music\\Invitation.wav"))
-	//{
-	//	throw Invalid_file{ "The music file does not exist...\n" };
-	//}
-
-	//song_name.setFont(font);
-	//song_name.setString("Song name: Ray Bryant Invitation");
-	//song_name.setCharacterSize(30);
-	//song_name.setFillColor(font_color);
-	//song_name.setPosition(sf::Vector2f{ 0, 588 });
 
 	dash.setFillColor(sf::Color{ 228, 193, 156 });
 	dash.setOrigin(sf::Vector2f{ 0.f,0.f });
@@ -70,16 +62,6 @@ DashBoard::DashBoard(sf::Clock& c)
 		+ " seconds");
 	elapsed_time.setPosition(sf::Vector2f{ 0,774 });
 	elapsed_time.setFillColor(sf::Color{ font_color });
-
-	//song.setVolume(0);
-	//song.setLoop(true);
-	//song.play();
-
-	/*song_status.setFont(font);
-	song_status.setString("Playing!");
-	song_status.setCharacterSize(30);
-	song_status.setFillColor(font_color);
-	song_status.setPosition(0, 630);*/
 }
 
 void DashBoard::draw(sf::RenderTarget& target, sf::RenderStates states) const

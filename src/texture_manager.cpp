@@ -5,13 +5,15 @@
 
 auto Texture_manager::load_textures() ->void
 {
-	std::filesystem::path image_names{ "../../../../txt/card_names.txt" };	//revise this to remove all of the ../
+	std::filesystem::path root{ "..\\..\\..\\..\\" };
+
+	std::filesystem::path image_names{ root.string() + "txt\\card_names.txt" };
 
 	std::ifstream ifs{ image_names.string() };
 
 	Util::check_stream(ifs, "unable to open stream...\n");
 
-	std::filesystem::path images_dir{ "../../../../images/" }; //revise this to remove all of the ../
+	std::filesystem::path images_dir{ root.string() + "images\\" };
 
 	sf::Texture back_texture;
 
