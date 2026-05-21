@@ -16,15 +16,6 @@ auto Texture_manager::load_textures() ->void
 				textures.emplace_back(t);
 			}
 		}
-
-		//if music
-			//load all of the songs into the vector of songs
-
-		//if fonts
-			//load all fonts...
-
-		// if sounds
-			//load all sounds
 	}
 
 	textures.emplace_back(); //empty texture to initialize sprite::card
