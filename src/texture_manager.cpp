@@ -5,8 +5,6 @@
 
 auto Texture_manager::load_textures() ->void
 {
-	std::cout << std::filesystem::current_path();
-
 	for (const auto& dir_entry : std::filesystem::directory_iterator(std::filesystem::path{ "\\clock_solitaire\\" }))
 	{
 		if (auto dir = dir_entry.path().filename(); dir == "images")
