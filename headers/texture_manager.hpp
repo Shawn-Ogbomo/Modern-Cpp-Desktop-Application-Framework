@@ -11,7 +11,7 @@ public:
 	std::vector<sf::Texture> textures;
 };
 
-inline Texture_manager& get_texture_manager()
+inline auto get_texture_manager() -> Texture_manager&
 {
 	static Texture_manager manager;
 	return manager;

@@ -7,6 +7,7 @@
 #include "../headers/exceptions.hpp"
 
 namespace Util {
+
 	auto check_stream(const std::istream& is, const std::string& message, const std::string& message2 = "") -> void;
 
 	//returns the previous pile on the board

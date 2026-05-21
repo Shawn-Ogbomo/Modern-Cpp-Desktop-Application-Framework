@@ -2,7 +2,6 @@
 #define DASHBOARD_HPP
 
 #include <string>
-#include <SFML/Audio.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>

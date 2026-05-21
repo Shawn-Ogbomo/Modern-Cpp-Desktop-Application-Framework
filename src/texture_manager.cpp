@@ -5,35 +5,19 @@
 
 auto Texture_manager::load_textures() ->void
 {
-	std::filesystem::path root{ "..\\..\\..\\..\\" };
+	std::cout << std::filesystem::current_path();
 
-	std::filesystem::path image_names{ root.string() + "txt\\card_names.txt" };
-
-	std::ifstream ifs{ image_names.string() };
-
-	Util::check_stream(ifs, "unable to open stream...\n");
-
-	std::filesystem::path images_dir{ root.string() + "images\\" };
-
-	sf::Texture back_texture;
-
-	if (!back_texture.loadFromFile(images_dir.string() + "card-back2.png"))
+	for (const auto& dir_entry : std::filesystem::directory_iterator(std::filesystem::path{ "\\clock_solitaire\\" }))
 	{
-		throw std::invalid_argument{ "image does not exist...\n" };
-	}
-
-	textures.emplace_back(back_texture);
-
-	for (std::string s; ifs >> s;)
-	{
-		sf::Texture t;
-
-		if (!t.loadFromFile(images_dir.string() + s))
+		if (auto dir = dir_entry.path().filename(); dir == "images")
 		{
-			throw std::invalid_argument{ "couldn't load file: " + s + "\n" };
+			for (const auto& img_name : std::filesystem::recursive_directory_iterator(dir_entry))
+			{
+				sf::Texture t;
+				t.loadFromFile(img_name);
+				textures.emplace_back(t);
+			}
 		}
-
-		textures.emplace_back(t);
 	}
 
 	textures.emplace_back(); //empty texture to initialize sprite::card
