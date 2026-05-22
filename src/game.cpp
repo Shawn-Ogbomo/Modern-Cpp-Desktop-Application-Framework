@@ -26,6 +26,7 @@ auto game() -> void
 	Deck de;
 	Board b{ de };
 	Game_Status gs;
+
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
