@@ -2,15 +2,11 @@
 
 #include "../headers/game_status.hpp"
 #include"../headers/exceptions.hpp"
+#include"../headers/util.hpp"
 
 Game_Status::Game_Status()
 {
-	std::filesystem::path root{ "..\\..\\..\\..\\" };
-
-	if (!font.openFromFile(root.string() + "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"))
-	{
-		throw Invalid_file{ "The file does not exist...\n" };
-	}
+	Util::load_font(std::filesystem::path{ "..\\..\\..\\..\\" }, font);
 
 	game_id.setFont(font);
 	game_id.setCharacterSize(26);

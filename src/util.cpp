@@ -28,3 +28,11 @@ auto Util::prev(int pos, std::array<std::vector<std::pair<Card, Rank_lib::Rank>>
 
 	return (piles.begin() + pos) - 1;
 }
+
+auto Util::load_font(const std::filesystem::path& p, sf::Font& f) ->void
+{
+	if (!f.openFromFile(p.string() + "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"))
+	{
+		throw Invalid_file{ "The file does not exist...\n" };
+	}
+}

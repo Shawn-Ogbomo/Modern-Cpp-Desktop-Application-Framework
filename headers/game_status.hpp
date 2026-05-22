@@ -9,7 +9,6 @@
 
 struct Game_Status : public sf::Drawable
 {
-	//Objects should be shared among Game_Status and Time_Status
 	sf::Font font{ };
 	sf::Color font_color{ sf::Color{63, 59, 147} };
 public:

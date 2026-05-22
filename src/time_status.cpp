@@ -4,15 +4,11 @@
 #include "../headers/time_status.hpp"
 #include "../headers/exceptions.hpp"
 #include"../headers/random_number_gen.hpp"
+#include"../headers/util.hpp"
 
 TimeStatus::TimeStatus(sf::Clock& c)
 {
-	std::filesystem::path root{ "..\\..\\..\\..\\" };
-
-	if (!font.openFromFile(root.string() + "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"))
-	{
-		throw Invalid_file{ "The file does not exist...\n" };
-	}
+	Util::load_font(std::filesystem::path{ "..\\..\\..\\..\\" }, font);
 
 	dash.setFillColor(sf::Color{ 228, 193, 156 });
 	dash.setOrigin(sf::Vector2f{ 0.f,0.f });
