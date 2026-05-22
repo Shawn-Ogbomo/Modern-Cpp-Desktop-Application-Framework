@@ -4,7 +4,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-//#include"../headers/dashboard.hpp"
 
 auto game() -> void;
 

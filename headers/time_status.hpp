@@ -17,9 +17,6 @@ public:
 	auto operator = (const 	TimeStatus&)->TimeStatus & = delete;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
-	sf::Text game_id{ font };
-	sf::Text move_count{ font };
-	sf::Text state{ font };
 	sf::Text date{ font };
 	sf::Text elapsed_time{ font };
 	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };

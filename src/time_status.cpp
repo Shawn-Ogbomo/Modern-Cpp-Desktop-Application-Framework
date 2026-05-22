@@ -48,9 +48,6 @@ TimeStatus::TimeStatus(sf::Clock& c)
 void TimeStatus::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(dash);
-	target.draw(game_id);
-	target.draw(move_count);
-	target.draw(state);
 	target.draw(date);
 	target.draw(elapsed_time);
 }

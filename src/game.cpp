@@ -5,6 +5,7 @@
 #include "../headers/deck.hpp"
 #include "../headers/board.hpp"
 #include "../headers/time_status.hpp"
+#include "../headers/game_status.hpp"
 
 #include <iostream>
 #include <chrono>
@@ -24,7 +25,7 @@ auto game() -> void
 
 	Deck de;
 	Board b{ de };
-
+	Game_Status gs;
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
@@ -47,7 +48,7 @@ auto game() -> void
 		//draw to window
 		window.draw(b);
 		window.draw(ts);
-
+		window.draw(gs);
 		// end the current frame
 		window.display();
 	}
