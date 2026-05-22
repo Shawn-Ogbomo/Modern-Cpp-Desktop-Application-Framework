@@ -7,14 +7,14 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <ctime>
 
-class DashBoard : public sf::Drawable
+class TimeStatus : public sf::Drawable
 {
 	sf::Font font{ };
 	sf::Color font_color{ sf::Color{63, 59, 147} };
 public:
-	DashBoard(sf::Clock& c);
-	DashBoard(const DashBoard&) = delete;
-	auto operator = (const DashBoard&)->DashBoard & = delete;
+	TimeStatus(sf::Clock& c);
+	TimeStatus(const TimeStatus&) = delete;
+	auto operator = (const 	TimeStatus&)->TimeStatus & = delete;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
 	sf::Text game_id{ font };

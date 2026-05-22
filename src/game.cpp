@@ -4,7 +4,7 @@
 #include "../headers/game.hpp"
 #include "../headers/deck.hpp"
 #include "../headers/board.hpp"
-#include "../headers/dashboard.hpp"
+#include "../headers/time_status.hpp"
 
 #include <iostream>
 #include <chrono>
@@ -29,7 +29,7 @@ auto game() -> void
 	while (window.isOpen())
 	{
 		//clock
-		DashBoard db{ clock1 };
+		TimeStatus ts{ clock1 };
 
 		// check all the window's events that were triggered since the last iteration of the loop
 
@@ -46,7 +46,7 @@ auto game() -> void
 
 		//draw to window
 		window.draw(b);
-		window.draw(db);
+		window.draw(ts);
 
 		// end the current frame
 		window.display();
