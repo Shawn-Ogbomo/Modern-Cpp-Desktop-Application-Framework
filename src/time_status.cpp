@@ -25,7 +25,7 @@ TimeStatus::TimeStatus(sf::Clock& c)
 	std::string date_today = (std::ctime(&result));
 
 	date.setString("Date: " + date_today);
-	date.setPosition(sf::Vector2f{ 0,748 });
+	date.setPosition(sf::Vector2f{ 630,774 });
 	date.setFillColor(font_color);
 
 	sf::Time elapsed = std::chrono::microseconds(c.getElapsedTime());

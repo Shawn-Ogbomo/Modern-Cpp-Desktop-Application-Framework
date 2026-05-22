@@ -14,19 +14,19 @@ Game_Status::Game_Status()
 
 	game_id.setFont(font);
 	game_id.setCharacterSize(26);
-	game_id.setString("Game Id: #" + std::to_string(Random_Number_Gen::g()));
-	game_id.setPosition(sf::Vector2f{ 0,670 });
+	game_id.setString(std::string{ "Game Id" }.append(11, ' ') + std::string{ ": " + std::to_string(Random_Number_Gen::g()) });
+	game_id.setPosition(sf::Vector2f{ 0,696 });
 	game_id.setFillColor(font_color);
 
 	move.setFont(font);
 	move.setCharacterSize(26);
-	move.setString("Move: " + std::to_string(move_count));
-	move.setPosition(sf::Vector2f{ 0,696 });
+	move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
+	move.setPosition(sf::Vector2f{ 0,748 });
 	move.setFillColor(font_color);
 
 	game_state.setFont(font);
 	game_state.setCharacterSize(26);
-	game_state.setString("State: Playing");
+	game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
 	game_state.setPosition(sf::Vector2f{ 0,722 });
 	game_state.setFillColor(font_color);
 }

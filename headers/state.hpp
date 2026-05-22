@@ -7,9 +7,4 @@ enum class Card_State
 	face_up
 };
 
-enum class Game_state
-{
-	playing,
-	paused
-};
 #endif //STATE_HPP
