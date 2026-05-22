@@ -26,7 +26,7 @@ Game_Status::Game_Status()
 
 	game_state.setFont(font);
 	game_state.setCharacterSize(26);
-	game_state.setString("State: " + std::string{ state == State_lib::Game_state::playing ? "Playing" : "Paused" });
+	game_state.setString("State: Playing");
 	game_state.setPosition(sf::Vector2f{ 0,722 });
 	game_state.setFillColor(font_color);
 }

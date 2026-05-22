@@ -72,5 +72,5 @@ Board::Board(Deck& d)
 	}
 
 	auto& [card, rank] = piles[12].back();
-	card.position() = State_lib::Card_State::face_up;
+	card.position() = Card_State::face_up;
 }

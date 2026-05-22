@@ -13,17 +13,17 @@ class Card : public sf::Drawable
 {
 public:
 	Card() = default;
-	explicit Card(Suit s, Rank_lib::Rank r, const sf::Texture& f, const sf::Texture& re, State_lib::Card_State st = State_lib::Card_State::face_down);
-	auto position() -> State_lib::Card_State& { return state; };
+	explicit Card(Suit s, Rank_lib::Rank r, const sf::Texture& f, const sf::Texture& re, Card_State st = Card_State::face_down);
+	auto position() -> Card_State& { return state; };
 	auto value()const -> Rank_lib::Rank { return rank; }
 	auto img() -> std::pair<sf::Sprite&, sf::Sprite&> { return{ std::ref(face),std::ref(reverse) }; }
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const { state == State_lib::Card_State::face_up ? target.draw(face) : target.draw(reverse); }
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const { state == Card_State::face_up ? target.draw(face) : target.draw(reverse); }
 private:
 	Suit suit{};
 	Rank_lib::Rank rank{};
 	sf::Sprite face{ get_texture_manager().textures.back() };
 	sf::Sprite reverse{ get_texture_manager().textures.back() };
-	State_lib::Card_State state{};
+	Card_State state{};
 };
 
 #endif //CARD_HPP

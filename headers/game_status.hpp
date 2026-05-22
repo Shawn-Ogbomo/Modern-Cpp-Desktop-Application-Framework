@@ -22,8 +22,6 @@ public:
 	sf::Text game_state{ font };
 
 	std::size_t move_count{};
-
-	State_lib::Game_state state{};
 };
 
 #endif // !GAME_STATUS_HPP
