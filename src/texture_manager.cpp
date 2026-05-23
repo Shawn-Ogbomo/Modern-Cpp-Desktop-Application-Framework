@@ -5,17 +5,16 @@
 
 auto Texture_manager::load_textures() ->void
 {
-	for (const auto& dir_entry : std::filesystem::directory_iterator(std::filesystem::path{ "\\clock_solitaire\\" }))
+	for (const auto& img_name : std::filesystem::recursive_directory_iterator({ "\\clock_solitaire\\images" }))
 	{
-		if (auto dir = dir_entry.path().filename(); dir == "images")
+		sf::Texture t;
+
+		if (!t.loadFromFile(img_name))
 		{
-			for (const auto& img_name : std::filesystem::recursive_directory_iterator(dir_entry))
-			{
-				sf::Texture t;
-				t.loadFromFile(img_name);
-				textures.emplace_back(t);
-			}
+			throw Invalid_file{ "The file: " + img_name.path().string() + " does not exist...\n" };
 		}
+
+		textures.emplace_back(t);
 	}
 
 	textures.emplace_back(); //empty texture to initialize sprite::card
