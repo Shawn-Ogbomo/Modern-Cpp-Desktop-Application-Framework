@@ -8,7 +8,7 @@
 
 TimeStatus::TimeStatus(sf::Clock& c)
 {
-	Util::load_font(std::filesystem::path{ "..\\" }, font);
+	Util::load_font(std::filesystem::path{ "..\\" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
 
 	dash.setFillColor(sf::Color{ 228, 193, 156 });
 	dash.setOrigin(sf::Vector2f{ 0.f,0.f });

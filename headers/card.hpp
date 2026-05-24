@@ -11,6 +11,7 @@
 
 class Card : public sf::Drawable
 {
+	sf::Texture t;
 public:
 	Card() = default;
 	explicit Card(Suit s, Rank_lib::Rank r, const sf::Texture& f, const sf::Texture& re, Card_State st = Card_State::face_down);
@@ -21,8 +22,8 @@ public:
 private:
 	Suit suit{};
 	Rank_lib::Rank rank{};
-	sf::Sprite face{ get_texture_manager().textures.back() };
-	sf::Sprite reverse{ get_texture_manager().textures.back() };
+	sf::Sprite face{t};
+	sf::Sprite reverse{t};
 	Card_State state{};
 };
 

@@ -6,7 +6,7 @@
 
 Game_Status::Game_Status()
 {
-	Util::load_font(std::filesystem::path{ "..\\" }, font);
+	Util::load_font(std::filesystem::path{ "..\\" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
 
 	game_id.setFont(font);
 	game_id.setCharacterSize(26);
