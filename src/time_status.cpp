@@ -8,7 +8,7 @@
 
 TimeStatus::TimeStatus(sf::Clock& c)
 {
-	Util::load_font(std::filesystem::path{ "..\\..\\..\\..\\" }, font);
+	Util::load_font(std::filesystem::path{ "..\\" }, font);
 
 	dash.setFillColor(sf::Color{ 228, 193, 156 });
 	dash.setOrigin(sf::Vector2f{ 0.f,0.f });
@@ -21,7 +21,7 @@ TimeStatus::TimeStatus(sf::Clock& c)
 	std::string date_today = (std::ctime(&result));
 
 	date.setString("Date: " + date_today);
-	date.setPosition(sf::Vector2f{ 630,774 });
+	date.setPosition(sf::Vector2f{ 600,774 });
 	date.setFillColor(font_color);
 
 	sf::Time elapsed = std::chrono::microseconds(c.getElapsedTime());
