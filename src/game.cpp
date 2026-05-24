@@ -1,3 +1,6 @@
+#include <chrono>
+#include <iostream>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
@@ -6,11 +9,6 @@
 #include "../headers/board.hpp"
 #include "../headers/time_status.hpp"
 #include "../headers/game_status.hpp"
-
-#include <iostream>
-#include <chrono>
-
-using namespace std::chrono_literals;
 
 sf::Clock clock1;
 
@@ -26,6 +24,8 @@ auto game() -> void
 	Deck de;
 	Board b{ de };
 	Game_Status gs;
+
+	sf::Music song{"waiting.wav"};
 
 	// run the program as long as the window is open
 	while (window.isOpen())

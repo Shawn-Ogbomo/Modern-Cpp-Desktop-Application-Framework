@@ -1,10 +1,10 @@
-#include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Transformable.hpp>
 
-#include "../headers/time_status.hpp"
-#include "../headers/exceptions.hpp"
-#include"../headers/random_number_gen.hpp"
 #include"../headers/util.hpp"
+#include "../headers/exceptions.hpp"
+#include "../headers/time_status.hpp"
+#include"../headers/random_number_gen.hpp"
 
 TimeStatus::TimeStatus(sf::Clock& c)
 {

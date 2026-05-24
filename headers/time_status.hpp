@@ -2,10 +2,11 @@
 #define DASHBOARD_HPP
 
 #include <string>
+#include <ctime>
+
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <ctime>
 
 class TimeStatus : public sf::Drawable
 {

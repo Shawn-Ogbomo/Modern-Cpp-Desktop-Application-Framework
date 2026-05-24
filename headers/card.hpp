@@ -3,7 +3,9 @@
 
 #include <utility>
 #include <functional>
+
 #include <SFML/Graphics.hpp>
+
 #include "../headers/rank.hpp"
 #include "../headers/suit.hpp"
 #include "../headers/state.hpp"

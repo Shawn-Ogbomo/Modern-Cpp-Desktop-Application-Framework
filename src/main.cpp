@@ -1,7 +1,8 @@
-#include <iostream>
 #include <fstream>
-#include "../headers/exceptions.hpp"
+#include <iostream>
+
 #include "../headers/game.hpp"
+#include "../headers/exceptions.hpp"
 
 auto main() -> int
 {

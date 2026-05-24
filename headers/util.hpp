@@ -2,6 +2,7 @@
 #define UTIL_HPP
 
 #include <string>
+
 #include "../headers/card.hpp"
 #include "../headers/board.hpp"
 #include "../headers/exceptions.hpp"
