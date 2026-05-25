@@ -12,8 +12,6 @@ auto Texture_manager::load_textures() ->void
 
 	std::filesystem::current_path("..\\..\\..\\..\\images");
 
-
-
 	for (std::string s; ifs >> s;)
 	{
 		sf::Texture t;
