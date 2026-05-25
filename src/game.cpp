@@ -27,7 +27,6 @@ auto game() -> void
 	Game_Status gs;
 	Music_Player mp;
 
-	mp.next();
 	mp.play();
 	// run the program as long as the window is open
 
