@@ -11,13 +11,13 @@ auto main() -> int
 		game();
 	}
 
-	catch (const std::invalid_argument& e)
+	catch (const Terminate& e)
 	{
 		std::cerr << e.what() << "\n";
 		return 1;
 	}
 
-	catch (const Terminate& e)
+	catch (const std::invalid_argument& e)
 	{
 		std::cerr << e.what() << "\n";
 		return 2;
@@ -27,5 +27,11 @@ auto main() -> int
 	{
 		std::cerr << e.what() << "\n";
 		return 3;
+	}
+
+	catch (const sf::Exception& e)
+	{
+		std::cerr << e.what() << "\n";
+		return 4;
 	}
 }

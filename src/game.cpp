@@ -9,6 +9,7 @@
 #include "../headers/board.hpp"
 #include "../headers/time_status.hpp"
 #include "../headers/game_status.hpp"
+#include "../headers/music_player.hpp"
 
 sf::Clock clock1;
 
@@ -24,10 +25,12 @@ auto game() -> void
 	Deck de;
 	Board b{ de };
 	Game_Status gs;
+	Music_Player mp;
 
-	sf::Music song{"waiting.wav"};
-
+	mp.next();
+	mp.play();
 	// run the program as long as the window is open
+
 	while (window.isOpen())
 	{
 		//clock
@@ -43,7 +46,7 @@ auto game() -> void
 			}
 		}
 
-		// clear the window with black color
+		// clear the window with blue color
 		window.clear(sf::Color{ 33,46,82 });
 
 		//draw to window
