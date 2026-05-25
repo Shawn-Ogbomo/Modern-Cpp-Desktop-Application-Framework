@@ -15,9 +15,9 @@ public:
 	Game_Status();
 	Game_Status(const Game_Status&) = delete;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-	sf::Text game_id{ font };
+	
 	sf::Text move{ font };
+	sf::Text game_id{ font };
 	sf::Text game_state{ font };
 
 	std::size_t move_count{};
