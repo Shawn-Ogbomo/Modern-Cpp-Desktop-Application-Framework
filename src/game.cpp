@@ -28,7 +28,6 @@ auto game() -> void
 	Music_Player mp;
 
 	mp.play();
-
 	// run the program as long as the window is open
 
 	while (window.isOpen())
@@ -53,6 +52,7 @@ auto game() -> void
 		window.draw(b);
 		window.draw(ts);
 		window.draw(gs);
+		window.draw(mp);
 		// end the current frame
 		window.display();
 	}

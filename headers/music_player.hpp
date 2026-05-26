@@ -7,8 +7,12 @@
 #include <vector>
 #include <iostream>
 
+#include "../headers/state.hpp"
+
 class Music_Player : public sf::Drawable
 {
+	sf::Font font{ };
+	sf::Color font_color{ sf::Color{63, 59, 147} };
 public:
 	Music_Player();
 	Music_Player(const Music_Player&) = delete;
@@ -16,7 +20,7 @@ public:
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	auto song_name() -> std::string_view { return songs[current_song].first; };
+	auto song_name() -> const std::string& { return songs[current_song].first.getString(); };
 
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
@@ -26,7 +30,7 @@ public:
 private:
 	std::size_t limit{};
 	std::size_t current_song{};
-	std::vector<std::pair<std::string, sf::Music>> songs;
+	std::vector<std::pair<sf::Text, sf::Music>> songs;
 };
 
 #endif //MUSIC_PLAYER.HPP
