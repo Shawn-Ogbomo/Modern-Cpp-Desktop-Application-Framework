@@ -28,6 +28,7 @@ auto game() -> void
 	Music_Player mp;
 
 	mp.play();
+
 	// run the program as long as the window is open
 
 	while (window.isOpen())
