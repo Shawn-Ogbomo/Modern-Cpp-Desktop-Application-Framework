@@ -12,7 +12,6 @@
 class Music_Player : public sf::Drawable
 {
 	sf::Font font{ };
-	sf::Color font_color{ sf::Color{63, 59, 147} };
 public:
 	Music_Player();
 	Music_Player(const Music_Player&) = delete;

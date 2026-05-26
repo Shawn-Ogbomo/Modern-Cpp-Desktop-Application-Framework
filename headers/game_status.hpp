@@ -10,12 +10,11 @@
 struct Game_Status : public sf::Drawable
 {
 	sf::Font font{ };
-	sf::Color font_color{ sf::Color{63, 59, 147} };
 public:
 	Game_Status();
 	Game_Status(const Game_Status&) = delete;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	
+
 	sf::Text move{ font };
 	sf::Text game_id{ font };
 	sf::Text game_state{ font };

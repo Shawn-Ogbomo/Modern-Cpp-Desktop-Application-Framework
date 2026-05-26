@@ -10,7 +10,7 @@ Music_Player::Music_Player()
 	for (const auto& song : std::filesystem::directory_iterator{ "..\\music" })
 	{
 		songs.emplace_back(sf::Text{ font, song.path().filename().string() }, song);
-		songs[index].first.setFillColor(font_color);
+		songs[index].first.setFillColor(sf::Color{ 63, 59, 147 });
 		songs[index].first.setPosition(sf::Vector2f{ 600,748 });
 		songs[index].first.setCharacterSize(26);
 

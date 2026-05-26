@@ -22,7 +22,7 @@ TimeStatus::TimeStatus(sf::Clock& c)
 
 	date.setString("Date: " + date_today);
 	date.setPosition(sf::Vector2f{ 600,774 });
-	date.setFillColor(font_color);
+	date.setFillColor(sf::Color{ 63, 59, 147 });
 
 	sf::Time elapsed = std::chrono::microseconds(c.getElapsedTime());
 
@@ -38,7 +38,7 @@ TimeStatus::TimeStatus(sf::Clock& c)
 	elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(static_cast<int>(elapsed.asSeconds()))
 		+ " seconds");
 	elapsed_time.setPosition(sf::Vector2f{ 0,774 });
-	elapsed_time.setFillColor(sf::Color{ font_color });
+	elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });
 }
 
 void TimeStatus::draw(sf::RenderTarget& target, sf::RenderStates states) const

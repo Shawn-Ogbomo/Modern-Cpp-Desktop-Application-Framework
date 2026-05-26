@@ -11,7 +11,6 @@
 class TimeStatus : public sf::Drawable
 {
 	sf::Font font{ };
-	sf::Color font_color{ sf::Color{63, 59, 147} };
 public:
 	TimeStatus(sf::Clock& c);
 	TimeStatus(const TimeStatus&) = delete;
