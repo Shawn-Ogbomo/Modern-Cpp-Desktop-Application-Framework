@@ -16,9 +16,10 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	sf::Text move{ font };
-	sf::Text game_id{ font };
+	sf::Text game_id_t{ font };
 	sf::Text game_state{ font };
 
+	std::size_t game_id{};
 	std::size_t move_count{};
 };
 

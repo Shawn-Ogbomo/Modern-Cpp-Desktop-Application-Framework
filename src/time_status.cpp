@@ -22,7 +22,7 @@ auto Time_Status::update(sf::Clock& c) ->void
 		+ " seconds");
 
 	const auto now = std::chrono::system_clock::now();
-	const std::time_t t_c = std::chrono::system_clock::to_time_t(now);
+	const auto t_c = std::chrono::system_clock::to_time_t(now);
 
 	date_today = std::ctime(&t_c);
 
