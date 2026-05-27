@@ -1,5 +1,5 @@
-#ifndef DASHBOARD_HPP
-#define DASHBOARD_HPP
+#ifndef TIME_STATUS_HPP
+#define TIME_STATUS_HPP
 
 #include <string>
 #include <ctime>
@@ -8,18 +8,24 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-class TimeStatus : public sf::Drawable
+class Time_Status : public sf::Drawable
 {
-	sf::Font font{ };
+	sf::Font font{};
 public:
-	TimeStatus(sf::Clock& c);
-	TimeStatus(const TimeStatus&) = delete;
-	auto operator = (const 	TimeStatus&)->TimeStatus & = delete;
+	explicit Time_Status(sf::Clock& c);
+	Time_Status(const Time_Status&) = delete;
+	auto operator = (const 	Time_Status&)->Time_Status & = delete;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	auto update(sf::Clock& c) -> void;
 private:
 	sf::Text date{ font };
 	sf::Text elapsed_time{ font };
-	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
+
+	std::string date_today;
+
+	std::chrono::hours h{};
+	std::chrono::minutes m{};
+	std::chrono::seconds s{};
 };
 
-#endif // !DASHBOARD_HPP
+#endif // !TIME_STATUS_HPP

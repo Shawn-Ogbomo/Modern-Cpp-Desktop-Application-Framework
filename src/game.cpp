@@ -13,6 +13,30 @@
 
 sf::Clock clock1;
 
+struct DashBoard : sf::Drawable
+{
+public:
+	DashBoard::DashBoard()
+	{
+		dash.setFillColor(sf::Color{ 228, 193, 156 });
+		dash.setOrigin(sf::Vector2f{ 0.f,0.f });
+		dash.setPosition(sf::Vector2f{ 0.f,700.f });
+	}
+
+	virtual void DashBoard::draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		target.draw(dash);
+		target.draw(gs);
+		target.draw(ts);
+		target.draw(mp);
+	}
+
+	Game_Status gs;
+	Time_Status ts{clock1};
+	Music_Player mp;
+	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
+};
+
 auto game() -> void
 {
 	sf::ContextSettings settings;
@@ -24,17 +48,15 @@ auto game() -> void
 
 	Deck de;
 	Board b{ de };
-	Game_Status gs;
-	Music_Player mp;
+	DashBoard db;
 
-	mp.play();
+	db.mp.play();
 	// run the program as long as the window is open
 
 	while (window.isOpen())
 	{
 		//clock
-		TimeStatus ts{ clock1 };
-
+		db.ts.update(clock1);
 		// check all the window's events that were triggered since the last iteration of the loop
 
 		while (const std::optional event = window.pollEvent())
@@ -50,9 +72,8 @@ auto game() -> void
 
 		//draw to window
 		window.draw(b);
-		window.draw(ts);
-		window.draw(gs);
-		window.draw(mp);
+		window.draw(db);
+
 		// end the current frame
 		window.display();
 	}

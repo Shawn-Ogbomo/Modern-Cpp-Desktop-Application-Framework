@@ -24,8 +24,8 @@ public:
 private:
 	Suit suit{};
 	Rank_lib::Rank rank{};
-	sf::Sprite face{default};
-	sf::Sprite reverse{default};
+	sf::Sprite face{ default };
+	sf::Sprite reverse{ default };
 	Card_State state{};
 };
 
