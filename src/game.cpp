@@ -19,8 +19,7 @@ public:
 	DashBoard::DashBoard()
 	{
 		dash.setFillColor(sf::Color{ 228, 193, 156 });
-		dash.setOrigin(sf::Vector2f{ 0.f,0.f });
-		dash.setPosition(sf::Vector2f{ 0.f,700.f });
+		dash.setPosition(sf::Vector2f{ 0.f,770.f });
 	}
 
 	virtual void DashBoard::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -43,7 +42,7 @@ auto game() -> void
 	settings.antiAliasingLevel = 16;
 
 	// create the window
-	sf::RenderWindow window(sf::VideoMode({ 1000, 800 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed, settings);
+	sf::RenderWindow window(sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed, settings);
 	window.setFramerateLimit(60);
 
 	Deck de;

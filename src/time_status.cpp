@@ -38,13 +38,13 @@ Time_Status::Time_Status(sf::Clock& c)
 	elapsed_time.setFont(font);
 	elapsed_time.setCharacterSize(26);
 
-	elapsed_time.setPosition(sf::Vector2f{ 0,774 });
+	elapsed_time.setPosition(sf::Vector2f{ 0,871 });
 	elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });
 
 	date.setFont(font);
 	date.setCharacterSize(26);
 
-	date.setPosition(sf::Vector2f{ 600,774 });
+	date.setPosition(sf::Vector2f{ 600,871 });
 	date.setFillColor(sf::Color{ 63, 59, 147 });
 }
 

@@ -11,7 +11,7 @@ Music_Player::Music_Player()
 	{
 		songs.emplace_back(sf::Text{ font, song.path().filename().string() }, song);
 		songs[index].first.setFillColor(sf::Color{ 63, 59, 147 });
-		songs[index].first.setPosition(sf::Vector2f{ 600,748 });
+		songs[index].first.setPosition(sf::Vector2f{ 600,842 });
 		songs[index].first.setCharacterSize(26);
 
 		++index;
