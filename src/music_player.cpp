@@ -4,14 +4,18 @@
 Music_Player::Music_Player()
 {
 	Util::load_font(std::filesystem::path{ "..\\" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
-
+	caption.setFillColor(sf::Color{ 63, 59, 147 });
+	caption.setString("Song: ");
+	caption.setCharacterSize(26);
+	caption.setPosition(sf::Vector2f{600,842});
+	
 	auto index = 0;
 
 	for (const auto& song : std::filesystem::directory_iterator{ "..\\music" })
 	{
-		songs.emplace_back(sf::Text{ font, song.path().filename().string() }, song);
+		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string()}, song);
 		songs[index].first.setFillColor(sf::Color{ 63, 59, 147 });
-		songs[index].first.setPosition(sf::Vector2f{ 600,842 });
+		songs[index].first.setPosition(sf::Vector2f{ 674,842 });
 		songs[index].first.setCharacterSize(26);
 
 		++index;
@@ -22,5 +26,6 @@ Music_Player::Music_Player()
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	target.draw(caption);
 	target.draw(songs[current_song].first);
 }

@@ -27,6 +27,7 @@ public:
 	auto pause() -> void { songs[current_song].second.pause(); };
 	auto play() -> void { songs[current_song].second.play(); };
 private:
+	sf::Text caption{font};
 	std::size_t limit{};
 	std::size_t current_song{};
 	std::vector<std::pair<sf::Text, sf::Music>> songs;
