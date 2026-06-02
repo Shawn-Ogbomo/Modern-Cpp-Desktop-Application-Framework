@@ -7,8 +7,8 @@ Music_Player::Music_Player()
 	caption.setFillColor(sf::Color{ 63, 59, 147 });
 	caption.setString("Song: ");
 	caption.setCharacterSize(26);
-	caption.setPosition(sf::Vector2f{600,842});
-	
+	caption.setPosition(sf::Vector2f{ 600,842 });
+
 	auto index = 0;
 
 	for (const auto& song : std::filesystem::directory_iterator{ "..\\music" })

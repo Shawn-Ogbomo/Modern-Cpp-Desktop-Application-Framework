@@ -46,7 +46,7 @@ Board::Board(Deck& d)
 
 			else if (rank == Rank_lib::Rank::king)
 			{
-				auto center = sf::Vector2f{ (1000 - face.getLocalBounds().size.x) / 2, (900 - face.getLocalBounds().size.y - 105 ) / 2};
+				auto center = sf::Vector2f{ (1000 - face.getLocalBounds().size.x) / 2, ((900 - face.getLocalBounds().size.y) / 2) - 52.862f };
 				face.setPosition(center);
 				reverse.setPosition(center);
 				continue;
@@ -63,8 +63,8 @@ Board::Board(Deck& d)
 			face.setOrigin(sf::Vector2f{ 0,144 });
 			reverse.setOrigin(sf::Vector2f{ 0,144 });
 
-			reverse.rotate(r);
 			face.rotate(r);
+			reverse.rotate(r);
 		}
 
 		r += sf::Angle{ sf::degrees(30) };
