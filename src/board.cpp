@@ -25,11 +25,12 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 Board::Board(Deck& d)
 {
-	auto index = 0;
 	const auto center_x = 500.0f;
 	const auto center_y = 385.0f;
 	const auto radius = 300.0f;
 	constexpr auto pi = 3.14159265358979323846;
+
+	auto index = 0;
 
 	for (auto& pile : piles)
 	{

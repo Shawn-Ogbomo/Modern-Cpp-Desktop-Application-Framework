@@ -1,4 +1,8 @@
 card-back2.png
+card-hearts-12.png
+card-diamonds-12.png
+card-spades-12.png
+card-clubs-12.png
 card-hearts-1.png
 card-diamonds-1.png
 card-spades-1.png
@@ -43,10 +47,6 @@ card-hearts-11.png
 card-diamonds-11.png
 card-spades-11.png
 card-clubs-11.png
-card-hearts-12.png
-card-diamonds-12.png
-card-spades-12.png
-card-clubs-12.png
 card-hearts-13.png
 card-diamonds-13.png
 card-spades-13.png
