@@ -1,5 +1,6 @@
-#include <iostream>
+#include <cmath>
 #include <iterator>
+#include <iostream>
 #include <algorithm>
 
 #include "../headers/util.hpp"
@@ -25,7 +26,10 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 Board::Board(Deck& d)
 {
 	auto index = 0;
-	auto r = sf::Angle{ sf::degrees(30) };
+	const auto center_x = 500.0f;
+	const auto center_y = 385.0f;
+	const auto radius = 300.0f;
+	constexpr auto pi = 3.14159265358979323846;
 
 	for (auto& pile : piles)
 	{
@@ -37,37 +41,20 @@ Board::Board(Deck& d)
 			rank = Rank_lib::ranks[index];
 			auto& [face, reverse] = card.img();
 
-			if (rank == Rank_lib::Rank::ace)
+			if (rank == Rank_lib::Rank::king)
 			{
-				auto coords_ace_pile = sf::Vector2f{ 543.245f , 194 };
-				face.setPosition(coords_ace_pile);
-				reverse.setPosition(coords_ace_pile);
-			}
-
-			else if (rank == Rank_lib::Rank::king)
-			{
-				auto center = sf::Vector2f{ (1000 - face.getLocalBounds().size.x) / 2, ((900 - face.getLocalBounds().size.y) / 2) - 52.862f };
+				auto center = sf::Vector2f{ (1000 - face.getLocalBounds().size.x) / 2, ((770 - face.getLocalBounds().size.y) / 2) };
 				face.setPosition(center);
 				reverse.setPosition(center);
 				continue;
 			}
 
-			else if (auto prev_pile = Util::prev(index, piles); prev_pile != std::end(piles))
-			{
-				const auto& [card_prev, rank_prev] = prev_pile[0].back().first.img();
-				auto coords_bottom_right = card_prev.getTransform().transformPoint(sf::Vector2f{ 96, 144 });
-				face.setPosition(coords_bottom_right);
-				reverse.setPosition(coords_bottom_right);
-			}
+			sf::Angle a{ sf::radians(index * 2.0f * pi / (total_piles - 1) - (pi / 2.0f)) };
 
-			face.setOrigin(sf::Vector2f{ 0,144 });
-			reverse.setOrigin(sf::Vector2f{ 0,144 });
-
-			face.rotate(r);
-			reverse.rotate(r);
+			face.setPosition(sf::Vector2f{ center_x + radius * std::cos(a.asRadians()) - (face.getLocalBounds().size.x) / 2, center_y + (radius * std::sin(a.asRadians())) - face.getLocalBounds().size.y / 2 });
+			reverse.setPosition(sf::Vector2f{ center_x + radius * std::cos(a.asRadians()) - (reverse.getLocalBounds().size.x) / 2, center_y + (radius * std::sin(a.asRadians())) - reverse.getLocalBounds().size.y / 2 });
 		}
 
-		r += sf::Angle{ sf::degrees(30) };
 		++index;
 	}
 
