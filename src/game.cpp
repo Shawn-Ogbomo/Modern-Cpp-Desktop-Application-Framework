@@ -4,8 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include "../headers/game.hpp"
 #include "../headers/deck.hpp"
+#include "../headers/game.hpp"
 #include "../headers/board.hpp"
 #include "../headers/time_status.hpp"
 #include "../headers/game_status.hpp"
@@ -56,8 +56,8 @@ auto game() -> void
 	{
 		//clock
 		db.ts.update(clock1);
-		// check all the window's events that were triggered since the last iteration of the loop
 
+		// check all the window's events that were triggered since the last iteration of the loop
 		while (const std::optional event = window.pollEvent())
 		{
 			if (event->is<sf::Event::Closed>())
