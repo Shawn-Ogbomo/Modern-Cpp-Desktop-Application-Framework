@@ -18,4 +18,4 @@ namespace Util
 	auto load_font(const std::filesystem::path& p, sf::Font& f) -> void;
 }
 
-#endif //UTIL_HPP
+#endif // UTIL_HPP

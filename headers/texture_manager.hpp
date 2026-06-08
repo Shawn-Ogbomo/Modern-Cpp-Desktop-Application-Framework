@@ -17,4 +17,4 @@ inline auto get_texture_manager() -> Texture_manager&
 	return manager;
 }
 
-#endif //TEXTURE_MANAGER_HPP
+#endif // TEXTURE_MANAGER_HPP

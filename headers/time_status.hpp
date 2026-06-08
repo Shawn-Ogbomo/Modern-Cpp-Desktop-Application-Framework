@@ -31,4 +31,4 @@ private:
 	std::chrono::seconds s{};
 };
 
-#endif // !TIME_STATUS_HPP
+#endif // TIME_STATUS_HPP

@@ -27,4 +27,4 @@ public:
 	std::size_t move_count{};
 };
 
-#endif // !GAME_STATUS_HPP
+#endif // GAME_STATUS_HPP

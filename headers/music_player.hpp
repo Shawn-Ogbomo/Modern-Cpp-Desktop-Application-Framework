@@ -35,4 +35,4 @@ private:
 	std::vector<std::pair<sf::Text, sf::Music>> songs;
 };
 
-#endif //MUSIC_PLAYER.HPP
+#endif // MUSIC_PLAYER.HPP

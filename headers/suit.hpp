@@ -9,4 +9,4 @@ enum class Suit
 	clubs
 };
 
-#endif //SUIT_HPP
+#endif // SUIT_HPP

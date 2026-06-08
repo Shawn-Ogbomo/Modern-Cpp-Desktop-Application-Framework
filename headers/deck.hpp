@@ -22,4 +22,4 @@ private:
 	std::vector<Card> cards;
 };
 
-#endif //DECK_HPP
+#endif // DECK_HPP

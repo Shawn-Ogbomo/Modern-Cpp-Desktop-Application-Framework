@@ -29,4 +29,4 @@ private:
 	Card_State state{};
 };
 
-#endif //CARD_HPP
+#endif // CARD_HPP

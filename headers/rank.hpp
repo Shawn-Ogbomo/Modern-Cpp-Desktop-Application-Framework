@@ -27,4 +27,4 @@ namespace Rank_lib
 		   Rank::seven, Rank::eight, Rank::nine, Rank::ten, Rank::jack, Rank::king };
 };
 
-#endif //RANK_HPP
+#endif // RANK_HPP

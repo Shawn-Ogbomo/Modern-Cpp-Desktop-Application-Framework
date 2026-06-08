@@ -17,4 +17,4 @@ class Invalid_file : public std::invalid_argument {
 public:
 	using std::invalid_argument::invalid_argument;
 };
-#endif //EXCEPTIONS_HPP
+#endif // EXCEPTIONS_HPP

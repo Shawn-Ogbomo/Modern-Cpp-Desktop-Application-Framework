@@ -6,4 +6,4 @@ enum class Card_State
 	face_down,
 	face_up
 };
-#endif //STATE_HPP
+#endif // STATE_HPP

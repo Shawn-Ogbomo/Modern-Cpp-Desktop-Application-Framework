@@ -22,4 +22,4 @@ public:
 	std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, total_piles> piles{};
 };
 
-#endif //BOARD_HPP 
+#endif // BOARD_HPP 

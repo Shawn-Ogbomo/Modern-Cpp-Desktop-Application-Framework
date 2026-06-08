@@ -7,4 +7,4 @@
 
 auto game() -> void;
 
-#endif //GAME_HPP
+#endif // GAME_HPP

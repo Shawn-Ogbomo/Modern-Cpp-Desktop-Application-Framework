@@ -16,4 +16,4 @@ public:
 	static inline std::mt19937 g{ rd() };
 };
 
-#endif //RANDOM_NUMBER_GEN_HPP
+#endif // RANDOM_NUMBER_GEN_HPP
