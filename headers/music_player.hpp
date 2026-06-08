@@ -15,7 +15,9 @@ class Music_Player : public sf::Drawable
 public:
 	Music_Player();
 	Music_Player(const Music_Player&) = delete;
+	auto operator =(const Music_Player&) -> Music_Player& = delete;
 	Music_Player(const Music_Player&&) = delete;
+	auto operator =(const Music_Player&&) -> Music_Player & = delete;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

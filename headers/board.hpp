@@ -13,6 +13,10 @@ struct Board : public sf::Drawable
 public:
 	explicit Board(Deck& d);
 	Board(const Board&) = delete;
+	auto operator =(const Board&) ->Board & = delete;
+	Board(const Board&&) = delete;
+	auto operator =(const Board&&) ->Board & = delete;
+
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	auto allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack) -> void;
 	std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, total_piles> piles{};

@@ -6,7 +6,7 @@
 
 auto Texture_manager::load_textures() ->void
 {
-	std::ifstream ifs{ "\\clock_solitaire\\txt\\card_names.txt" };
+	auto ifs = std::ifstream{ "\\clock_solitaire\\txt\\card_names.txt" };
 	
 	Util::check_stream(ifs, "Invalid file...\n");
 
@@ -14,7 +14,7 @@ auto Texture_manager::load_textures() ->void
 
 	for (std::string s; ifs >> s;)
 	{
-		sf::Texture t;
+		auto t = sf::Texture{};
 
 		if (!t.loadFromFile(s))
 		{

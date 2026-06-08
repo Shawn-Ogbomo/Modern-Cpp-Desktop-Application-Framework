@@ -13,7 +13,7 @@ public:
 
 inline auto get_texture_manager() -> Texture_manager&
 {
-	static Texture_manager manager;
+	static auto manager = Texture_manager{};
 	return manager;
 }
 

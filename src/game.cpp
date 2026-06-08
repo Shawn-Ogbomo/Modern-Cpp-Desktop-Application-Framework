@@ -31,7 +31,7 @@ public:
 	}
 
 	Game_Status gs;
-	Time_Status ts{clock1};
+	Time_Status ts{ clock1 };
 	Music_Player mp;
 	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
 };
@@ -45,9 +45,9 @@ auto game() -> void
 	sf::RenderWindow window(sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed, settings);
 	window.setFramerateLimit(60);
 
-	Deck de;
-	Board b{ de };
-	DashBoard db;
+	auto de = Deck{};
+	auto b =Board { de };
+	auto db = DashBoard{};
 
 	db.mp.play();
 	// run the program as long as the window is open

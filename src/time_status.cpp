@@ -8,7 +8,7 @@
 
 auto Time_Status::update(sf::Clock& c) ->void
 {
-	sf::Time elapsed = std::chrono::microseconds(c.getElapsedTime());
+	auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
 
 	h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
 	elapsed -= h;

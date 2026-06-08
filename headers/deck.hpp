@@ -13,6 +13,9 @@ public:
 	Deck();
 	Deck(const Deck&) = delete;
 	auto operator = (const Deck&)->Deck & = delete;
+	Deck(const Deck&&) = delete;
+	auto operator = (const Deck&&)->Deck & = delete;
+	
 	auto draw() -> Card;
 	auto shuffle() -> void { std::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g); }
 private:
