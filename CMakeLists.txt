@@ -13,6 +13,13 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(main "src/main.cpp" "src/board.cpp" "src/card.cpp" "src/deck.cpp" "src/game.cpp" "src/texture_manager.cpp" "src/util.cpp" "src/time_status.cpp" "src/game_status.cpp" "src/music_player.cpp")
+if(MSVC)
+    # Sets warning level 4 (/W4) for the Visual Studio compiler
+    target_compile_options(main PRIVATE /W4)
+    
+    # Optional: Suppress external SFML header noise so you only see your own warnings
+    target_compile_options(main PRIVATE /external:W0)
+endif()
 target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main PRIVATE SFML::Graphics SFML::Audio)
 

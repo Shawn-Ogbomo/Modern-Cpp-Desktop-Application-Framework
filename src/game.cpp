@@ -64,6 +64,12 @@ auto game() -> void
 			{
 				window.close();
 			}
+
+			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+					window.close();
+			}
 		}
 
 		// clear the window with blue color

@@ -1,6 +1,6 @@
 #include "../headers/util.hpp"
 
-auto Util::check_stream(const std::istream& is, const std::string& message, const std::string& message2) -> void
+auto Util::check_stream(const std::istream& is, const std::filesystem::path& p, const std::string& message, const std::string& message2) -> void
 {
 	if (is.eof())
 	{
@@ -9,7 +9,7 @@ auto Util::check_stream(const std::istream& is, const std::string& message, cons
 
 	if (is.fail())
 	{
-		throw std::invalid_argument{ message };
+		throw std::invalid_argument{std::filesystem::absolute(p).string() + message};
 	}
 }
 
