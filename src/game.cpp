@@ -39,7 +39,7 @@ public:
 auto game() -> void
 {
 	sf::ContextSettings settings;
-	settings.antiAliasingLevel = 16;
+	settings.antiAliasingLevel = 100;
 
 	// create the window
 	sf::RenderWindow window(sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed, settings);
