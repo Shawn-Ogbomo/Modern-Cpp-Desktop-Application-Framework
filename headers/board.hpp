@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "../headers/deck.hpp"
-#include "../headers/board.hpp"
 
 struct Board : public sf::Drawable
 {

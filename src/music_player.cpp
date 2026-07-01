@@ -22,10 +22,35 @@ Music_Player::Music_Player()
 	}
 
 	limit = songs.size();
+
+	const auto& textures = get_texture_manager().textures;
+	const auto& size = textures.size();
+
+	auto pos_x = 0.0f;
+	auto pos_y = 0.0f;
+	auto internal_index = 0;
+	auto button_pos_texture = 53;
+
+	for (auto i = button_pos_texture, j = button_pos_texture+1, k = button_pos_texture+2; i < size; i = k + 1, j = i + 1, k = j + 1)
+	{
+		buttons.push_back(Button{ textures[i],textures[j],textures[k] });
+		buttons[internal_index].forms[0].setPosition(sf::Vector2f{pos_x,pos_y});
+		buttons[internal_index].forms[1].setPosition(sf::Vector2f{pos_x,pos_y});
+		buttons[internal_index].forms[2].setPosition(sf::Vector2f{pos_x,pos_y});
+	
+		++internal_index;
+		pos_x += 35;
+	}
+
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(caption);
 	target.draw(songs[current_song].first);
+	
+	for (auto& button : buttons)
+	{
+		target.draw(button);
+	}
 }

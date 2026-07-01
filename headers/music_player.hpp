@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "../headers/state.hpp"
+#include "../headers/button.hpp"
 
 class Music_Player : public sf::Drawable
 {
@@ -33,6 +34,7 @@ private:
 	std::size_t limit{};
 	std::size_t current_song{};
 	std::vector<std::pair<sf::Text, sf::Music>> songs;
+	std::vector<Button> buttons;
 };
 
 #endif // MUSIC_PLAYER.HPP

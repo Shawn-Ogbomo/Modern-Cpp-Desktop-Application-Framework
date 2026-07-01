@@ -1,37 +1,124 @@
+#include <chrono>
 #include <fstream>
 #include <iostream>
 
-#include "../headers/game.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+
+#include "../headers/deck.hpp"
+#include "../headers/board.hpp"
 #include "../headers/exceptions.hpp"
+#include "../headers/time_status.hpp"
+#include "../headers/game_status.hpp"
+#include "../headers/music_player.hpp"
+
+sf::Clock clock1;
+
+class Application
+{
+public:
+	Application()
+	{
+		if (!sf::Shader::isAvailable())
+		{
+			throw std::runtime_error{ "Shaders are not supported on this GPU...\n" };
+		}
+
+		window.setFramerateLimit(60);
+		settings.antiAliasingLevel = 15;
+		window.setVerticalSyncEnabled(true);
+		window.setMouseCursor(cursor.value());
+		window.setIcon(sf::Image{ std::filesystem::path{"..\\..\\..\\..\\icon\\7_diamonds_new.png"} });
+	}
+
+	struct DashBoard : sf::Drawable
+	{
+	public:
+		DashBoard::DashBoard()
+		{
+			dash.setFillColor(sf::Color{ 228, 193, 156 });
+			dash.setPosition(sf::Vector2f{ 0.f,770.f });
+		}
+
+		virtual void DashBoard::draw(sf::RenderTarget& target, sf::RenderStates states) const
+		{
+			target.draw(dash);
+			target.draw(gs);
+			target.draw(ts);
+			target.draw(mp);
+		}
+
+		Game_Status gs;
+		Time_Status ts{ clock1 };
+		Music_Player mp;
+		sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
+	};
+
+	auto run() -> void
+	{
+		auto de = Deck{};
+		auto b = Board{ de };
+		auto db = DashBoard{};
+
+		db.mp.play();
+		// run the program as long as the window is open
+
+		while (window.isOpen())
+		{
+			//clock
+			db.ts.update(clock1);
+
+			// check all the window's events that were triggered since the last iteration of the loop
+			while (const std::optional event = window.pollEvent())
+			{
+				if (event->is<sf::Event::Closed>())
+				{
+					window.close();
+				}
+
+				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+				{
+					if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+						window.close();
+				}
+			}
+
+			// clear the window with blue color
+			window.clear(sf::Color{ 33,46,82 });
+
+			//draw to window
+			window.draw(b);
+			window.draw(db);
+
+			// end the current frame
+			window.display();
+		}
+	}
+private:
+	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed};
+	sf::ContextSettings		     settings;
+	sf::Shader					     glow_shader{ std::filesystem::path{"..\\..\\..\\..\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
+	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\cursor\\cursor_red_box.png"} };
+	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
+};
 
 auto main() -> int
 {
 	try
 	{
-		game();
-	}
-
-	catch (const Terminate& e)
-	{
-		std::cerr << e.what() << "\n";
-		return 1;
-	}
-
-	catch (const std::invalid_argument& e)
-	{
-		std::cerr << e.what() << "\n";
-		return 2;
-	}
-
-	catch (const std::out_of_range& e)
-	{
-		std::cerr << e.what() << "\n";
-		return 3;
+		Application application;
+		application.run();
 	}
 
 	catch (const sf::Exception& e)
 	{
 		std::cerr << e.what() << "\n";
-		return 4;
+		return 1;
+	}
+
+	catch (std::exception& e) 
+	{
+		std::cerr << e.what() << "\n";
+		return 2;
 	}
 }

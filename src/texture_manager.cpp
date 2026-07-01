@@ -1,3 +1,4 @@
+#include <utility>
 #include <fstream>
 #include <filesystem>
 
@@ -25,4 +26,22 @@ auto Texture_manager::load_textures() ->void
 
 		textures.emplace_back(t);
 	} 
+
+	auto img_size_x = 150 - 30;
+	auto img_size_y = 90 - 30;
+
+	for (auto i = 0, pos_x = 30; i <= img_size_x; i += pos_x)
+	{
+		for (auto j = 0, pos_y = 30; j <= img_size_y; j += pos_y)
+		{
+			auto t = sf::Texture{};
+
+			if (!t.loadFromFile("..\\buttons\\buttons_clock_solitare.png", false, sf::IntRect{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} }))
+			{
+				throw std::invalid_argument{ "Failed to load img...\n" };
+			}
+
+			textures.push_back(std::move(t));
+		}
+	}
 }
