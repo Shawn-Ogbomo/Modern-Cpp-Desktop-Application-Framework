@@ -3,8 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
-#include "../headers/util.hpp"
-#include "../headers/board.hpp"
+#include "../include/util.hpp"
+#include "../include/board.hpp"
 
 auto Board::allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack)->void
 {

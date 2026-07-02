@@ -1,7 +1,7 @@
 #ifndef  BUTTON_HPP
 #define BUTTON_HPP
 
-#include "../headers/state.hpp"
+#include "../include/state.hpp"
 
 struct Button : public sf::Drawable
 {

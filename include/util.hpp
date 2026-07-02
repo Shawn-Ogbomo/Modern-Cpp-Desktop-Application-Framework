@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "../headers/card.hpp"
-#include "../headers/board.hpp"
-#include "../headers/exceptions.hpp"
+#include "../include/card.hpp"
+#include "../include/board.hpp"
+#include "../include/exceptions.hpp"
 
 namespace Util
 {

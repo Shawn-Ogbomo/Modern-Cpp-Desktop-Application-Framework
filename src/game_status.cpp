@@ -1,8 +1,8 @@
 #include <SFML/Graphics.hpp>
 
-#include "../headers/game_status.hpp"
-#include"../headers/exceptions.hpp"
-#include"../headers/util.hpp"
+#include "../include/game_status.hpp"
+#include"../include/exceptions.hpp"
+#include"../include/util.hpp"
 
 Game_Status::Game_Status()
 	:game_id{ Random_Number_Gen::g() }

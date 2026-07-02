@@ -6,10 +6,10 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../headers/rank.hpp"
-#include "../headers/suit.hpp"
-#include "../headers/state.hpp"
-#include "../headers/texture_manager.hpp"
+#include "../include/rank.hpp"
+#include "../include/suit.hpp"
+#include "../include/state.hpp"
+#include "../include/texture_manager.hpp"
 
 class Card : public sf::Drawable
 {

@@ -4,7 +4,7 @@
 #include <array>
 #include <utility>
 
-#include "../headers/deck.hpp"
+#include "../include/deck.hpp"
 
 struct Board : public sf::Drawable
 {

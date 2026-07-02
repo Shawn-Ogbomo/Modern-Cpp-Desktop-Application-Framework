@@ -4,10 +4,10 @@
 #include <fstream>
 #include <filesystem>
 
-#include "../headers/util.hpp"
-#include "../headers/deck.hpp"
-#include"../headers/exceptions.hpp"
-#include "../headers/texture_manager.hpp"
+#include "../include/util.hpp"
+#include "../include/deck.hpp"
+#include"../include/exceptions.hpp"
+#include "../include/texture_manager.hpp"
 
 Deck::Deck()
 {

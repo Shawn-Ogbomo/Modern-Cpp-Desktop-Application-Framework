@@ -7,8 +7,8 @@
 #include <vector>
 #include <iostream>
 
-#include "../headers/state.hpp"
-#include "../headers/button.hpp"
+#include "../include/state.hpp"
+#include "../include/button.hpp"
 
 class Music_Player : public sf::Drawable
 {

@@ -2,18 +2,18 @@
 #include <fstream>
 #include <filesystem>
 
-#include "../headers/util.hpp"
-#include "../headers/texture_manager.hpp"
+#include "../include/util.hpp"
+#include "../include/texture_manager.hpp"
 
 auto Texture_manager::load_textures() ->void
 {
-	auto card_names = std::filesystem::path{ "..\\..\\..\\..\\txt\\card_names.txt" };
+	auto card_names = std::filesystem::path{ "..\\..\\..\\..\\assets\\txt\\card_names.txt" };
 
 	auto ifs = std::ifstream{ card_names};
 	
 	Util::check_stream(ifs, card_names,": does not exist.\n");
 
-	std::filesystem::current_path("..\\..\\..\\..\\images");
+	std::filesystem::current_path("..\\..\\..\\..\\assets\\images");
 
 	for (std::string s; ifs >> s;)
 	{

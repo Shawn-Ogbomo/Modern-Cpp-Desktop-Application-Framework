@@ -5,12 +5,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include "../headers/deck.hpp"
-#include "../headers/board.hpp"
-#include "../headers/exceptions.hpp"
-#include "../headers/time_status.hpp"
-#include "../headers/game_status.hpp"
-#include "../headers/music_player.hpp"
+#include "../include/deck.hpp"
+#include "../include/board.hpp"
+#include "../include/exceptions.hpp"
+#include "../include/time_status.hpp"
+#include "../include/game_status.hpp"
+#include "../include/music_player.hpp"
 
 sf::Clock clock1;
 
@@ -28,7 +28,7 @@ public:
 		settings.antiAliasingLevel = 15;
 		window.setVerticalSyncEnabled(true);
 		window.setMouseCursor(cursor.value());
-		window.setIcon(sf::Image{ std::filesystem::path{"..\\..\\..\\..\\icon\\7_diamonds_new.png"} });
+		window.setIcon(sf::Image{ std::filesystem::path{"..\\..\\..\\..\\assets\\icon\\7_diamonds_new.png"} });
 	}
 
 	struct DashBoard : sf::Drawable
@@ -97,8 +97,8 @@ public:
 private:
 	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed};
 	sf::ContextSettings		     settings;
-	sf::Shader					     glow_shader{ std::filesystem::path{"..\\..\\..\\..\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
-	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\cursor\\cursor_red_box.png"} };
+	sf::Shader					     glow_shader{ std::filesystem::path{"..\\..\\..\\..\\assets\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
+	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\assets\\cursor\\cursor_red_box.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
 };
 

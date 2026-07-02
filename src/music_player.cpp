@@ -1,5 +1,5 @@
-#include "../headers/music_player.hpp"
-#include "../headers/util.hpp"
+#include "../include/music_player.hpp"
+#include "../include/util.hpp"
 
 Music_Player::Music_Player()
 {
@@ -11,7 +11,7 @@ Music_Player::Music_Player()
 
 	auto index = 0;
 
-	for (const auto& song : std::filesystem::directory_iterator{ "..\\music" })
+	for (const auto& song : std::filesystem::directory_iterator{ "..\\audio" })
 	{
 		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string()}, song);
 		songs[index].first.setFillColor(sf::Color{ 63, 59, 147 });

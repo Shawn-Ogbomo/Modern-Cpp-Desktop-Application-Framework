@@ -1,4 +1,4 @@
-#include "../headers/util.hpp"
+#include "../include/util.hpp"
 
 auto Util::check_stream(const std::istream& is, const std::filesystem::path& p, const std::string& message, const std::string& message2) -> void
 {

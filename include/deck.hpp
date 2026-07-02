@@ -4,8 +4,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "../headers/card.hpp"
-#include "../headers/random_number_gen.hpp"
+#include "../include/card.hpp"
+#include "../include/random_number_gen.hpp"
 
 class Deck
 {
