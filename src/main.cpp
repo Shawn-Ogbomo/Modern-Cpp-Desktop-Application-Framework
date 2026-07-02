@@ -98,7 +98,7 @@ private:
 	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed};
 	sf::ContextSettings		     settings;
 	sf::Shader					     glow_shader{ std::filesystem::path{"..\\..\\..\\..\\assets\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
-	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\assets\\cursor\\cursor_red_box.png"} };
+	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\assets\\cursor\\cursor_ice_white.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
 };
 

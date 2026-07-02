@@ -26,8 +26,8 @@ Music_Player::Music_Player()
 	const auto& textures = get_texture_manager().textures;
 	const auto& size = textures.size();
 
-	auto pos_x = 0.0f;
-	auto pos_y = 0.0f;
+	auto pos_x = 452.0f-35.0f;
+	auto pos_y = 842.0f;
 	auto internal_index = 0;
 	auto button_pos_texture = 53;
 
