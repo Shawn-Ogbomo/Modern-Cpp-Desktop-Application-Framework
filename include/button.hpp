@@ -22,6 +22,7 @@ public:
 		target.draw(forms[0]);
 	}
 
+	bool clicked{};
 	ButtonState name{};
 	std::vector<sf::Sprite>forms;
 };

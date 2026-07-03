@@ -1,10 +1,12 @@
 #include <chrono>
 #include <fstream>
+#include <iterator>
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
+#include "../include/util.hpp"
 #include "../include/deck.hpp"
 #include "../include/board.hpp"
 #include "../include/exceptions.hpp"
@@ -81,6 +83,36 @@ public:
 					if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
 						window.close();
 				}
+				else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+				{
+					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+					{
+						sf::Vector2f cursor_pos{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
+
+						if (auto button = db.mp.name_this_later(cursor_pos); button != std::end(db.mp.buttons))
+						{
+							button->clicked = true;
+							window.draw(button->forms[1]);
+							window.display();
+
+							Util::delay_time(clock1, std::chrono::seconds{ 5 });
+
+							while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+							{
+								window.draw(button->forms[2]);
+								window.display();
+							}
+						}
+					}
+				}
+
+				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
+				{
+					if (mouseButtonReleased->button == sf::Mouse::Button::Left)
+					{
+						
+					}
+				}
 			}
 
 			// clear the window with blue color
@@ -95,7 +127,7 @@ public:
 		}
 	}
 private:
-	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed};
+	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
 	sf::ContextSettings		     settings;
 	sf::Shader					     glow_shader{ std::filesystem::path{"..\\..\\..\\..\\assets\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
 	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\assets\\cursor\\cursor_ice_white.png"} };
@@ -116,7 +148,7 @@ auto main() -> int
 		return 1;
 	}
 
-	catch (std::exception& e) 
+	catch (std::exception& e)
 	{
 		std::cerr << e.what() << "\n";
 		return 2;

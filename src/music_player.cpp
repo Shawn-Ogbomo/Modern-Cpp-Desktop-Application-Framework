@@ -13,7 +13,7 @@ Music_Player::Music_Player()
 
 	for (const auto& song : std::filesystem::directory_iterator{ "..\\audio" })
 	{
-		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string()}, song);
+		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string() }, song);
 		songs[index].first.setFillColor(sf::Color{ 63, 59, 147 });
 		songs[index].first.setPosition(sf::Vector2f{ 674,842 });
 		songs[index].first.setCharacterSize(26);
@@ -26,31 +26,38 @@ Music_Player::Music_Player()
 	const auto& textures = get_texture_manager().textures;
 	const auto& size = textures.size();
 
-	auto pos_x = 452.0f-35.0f;
+	auto pos_x = 452.0f - 35.0f;
 	auto pos_y = 842.0f;
 	auto internal_index = 0;
 	auto button_pos_texture = 53;
 
-	for (auto i = button_pos_texture, j = button_pos_texture+1, k = button_pos_texture+2; i < size; i = k + 1, j = i + 1, k = j + 1)
+	for (auto i = button_pos_texture, j = button_pos_texture + 1, k = button_pos_texture + 2; i < size; i = k + 1, j = i + 1, k = j + 1)
 	{
 		buttons.push_back(Button{ textures[i],textures[j],textures[k] });
-		buttons[internal_index].forms[0].setPosition(sf::Vector2f{pos_x,pos_y});
-		buttons[internal_index].forms[1].setPosition(sf::Vector2f{pos_x,pos_y});
-		buttons[internal_index].forms[2].setPosition(sf::Vector2f{pos_x,pos_y});
-	
+		buttons[internal_index].forms[0].setPosition(sf::Vector2f{ pos_x,pos_y });
+		buttons[internal_index].forms[1].setPosition(sf::Vector2f{ pos_x,pos_y });
+		buttons[internal_index].forms[2].setPosition(sf::Vector2f{ pos_x,pos_y });
+
 		++internal_index;
 		pos_x += 35;
 	}
-
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(caption);
 	target.draw(songs[current_song].first);
-	
+
 	for (auto& button : buttons)
 	{
 		target.draw(button);
 	}
+}
+
+auto Music_Player::name_this_later(const sf::Vector2<float>& cursor_pos) ->std::vector<Button>::iterator
+{
+	return std::find_if(buttons.begin(), buttons.end(), [&cursor_pos](Button& b) {
+		return (cursor_pos.x >= b.forms[0].getPosition().x && cursor_pos.x <= b.forms[0].getPosition().x + b.forms[0].getLocalBounds().size.x
+			&& cursor_pos.y >= b.forms[0].getPosition().y && cursor_pos.y <= b.forms[0].getPosition().y + b.forms[0].getLocalBounds().size.y);
+		});
 }

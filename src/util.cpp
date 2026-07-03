@@ -9,24 +9,8 @@ auto Util::check_stream(const std::istream& is, const std::filesystem::path& p, 
 
 	if (is.fail())
 	{
-		throw std::invalid_argument{std::filesystem::absolute(p).string() + message};
+		throw std::invalid_argument{ std::filesystem::absolute(p).string() + message };
 	}
-}
-
-auto Util::prev(int pos, std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>& piles)
--> std::array < std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>::iterator
-{
-	if (pos < 0 || pos > static_cast<int>(Rank_lib::Rank::queen))
-	{
-		throw std::out_of_range{ "Oops out of bounds...\n" };
-	}
-
-	if (!pos)
-	{
-		return piles.end();
-	}
-
-	return (piles.begin() + pos) - 1;
 }
 
 auto Util::load_font(const std::filesystem::path& p, sf::Font& f) ->void
@@ -34,5 +18,16 @@ auto Util::load_font(const std::filesystem::path& p, sf::Font& f) ->void
 	if (!f.openFromFile(p.string()))
 	{
 		throw Invalid_file{ "Invalid file: " + p.string() + "\n" };
+	}
+}
+
+auto Util::delay_time(const sf::Clock& c, std::chrono::seconds s) -> void
+{
+	auto t{ c.getElapsedTime() };
+
+	while (t.asSeconds() < (t.asSeconds() + s.count()))
+	{
+		t = c.getElapsedTime();
+		std::cout << t.asSeconds() << "\n";
 	}
 }

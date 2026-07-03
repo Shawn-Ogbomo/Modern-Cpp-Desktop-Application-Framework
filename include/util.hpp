@@ -2,6 +2,7 @@
 #define UTIL_HPP
 
 #include <string>
+#include <chrono>
 
 #include "../include/card.hpp"
 #include "../include/board.hpp"
@@ -9,13 +10,12 @@
 
 namespace Util
 {
-	auto check_stream(const std::istream& is, const std::filesystem::path&p, const std::string& message ="", const std::string& message2 = "") -> void;
-
-	//returns the previous pile on the board
-	auto prev(int pos, std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>& piles)
-		-> std::array < std::vector<std::pair<Card, Rank_lib::Rank>>, Board::total_piles>::iterator;
+	auto check_stream(const std::istream& is, const std::filesystem::path& p, const std::string& message = "", const std::string& message2 = "") -> void;
 
 	auto load_font(const std::filesystem::path& p, sf::Font& f) -> void;
+
+	//sets a delay based on supplied time in microseconds
+	auto delay_time(const sf::Clock& c, std::chrono::seconds s) -> void;
 }
 
 #endif // UTIL_HPP

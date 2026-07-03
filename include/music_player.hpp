@@ -10,7 +10,7 @@
 #include "../include/state.hpp"
 #include "../include/button.hpp"
 
-class Music_Player : public sf::Drawable
+struct  Music_Player : public sf::Drawable
 {
 	sf::Font font{ };
 public:
@@ -24,12 +24,14 @@ public:
 
 	auto song_name() -> const std::string& { return songs[current_song].first.getString(); };
 
+	auto name_this_later(const sf::Vector2<float>& cursor_pos) -> std::vector<Button>::iterator;
+
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
 	auto stop() -> void { songs[current_song].second.stop(); };
 	auto pause() -> void { songs[current_song].second.pause(); };
 	auto play() -> void { songs[current_song].second.play(); };
-private:
+	
 	sf::Text caption{ font };
 	std::size_t limit{};
 	std::size_t current_song{};
