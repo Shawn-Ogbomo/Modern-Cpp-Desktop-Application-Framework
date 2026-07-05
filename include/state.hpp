@@ -3,7 +3,7 @@
 
 enum class ButtonState
 {
-	prev, play, pause, next, stop
+	prev, pause, play, next, stop
 };
 
 inline auto operator++(ButtonState& b) ->ButtonState&

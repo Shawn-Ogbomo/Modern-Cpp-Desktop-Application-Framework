@@ -87,7 +87,7 @@ public:
 				{
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 					{
-						sf::Vector2f cursor_pos{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
+						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 
 						if (auto button = db.mp.name_this_later(cursor_pos); button != std::end(db.mp.buttons))
 						{
@@ -95,7 +95,7 @@ public:
 							window.draw(button->forms[1]);
 							window.display();
 
-							Util::delay_time(clock1, std::chrono::seconds{ 5 });
+							Util::delay_time(clock1, std::chrono::microseconds{ 200000 });
 
 							while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 							{
@@ -110,7 +110,57 @@ public:
 				{
 					if (mouseButtonReleased->button == sf::Mouse::Button::Left)
 					{
-						
+						if (auto button = std::find_if(db.mp.buttons.begin(), db.mp.buttons.end(), [](auto& b) {return b.clicked; });button!= std::end(db.mp.buttons))
+						{
+							window.draw(button->forms[1]);
+							window.display();
+
+							Util::delay_time(clock1, std::chrono::microseconds{ 200000 });
+
+							window.draw(button->forms[0]);
+							window.display();
+
+							switch (button->name)
+							{
+							case ButtonState::prev:
+							{
+								db.mp.stop();
+								db.mp.prev();
+								db.mp.play();
+								break;
+							}
+
+							case ButtonState::pause:
+							{
+								db.mp.pause();
+								break;
+							}
+
+							case ButtonState::play:
+							{
+								db.mp.play();
+								break;
+							}
+			
+							case ButtonState::next:
+							{
+								db.mp.stop();
+								db.mp.next();
+								db.mp.play();
+								break;
+							}
+							case ButtonState::stop:
+							{
+								db.mp.stop();
+								break;
+
+							}
+							default:
+								break;
+							}
+
+							button->clicked = false;
+						}
 					}
 				}
 			}

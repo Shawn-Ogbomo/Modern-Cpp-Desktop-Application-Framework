@@ -15,7 +15,7 @@ namespace Util
 	auto load_font(const std::filesystem::path& p, sf::Font& f) -> void;
 
 	//sets a delay based on supplied time in microseconds
-	auto delay_time(const sf::Clock& c, std::chrono::seconds s) -> void;
+	auto delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void;
 }
 
 #endif // UTIL_HPP

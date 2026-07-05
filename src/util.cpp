@@ -21,13 +21,13 @@ auto Util::load_font(const std::filesystem::path& p, sf::Font& f) ->void
 	}
 }
 
-auto Util::delay_time(const sf::Clock& c, std::chrono::seconds s) -> void
+auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms)-> void
 {
-	auto t{ c.getElapsedTime() };
+	auto t = c.getElapsedTime();
+	auto t2 = c.getElapsedTime();
 
-	while (t.asSeconds() < (t.asSeconds() + s.count()))
+	while (t2 < t + ms)
 	{
-		t = c.getElapsedTime();
-		std::cout << t.asSeconds() << "\n";
+		t2 = c.getElapsedTime();
 	}
 }

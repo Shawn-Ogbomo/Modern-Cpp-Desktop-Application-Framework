@@ -51,12 +51,13 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	for (auto& button : buttons)
 	{
 		target.draw(button);
+
 	}
 }
 
 auto Music_Player::name_this_later(const sf::Vector2<float>& cursor_pos) ->std::vector<Button>::iterator
 {
-	return std::find_if(buttons.begin(), buttons.end(), [&cursor_pos](Button& b) {
+	return std::find_if(buttons.begin(), buttons.end(), [&cursor_pos](auto& b) {
 		return (cursor_pos.x >= b.forms[0].getPosition().x && cursor_pos.x <= b.forms[0].getPosition().x + b.forms[0].getLocalBounds().size.x
 			&& cursor_pos.y >= b.forms[0].getPosition().y && cursor_pos.y <= b.forms[0].getPosition().y + b.forms[0].getLocalBounds().size.y);
 		});
