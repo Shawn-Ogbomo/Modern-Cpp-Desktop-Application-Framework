@@ -21,10 +21,8 @@ public:
 	auto operator =(const Music_Player&&) -> Music_Player & = delete;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
 	auto song_name() -> const std::string& { return songs[current_song].first.getString(); };
-
-	auto name_this_later(const sf::Vector2<float>& cursor_pos) -> std::vector<Button>::iterator;
+	auto find_clicked_button(const sf::Vector2<float>& cursor_pos) -> std::vector<Button>::iterator;
 
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };

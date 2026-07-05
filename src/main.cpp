@@ -62,6 +62,8 @@ public:
 		auto b = Board{ de };
 		auto db = DashBoard{};
 
+		auto button = std::vector<Button>::iterator{};
+
 		db.mp.play();
 		// run the program as long as the window is open
 
@@ -89,7 +91,7 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 
-						if (auto button = db.mp.name_this_later(cursor_pos); button != std::end(db.mp.buttons))
+						if (button = db.mp.find_clicked_button(cursor_pos); button != std::end(db.mp.buttons))
 						{
 							button->clicked = true;
 							window.draw(button->forms[1]);
@@ -110,7 +112,7 @@ public:
 				{
 					if (mouseButtonReleased->button == sf::Mouse::Button::Left)
 					{
-						if (auto button = std::find_if(db.mp.buttons.begin(), db.mp.buttons.end(), [](auto& b) {return b.clicked; });button!= std::end(db.mp.buttons))
+						if  (button != std::end(db.mp.buttons))
 						{
 							window.draw(button->forms[1]);
 							window.display();
