@@ -85,6 +85,7 @@ public:
 					if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
 						window.close();
 				}
+
 				else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
 				{
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
@@ -121,47 +122,7 @@ public:
 
 							window.draw(button->forms[0]);
 							window.display();
-
-							switch (button->name)
-							{
-							case ButtonState::prev:
-							{
-								db.mp.stop();
-								db.mp.prev();
-								db.mp.play();
-								break;
-							}
-
-							case ButtonState::pause:
-							{
-								db.mp.pause();
-								break;
-							}
-
-							case ButtonState::play:
-							{
-								db.mp.play();
-								break;
-							}
-			
-							case ButtonState::next:
-							{
-								db.mp.stop();
-								db.mp.next();
-								db.mp.play();
-								break;
-							}
-							case ButtonState::stop:
-							{
-								db.mp.stop();
-								break;
-
-							}
-							default:
-								break;
-							}
-
-							button->clicked = false;
+							db.mp(*button);
 						}
 					}
 				}

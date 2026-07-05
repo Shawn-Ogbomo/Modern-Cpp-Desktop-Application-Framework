@@ -19,6 +19,7 @@ public:
 	auto operator =(const Music_Player&) -> Music_Player& = delete;
 	Music_Player(const Music_Player&&) = delete;
 	auto operator =(const Music_Player&&) -> Music_Player & = delete;
+	auto operator()(Button &b) ->void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	auto song_name() -> const std::string& { return songs[current_song].first.getString(); };

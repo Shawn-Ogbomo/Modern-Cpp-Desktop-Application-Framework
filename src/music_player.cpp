@@ -43,6 +43,40 @@ Music_Player::Music_Player()
 	}
 }
 
+auto Music_Player::operator()(Button& b) ->void
+{
+	if (b.name == ButtonState::prev)
+	{
+		stop();
+		prev();
+		play();
+	}
+
+	else if (b.name == ButtonState::pause)
+	{
+		pause();
+	}
+
+	else if( b.name == ButtonState::play)
+	{
+		play();
+	}
+
+	else if (b.name == ButtonState::next)
+	{
+		stop();
+		next();
+		play();
+	}
+
+	else if (b.name == ButtonState::stop)
+	{
+		stop();
+	}
+
+	b.clicked = false;
+}
+
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(caption);
@@ -51,7 +85,6 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	for (auto& button : buttons)
 	{
 		target.draw(button);
-
 	}
 }
 
