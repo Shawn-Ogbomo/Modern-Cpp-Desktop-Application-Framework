@@ -62,11 +62,9 @@ public:
 		auto b = Board{ de };
 		auto db = DashBoard{};
 
-		auto button = std::vector<Button>::iterator{};
-
 		db.mp.play();
+		
 		// run the program as long as the window is open
-
 		while (window.isOpen())
 		{
 			//clock
@@ -91,21 +89,7 @@ public:
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
-
-						if (button = db.mp.find_clicked_button(cursor_pos); button != std::end(db.mp.buttons))
-						{
-							button->clicked = true;
-							window.draw(button->forms[1]);
-							window.display();
-
-							Util::delay_time(clock1, std::chrono::microseconds{ 200000 });
-
-							while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-							{
-								window.draw(button->forms[2]);
-								window.display();
-							}
-						}
+						db.mp(clock1, window, cursor_pos);
 					}
 				}
 
@@ -113,17 +97,8 @@ public:
 				{
 					if (mouseButtonReleased->button == sf::Mouse::Button::Left)
 					{
-						if  (button != std::end(db.mp.buttons))
-						{
-							window.draw(button->forms[1]);
-							window.display();
-
-							Util::delay_time(clock1, std::chrono::microseconds{ 200000 });
-
-							window.draw(button->forms[0]);
-							window.display();
-							db.mp(*button);
-						}
+						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
+						db.mp(clock1, window, cursor_pos);
 					}
 				}
 			}

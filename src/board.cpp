@@ -40,7 +40,7 @@ Board::Board(Deck& d)
 		{
 			card = std::move(d.draw());
 			rank = Rank_lib::ranks[index];
-			auto& [face, reverse] = card.img();
+			auto [face, reverse] = card.img();
 
 			if (rank == Rank_lib::Rank::king)
 			{
