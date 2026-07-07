@@ -110,8 +110,9 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 	}
 
 	//idle state
-	else if (songs[current_song].second.getPlayingOffset() == songs[current_song].second.getDuration())
+	else if (songs[current_song].second.getPlayingOffset() >= songs[current_song].second.getDuration() - std::chrono::microseconds{  1000000})
 	{
+		stop();
 		next();
 		play();
 	}
@@ -121,6 +122,9 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 	{
 		play();
 	}
+
+	std::cout << "Position in song: " << songs[current_song].second.getPlayingOffset().asMicroseconds() << "  | |  " << "Duration of song: " << songs[current_song].second.getDuration().asMicroseconds() << "\n\n\n";
+	Util::delay_time(c, std::chrono::microseconds{ 300000 });
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
