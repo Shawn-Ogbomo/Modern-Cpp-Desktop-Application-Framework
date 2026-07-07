@@ -19,7 +19,7 @@ public:
 	auto operator =(const Music_Player&) -> Music_Player& = delete;
 	Music_Player(const Music_Player&&) = delete;
 	auto operator =(const Music_Player&&) -> Music_Player & = delete;
-	auto operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void;
+	auto operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

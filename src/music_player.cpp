@@ -108,6 +108,19 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 			button->clicked = false;
 		}
 	}
+
+	//idle state
+	else if (songs[current_song].second.getPlayingOffset() == songs[current_song].second.getDuration())
+	{
+		next();
+		play();
+	}
+
+	//first song at application start...
+	else if (songs[current_song].second.getStatus() == sf::Music::Status::Stopped)
+	{
+		play();
+	}
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const

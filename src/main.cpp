@@ -62,11 +62,11 @@ public:
 		auto b = Board{ de };
 		auto db = DashBoard{};
 
-		db.mp.play();
-		
 		// run the program as long as the window is open
 		while (window.isOpen())
 		{
+			db.mp(clock1, window);
+
 			//clock
 			db.ts.update(clock1);
 
