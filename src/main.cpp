@@ -62,16 +62,13 @@ public:
 		auto b = Board{ de };
 		auto db = DashBoard{};
 
-		auto cursor_pos = sf::Vector2f{};
-
 		db.mp.play();
 
 		// run the program as long as the window is open
 		while (window.isOpen())
 		{
 			db.mp(clock1, window);
-
-			//clock
+			
 			db.ts.update(clock1);
 
 			// check all the window's events that were triggered since the last iteration of the loop
@@ -92,7 +89,7 @@ public:
 				{
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 					{
-						cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
+						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 						db.mp(clock1, window, cursor_pos);
 					}
 				}
