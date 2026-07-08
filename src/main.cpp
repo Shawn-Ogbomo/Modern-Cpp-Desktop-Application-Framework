@@ -101,7 +101,6 @@ public:
 				{
 					if (mouseButtonReleased->button == sf::Mouse::Button::Left)
 					{
-						db.mp(clock1, window, cursor_pos);
 					}
 				}
 			}

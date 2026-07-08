@@ -52,8 +52,6 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 	
 	if (button != std::end(buttons))
 	{
-		if (!button->clicked)
-		{
 			rw.draw(button->forms[1]);
 			rw.display();
 			Util::delay_time(c, std::chrono::microseconds{ 20000 });
@@ -64,11 +62,6 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 				rw.display();
 			}
 
-			button->clicked = true;
-		}
-
-		else if (button->clicked)
-		{
 			rw.draw(button->forms[1]);
 			rw.display();
 			Util::delay_time(c, std::chrono::microseconds{ 20000 });
@@ -104,12 +97,8 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 			{
 				stop();
 			}
-
-			button->clicked = false;
 		}
-	}
 
-	//idle state
 	else if (auto song_finished = songs[current_song].second.getPlayingOffset() >= songs[current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
 		stop();
