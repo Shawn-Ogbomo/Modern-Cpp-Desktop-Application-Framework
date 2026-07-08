@@ -10,7 +10,7 @@
 #include "../include/state.hpp"
 #include "../include/button.hpp"
 
-struct  Music_Player : public sf::Drawable
+class  Music_Player : public sf::Drawable
 {
 	sf::Font font{ };
 public:
@@ -28,7 +28,7 @@ public:
 	auto stop() -> void { songs[current_song].second.stop(); };
 	auto pause() -> void { songs[current_song].second.pause(); };
 	auto play() -> void { songs[current_song].second.play(); };
-	
+private:	
 	sf::Text caption{ font };
 	std::size_t limit{};
 	std::size_t current_song{};
