@@ -8,12 +8,41 @@
 #include <iostream>
 
 #include "../include/state.hpp"
-#include "../include/button.hpp"
+
+class Button : public sf::Drawable
+{
+public:
+	friend class Music_Player;
+	
+	explicit Button(const sf::Texture& t, const sf::Texture& t2, const sf::Texture& t3)
+	{
+		static auto bs = ButtonState{};
+		name = bs;
+		++bs;
+
+		forms.push_back(std::move(sf::Sprite{ t }));
+		forms.push_back(std::move(sf::Sprite{ t2 }));
+		forms.push_back(std::move(sf::Sprite{ t3 }));
+	}
+
+	auto operator()(Music_Player& mp) -> void;
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		target.draw(forms[0]);
+	}
+
+private:
+	ButtonState name{};
+	std::vector<sf::Sprite>forms;
+};
 
 class  Music_Player : public sf::Drawable
 {
 	sf::Font font{ };
 public:
+	friend class Button;
+
 	Music_Player();
 	Music_Player(const Music_Player&) = delete;
 	auto operator =(const Music_Player&) -> Music_Player& = delete;
@@ -22,14 +51,14 @@ public:
 	auto operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	friend auto idle(Music_Player&mp) -> void;
-
+private:	
+	friend auto idle(Music_Player& mp) -> void;
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
 	auto stop() -> void { songs[current_song].second.stop(); };
 	auto pause() -> void { songs[current_song].second.pause(); };
 	auto play() -> void { songs[current_song].second.play(); };
-private:	
+
 	sf::Text caption{ font };
 	std::size_t limit{};
 	std::size_t current_song{};

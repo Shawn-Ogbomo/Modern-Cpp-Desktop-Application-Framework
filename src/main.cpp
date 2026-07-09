@@ -61,8 +61,8 @@ public:
 		auto de = Deck{};
 		auto b = Board{ de };
 		auto db = DashBoard{};
-	
 		// run the program as long as the window is open
+
 		while (window.isOpen())
 		{
 			db.mp(clock1, window);

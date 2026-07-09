@@ -68,35 +68,8 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 
 			rw.draw(button->forms[0]);
 			rw.display();
-
-			if (button->name == ButtonState::prev)
-			{
-				stop();
-				prev();
-				play();
-			}
-
-			else if (button->name == ButtonState::pause)
-			{
-				pause();
-			}
-
-			else if (button->name == ButtonState::play)
-			{
-				play();
-			}
-
-			else if (button->name == ButtonState::next)
-			{
-				stop();
-				next();
-				play();
-			}
-
-			else if (button->name == ButtonState::stop)
-			{
-				stop();
-			}
+			button->operator()(*this);
+			return;
 	}
 	
 	idle(*this);
@@ -117,14 +90,47 @@ auto idle( Music_Player& mp) -> void
 {
 	if (auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
+		auto& next = mp.buttons[3];
+		next.operator()(mp);
+	}
+
+	else if  (static auto count = 0; !count)
+	{
+		auto& play = mp.buttons[2];
+		play.operator()(mp);
+
+		++count;
+	}
+}
+
+auto Button::operator()(Music_Player& mp) ->void
+{
+	if (name == ButtonState::prev)
+	{
+		mp.stop();
+		mp.prev();
+		mp.play();
+	}
+
+	else if (name == ButtonState::pause)
+	{
+		mp.pause();
+	}
+
+	else if (name == ButtonState::play)
+	{
+		mp.play();
+	}
+
+	else if (name == ButtonState::next)
+	{
 		mp.stop();
 		mp.next();
 		mp.play();
 	}
 
-	else if  (static auto count = 0; !count)
+	else if (name == ButtonState::stop)
 	{
-			mp.play();
-			++count;
+		mp.stop();
 	}
 }
