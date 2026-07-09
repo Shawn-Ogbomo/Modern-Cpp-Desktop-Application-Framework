@@ -22,6 +22,7 @@ public:
 	auto operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	friend auto idle(Music_Player&mp) -> void;
 
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };

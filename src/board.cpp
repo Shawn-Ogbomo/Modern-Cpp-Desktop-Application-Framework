@@ -50,7 +50,7 @@ Board::Board(Deck& d)
 				continue;
 			}
 
-			sf::Angle a{ sf::radians(index * 2.0f * pi / (total_piles - 1.0f) - (pi / 2.0f)) };
+			sf::Angle a{ sf::radians(static_cast<float>(index * 2.0f * pi / (total_piles - 1.0f) - (pi / 2.0f))) };
 
 			face.setPosition(sf::Vector2f{ center_x + radius * std::cos(a.asRadians()) - (face.getLocalBounds().size.x) / 2, center_y + (radius * std::sin(a.asRadians())) - face.getLocalBounds().size.y / 2 });
 			reverse.setPosition(sf::Vector2f{ center_x + radius * std::cos(a.asRadians()) - (reverse.getLocalBounds().size.x) / 2, center_y + (radius * std::sin(a.asRadians())) - reverse.getLocalBounds().size.y / 2 });
