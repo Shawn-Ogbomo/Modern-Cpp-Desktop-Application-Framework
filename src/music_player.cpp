@@ -86,7 +86,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
-auto idle( Music_Player& mp) -> void
+auto Music_Player::idle( Music_Player& mp) -> void
 {
 	if (auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{

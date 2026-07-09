@@ -52,7 +52,7 @@ public:
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:	
-	friend auto idle(Music_Player& mp) -> void;
+	auto idle(Music_Player& mp) -> void;
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
 	auto stop() -> void { songs[current_song].second.stop(); };
