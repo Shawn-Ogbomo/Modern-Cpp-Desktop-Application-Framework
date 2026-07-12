@@ -10,7 +10,7 @@
 
 class Time_Status : public sf::Drawable
 {
-	sf::Font font{};
+	sf::Font font;
 public:
 	explicit Time_Status(sf::Clock& c);
 	Time_Status(const Time_Status&) = delete;

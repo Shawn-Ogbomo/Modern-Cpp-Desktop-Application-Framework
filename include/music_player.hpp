@@ -39,7 +39,7 @@ private:
 
 class  Music_Player : public sf::Drawable
 {
-	sf::Font font{ };
+	sf::Font font;
 public:
 	friend class Button;
 

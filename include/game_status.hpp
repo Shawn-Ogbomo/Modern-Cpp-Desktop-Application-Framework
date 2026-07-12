@@ -9,7 +9,7 @@
 
 struct Game_Status : public sf::Drawable
 {
-	sf::Font font{ };
+	sf::Font font;
 public:
 	Game_Status();
 	Game_Status(const Game_Status&) = delete;
