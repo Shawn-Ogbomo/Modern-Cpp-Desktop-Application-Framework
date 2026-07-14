@@ -3,10 +3,11 @@
 
 #include <array>
 #include <utility>
+#include <deque>
 
 #include "../include/deck.hpp"
 
-struct Board : public sf::Drawable
+class Board : public sf::Drawable
 {
 	static constexpr auto total_piles = 13;
 public:
@@ -15,10 +16,12 @@ public:
 	auto operator =(const Board&) ->Board & = delete;
 	Board(const Board&&) = delete;
 	auto operator =(const Board&&) ->Board & = delete;
+	auto operator ()(sf::Vector2f& cursor,const sf::Shader& effect) -> void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	auto allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack) -> void;
-	std::array<std::vector<std::pair<Card, Rank_lib::Rank>>, total_piles> piles{};
+private:
+	auto allocate(std::deque<std::pair<Card, Rank_lib::Rank>>& stack) -> void;
+	std::array<std::deque<std::pair<Card, Rank_lib::Rank>>, total_piles> piles{};
 };
 
 #endif // BOARD_HPP 

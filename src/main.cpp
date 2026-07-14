@@ -16,6 +16,29 @@
 
 sf::Clock clock1;
 
+struct DashBoard : sf::Drawable
+{
+public:
+	DashBoard::DashBoard()
+	{
+		dash.setFillColor(sf::Color{ 228, 193, 156 });
+		dash.setPosition(sf::Vector2f{ 0.f,770.f });
+	}
+
+	virtual void DashBoard::draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		target.draw(dash);
+		target.draw(gs);
+		target.draw(ts);
+		target.draw(mp);
+	}
+
+	Game_Status gs;
+	Time_Status ts{ clock1 };
+	Music_Player mp;
+	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
+};
+
 class Application
 {
 public:
@@ -32,29 +55,6 @@ public:
 		window.setMouseCursor(cursor.value());
 		window.setIcon(sf::Image{ std::filesystem::path{"..\\..\\..\\..\\assets\\icon\\7_diamonds_new.png"} });
 	}
-
-	struct DashBoard : sf::Drawable
-	{
-	public:
-		DashBoard::DashBoard()
-		{
-			dash.setFillColor(sf::Color{ 228, 193, 156 });
-			dash.setPosition(sf::Vector2f{ 0.f,770.f });
-		}
-
-		virtual void DashBoard::draw(sf::RenderTarget& target, sf::RenderStates states) const
-		{
-			target.draw(dash);
-			target.draw(gs);
-			target.draw(ts);
-			target.draw(mp);
-		}
-
-		Game_Status gs;
-		Time_Status ts{ clock1 };
-		Music_Player mp;
-		sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
-	};
 
 	auto run() -> void
 	{
@@ -89,13 +89,7 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 						db.mp(clock1, window, cursor_pos);
-					}
-				}
-
-				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
-				{
-					if (mouseButtonReleased->button == sf::Mouse::Button::Left)
-					{
+						b(cursor_pos,glow_shader);
 					}
 				}
 			}
@@ -114,7 +108,7 @@ public:
 private:
 	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
 	sf::ContextSettings		     settings;
-	sf::Shader					     glow_shader{ std::filesystem::path{"..\\..\\..\\..\\assets\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
+	sf::Shader						 glow_shader{ std::filesystem::path{"..\\..\\..\\..\\assets\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
 	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\assets\\cursor\\cursor_ice_white.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
 };

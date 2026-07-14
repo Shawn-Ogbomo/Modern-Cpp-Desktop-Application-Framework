@@ -6,9 +6,8 @@
 #include "../include/util.hpp"
 #include "../include/board.hpp"
 
-auto Board::allocate(std::vector<std::pair<Card, Rank_lib::Rank>>& stack)->void
+auto Board::allocate(std::deque<std::pair<Card, Rank_lib::Rank>>& stack)->void
 {
-	stack.reserve(4);
 	std::fill_n(std::back_inserter(stack), 4, std::pair{ Card{}, Rank_lib::Rank{} });
 }
 
@@ -61,4 +60,24 @@ Board::Board(Deck& d)
 
 	auto& [card, rank] = piles[12].back();
 	card.position() = Card_State::face_up;
+}
+
+auto Board::operator ()(sf::Vector2f& cursor,const sf::Shader& effect) -> void
+{
+	//this operator is only valid while there are less than 4 kings face up in the center pile
+
+	auto dummy = sf::RectangleShape{ sf::Vector2f{96,144 } };
+
+//IF the cursor within the bounds of a card??? 	
+  // get an iterator to the card 
+	//is the card face up?? 
+		//is the pile active?? 
+		//move card 
+			//did is it in bounds of the correct destination pile?? 
+				//turn the shader effect on destination pile while the card is within bounds 
+			// use operator == to compare active card suit to destination pile suit 
+			//if the card is dropped in the correct pile move it from the source pile to the destination pile -- the back
+				// move all cards starting from the back to the front if they are face up 
+			//turn off the shader when the card is not in bounds 
+ //END IF  
 }
