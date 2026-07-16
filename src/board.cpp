@@ -6,16 +6,16 @@
 #include "../include/util.hpp"
 #include "../include/board.hpp"
 
-auto Board::allocate(std::deque<std::pair<Card, Rank_lib::Rank>>& stack)->void
+auto Board::allocate(std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>& stack)->void
 {
-	std::fill_n(std::back_inserter(stack), 4, std::pair{ Card{}, Rank_lib::Rank{} });
+	std::fill_n(std::back_inserter(stack.second), 4, std::pair{ Card{},Rank_lib::Rank{} });
 }
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (auto& pile : piles)
 	{
-		for (const auto& [card, rank] : pile)
+		for (const auto& [card, rank] : pile.second)
 		{
 			target.draw(card);
 		}
@@ -35,7 +35,7 @@ Board::Board(Deck& d)
 	{
 		allocate(pile);
 
-		for (auto& [card, rank] : pile)
+		for (auto& [card, rank] : pile.second)
 		{
 			card = std::move(d.draw());
 			rank = Rank_lib::ranks[index];
@@ -58,26 +58,27 @@ Board::Board(Deck& d)
 		++index;
 	}
 
-	auto& [card, rank] = piles[12].back();
+	auto& [card, rank] = piles[12].second.back();
 	card.position() = Card_State::face_up;
+	piles[12].first = true;
 }
 
-auto Board::operator ()(sf::Vector2f& cursor,const sf::Shader& effect) -> void
+auto Board::operator ()(sf::Vector2f cursor_pos)->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>, total_piles>::iterator
 {
 	//this operator is only valid while there are less than 4 kings face up in the center pile
+	//get a count of face up kings in the center pile...
+	//IF the cursor within the bounds of a card???
+	// get an iterator to the card
+	return std::find_if(piles.begin(), piles.end(), [&cursor_pos](auto& c) {
+		return (cursor_pos.x >= c.second[0].first.img().first.getPosition().x && cursor_pos.x <= c.second[0].first.img().first.getPosition().x + c.second[0].first.img().first.getLocalBounds().size.x
+			&& cursor_pos.y >= c.second[0].first.img().first.getPosition().y && cursor_pos.y <= c.second[0].first.img().first.getPosition().y + c.second[0].first.img().first.getLocalBounds().size.y);
+		});
 
-	auto dummy = sf::RectangleShape{ sf::Vector2f{96,144 } };
+	// is it in bounds of the correct destination pile??
+		//turn the shader effect on destination pile while the card is within bounds
+	// use operator == to compare active card suit to destination pile suit
 
-//IF the cursor within the bounds of a card??? 	
-  // get an iterator to the card 
-	//is the card face up?? 
-		//is the pile active?? 
-		//move card 
-			//did is it in bounds of the correct destination pile?? 
-				//turn the shader effect on destination pile while the card is within bounds 
-			// use operator == to compare active card suit to destination pile suit 
-			//if the card is dropped in the correct pile move it from the source pile to the destination pile -- the back
-				// move all cards starting from the back to the front if they are face up 
-			//turn off the shader when the card is not in bounds 
- //END IF  
+	//if the card is dropped in the correct pile move it from the source pile to the destination pile -- the back
+		// move all cards starting from the back to the front if they are face up
+	//turn off the shader when the card is not in bounds
 }

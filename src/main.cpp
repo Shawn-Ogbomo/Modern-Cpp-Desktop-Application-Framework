@@ -63,10 +63,11 @@ public:
 		auto db = DashBoard{};
 		// run the program as long as the window is open
 
+		auto test = b();
 		while (window.isOpen())
 		{
 			db.mp(clock1, window);
-			
+
 			db.ts.update(clock1);
 
 			// check all the window's events that were triggered since the last iteration of the loop
@@ -83,13 +84,36 @@ public:
 						window.close();
 				}
 
+				else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
+				{
+					if (test != std::end(b.piles))
+					{
+						if (auto pile_active = test->first)
+						{
+							test->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+							test->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+						}
+					}
+				}
+
+				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
+				{
+					if (test != std::end(b.piles))
+					{
+						test->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
+						test->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
+					}
+
+					test = std::end(b.piles);
+				}
+
 				else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
 				{
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 						db.mp(clock1, window, cursor_pos);
-						b(cursor_pos,glow_shader);
+						test = b(cursor_pos);
 					}
 				}
 			}
@@ -100,7 +124,7 @@ public:
 			//draw to window
 			window.draw(b);
 			window.draw(db);
-			
+
 			// end the current frame
 			window.display();
 		}
