@@ -118,7 +118,7 @@ public:
 
 				else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
 				{
-					if (active_card != std::end(b.piles))
+					if (active_card != std::end(b.cards()))
 					{
 						if (auto pile_active = active_card->first)
 						{
@@ -130,11 +130,11 @@ public:
 
 				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
 				{
-					if (mouseButtonReleased->button == sf::Mouse::Button::Left && active_card != std::end(b.piles))
+					if (mouseButtonReleased->button == sf::Mouse::Button::Left && active_card != std::end(b.cards()))
 					{
 						active_card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
 						active_card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
-						active_card = std::end(b.piles);
+						active_card = b.operator()(window,glow_rect,glow_shader);
 					}
 				}
 

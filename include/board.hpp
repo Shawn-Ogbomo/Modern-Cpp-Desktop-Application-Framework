@@ -19,7 +19,8 @@ public:
 	auto operator ()(sf::RenderWindow& rw, sf::RectangleShape& r, sf::Shader& effect, sf::Vector2f cursor_pos = {})->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>, total_piles>::iterator;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	//private:
+	auto cards()-> const std::array <std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank	>>>, total_piles >& { return piles; };
+private:
 	auto allocate(std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>& stack) -> void;
 	std::array <std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank	>>>, total_piles > piles{};
 };

@@ -72,6 +72,22 @@ Board::Board(Deck& d)
 
 auto Board::operator ()(sf::RenderWindow& rw, sf::RectangleShape& r, sf::Shader& effect, sf::Vector2f cursor_pos)->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>, total_piles>::iterator
 {
+	//if back card found  and it is in the active pile 
+		//	save original position of the card 
+		//while the bounding box of the moving card that is active is in bounds of the correct destination pile 
+			//draw glow rect at the position of the destination pile 
+		//end while 
+		//if card is dropped in the wrong pile 
+			//return it to its original position 
+		//end if 
+		//if the card is dropped in the correct pile 
+			//do some things 
+			// set the prior iterators active property to false
+			// return an iterator to the new destination pile and set its active property to true 
+		//end if 
+	//end if 
+
+				
 	return std::find_if(piles.begin(), piles.end(), [&cursor_pos](auto& c) {
 		return (cursor_pos.x >= c.second[0].first.img().first.getPosition().x && cursor_pos.x <= c.second[0].first.img().first.getPosition().x + c.second[0].first.img().first.getLocalBounds().size.x
 			&& cursor_pos.y >= c.second[0].first.img().first.getPosition().y && cursor_pos.y <= c.second[0].first.img().first.getPosition().y + c.second[0].first.img().first.getLocalBounds().size.y);
@@ -80,4 +96,9 @@ auto Board::operator ()(sf::RenderWindow& rw, sf::RectangleShape& r, sf::Shader&
 	//this is variable
 	r.setPosition(sf::Vector2f{ 452 - 10, 313 - 10 });
 	rw.draw(r, &effect);
+
+	//if card not found 
+		//set card to its original position 
+		//return end iterator
+	//end if 
 }
