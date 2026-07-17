@@ -13,7 +13,7 @@ class Button : public sf::Drawable
 {
 public:
 	friend class Music_Player;
-	
+
 	explicit Button(const sf::Texture& t, const sf::Texture& t2, const sf::Texture& t3)
 	{
 		static auto bs = ButtonState{};
@@ -29,7 +29,7 @@ public:
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
-		target.draw(forms[0]);
+		target.draw(forms.front());
 	}
 
 private:
@@ -45,13 +45,13 @@ public:
 
 	Music_Player();
 	Music_Player(const Music_Player&) = delete;
-	auto operator =(const Music_Player&) -> Music_Player& = delete;
+	auto operator =(const Music_Player&) -> Music_Player & = delete;
 	Music_Player(const Music_Player&&) = delete;
 	auto operator =(const Music_Player&&) -> Music_Player & = delete;
 	auto operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-private:	
+private:
 	auto idle(Music_Player& mp) -> void;
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };

@@ -156,7 +156,7 @@ public:
 			window.draw(db);
 
 			//if card collides with the correct destination pile, enable the shader on the correct destination pile...
-			b(window, glow_rect, glow_shader);
+			//b(window, glow_rect, glow_shader);
 
 			window.draw(b);
 

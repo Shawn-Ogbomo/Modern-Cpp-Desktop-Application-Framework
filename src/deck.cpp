@@ -18,10 +18,10 @@ Deck::Deck()
 
 	for (const auto& rank : Rank_lib::ranks)
 	{
-		cards.emplace_back(Suit::hearts, rank, textures[index++], textures[0]);
-		cards.emplace_back(Suit::diamonds, rank, textures[index++], textures[0]);
-		cards.emplace_back(Suit::spades, rank, textures[index++], textures[0]);
-		cards.emplace_back(Suit::clubs, rank, textures[index++], textures[0]);
+		cards.emplace_back(Suit::hearts, rank, textures[index++], textures.front());
+		cards.emplace_back(Suit::diamonds, rank, textures[index++], textures.front());
+		cards.emplace_back(Suit::spades, rank, textures[index++], textures.front());
+		cards.emplace_back(Suit::clubs, rank, textures[index++], textures.front());
 	}
 
 	shuffle();
