@@ -49,6 +49,37 @@ public:
 			throw std::runtime_error{ "Shaders are not supported on this GPU...\n" };
 		}
 
+		if (std::filesystem::path shader = { "..\\..\\..\\..\\assets\\shader\\effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
+		{
+			throw std::invalid_argument{ "\nFailed to load shader: " + shader.filename().string() + "\n in path: " + shader.parent_path().string() + "\n" };
+		}
+
+		static const sf::Texture dummyTexture(sf::Vector2u(1, 1));
+
+		auto innerSize = sf::Vector2f(96, 144);
+
+		auto glowWidth = 10.f;
+
+		auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2, glowWidth * 2) };
+
+		glow_rect.setSize(outerSize);
+
+		glow_rect.setTexture(&dummyTexture);		// Forces SFML to supply UV map coordinates
+
+		auto ratioX = innerSize.x / outerSize.x;
+		auto ratioY = innerSize.y / outerSize.y;
+
+		glow_shader.setUniform("u_glowRatioX", ratioX);
+		glow_shader.setUniform("u_glowRatioY", ratioY);
+
+		auto parchment_white = sf::Color{ 240, 245, 245 };
+
+		glow_shader.setUniform("u_glowColor", sf::Glsl::Vec4(
+			parchment_white.r / 255.f,
+			parchment_white.g / 255.f,
+			parchment_white.b / 255.f,
+			parchment_white.a / 255.f));
+
 		window.setFramerateLimit(60);
 		settings.antiAliasingLevel = 15;
 		window.setVerticalSyncEnabled(true);
@@ -61,9 +92,10 @@ public:
 		auto de = Deck{};
 		auto b = Board{ de };
 		auto db = DashBoard{};
-		// run the program as long as the window is open
 
-		auto test = b();
+		auto active_card = b(window, glow_rect, glow_shader);
+
+		// run the program as long as the window is open
 		while (window.isOpen())
 		{
 			db.mp(clock1, window);
@@ -86,25 +118,24 @@ public:
 
 				else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
 				{
-					if (test != std::end(b.piles))
+					if (active_card != std::end(b.piles))
 					{
-						if (auto pile_active = test->first)
+						if (auto pile_active = active_card->first)
 						{
-							test->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
-							test->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+							active_card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+							active_card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
 						}
 					}
 				}
 
 				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
 				{
-					if (test != std::end(b.piles))
+					if (mouseButtonReleased->button == sf::Mouse::Button::Left && active_card != std::end(b.piles))
 					{
-						test->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
-						test->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
+						active_card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
+						active_card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
+						active_card = std::end(b.piles);
 					}
-
-					test = std::end(b.piles);
 				}
 
 				else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
@@ -113,7 +144,7 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 						db.mp(clock1, window, cursor_pos);
-						test = b(cursor_pos);
+						active_card = b(window, glow_rect, glow_shader, cursor_pos);
 					}
 				}
 			}
@@ -122,8 +153,12 @@ public:
 			window.clear(sf::Color{ 33,46,82 });
 
 			//draw to window
-			window.draw(b);
 			window.draw(db);
+
+			//if card collides with the correct destination pile, enable the shader on the correct destination pile...
+			b(window, glow_rect, glow_shader);
+
+			window.draw(b);
 
 			// end the current frame
 			window.display();
@@ -135,6 +170,7 @@ private:
 	sf::Shader						 glow_shader{ std::filesystem::path{"..\\..\\..\\..\\assets\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
 	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\assets\\cursor\\cursor_ice_white.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
+	sf::RectangleShape			 glow_rect;
 };
 
 auto main() -> int
