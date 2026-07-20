@@ -2,7 +2,6 @@
 #include <iterator>
 #include <iostream>
 #include <algorithm>
-#include <numbers>
 
 #include "../include/util.hpp"
 #include "../include/board.hpp"
