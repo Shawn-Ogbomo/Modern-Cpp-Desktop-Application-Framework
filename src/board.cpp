@@ -2,31 +2,17 @@
 #include <iterator>
 #include <iostream>
 #include <algorithm>
-
+#include <numbers>
 #include "../include/util.hpp"
 #include "../include/board.hpp"
 
-void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	for (auto& pile : piles)
-	{
-		auto& [state, cards] = pile;
+using namespace std::numbers;
 
-		for (const auto& [card, rank] : cards)
-		{
-			target.draw(card);
-		}
-	}
-}
-
-//truncate this constructor
 Board::Board(Deck& d)
 {
 	const auto center_x = 500.0f;
 	const auto center_y = 385.0f;
-	const auto radius = 300.0f;
-
-	constexpr auto pi = 3.14159265358979323846;
+	const auto radius	 = 300.0f;
 
 	for (auto index = 0; auto& pile : piles)
 	{
@@ -37,6 +23,7 @@ Board::Board(Deck& d)
 		{
 			card = std::move(d.draw());
 			rank = Rank_lib::ranks[index];
+
 			auto [face, reverse] = card.img();
 
 			if (rank == Rank_lib::Rank::king)
@@ -48,9 +35,13 @@ Board::Board(Deck& d)
 			}
 
 			sf::Angle a{ sf::radians(static_cast<float>(index * 2.0f * pi / (total_piles - 1.0f) - (pi / 2.0f))) };
+			
+			auto a_radians = a.asRadians();
+			auto pos_card = face.getLocalBounds().size;
+			auto pos = sf::Vector2f{ center_x + radius * std::cos(a_radians) - (pos_card.x / 2.0f), center_y + (radius * std::sin(a_radians)) - pos_card.y / 2.0f };
 
-			face.setPosition(sf::Vector2f{ center_x + radius * std::cos(a.asRadians()) - (face.getLocalBounds().size.x) / 2, center_y + (radius * std::sin(a.asRadians())) - face.getLocalBounds().size.y / 2 });
-			reverse.setPosition(sf::Vector2f{ center_x + radius * std::cos(a.asRadians()) - (reverse.getLocalBounds().size.x) / 2, center_y + (radius * std::sin(a.asRadians())) - reverse.getLocalBounds().size.y / 2 });
+			face.setPosition(pos );
+			reverse.setPosition(pos);
 		}
 
 		++index;
@@ -72,4 +63,17 @@ auto Board::operator ()(sf::Vector2f cursor_pos)->std::array < std::pair<bool, s
 		return (p.first && cursor_pos.x >= card_pos_x && cursor_pos.x <= card_pos_x + card_size_x
 			&& cursor_pos.y >= card_pos_y && cursor_pos.y <= card_pos_y + card_size_y);
 		});
+}
+
+void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	for (auto& pile : piles)
+	{
+		auto& [state, cards] = pile;
+
+		for (const auto& [card, rank] : cards)
+		{
+			target.draw(card);
+		}
+	}
 }

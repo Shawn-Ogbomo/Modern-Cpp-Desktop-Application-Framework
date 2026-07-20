@@ -9,7 +9,7 @@ Music_Player::Music_Player()
 	caption.setCharacterSize(26);
 	caption.setPosition(sf::Vector2f{ 600,842 });
 
-	for (auto index =0; const auto& song : std::filesystem::directory_iterator{ "..\\audio" })
+	for (auto index = 0; const auto& song : std::filesystem::directory_iterator{ "..\\audio" })
 	{
 		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string() }, song);
 
@@ -26,8 +26,8 @@ Music_Player::Music_Player()
 
 	const auto& textures = get_texture_manager().textures;
 	const auto& size = static_cast<int>(textures.size());
-	const auto button_pos_texture = 53;
-	auto button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
+	const auto	   button_pos_texture = 53;
+	auto			   button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
 	for (auto i = button_pos_texture; i< size;)
 	{
