@@ -25,8 +25,8 @@ Music_Player::Music_Player()
 	limit = songs.size();
 
 	const auto& textures = get_texture_manager().textures;
-	const auto& size = static_cast<int>(textures.size());
-	const auto	   button_pos_texture = 53;
+	const auto& size = textures.size();
+	const auto	   button_pos_texture = std::size_t{ 53 };
 	auto			   button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
 	for (auto i = button_pos_texture; i< size;)
