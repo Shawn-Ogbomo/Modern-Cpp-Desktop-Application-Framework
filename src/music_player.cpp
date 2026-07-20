@@ -1,3 +1,5 @@
+#include <ranges>
+
 #include "../include/music_player.hpp"
 #include "../include/util.hpp"
 
@@ -9,14 +11,15 @@ Music_Player::Music_Player()
 	caption.setCharacterSize(26);
 	caption.setPosition(sf::Vector2f{ 600,842 });
 
-	auto index = 0;
-
-	for (const auto& song : std::filesystem::directory_iterator{ "..\\audio" })
+	for (auto index =0; const auto& song : std::filesystem::directory_iterator{ "..\\audio" })
 	{
 		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string() }, song);
-		songs[index].first.setFillColor(sf::Color{ 63, 59, 147 });
-		songs[index].first.setPosition(sf::Vector2f{ 674,842 });
-		songs[index].first.setCharacterSize(26);
+
+		auto& [name, file] = songs[index];
+
+		name.setFillColor(sf::Color{ 63, 59, 147 });
+		name.setPosition(sf::Vector2f{ 674,842 });
+		name.setCharacterSize(26);
 
 		++index;
 	}
@@ -24,30 +27,31 @@ Music_Player::Music_Player()
 	limit = songs.size();
 
 	const auto& textures = get_texture_manager().textures;
-	const auto& size = textures.size();
+	const auto& size = static_cast<int>(textures.size());
+	const auto button_pos_texture = 53;
+	auto button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
-	auto pos_x = 452.0f - 35.0f;
-	auto pos_y = 842.0f;
-	auto internal_index = 0;
-	auto button_pos_texture = 53;
-
-	for (auto i = button_pos_texture, j = button_pos_texture + 1, k = button_pos_texture + 2; i < size; i = k + 1, j = i + 1, k = j + 1)
+	for (auto i = button_pos_texture; i< size;)
 	{
-		buttons.push_back(Button{ textures[i],textures[j],textures[k] });
-		buttons[internal_index].forms[0].setPosition(sf::Vector2f{ pos_x,pos_y });
-		buttons[internal_index].forms[1].setPosition(sf::Vector2f{ pos_x,pos_y });
-		buttons[internal_index].forms[2].setPosition(sf::Vector2f{ pos_x,pos_y });
+		auto& button = buttons.emplace_back(Button{ textures[i++],textures[i++],textures[i++] });
 
-		++internal_index;
-		pos_x += 35;
+		for (auto& button_state: button.forms)
+		{
+			button_state.setPosition(button_pos);
+		}
+
+		button_pos.x += 35;
 	}
 }
 
 auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vector2f cursor_pos) ->void
 {
-	auto button = std::find_if(buttons.begin(), buttons.end(), [&cursor_pos](auto& b) {
-		return (cursor_pos.x >= b.forms[0].getPosition().x && cursor_pos.x <= b.forms[0].getPosition().x + b.forms[0].getLocalBounds().size.x
-			&& cursor_pos.y >= b.forms[0].getPosition().y && cursor_pos.y <= b.forms[0].getPosition().y + b.forms[0].getLocalBounds().size.y);
+	const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
+	
+	auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
+		const auto& [button_pos_x, button_pos_y] = b.forms.front().getPosition();
+		return (cursor_pos.x >= button_pos_x && cursor_pos.x <= button_pos_x + button_size_x
+			&& cursor_pos.y >= button_pos_y && cursor_pos.y <= button_pos_y + button_size_y);
 		});
 	
 	if (button != std::end(buttons))
@@ -58,7 +62,7 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 		
 			while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 			{
-				rw.draw(button->forms[2]);
+				rw.draw(button->forms.back());
 				rw.display();
 			}
 
@@ -66,7 +70,7 @@ auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vect
 			rw.display();
 			Util::delay_time(c, std::chrono::microseconds{ 20000 });
 
-			rw.draw(button->forms[0]);
+			rw.draw(button->forms.front());
 			rw.display();
 			button->operator()(*this);
 			return;

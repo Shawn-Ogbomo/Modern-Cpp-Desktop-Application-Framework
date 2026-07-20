@@ -6,6 +6,7 @@
 #include "../include/time_status.hpp"
 #include"../include/random_number_gen.hpp"
 
+//upgrade to c++20 to silence the secure no warnings prompt regarding the date. Chrono provides date in c++20 
 auto Time_Status::update(sf::Clock& c) ->void
 {
 	auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };

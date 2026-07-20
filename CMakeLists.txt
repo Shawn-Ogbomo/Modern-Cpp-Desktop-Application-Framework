@@ -20,7 +20,7 @@ if(MSVC)
     # Optional: Suppress external SFML header noise so you only see your own warnings
     target_compile_options(main PRIVATE /external:W0)
 endif()
-target_compile_features(main PRIVATE cxx_std_17)
+target_compile_features(main PRIVATE cxx_std_20)
 target_link_libraries(main PRIVATE SFML::Graphics SFML::Audio)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)

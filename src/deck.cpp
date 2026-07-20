@@ -14,14 +14,14 @@ Deck::Deck()
 	get_texture_manager().load_textures();
 
 	const auto& textures = get_texture_manager().textures;
-	auto index = 1;
+	const auto& front_texture = textures.front();
 
-	for (const auto& rank : Rank_lib::ranks)
+	for (auto index =1; const auto& rank : Rank_lib::ranks)
 	{
-		cards.emplace_back(Suit::hearts, rank, textures[index++], textures.front());
-		cards.emplace_back(Suit::diamonds, rank, textures[index++], textures.front());
-		cards.emplace_back(Suit::spades, rank, textures[index++], textures.front());
-		cards.emplace_back(Suit::clubs, rank, textures[index++], textures.front());
+		cards.emplace_back(Suit::hearts, rank, textures[index++], front_texture);
+		cards.emplace_back(Suit::diamonds, rank, textures[index++], front_texture);
+		cards.emplace_back(Suit::spades, rank, textures[index++], front_texture);
+		cards.emplace_back(Suit::clubs, rank, textures[index++], front_texture);
 	}
 
 	shuffle();

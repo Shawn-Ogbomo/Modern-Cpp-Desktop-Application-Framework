@@ -6,12 +6,6 @@
 #include "../include/util.hpp"
 #include "../include/board.hpp"
 
-auto Board::allocate(std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>& stack)->void
-{
-	auto& [state, cards] = stack;
-	std::fill_n(std::back_inserter(cards), 4, std::pair{ Card{},Rank_lib::Rank{} });
-}
-
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (auto& pile : piles)
@@ -25,6 +19,7 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
+//truncate this constructor
 Board::Board(Deck& d)
 {
 	const auto center_x = 500.0f;
@@ -33,11 +28,9 @@ Board::Board(Deck& d)
 
 	constexpr auto pi = 3.14159265358979323846;
 
-	auto index = 0;
-
-	for (auto& pile : piles)
+	for (auto index = 0; auto& pile : piles)
 	{
-		allocate(pile);
+		Util::allocate(pile);
 		auto& [state, cards] = pile;
 
 		for (auto& [card, rank] : cards)
@@ -70,35 +63,13 @@ Board::Board(Deck& d)
 	card.position() = Card_State::face_up;
 }
 
-auto Board::operator ()(sf::RenderWindow& rw, sf::RectangleShape& r, sf::Shader& effect, sf::Vector2f cursor_pos)->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>, total_piles>::iterator
+auto Board::operator ()(sf::Vector2f cursor_pos)->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>, total_piles>::iterator
 {
-	//if back card found  and it is in the active pile 
-		//	save original position of the card 
-		//while the bounding box of the moving card that is active is in bounds of the correct destination pile 
-			//draw glow rect at the position of the destination pile 
-		//end while 
-		//if card is dropped in the wrong pile 
-			//return it to its original position 
-		//end if 
-		//if the card is dropped in the correct pile 
-			//do some things 
-			// set the prior iterators active property to false
-			// return an iterator to the new destination pile and set its active property to true 
-		//end if 
-	//end if 
+	 const auto& [card_size_x, card_size_y] = piles.back().second.back().first.img().first.getLocalBounds().size;
 
-				
-	return std::find_if(piles.begin(), piles.end(), [&cursor_pos](auto& c) {
-		return (cursor_pos.x >= c.second[0].first.img().first.getPosition().x && cursor_pos.x <= c.second[0].first.img().first.getPosition().x + c.second[0].first.img().first.getLocalBounds().size.x
-			&& cursor_pos.y >= c.second[0].first.img().first.getPosition().y && cursor_pos.y <= c.second[0].first.img().first.getPosition().y + c.second[0].first.img().first.getLocalBounds().size.y);
+	return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
+		const auto& [card_pos_x, card_pos_y] = p.second.back().first.img().first.getPosition();
+		return (p.first && cursor_pos.x >= card_pos_x && cursor_pos.x <= card_pos_x + card_size_x
+			&& cursor_pos.y >= card_pos_y && cursor_pos.y <= card_pos_y + card_size_y);
 		});
-
-	//this is variable
-	r.setPosition(sf::Vector2f{ 452 - 10, 313 - 10 });
-	rw.draw(r, &effect);
-
-	//if card not found 
-		//set card to its original position 
-		//return end iterator
-	//end if 
 }
