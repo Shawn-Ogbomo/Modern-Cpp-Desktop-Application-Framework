@@ -5,16 +5,17 @@
 #include "../include/util.hpp"
 #include "../include/texture_manager.hpp"
 
-//refractor this to use std::file system...
+ auto ps = std::filesystem::path::preferred_separator;
+
 auto Texture_manager::load_textures() ->void
 {
-	auto card_names = std::filesystem::path{ "..\\..\\..\\..\\assets\\txt\\card_names.txt" };
+	auto card_names = std::filesystem::path{ "../../../../assets/txt/card_names.txt" };
 
 	auto ifs = std::ifstream{ card_names};
 	
 	Util::check_stream(ifs, card_names,": does not exist.\n");
 
-	std::filesystem::current_path("..\\..\\..\\..\\assets\\images");
+	std::filesystem::current_path("../../../../assets/images");
 
 	for (std::string s; ifs >> s;)
 	{
@@ -37,7 +38,7 @@ auto Texture_manager::load_textures() ->void
 		{
 			auto t = sf::Texture{};
 
-			if (!t.loadFromFile("..\\buttons\\buttons_clock_solitare.png", false, sf::IntRect{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} }))
+			if (!t.loadFromFile("../buttons/buttons_clock_solitare.png", false, sf::IntRect{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} }))
 			{
 				throw std::invalid_argument{ "Failed to load img...\n" };
 			}

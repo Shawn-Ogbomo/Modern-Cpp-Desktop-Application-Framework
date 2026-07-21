@@ -49,7 +49,7 @@ public:
 			throw std::runtime_error{ "Shaders are not supported on this GPU...\n" };
 		}
 
-		if (std::filesystem::path shader = { "..\\..\\..\\..\\assets\\shader\\effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
+		if (std::filesystem::path shader = { "../../../../assets/shader/effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
 		{
 			throw std::invalid_argument{ "\nFailed to load shader: " + shader.filename().string() + "\n in path: " + shader.parent_path().string() + "\n" };
 		}
@@ -84,7 +84,7 @@ public:
 		settings.antiAliasingLevel = 15;
 		window.setVerticalSyncEnabled(true);
 		window.setMouseCursor(cursor.value());
-		window.setIcon(sf::Image{ std::filesystem::path{"..\\..\\..\\..\\assets\\icon\\7_diamonds_new.png"} });
+		window.setIcon(sf::Image{ std::filesystem::path{"../../../../assets/icon/7_diamonds_new.png"} });
 	}
 
 	auto run() -> void
@@ -196,8 +196,8 @@ public:
 private:
 	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
 	sf::ContextSettings		     settings;
-	sf::Shader						 glow_shader{ std::filesystem::path{"..\\..\\..\\..\\assets\\shader\\effect.frag"}, sf::Shader::Type::Fragment };
-	sf::Image						 cursor_image{ std::filesystem::path{"..\\..\\..\\..\\assets\\cursor\\cursor_ice_white.png"} };
+	sf::Shader						 glow_shader{ std::filesystem::path{"../../../../assets/shader/effect.frag"}, sf::Shader::Type::Fragment };
+	sf::Image						 cursor_image{ std::filesystem::path{"../../../../assets/cursor/cursor_ice_white.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
 	sf::RectangleShape			 glow_rect;
 };

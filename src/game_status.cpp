@@ -7,7 +7,7 @@
 Game_Status::Game_Status()
 	:game_id{ Random_Number_Gen::g() }
 {
-	Util::load_font(std::filesystem::path{ "..\\" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
+	Util::load_font(std::filesystem::path{ "../" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
 
 	game_id_t.setFont(font);
 	game_id_t.setCharacterSize(26);

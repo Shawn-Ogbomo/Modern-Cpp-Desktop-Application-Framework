@@ -3,13 +3,13 @@
 
 Music_Player::Music_Player()
 {
-	Util::load_font(std::filesystem::path{ "..\\" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
+	Util::load_font(std::filesystem::path{ "../" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
 	caption.setFillColor(sf::Color{ 63, 59, 147 });
 	caption.setString("Song: ");
 	caption.setCharacterSize(26);
 	caption.setPosition(sf::Vector2f{ 600,842 });
 
-	for (auto index = 0; const auto& song : std::filesystem::directory_iterator{ "..\\audio" })
+	for (auto index = 0; const auto& song : std::filesystem::directory_iterator{ "../audio" })
 	{
 		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string() }, song);
 
