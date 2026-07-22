@@ -2,7 +2,6 @@
 #define TIME_STATUS_HPP
 
 #include <string>
-#include <ctime>
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -17,7 +16,7 @@ public:
 	auto operator = (const 	Time_Status&)->Time_Status & = delete;
 	Time_Status(const Time_Status&&) = delete;
 	auto operator = (const 	Time_Status&&)->Time_Status & = delete;
-	
+
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	auto update(sf::Clock& c) -> void;
 private:

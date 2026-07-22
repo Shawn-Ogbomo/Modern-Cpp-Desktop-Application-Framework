@@ -5,8 +5,6 @@
 #include "../include/util.hpp"
 #include "../include/texture_manager.hpp"
 
- auto ps = std::filesystem::path::preferred_separator;
-
 auto Texture_manager::load_textures() ->void
 {
 	auto card_names = std::filesystem::path{ "../../../../assets/txt/card_names.txt" };
@@ -38,6 +36,7 @@ auto Texture_manager::load_textures() ->void
 		{
 			auto t = sf::Texture{};
 
+			//this doesn't belong here.... read the image once and work with it.
 			if (!t.loadFromFile("../buttons/buttons_clock_solitare.png", false, sf::IntRect{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} }))
 			{
 				throw std::invalid_argument{ "Failed to load img...\n" };

@@ -1,19 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Transformable.hpp>
+#include <format>
 
 #include"../include/util.hpp"
 #include "../include/exceptions.hpp"
 #include "../include/time_status.hpp"
 #include"../include/random_number_gen.hpp"
 
-//upgrade to c++20 to silence the secure no warnings prompt regarding the date. Chrono provides date in c++20 
 auto Time_Status::update(sf::Clock& c) ->void
 {
 	auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
 
 	h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
 	elapsed -= h;
-	
+
 	m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
 	elapsed -= m;
 
@@ -22,12 +22,13 @@ auto Time_Status::update(sf::Clock& c) ->void
 	elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(s.count())
 		+ " seconds");
 
-	const auto now = std::chrono::system_clock::now();
-	const auto t_c = std::chrono::system_clock::to_time_t(now);
+	std::chrono::zoned_time cur_time
+	{
+		std::chrono::current_zone(), // may throw
+		std::chrono::system_clock::now()
+	};
 
-	date_today = std::ctime(&t_c);
-
-	date.setString("Date: " + date_today);
+	date.setString("Date: " + std::format("{:%a:%B:%d:%Y %I:%M %p}", cur_time.get_local_time()));
 }
 
 Time_Status::Time_Status(sf::Clock& c)
