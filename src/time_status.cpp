@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Transformable.hpp>
+
 #include <format>
 
 #include"../include/util.hpp"
@@ -22,13 +23,7 @@ auto Time_Status::update(sf::Clock& c) ->void
 	elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(s.count())
 		+ " seconds");
 
-	auto time_now = std::chrono::zoned_time<std::chrono::system_clock::duration, const std::chrono::time_zone*>
-	{
-		std::chrono::current_zone(), // may throw
-		std::chrono::system_clock::now()
-	};
-
-	date.setString("Date: " + std::format("{:%a:%B:%d:%Y %I:%M %p}", time_now.get_local_time()));
+	date.setString("Date: " + Util::local_time());
 }
 
 Time_Status::Time_Status(sf::Clock& c)

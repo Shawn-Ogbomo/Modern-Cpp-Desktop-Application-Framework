@@ -29,11 +29,11 @@ Music_Player::Music_Player()
 	const auto	   button_pos_texture = std::size_t{ 53 };
 	auto			   button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
-	for (auto i = button_pos_texture; i< size;)
+	for (auto i = button_pos_texture; i < size;)
 	{
 		auto& button = buttons.emplace_back(Button{ textures[i++],textures[i++],textures[i++] });
 
-		for (auto& button_state: button.forms)
+		for (auto& button_state : button.forms)
 		{
 			button_state.setPosition(button_pos);
 		}
@@ -42,38 +42,43 @@ Music_Player::Music_Player()
 	}
 }
 
-auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow &rw, sf::Vector2f cursor_pos) ->void
+auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void
 {
 	const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
-	
+	auto [button_pos_x, button_pos_y] = sf::Vector2f{};
+
 	auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
-		const auto& [button_pos_x, button_pos_y] = b.forms.front().getPosition();
+		button_pos_x = b.forms.front().getPosition().x;
+		button_pos_y = b.forms.front().getPosition().y;
 		return (cursor_pos.x >= button_pos_x && cursor_pos.x <= button_pos_x + button_size_x
 			&& cursor_pos.y >= button_pos_y && cursor_pos.y <= button_pos_y + button_size_y);
 		});
-	
+
 	if (button != std::end(buttons))
 	{
-			rw.draw(button->forms[1]);
-			rw.display();
-			Util::delay_time(c, std::chrono::microseconds{ 20000 });
-		
-			while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-			{
-				rw.draw(button->forms.back());
-				rw.display();
-			}
+		rw.draw(button->forms[1]);
+		rw.display();
 
+		while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		{
+			rw.draw(button->forms.back());
+			rw.display();
+		}
+
+		if (auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
+			cursor_pos_released.x >= button_pos_x && cursor_pos_released.x <= button_pos_x + button_size_x
+			&& cursor_pos_released.y >= button_pos_y && cursor_pos_released.y <= button_pos_y + button_size_y)
+		{
 			rw.draw(button->forms[1]);
 			rw.display();
-			Util::delay_time(c, std::chrono::microseconds{ 20000 });
 
 			rw.draw(button->forms.front());
 			rw.display();
 			button->operator()(*this);
 			return;
+		}
 	}
-	
+
 	idle(*this);
 }
 
@@ -88,7 +93,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
-auto Music_Player::idle( Music_Player& mp) -> void
+auto Music_Player::idle(Music_Player& mp) -> void
 {
 	if (auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
@@ -96,7 +101,7 @@ auto Music_Player::idle( Music_Player& mp) -> void
 		next.operator()(mp);
 	}
 
-	else if  (static auto count = 0; !count)
+	else if (static auto count = 0; !count)
 	{
 		auto& play = mp.buttons[2];
 		play.operator()(mp);

@@ -18,30 +18,33 @@ auto Texture_manager::load_textures() ->void
 	for (std::string s; ifs >> s;)
 	{
 		auto t = sf::Texture{};
-
+		
 		if (!t.loadFromFile(s))
 		{
 			throw Invalid_file{ "The file: " + s + " does not exist...\n" };
 		}
 
+		t.setSmooth(true);
 		textures.emplace_back(t);
 	} 
 
-	auto img_size_x = 150 - 30;
-	auto img_size_y = 90 - 30;
+	//Could I use ranges here?? c++20 ?? Views??
+	auto buttons = sf::Image{ "../buttons/buttons_clock_solitare.png" };
+	auto dimmensions_button = sf::Vector2i{ 30,30 };
+	auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button};
 
-	for (auto i = 0, pos_x = 30; i <= img_size_x; i += pos_x)
+	for (auto i = 0, pos_x = dimmensions_button.x; i <= dimmensions_image.x; i += pos_x)
 	{
-		for (auto j = 0, pos_y = 30; j <= img_size_y; j += pos_y)
+		for (auto j = 0, pos_y = dimmensions_button.y; j <= dimmensions_image.y; j += pos_y)
 		{
 			auto t = sf::Texture{};
 
-			//this doesn't belong here.... read the image once and work with it.
-			if (!t.loadFromFile("../buttons/buttons_clock_solitare.png", false, sf::IntRect{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} }))
+			if (!t.loadFromImage(buttons, false, sf::IntRect{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} }))
 			{
 				throw std::invalid_argument{ "Failed to load img...\n" };
 			}
 
+			t.setSmooth(true);
 			textures.push_back(std::move(t));
 		}
 	}

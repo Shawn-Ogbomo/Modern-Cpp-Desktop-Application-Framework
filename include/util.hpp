@@ -15,6 +15,7 @@ namespace Util
 	auto allocate(std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>& stack) -> void;
 	auto delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void;
 	auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_lib::Rank rank, int v1, int v2) -> void;
+	auto local_time() -> std::string;
 }
 
 #endif // UTIL_HPP
