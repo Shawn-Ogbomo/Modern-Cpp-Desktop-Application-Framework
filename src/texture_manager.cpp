@@ -9,43 +9,33 @@ auto Texture_manager::load_textures() ->void
 {
 	auto card_names = std::filesystem::path{ "../../../../assets/txt/card_names.txt" };
 
-	auto ifs = std::ifstream{ card_names};
-	
-	Util::check_stream(ifs, card_names,": does not exist.\n");
+	auto ifs = std::ifstream{ card_names };
+
+	Util::check_stream(ifs, card_names, ": does not exist.\n");
 
 	std::filesystem::current_path("../../../../assets/images");
 
 	for (std::string s; ifs >> s;)
 	{
 		auto t = sf::Texture{};
-		
+
 		if (!t.loadFromFile(s))
 		{
 			throw Invalid_file{ "The file: " + s + " does not exist...\n" };
 		}
 
-		t.setSmooth(true);
-		textures.emplace_back(t);
-	} 
+		textures.emplace_back(std::move(t));
+	}
 
-	//Could I use ranges here?? c++20 ?? Views??
 	auto buttons = sf::Image{ "../buttons/buttons_clock_solitare.png" };
 	auto dimmensions_button = sf::Vector2i{ 30,30 };
-	auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button};
+	auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 
 	for (auto i = 0, pos_x = dimmensions_button.x; i <= dimmensions_image.x; i += pos_x)
 	{
 		for (auto j = 0, pos_y = dimmensions_button.y; j <= dimmensions_image.y; j += pos_y)
 		{
-			auto t = sf::Texture{};
-
-			if (!t.loadFromImage(buttons, false, sf::IntRect{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} }))
-			{
-				throw std::invalid_argument{ "Failed to load img...\n" };
-			}
-
-			t.setSmooth(true);
-			textures.push_back(std::move(t));
+			textures.push_back(sf::Texture{ buttons,false,{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} } });
 		}
 	}
 }

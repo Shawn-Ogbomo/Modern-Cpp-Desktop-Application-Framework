@@ -31,10 +31,9 @@ public:
 	{
 		target.draw(forms.front());
 	}
-
 private:
-	ButtonState name{};
 	std::vector<sf::Sprite>forms;
+	ButtonState name{};
 };
 
 class  Music_Player : public sf::Drawable
@@ -48,7 +47,7 @@ public:
 	auto operator =(const Music_Player&) -> Music_Player & = delete;
 	Music_Player(const Music_Player&&) = delete;
 	auto operator =(const Music_Player&&) -> Music_Player & = delete;
-	auto operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
+	auto operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:

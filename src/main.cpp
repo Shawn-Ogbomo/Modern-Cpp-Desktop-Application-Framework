@@ -98,7 +98,7 @@ public:
 		// run the program as long as the window is open
 		while (window.isOpen())
 		{
-			db.mp(clock1, window);
+			db.mp(window);
 
 			db.ts.update(clock1);
 
@@ -120,11 +120,11 @@ public:
 				{
 					if (active_card != std::end(b.piles))
 					{
-							//save original position of card before moving...
-							//check for collision here 
-							//turn on shader while card is in bounds of the correct destination pile
-							active_card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
-							active_card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+						//save original position of card before moving...
+						//check for collision here
+						//turn on shader while card is in bounds of the correct destination pile
+						active_card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+						active_card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
 					}
 				}
 
@@ -133,24 +133,24 @@ public:
 					if (mouseButtonReleased->button == sf::Mouse::Button::Left && active_card != std::end(b.piles))
 					{
 						//if it is dropped in the correct destination pile
-						// add it to the front of the queue std::move 
-						// pop the moved from card from its original pile 
+						// add it to the front of the queue std::move
+						// pop the moved from card from its original pile
 						// flip back card face up in destination pile
-						// turn off active pile of the moved from pile 
-						// turn on active on the new destination pile 
-						// if the back card has the same value as the destination pile 
-						// move it to the front		
-						// set new back card face up 
-						// keep active pile on current pile 
-						// 
-						// if a card is already face up in dest pile and move from object value matched dest pile 
-						// move both cards to the back and flip new back card face up 
-						// change active pile to new dest 
-						// turn prov active off 
-						// 
-						// 
-						// 
-						// if button left click is released while dragging card, and it is not dropped on the correct destination pile, return it to its original position... 
+						// turn off active pile of the moved from pile
+						// turn on active on the new destination pile
+						// if the back card has the same value as the destination pile
+						// move it to the front
+						// set new back card face up
+						// keep active pile on current pile
+						//
+						// if a card is already face up in dest pile and move from object value matched dest pile
+						// move both cards to the back and flip new back card face up
+						// change active pile to new dest
+						// turn prov active off
+						//
+						//
+						//
+						// if button left click is released while dragging card, and it is not dropped on the correct destination pile, return it to its original position...
 						active_card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
 						active_card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
 						active_card = std::end(b.piles);
@@ -162,21 +162,21 @@ public:
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
-						db.mp(clock1, window, cursor_pos);
+						db.mp(window, cursor_pos);
 						active_card = b(cursor_pos);
 					}
 				}
 			}
 
-			//what if we start with a king in the middle 
-				// we have to swap it 
-				// 
-				// 
-			//check win cond here.... 
+			//what if we start with a king in the middle
+				// we have to swap it
+				//
+				//
+			//check win cond here....
 				//4 kings face up in the middle
-					//all cards face up? 
-						//win 
-					//lose 
+					//all cards face up?
+						//win
+					//lose
 
 			// clear the window with blue color
 			window.clear(sf::Color{ 33,46,82 });

@@ -16,7 +16,7 @@ Deck::Deck()
 	const auto& textures = get_texture_manager().textures;
 	const auto& front_texture = textures.front();
 
-	for (auto index =1; const auto& rank : Rank_lib::ranks)
+	for (auto index = static_cast<int>(Texture_Manager_State::cards); const auto& rank : Rank_lib::ranks)
 	{
 		cards.emplace_back(Suit::hearts, rank, textures[index++], front_texture);
 		cards.emplace_back(Suit::diamonds, rank, textures[index++], front_texture);

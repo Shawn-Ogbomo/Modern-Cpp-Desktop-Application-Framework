@@ -26,23 +26,22 @@ Music_Player::Music_Player()
 
 	const auto& textures = get_texture_manager().textures;
 	const auto& size = textures.size();
-	const auto	   button_pos_texture = std::size_t{ 53 };
 	auto			   button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
-	for (auto i = button_pos_texture; i < size;)
+	for (auto i = static_cast<int>(Texture_Manager_State::buttons); i < size;)
 	{
 		auto& button = buttons.emplace_back(Button{ textures[i++],textures[i++],textures[i++] });
 
-		for (auto& button_state : button.forms)
+		for (auto& internal_button : button.forms)
 		{
-			button_state.setPosition(button_pos);
+			internal_button.setPosition(button_pos);
 		}
 
 		button_pos.x += 35;
 	}
 }
 
-auto Music_Player::operator()(const sf::Clock& c, sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void
+auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void
 {
 	const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
 	auto [button_pos_x, button_pos_y] = sf::Vector2f{};
@@ -97,13 +96,13 @@ auto Music_Player::idle(Music_Player& mp) -> void
 {
 	if (auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
-		auto& next = mp.buttons[3];
+		auto& next = mp.buttons[static_cast<int>(ButtonState::next)];
 		next.operator()(mp);
 	}
 
 	else if (static auto count = 0; !count)
 	{
-		auto& play = mp.buttons[2];
+		auto& play = mp.buttons[static_cast<int>(ButtonState::play)];
 		play.operator()(mp);
 
 		++count;
