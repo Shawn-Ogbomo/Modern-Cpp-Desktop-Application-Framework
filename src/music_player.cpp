@@ -1,6 +1,8 @@
 #include "../include/music_player.hpp"
 #include "../include/util.hpp"
 
+using namespace Button_Interface;
+
 Music_Player::Music_Player()
 {
 	Util::load_font(std::filesystem::path{ "../" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
@@ -28,7 +30,7 @@ Music_Player::Music_Player()
 	const auto& size = textures.size();
 	auto			   button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
-	for (auto i = static_cast<int>(Texture_Manager_State::buttons); i < size;)
+	for (auto i = to_int(Texture_Manager_State::buttons); i < size;)
 	{
 		auto& button = buttons.emplace_back(Button{ textures[i++],textures[i++],textures[i++] });
 
@@ -55,12 +57,12 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 
 	if (button != std::end(buttons))
 	{
-		rw.draw(button->forms[1]);
+		rw.draw(button->forms[to_int(ButtonState::touched)]);
 		rw.display();
 
 		while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
-			rw.draw(button->forms.back());
+			rw.draw(button->forms[to_int(ButtonState::pushed)]);
 			rw.display();
 		}
 
@@ -68,10 +70,10 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 			cursor_pos_released.x >= button_pos_x && cursor_pos_released.x <= button_pos_x + button_size_x
 			&& cursor_pos_released.y >= button_pos_y && cursor_pos_released.y <= button_pos_y + button_size_y)
 		{
-			rw.draw(button->forms[1]);
+			rw.draw(button->forms[to_int(ButtonState::touched)]);
 			rw.display();
 
-			rw.draw(button->forms.front());
+			rw.draw(button->forms[to_int(ButtonState::idle)]);
 			rw.display();
 			button->operator()(*this);
 			return;
@@ -96,13 +98,13 @@ auto Music_Player::idle(Music_Player& mp) -> void
 {
 	if (auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
-		auto& next = mp.buttons[static_cast<int>(ButtonState::next)];
+		auto& next = mp.buttons[to_int(ButtonName::next)];
 		next.operator()(mp);
 	}
 
 	else if (static auto count = 0; !count)
 	{
-		auto& play = mp.buttons[static_cast<int>(ButtonState::play)];
+		auto& play = mp.buttons[to_int(ButtonName::play)];
 		play.operator()(mp);
 
 		++count;
@@ -111,31 +113,31 @@ auto Music_Player::idle(Music_Player& mp) -> void
 
 auto Button::operator()(Music_Player& mp) ->void
 {
-	if (name == ButtonState::prev)
+	if (name == ButtonName::prev)
 	{
 		mp.stop();
 		mp.prev();
 		mp.play();
 	}
 
-	else if (name == ButtonState::pause)
+	else if (name == ButtonName::pause)
 	{
 		mp.pause();
 	}
 
-	else if (name == ButtonState::play)
+	else if (name == ButtonName::play)
 	{
 		mp.play();
 	}
 
-	else if (name == ButtonState::next)
+	else if (name == ButtonName::next)
 	{
 		mp.stop();
 		mp.next();
 		mp.play();
 	}
 
-	else if (name == ButtonState::stop)
+	else if (name == ButtonName::stop)
 	{
 		mp.stop();
 	}

@@ -16,7 +16,7 @@ public:
 
 	explicit Button(const sf::Texture& t, const sf::Texture& t2, const sf::Texture& t3)
 	{
-		static auto bs = ButtonState{};
+		static auto bs = Button_Interface::ButtonName{};
 		name = bs;
 		++bs;
 
@@ -33,7 +33,7 @@ public:
 	}
 private:
 	std::vector<sf::Sprite>forms;
-	ButtonState name{};
+	Button_Interface::ButtonName name{};
 };
 
 class  Music_Player : public sf::Drawable
@@ -48,7 +48,6 @@ public:
 	Music_Player(const Music_Player&&) = delete;
 	auto operator =(const Music_Player&&) -> Music_Player & = delete;
 	auto operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
-
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
 	auto idle(Music_Player& mp) -> void;
