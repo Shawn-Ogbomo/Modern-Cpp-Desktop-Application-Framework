@@ -17,14 +17,7 @@ auto Texture_manager::load_textures() ->void
 
 	for (std::string s; ifs >> s;)
 	{
-		auto t = sf::Texture{};
-
-		if (!t.loadFromFile(s))
-		{
-			throw Invalid_file{ "The file: " + s + " does not exist...\n" };
-		}
-
-		textures.emplace_back(std::move(t));
+			textures.emplace_back(sf::Texture{s,false});
 	}
 
 	auto buttons = sf::Image{ "../buttons/buttons_clock_solitare.png" };
