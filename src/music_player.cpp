@@ -46,7 +46,7 @@ Music_Player::Music_Player()
 auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void
 {
 	const auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
-		auto [button_pos_x, button_pos_y] = b.forms.front().getPosition();
+		const auto [button_pos_x, button_pos_y] = b.forms.front().getPosition();
 		const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
 		return (cursor_pos.x >= button_pos_x && cursor_pos.x <= button_pos_x + button_size_x
 			&& cursor_pos.y >= button_pos_y && cursor_pos.y <= button_pos_y + button_size_y);
