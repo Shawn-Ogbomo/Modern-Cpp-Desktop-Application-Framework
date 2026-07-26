@@ -45,12 +45,9 @@ Music_Player::Music_Player()
 
 auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void
 {
-	const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
-	auto [button_pos_x, button_pos_y] = sf::Vector2f{};
-
 	const auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
-		button_pos_x = b.forms.front().getPosition().x;
-		button_pos_y = b.forms.front().getPosition().y;
+		auto [button_pos_x, button_pos_y] = b.forms.front().getPosition();
+		const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
 		return (cursor_pos.x >= button_pos_x && cursor_pos.x <= button_pos_x + button_size_x
 			&& cursor_pos.y >= button_pos_y && cursor_pos.y <= button_pos_y + button_size_y);
 		});
@@ -67,9 +64,11 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 		}
 
 		if (const auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
-			cursor_pos_released.x >= button_pos_x && cursor_pos_released.x <= button_pos_x + button_size_x
-			&& cursor_pos_released.y >= button_pos_y && cursor_pos_released.y <= button_pos_y + button_size_y)
-		{
+			cursor_pos_released.x	   >= button->forms.front().getPosition().x
+			&& cursor_pos_released.x <= button->forms.front().getPosition().x + button->forms.front().getLocalBounds().size.x
+			&& cursor_pos_released.y >= button->forms.front().getPosition().y 
+			&& cursor_pos_released.y <= button->forms.front().getPosition().y +button->forms.front().getLocalBounds().size.y)
+	{
 			rw.draw(button->forms[to_int(ButtonState::touched)]);
 			rw.display();
 
