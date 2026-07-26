@@ -11,8 +11,6 @@
 
 Deck::Deck()
 {
-	get_texture_manager().load_textures();
-
 	const auto& textures = get_texture_manager().textures;
 	const auto& front_texture = textures.front();
 

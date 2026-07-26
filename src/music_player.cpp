@@ -48,7 +48,7 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 	const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
 	auto [button_pos_x, button_pos_y] = sf::Vector2f{};
 
-	auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
+	const auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
 		button_pos_x = b.forms.front().getPosition().x;
 		button_pos_y = b.forms.front().getPosition().y;
 		return (cursor_pos.x >= button_pos_x && cursor_pos.x <= button_pos_x + button_size_x
@@ -66,7 +66,7 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 			rw.display();
 		}
 
-		if (auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
+		if (const auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
 			cursor_pos_released.x >= button_pos_x && cursor_pos_released.x <= button_pos_x + button_size_x
 			&& cursor_pos_released.y >= button_pos_y && cursor_pos_released.y <= button_pos_y + button_size_y)
 		{
@@ -96,22 +96,22 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 auto Music_Player::idle(Music_Player& mp) -> void
 {
-	if (auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
+	if (const auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
-		auto& next = mp.buttons[to_int(ButtonName::next)];
+		const auto& next = mp.buttons[to_int(ButtonName::next)];
 		next.operator()(mp);
 	}
 
 	else if (static auto count = 0; !count)
 	{
-		auto& play = mp.buttons[to_int(ButtonName::play)];
+		const auto& play = mp.buttons[to_int(ButtonName::play)];
 		play.operator()(mp);
 
 		++count;
 	}
 }
 
-auto Button::operator()(Music_Player& mp) ->void
+auto Button::operator()(Music_Player& mp)const ->void
 {
 	if (name == ButtonName::prev)
 	{

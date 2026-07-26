@@ -20,9 +20,9 @@ auto Texture_manager::load_textures() ->void
 			textures.emplace_back(sf::Texture{s,false});
 	}
 
-	auto buttons = sf::Image{ "../buttons/buttons_clock_solitare.png" };
-	auto dimmensions_button = sf::Vector2i{ 30,30 };
-	auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
+	const auto buttons = sf::Image{ "../buttons/buttons_clock_solitare.png" };
+	const auto dimmensions_button = sf::Vector2i{ 30,30 };
+	const auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 
 	for (auto i = 0, pos_x = dimmensions_button.x; i <= dimmensions_image.x; i += pos_x)
 	{

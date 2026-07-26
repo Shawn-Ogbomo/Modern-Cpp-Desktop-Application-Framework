@@ -26,7 +26,7 @@ auto Util::load_font(const std::filesystem::path& p, sf::Font& f) ->void
 
 auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms)-> void
 {
-	auto t = c.getElapsedTime();
+	const auto t = c.getElapsedTime();
 	auto t2 = c.getElapsedTime();
 
 	while (t2 < t + ms)
@@ -43,12 +43,12 @@ auto Util::allocate(std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>
 
 auto Util::position_card(sf::Sprite& front, sf::Sprite& back, Rank_lib::Rank rank, int v1, int v2) -> void
 {
-	auto center_x = 500.0f;
-	auto center_y = 385.0f;
-	auto radius = 300.0f;
-	auto pos_card = front.getLocalBounds().size;
+	const auto center_x = 500.0f;
+	const auto center_y = 385.0f;
+	const auto radius = 300.0f;
+	const auto pos_card = front.getLocalBounds().size;
 
-	if (auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2) - pos_card.y) / 2 };
+	if (const auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2) - pos_card.y) / 2 };
 		rank == Rank_lib::Rank::king)
 	{
 		front.setPosition(center);
@@ -56,7 +56,7 @@ auto Util::position_card(sf::Sprite& front, sf::Sprite& back, Rank_lib::Rank ran
 		return;
 	}
 
-	sf::Angle a{ sf::radians(static_cast<float>(v1 * 2.0f * pi / (v2 - 1.0f) - (pi / 2.0f))) };
+	const auto a = sf::Angle{ sf::radians(static_cast<float>(v1 * 2.0f * pi / (v2 - 1.0f) - (pi / 2.0f))) };
 
 	auto a_radians = a.asRadians();
 	auto pos = sf::Vector2f{ center_x + radius * std::cos(a_radians) - (pos_card.x / 2.0f), center_y + (radius * std::sin(a_radians)) - pos_card.y / 2.0f };
@@ -67,7 +67,7 @@ auto Util::position_card(sf::Sprite& front, sf::Sprite& back, Rank_lib::Rank ran
 
 auto::Util::local_time()->std::string
 {
-	auto time_now = std::chrono::zoned_time<std::chrono::system_clock::duration, const std::chrono::time_zone*>
+	const auto time_now = std::chrono::zoned_time<std::chrono::system_clock::duration, const std::chrono::time_zone*>
 	{
 		std::chrono::current_zone(), // may throw
 		std::chrono::system_clock::now()

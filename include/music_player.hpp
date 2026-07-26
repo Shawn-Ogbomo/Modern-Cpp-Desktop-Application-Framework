@@ -25,7 +25,7 @@ public:
 		forms.push_back(std::move(sf::Sprite{ t3 }));
 	}
 
-	auto operator()(Music_Player& mp) -> void;
+	auto operator()(Music_Player& mp) const-> void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
