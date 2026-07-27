@@ -12,12 +12,6 @@ namespace Button_Interface
 	{
 		idle, touched, pushed
 	};
-
-	template<class T>
-	inline auto to_int(T b) -> int
-	{
-		return static_cast<int>(b);
-	}
 };
 
 inline auto operator++(Button_Interface::ButtonName& b) ->Button_Interface::ButtonName&

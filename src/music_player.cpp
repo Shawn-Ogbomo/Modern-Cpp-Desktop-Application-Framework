@@ -30,7 +30,7 @@ Music_Player::Music_Player()
 	const auto& size = textures.size();
 	auto			   button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
-	for (auto i = to_int(Texture_Manager_State::buttons); i < size;)
+	for (auto i = Util::to_int(Texture_Manager_State::buttons); i < size;)
 	{
 		auto& button = buttons.emplace_back(Button{ textures[i++],textures[i++],textures[i++] });
 
@@ -54,12 +54,12 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 
 	if (button != std::end(buttons))
 	{
-		rw.draw(button->forms[to_int(ButtonState::touched)]);
+		rw.draw(button->forms[Util::to_int(ButtonState::touched)]);
 		rw.display();
 
 		while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
-			rw.draw(button->forms[to_int(ButtonState::pushed)]);
+			rw.draw(button->forms[Util::to_int(ButtonState::pushed)]);
 			rw.display();
 		}
 
@@ -69,10 +69,10 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 			&& cursor_pos_released.y >= button->forms.front().getPosition().y 
 			&& cursor_pos_released.y <= button->forms.front().getPosition().y +button->forms.front().getLocalBounds().size.y)
 	{
-			rw.draw(button->forms[to_int(ButtonState::touched)]);
+			rw.draw(button->forms[Util::to_int(ButtonState::touched)]);
 			rw.display();
 
-			rw.draw(button->forms[to_int(ButtonState::idle)]);
+			rw.draw(button->forms[Util::to_int(ButtonState::idle)]);
 			rw.display();
 			button->operator()(*this);
 			return;
@@ -97,13 +97,13 @@ auto Music_Player::idle(Music_Player& mp) -> void
 {
 	if (const auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
-		const auto& next = mp.buttons[to_int(ButtonName::next)];
+		const auto& next = mp.buttons[Util::to_int(ButtonName::next)];
 		next.operator()(mp);
 	}
 
 	else if (static auto count = 0; !count)
 	{
-		const auto& play = mp.buttons[to_int(ButtonName::play)];
+		const auto& play = mp.buttons[Util::to_int(ButtonName::play)];
 		play.operator()(mp);
 
 		++count;
