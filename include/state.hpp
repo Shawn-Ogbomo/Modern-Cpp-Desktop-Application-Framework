@@ -1,8 +1,6 @@
 #ifndef   STATE_HPP
 #define	 STATE_HPP
 
-#include <variant>
-
 namespace Button_Interface
 {
 	enum class ButtonName
