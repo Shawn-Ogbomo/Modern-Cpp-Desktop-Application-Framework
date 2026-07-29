@@ -38,7 +38,7 @@ auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms)-> void
 auto Util::allocate(std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>& stack) -> void
 {
 	auto& [state, cards] = stack;
-	std::fill_n(std::back_inserter(cards), 4, std::pair{ Card{},Rank_lib::Rank{} });
+	std::ranges::fill_n(std::back_inserter(cards), 4, std::pair{Card{},Rank_lib::Rank{}});
 }
 
 auto Util::position_card(sf::Sprite& front, sf::Sprite& back, Rank_lib::Rank rank, int v1, int v2) -> void

@@ -23,10 +23,10 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const { state == Card_State::face_up ? target.draw(face) : target.draw(reverse); }
 private:
 	Suit suit{};
-	Rank_lib::Rank rank{};
-	sf::Sprite face{ t };
-	sf::Sprite reverse{ t };
 	Card_State state{};
+	Rank_lib::Rank rank{};
+	sf::Sprite face{t};
+	sf::Sprite reverse{t};
 };
 
 #endif // CARD_HPP

@@ -19,16 +19,23 @@ auto Texture_manager::load_textures() ->void
 	{
 			textures.emplace_back(sf::Texture{s,false});
 	}
+}
 
+auto Button_Manager::load_textures() ->void
+{
 	const auto buttons = sf::Image{ "../buttons/buttons_clock_solitare.png" };
 	const auto dimmensions_button = sf::Vector2i{ 30,30 };
 	const auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 
-	for (auto i = 0, pos_x = dimmensions_button.x; i <= dimmensions_image.x; i += pos_x)
+	   auto t = [&](auto x, int y = 0) ->std::tuple<sf::Texture, sf::Texture, sf::Texture> {
+		
+		return std::make_tuple(
+			sf::Texture{ buttons,false,{ sf::Vector2i{x,y}, dimmensions_button} }, 
+			sf::Texture{ buttons,false,{ sf::Vector2i{x,(y + dimmensions_button.y)},dimmensions_button } },
+			sf::Texture{ buttons,false,{ sf::Vector2i{x,(y + (dimmensions_button.y  * 2) )},dimmensions_button } });};
+
+	for (auto i = 0;  i <= dimmensions_image.x; i += dimmensions_button.x)
 	{
-		for (auto j = 0, pos_y = dimmensions_button.y; j <= dimmensions_image.y; j += pos_y)
-		{
-			textures.push_back(sf::Texture{ buttons,false,{ sf::Vector2i{i,j},sf::Vector2i{pos_x,pos_y} } });
-		}
+		textures.emplace_back(t(i));
 	}
 }

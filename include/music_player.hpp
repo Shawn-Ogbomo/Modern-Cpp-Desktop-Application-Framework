@@ -7,32 +7,31 @@
 #include <vector>
 #include <iostream>
 
+#include "../include/util.hpp"
 #include "../include/state.hpp"
 
 class Button : public sf::Drawable
 {
+	sf::Texture t;
 public:
 	friend class Music_Player;
 
-	explicit Button(const sf::Texture& t, const sf::Texture& t2, const sf::Texture& t3)
+	Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs)
+		:forms{ std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>(txtrs) }
 	{
 		static auto bs = Button_Interface::ButtonName{};
 		name = bs;
 		++bs;
-
-		forms.push_back(std::move(sf::Sprite{ t }));
-		forms.push_back(std::move(sf::Sprite{ t2 }));
-		forms.push_back(std::move(sf::Sprite{ t3 }));
 	}
 
 	auto operator()(Music_Player& mp) const-> void;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
-		target.draw(forms.front());
+		target.draw(std::get<0>(forms));
 	}
 private:
-	std::vector<sf::Sprite>forms;
+	std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{t,t,t};
 	Button_Interface::ButtonName name{};
 };
 

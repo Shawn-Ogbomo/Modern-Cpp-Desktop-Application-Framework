@@ -26,19 +26,20 @@ Music_Player::Music_Player()
 
 	limit = songs.size();
 
-	const auto& textures = get_texture_manager().textures;
-	const auto& size = textures.size();
-	auto			   button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
+	get_texture_manager_test().load_textures();
 
-	for (auto i = Util::to_int(Texture_Manager_State::buttons); i < size;)
+	auto button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
+	const auto sz = get_texture_manager_test().textures.size();
+
+	for(auto i = 0;  i < sz; ++i)
 	{
-		auto& button = buttons.emplace_back(Button{ textures[i++],textures[i++],textures[i++] });
-
-		for (auto& internal_button : button.forms)
-		{
-			internal_button.setPosition(button_pos);
-		}
-
+		buttons.emplace_back(Button{ get_texture_manager_test().textures[i] });
+		
+		auto& [form_1, form_2,form_3] = buttons.back().forms;
+		
+		form_1.setPosition(button_pos);
+		form_2.setPosition(button_pos);
+		form_3.setPosition(button_pos);
 		button_pos.x += 35;
 	}
 }
@@ -46,33 +47,33 @@ Music_Player::Music_Player()
 auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void
 {
 	const auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
-		const auto [button_pos_x, button_pos_y] = b.forms.front().getPosition();
-		const auto& [button_size_x, button_size_y] = buttons.front().forms.front().getLocalBounds().size;
+		const auto [button_pos_x, button_pos_y] = std::get<0>(b.forms).getPosition();
+		const auto& [button_size_x, button_size_y] = std::get<0>(b.forms).getLocalBounds().size;
 		return (cursor_pos.x >= button_pos_x && cursor_pos.x <= button_pos_x + button_size_x
 			&& cursor_pos.y >= button_pos_y && cursor_pos.y <= button_pos_y + button_size_y);
 		});
 
 	if (button != std::end(buttons))
 	{
-		rw.draw(button->forms[Util::to_int(ButtonState::touched)]);
+		rw.draw(std::get<1>(button->forms));
 		rw.display();
 
 		while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
-			rw.draw(button->forms[Util::to_int(ButtonState::pushed)]);
+			rw.draw(std::get<2>(button->forms));
 			rw.display();
 		}
 
 		if (const auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
-			cursor_pos_released.x	   >= button->forms.front().getPosition().x
-			&& cursor_pos_released.x <= button->forms.front().getPosition().x + button->forms.front().getLocalBounds().size.x
-			&& cursor_pos_released.y >= button->forms.front().getPosition().y 
-			&& cursor_pos_released.y <= button->forms.front().getPosition().y +button->forms.front().getLocalBounds().size.y)
+			cursor_pos_released.x >= std::get<0>(button->forms).getPosition().x
+			&& cursor_pos_released.x <= std::get<0>(button->forms).getPosition().x + std::get<0>(button->forms).getLocalBounds().size.x
+			&& cursor_pos_released.y >= std::get<0>(button->forms).getPosition().y
+			&& cursor_pos_released.y <= std::get<0>(button->forms).getPosition().y + std::get<0>(button->forms).getLocalBounds().size.y)
 	{
-			rw.draw(button->forms[Util::to_int(ButtonState::touched)]);
+			rw.draw(std::get<1>(button->forms));
 			rw.display();
 
-			rw.draw(button->forms[Util::to_int(ButtonState::idle)]);
+			rw.draw(std::get<0>(button->forms));
 			rw.display();
 			button->operator()(*this);
 			return;
@@ -86,11 +87,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(caption);
 	target.draw(songs[current_song].first);
-
-	for (auto& button : buttons)
-	{
-		target.draw(button);
-	}
+	std::for_each(buttons.begin(), buttons.end(), [&target](const auto&b) {target.draw(b);});
 }
 
 auto Music_Player::idle(Music_Player& mp) -> void
