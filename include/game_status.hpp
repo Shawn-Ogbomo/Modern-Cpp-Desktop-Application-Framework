@@ -14,8 +14,8 @@ public:
 	Game_Status();
 	Game_Status(const Game_Status&) = delete;
 	auto operator = (const Game_Status&) -> Game_Status& = delete;
-	Game_Status(const Game_Status&&) = delete;
-	auto operator = (const Game_Status&&) -> Game_Status& = delete;
+	Game_Status(Game_Status&&) = delete;
+	auto operator = (Game_Status&&) -> Game_Status& = delete;
 	
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

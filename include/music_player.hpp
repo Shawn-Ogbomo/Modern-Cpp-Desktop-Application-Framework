@@ -9,6 +9,7 @@
 
 #include "../include/util.hpp"
 #include "../include/state.hpp"
+#include "../include/texture_manager.hpp"
 
 class Button : public sf::Drawable
 {
@@ -44,8 +45,8 @@ public:
 	Music_Player();
 	Music_Player(const Music_Player&) = delete;
 	auto operator =(const Music_Player&) -> Music_Player & = delete;
-	Music_Player(const Music_Player&&) = delete;
-	auto operator =(const Music_Player&&) -> Music_Player & = delete;
+	Music_Player(Music_Player&&) = delete;
+	auto operator =(Music_Player&&) -> Music_Player & = delete;
 	auto operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
@@ -57,10 +58,13 @@ private:
 	auto play() -> void { songs[current_song].second.play(); };
 
 	sf::Text caption{ font };
+	
 	std::size_t limit{};
 	std::size_t current_song{};
+
 	std::vector<std::pair<sf::Text, sf::Music>> songs;
 	std::vector<Button> buttons;
+	Button_Manager bm;
 };
 
 #endif // MUSIC_PLAYER.HPP

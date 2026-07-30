@@ -9,8 +9,8 @@ public:
 	Random_Number_Gen() = default;
 	Random_Number_Gen(const Random_Number_Gen&) = delete;
 	Random_Number_Gen& operator = (const Random_Number_Gen&) = delete;
-	Random_Number_Gen(const Random_Number_Gen&&) = delete;
-	Random_Number_Gen& operator = (const Random_Number_Gen&&) = delete;
+	Random_Number_Gen(Random_Number_Gen&&) = delete;
+	Random_Number_Gen& operator = (Random_Number_Gen&&) = delete;
 
 	static inline std::random_device rd;
 	static inline std::mt19937 g{ rd() };

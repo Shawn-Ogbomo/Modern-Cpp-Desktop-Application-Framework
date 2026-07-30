@@ -89,8 +89,6 @@ public:
 
 	auto run() -> void
 	{
-		get_texture_manager().load_textures();
-
 		auto de = Deck{};
 		auto b = Board{ de };
 		auto db = DashBoard{};

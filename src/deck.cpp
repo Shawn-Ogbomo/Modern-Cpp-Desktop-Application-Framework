@@ -11,15 +11,15 @@
 
 Deck::Deck()
 {
-	const auto& textures = get_texture_manager().textures;
-	const auto& front_texture = textures.front();
+	cm.load_textures();
+	const auto& front_texture = cm.textures.front();
 
-	for (auto index = static_cast<int>(Texture_Manager_State::cards); const auto& rank : Rank_lib::ranks)
+	for (auto index = 1; const auto& rank : Rank_lib::ranks)
 	{
-		cards.emplace_back(Suit::hearts, rank, textures[index++], front_texture);
-		cards.emplace_back(Suit::diamonds, rank, textures[index++], front_texture);
-		cards.emplace_back(Suit::spades, rank, textures[index++], front_texture);
-		cards.emplace_back(Suit::clubs, rank, textures[index++], front_texture);
+		cards.emplace_back(Suit::hearts, rank, cm.textures[index++], front_texture);
+		cards.emplace_back(Suit::diamonds, rank, cm.textures[index++], front_texture);
+		cards.emplace_back(Suit::spades, rank, cm.textures[index++], front_texture);
+		cards.emplace_back(Suit::clubs, rank, cm.textures[index++], front_texture);
 	}
 
 	shuffle();

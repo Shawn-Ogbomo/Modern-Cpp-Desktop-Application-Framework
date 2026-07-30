@@ -26,14 +26,14 @@ Music_Player::Music_Player()
 
 	limit = songs.size();
 
-	get_texture_manager_test().load_textures();
-
 	auto button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
-	const auto sz = get_texture_manager_test().textures.size();
+	bm.load_textures();
+
+	const auto sz = bm.textures.size();
 
 	for(auto i = 0;  i < sz; ++i)
 	{
-		buttons.emplace_back(Button{ get_texture_manager_test().textures[i] });
+		buttons.emplace_back(Button{bm.textures[i]});
 		
 		auto& [form_1, form_2,form_3] = buttons.back().forms;
 		

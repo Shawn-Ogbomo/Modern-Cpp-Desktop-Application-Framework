@@ -4,25 +4,26 @@
 #include <filesystem>
 #include <SFML/Graphics.hpp>
 
-class Texture_Manager_test
+struct Texture_Manager_Interface
 {
 public:
+	virtual ~Texture_Manager_Interface() = default;
 	virtual auto load_textures() -> void = 0;
-private:
 };
 
-struct Texture_manager
+struct Card_Manager : public Texture_Manager_Interface
 {
 public:
-	auto load_textures() -> void;
+	auto load_textures() -> void override;
 	std::vector<sf::Texture> textures;
 };
 
-inline auto get_texture_manager() -> Texture_manager&
+struct Button_Manager : public Texture_Manager_Interface
 {
-	static auto manager = Texture_manager{};
-	return manager;
-}
+public:
+	auto load_textures() -> void override;
+	std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
+};
 
 //class Card_Manager: public Texture_Manager
 //{
@@ -31,19 +32,5 @@ inline auto get_texture_manager() -> Texture_manager&
 //	std::vector<std::pair<std::string, sf::Texture>> textures;
 //private:
 //};
-
-struct Button_Manager: public Texture_Manager_test
-{
-public:
-	 virtual auto load_textures() -> void;
-	std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
-};
-
-//template this...
-inline auto get_texture_manager_test() -> Button_Manager&
-{
-	static auto manager = Button_Manager{};
-	return manager;
-}
 
 #endif // TEXTURE_MANAGER_HPP

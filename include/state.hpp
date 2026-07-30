@@ -26,9 +26,4 @@ enum class Card_State
 	face_up
 };
 
-enum class Texture_Manager_State
-{
-	cards, buttons = 53
-};
-
 #endif // STATE_HPP

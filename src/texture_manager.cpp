@@ -5,7 +5,7 @@
 #include "../include/util.hpp"
 #include "../include/texture_manager.hpp"
 
-auto Texture_manager::load_textures() ->void
+auto Card_Manager::load_textures() ->void
 {
 	auto card_names = std::filesystem::path{ "../../../../assets/txt/card_names.txt" };
 
