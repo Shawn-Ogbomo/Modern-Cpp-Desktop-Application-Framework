@@ -9,20 +9,22 @@
 #include"../include/exceptions.hpp"
 #include "../include/texture_manager.hpp"
 
+using namespace Rank_Lib;
+
 Deck::Deck()
 {
-	cm.load_textures();
-	const auto& front_texture = cm.textures.front();
+    cm.load_textures();
+    const auto& front_texture = cm.textures.front();
 
-	for (auto index = 1; const auto& rank : Rank_lib::ranks)
-	{
-		cards.emplace_back(Suit::hearts, rank, cm.textures[index++], front_texture);
-		cards.emplace_back(Suit::diamonds, rank, cm.textures[index++], front_texture);
-		cards.emplace_back(Suit::spades, rank, cm.textures[index++], front_texture);
-		cards.emplace_back(Suit::clubs, rank, cm.textures[index++], front_texture);
-	}
+    for (auto index = 1; const auto& rank :ranks)
+    {
+        cards.emplace_back(Suit::hearts, rank, cm.textures[index++], front_texture);
+        cards.emplace_back(Suit::diamonds, rank, cm.textures[index++], front_texture);
+        cards.emplace_back(Suit::spades, rank, cm.textures[index++], front_texture);
+        cards.emplace_back(Suit::clubs, rank, cm.textures[index++], front_texture);
+    }
 
-	shuffle();
+    shuffle();
 }
 
 auto Deck::draw() ->Card

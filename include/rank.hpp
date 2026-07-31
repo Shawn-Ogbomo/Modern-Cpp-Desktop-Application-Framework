@@ -3,7 +3,7 @@
 
 #include <array>
 
-namespace Rank_lib
+namespace Rank_Lib
 {
 	enum class Rank
 	{

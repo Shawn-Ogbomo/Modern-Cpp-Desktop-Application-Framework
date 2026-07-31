@@ -35,13 +35,13 @@ auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms)-> void
 	}
 }
 
-auto Util::allocate(std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>& stack) -> void
+auto Util::allocate(std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>& stack) -> void
 {
 	auto& [state, cards] = stack;
-	std::ranges::fill_n(std::back_inserter(cards), 4, std::pair{Card{},Rank_lib::Rank{}});
+	std::ranges::fill_n(std::back_inserter(cards), 4, std::pair{Card{},Rank_Lib::Rank{}});
 }
 
-auto Util::position_card(sf::Sprite& front, sf::Sprite& back, Rank_lib::Rank rank, int v1, int v2) -> void
+auto Util::position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int v1, int v2) -> void
 {
 	const auto center_x = 500.0f;
 	const auto center_y = 385.0f;
@@ -49,7 +49,7 @@ auto Util::position_card(sf::Sprite& front, sf::Sprite& back, Rank_lib::Rank ran
 	const auto pos_card = front.getLocalBounds().size;
 
 	if (const auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2) - pos_card.y) / 2 };
-		rank == Rank_lib::Rank::king)
+		rank == Rank_Lib::Rank::king)
 	{
 		front.setPosition(center);
 		back.setPosition(center);

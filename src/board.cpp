@@ -16,7 +16,7 @@ Board::Board(Deck& d)
 		for (auto& [card, rank] : cards)
 		{
 			card = std::move(d.draw());
-			rank = Rank_lib::ranks[index];
+			rank = Rank_Lib::ranks[index];
 
 			auto [face, reverse] = card.img();
 			Util::position_card(face, reverse, rank, index, total_piles);
@@ -32,7 +32,7 @@ Board::Board(Deck& d)
 	card.position() = Card_State::face_up;
 }
 
-auto Board::operator ()(sf::Vector2f cursor_pos)->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_lib::Rank>>>, total_piles>::iterator
+auto Board::operator ()(sf::Vector2f cursor_pos)->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator
 {
 	 const auto& [card_size_x, card_size_y] = piles.back().second.back().first.img().first.getLocalBounds().size;
 
