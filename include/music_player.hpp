@@ -17,8 +17,8 @@ class Button : public sf::Drawable
 public:
 	friend class Music_Player;
 
-	Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs)
-		:forms{ std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>(txtrs) }
+	Button(std::tuple<sf::Texture, sf::Texture, sf::Texture> &txtrs)
+		:forms{ std::move(txtrs) }
 	{
 		static auto bs = Button_Interface::ButtonName{};
 		name = bs;
