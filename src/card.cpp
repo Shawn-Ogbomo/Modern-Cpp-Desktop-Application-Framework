@@ -16,7 +16,7 @@ Card::Card(std::string_view card_name, sf::Texture& f,  sf::Texture& re, Card_St
 	const auto pos_suite_name_begin = (card_name.find_first_of("-") + 1);
 	const auto count = (card_name.find_last_of("-") - 1) - (pos_suite_name_begin)+1;
 
-	const auto&[suite_name,value] = (*suits.find(card_name.substr(pos_suite_name_begin, count)));
+	const auto& [suite_name,value] = (*suits.find(card_name.substr(pos_suite_name_begin, count)));
 
 	suit = value;
 	auto result = 0;

@@ -32,9 +32,11 @@ Music_Player::Music_Player()
 
 	const auto sz = bm.textures.size();
 
+	buttons.reserve(sz);
+
 	for(auto i = 0;  i < sz; ++i)
 	{
-		buttons.emplace_back(Button{bm.textures[i]});
+		buttons.push_back(Button{ bm.textures[i] });
 		
 		auto& [form_1, form_2,form_3] = buttons.back().forms;
 		

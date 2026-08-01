@@ -11,6 +11,8 @@ auto Card_Manager::load_textures() ->void
 {
 	fs::current_path("../../../../assets/");
 
+	textures.reserve((Board::total_piles * Board::cards_pile) +1);
+
 	for (auto& dir_entry : fs::directory_iterator{"images"})
 	{
 		auto& card_name = dir_entry.path();
@@ -30,6 +32,8 @@ auto Button_Manager::load_textures() ->void
 			sf::Texture{ buttons,false,{ sf::Vector2i{x,y}, dimmensions_button} }, 
 			sf::Texture{ buttons,false,{ sf::Vector2i{x,(y + dimmensions_button.y)},dimmensions_button } },
 			sf::Texture{ buttons,false,{ sf::Vector2i{x,(y + (dimmensions_button.y  * 2) )},dimmensions_button } });};
+
+	   textures.reserve(buttons.getSize().x/dimmensions_button.x);
 
 	for (auto i = 0;  i <= dimmensions_image.x; i += dimmensions_button.x)
 	{

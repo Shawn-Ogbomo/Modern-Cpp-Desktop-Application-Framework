@@ -15,6 +15,7 @@ Deck::Deck()
 {
     cm.load_textures();
      auto& [name,back_card] = cm.textures.front();
+	 cards.reserve(Board::total_piles * Board::cards_pile);
 
     std::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto & textures){
         auto& [name, texture] = textures;
