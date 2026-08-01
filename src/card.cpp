@@ -21,6 +21,6 @@ Card::Card(std::string_view card_name, sf::Texture& f,  sf::Texture& re, Card_St
 	suit = value;
 	auto result = 0;
 
-	std::from_chars(card_name.data()+(pos_suite_name_begin*2) +1, card_name.data()+card_name.size(), v);
+	std::from_chars(card_name.data()+(pos_suite_name_begin*2) +1, card_name.data()+card_name.size(), result);
 	rank = static_cast<Rank_Lib::Rank>(result);
 }
