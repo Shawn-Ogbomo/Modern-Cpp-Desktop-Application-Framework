@@ -15,7 +15,7 @@ Board::Board(Deck& d)
 
 		for (auto& [card, rank] : cards)
 		{
-			card = std::move(d.draw());
+			card = d.draw();
 			rank = Rank_Lib::ranks[index];
 
 			auto [face, reverse] = card.img();

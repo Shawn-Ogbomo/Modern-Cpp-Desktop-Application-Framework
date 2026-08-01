@@ -5,25 +5,22 @@
 #include "../include/util.hpp"
 #include "../include/texture_manager.hpp"
 
+namespace fs = std::filesystem;
+
 auto Card_Manager::load_textures() ->void
 {
-	auto card_names = std::filesystem::path{ "../../../../assets/txt/card_names.txt" };
+	fs::current_path("../../../../assets/");
 
-	auto ifs = std::ifstream{ card_names };
-
-	Util::check_stream(ifs, card_names, ": does not exist.\n");
-
-	std::filesystem::current_path("../../../../assets/images");
-
-	for (std::string s; ifs >> s;)
+	for (auto& dir_entry : fs::directory_iterator{"images"})
 	{
-			textures.emplace_back(sf::Texture{s,false});
+		auto& card_name = dir_entry.path();
+		textures.emplace_back(std::pair{card_name.filename().stem(),sf::Texture{card_name} });
 	}
 }
 
 auto Button_Manager::load_textures() ->void
 {
-	const auto buttons = sf::Image{ "../buttons/buttons_clock_solitare.png" };
+	const auto buttons = sf::Image{ "buttons/buttons_clock_solitare.png" };
 	const auto dimmensions_button = sf::Vector2i{ 30,30 };
 	const auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 

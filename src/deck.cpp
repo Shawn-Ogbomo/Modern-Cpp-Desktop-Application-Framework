@@ -10,19 +10,15 @@
 #include "../include/texture_manager.hpp"
 
 using namespace Rank_Lib;
-
+namespace fs = std::filesystem;
 Deck::Deck()
 {
     cm.load_textures();
-    const auto& front_texture = cm.textures.front();
+     auto& [name,back_card] = cm.textures.front();
 
-    for (auto index = 1; const auto& rank :ranks)
-    {
-        cards.emplace_back(Suit::hearts, rank, cm.textures[index++], front_texture);
-        cards.emplace_back(Suit::diamonds, rank, cm.textures[index++], front_texture);
-        cards.emplace_back(Suit::spades, rank, cm.textures[index++], front_texture);
-        cards.emplace_back(Suit::clubs, rank, cm.textures[index++], front_texture);
-    }
+    std::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto & textures){
+        auto& [name, texture] = textures;
+        cards.emplace_back(name.string(), texture, back_card); });
 
     shuffle();
 }

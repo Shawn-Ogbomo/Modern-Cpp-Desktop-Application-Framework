@@ -28,7 +28,7 @@ auto Time_Status::update(sf::Clock& c) ->void
 
 Time_Status::Time_Status(sf::Clock& c)
 {
-	Util::load_font(std::filesystem::path{ "../" + std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"} }, font);
+	Util::load_font(std::filesystem::path{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"}, font);
 
 	update(c);
 

@@ -15,7 +15,7 @@ struct Card_Manager : public Texture_Manager_Interface
 {
 public:
 	auto load_textures() -> void override;
-	std::vector<sf::Texture> textures;
+	std::vector<std::pair<std::filesystem::path,sf::Texture>> textures;
 };
 
 struct Button_Manager : public Texture_Manager_Interface
@@ -24,13 +24,5 @@ public:
 	auto load_textures() -> void override;
 	std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
 };
-
-//class Card_Manager: public Texture_Manager
-//{
-//public:
-//	virtual auto load_textures() -> void;
-//	std::vector<std::pair<std::string, sf::Texture>> textures;
-//private:
-//};
 
 #endif // TEXTURE_MANAGER_HPP
