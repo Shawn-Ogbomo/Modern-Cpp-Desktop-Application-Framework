@@ -11,7 +11,6 @@ struct Board : public sf::Drawable
 {
 	static constexpr auto total_piles = 13;
 	static constexpr auto cards_pile = 4;
-
 public:
 	explicit Board(Deck& d);
 	Board(const Board&) = delete;
