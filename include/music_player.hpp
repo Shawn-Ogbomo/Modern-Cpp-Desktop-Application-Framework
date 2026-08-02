@@ -17,12 +17,25 @@ class Button : public sf::Drawable
 public:
 	friend class Music_Player;
 
-	Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs)
+	Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos)
 		:forms{ txtrs }
 	{
-		static auto bs = Button_Interface::ButtonName{};
-		name = bs;
-		++bs;
+		auto bounds = std::pair<int, int>{ 0,5 };
+
+		const auto& [lower_bound, upper_bound] = bounds;
+
+		if (val < lower_bound || val > upper_bound)
+		{
+			throw std::out_of_range{ "No button name corresponding to value: " + std::to_string(val)};
+		}
+
+		name = static_cast<Button_Interface::ButtonName>(val);
+
+		auto& [form_1, form_2, form_3] = forms;
+
+		form_1.setPosition(pos);
+		form_2.setPosition(pos);
+		form_3.setPosition(pos);
 	}
 
 	auto operator()(Music_Player& mp) const-> void;

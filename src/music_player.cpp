@@ -27,22 +27,16 @@ Music_Player::Music_Player()
 
 	limit = songs.size();
 
-	auto button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 	bm.load_textures();
 
-	const auto sz = bm.textures.size();
+	buttons.reserve(bm.textures.size());
 
-	buttons.reserve(sz);
+	auto button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
-	for(auto i = 0;  i < sz; ++i)
+	for(auto internal_index = 0; const auto& texture :bm.textures)
 	{
-		buttons.push_back(Button{ bm.textures[i] });
-		
-		auto& [form_1, form_2,form_3] = buttons.back().forms;
-		
-		form_1.setPosition(button_pos);
-		form_2.setPosition(button_pos);
-		form_3.setPosition(button_pos);
+		buttons.push_back(Button{ texture,internal_index,button_pos });
+		++internal_index;
 		button_pos.x += 35;
 	}
 }
