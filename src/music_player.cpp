@@ -89,18 +89,17 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 auto Music_Player::idle(Music_Player& mp) -> void
 {
-	if (const auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
+	 if (!mp)
+	{
+		 mp.mode = ButtonMode::on;
+		const auto& play = mp.buttons[Util::to_int(ButtonName::play)];
+		play.operator()(mp);
+	}
+
+	else if (const auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
 	{
 		const auto& next = mp.buttons[Util::to_int(ButtonName::next)];
 		next.operator()(mp);
-	}
-
-	else if (static auto count = 0; !count)
-	{
-		const auto& play = mp.buttons[Util::to_int(ButtonName::play)];
-		play.operator()(mp);
-
-		++count;
 	}
 }
 

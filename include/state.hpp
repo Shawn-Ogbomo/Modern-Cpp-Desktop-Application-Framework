@@ -12,6 +12,11 @@ namespace Button_Interface
 	{
 		idle, touched, pushed
 	};
+
+	enum class ButtonMode
+	{
+		off, on
+	};
 };
 
 enum class Card_State

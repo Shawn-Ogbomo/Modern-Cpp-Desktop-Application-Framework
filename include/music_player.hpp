@@ -61,6 +61,8 @@ public:
 	Music_Player(Music_Player&&) = delete;
 	auto operator =(Music_Player&&) -> Music_Player & = delete;
 	auto operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
+	operator bool() { return static_cast<bool>(mode); };
+
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
 	auto idle(Music_Player& mp) -> void;
@@ -71,13 +73,12 @@ private:
 	auto play() -> void { songs[current_song].second.play(); };
 
 	sf::Text caption{ font };
-	
 	std::size_t limit{};
 	std::size_t current_song{};
-
 	std::vector<std::pair<sf::Text, sf::Music>> songs;
 	std::vector<Button> buttons;
 	Button_Manager bm;
+	Button_Interface::ButtonMode mode{};
 };
 
 #endif // MUSIC_PLAYER.HPP
