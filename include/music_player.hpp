@@ -61,7 +61,7 @@ public:
 	Music_Player(Music_Player&&) = delete;
 	auto operator =(Music_Player&&) -> Music_Player & = delete;
 	auto operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
-	operator bool() { return static_cast<bool>(mode); };
+	operator bool() const { return static_cast<bool>(mode);};
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
