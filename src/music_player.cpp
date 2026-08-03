@@ -2,6 +2,7 @@
 #include "../include/util.hpp"
 
 using namespace Button_Interface;
+using namespace std::chrono_literals;
 namespace fs = std::filesystem;
 
 Music_Player::Music_Player()
@@ -87,18 +88,18 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	std::for_each(buttons.begin(), buttons.end(), [&target](const auto&b) {target.draw(b);});
 }
 
-auto Music_Player::idle(Music_Player& mp) -> void
+auto Music_Player::idle(Music_Player &mp) -> void
 {
 	 if (!mp)
 	{
-		 mp.mode = ButtonMode::on;
-		const auto& play = mp.buttons[Util::to_int(ButtonName::play)];
+		mode = ButtonMode::on;
+		const auto& play = buttons[Util::to_int(ButtonName::play)];
 		play.operator()(mp);
 	}
 
-	else if (const auto song_finished = mp.songs[mp.current_song].second.getPlayingOffset() >= mp.songs[mp.current_song].second.getDuration() - std::chrono::microseconds{ 500000 })
+	else if (const auto& done = songs[current_song].second; done.getPlayingOffset() >= done.getDuration() - 500000us)
 	{
-		const auto& next = mp.buttons[Util::to_int(ButtonName::next)];
+		const auto& next = buttons[Util::to_int(ButtonName::next)];
 		next.operator()(mp);
 	}
 }
