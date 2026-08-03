@@ -73,5 +73,5 @@ auto::Util::local_time()->std::string
 		std::chrono::system_clock::now()
 	};
 
-	return std::format("{:%a:%b:%d:%Y %I:%M %p}", time_now.get_local_time());
+	return std::format("{:%a:%b:%d:%y %I:%M %p}", time_now.get_local_time());
 }
