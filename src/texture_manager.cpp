@@ -9,8 +9,6 @@ namespace fs = std::filesystem;
 
 auto Card_Manager::load_textures() ->void
 {
-	fs::current_path("../../../../assets/");
-
 	textures.reserve((Board::total_piles * Board::cards_pile) +1);
 
 	for (auto& dir_entry : fs::directory_iterator{"images"})

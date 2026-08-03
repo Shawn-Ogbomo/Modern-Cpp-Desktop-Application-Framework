@@ -11,8 +11,11 @@
 
 using namespace Rank_Lib;
 namespace fs = std::filesystem;
+
 Deck::Deck()
 {
+	fs::current_path("../../../../assets/");
+
     cm.load_textures();
      auto& [name,back_card] = cm.textures.front();
 	 cards.reserve(Board::total_piles * Board::cards_pile);

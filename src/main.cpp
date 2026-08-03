@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iterator>
 #include <iostream>
-
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
