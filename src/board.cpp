@@ -34,7 +34,7 @@ Board::Board(Deck& d)
 
 auto Board::operator ()(sf::Vector2f cursor_pos)->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator
 {
-	 const auto& [card_size_x, card_size_y] = piles.back().second.back().first.img().first.getLocalBounds().size;
+	const auto& [card_size_x, card_size_y] = piles.back().second.back().first.img().first.getLocalBounds().size;
 
 	return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
 		const auto& [card_pos_x, card_pos_y] = p.second.back().first.img().first.getPosition();

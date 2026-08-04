@@ -16,8 +16,8 @@ namespace Util
 	auto delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void;
 	auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int v1, int v2) -> void;
 	auto local_time() -> std::string;
-	
-	inline auto to_int(auto b) -> int 
+
+	inline auto to_int(auto b) -> int
 	{
 		return static_cast<int>(b);
 	}

@@ -25,8 +25,8 @@ private:
 	Suit suit{};
 	Card_State state{};
 	Rank_Lib::Rank rank{};
-	sf::Sprite face{t};
-	sf::Sprite reverse{t};
+	sf::Sprite face{ t };
+	sf::Sprite reverse{ t };
 };
 
 #endif // CARD_HPP

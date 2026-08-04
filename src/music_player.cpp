@@ -7,7 +7,7 @@ namespace fs = std::filesystem;
 
 Music_Player::Music_Player()
 {
-	Util::load_font(std::string{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"}, font);
+	Util::load_font(std::string{ "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
 	caption.setFillColor(sf::Color{ 63, 59, 147 });
 	caption.setString("Song: ");
 	caption.setCharacterSize(26);
@@ -34,7 +34,7 @@ Music_Player::Music_Player()
 
 	auto button_pos = sf::Vector2f{ 452.0f - 35.0f,842.0f };
 
-	for(auto internal_index = 0; const auto& texture :bm.textures)
+	for (auto internal_index = 0; const auto& texture :bm.textures)
 	{
 		buttons.push_back(Button{ texture,internal_index,button_pos });
 		++internal_index;
@@ -67,7 +67,7 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->v
 			&& cursor_pos_released.x <= std::get<0>(button->forms).getPosition().x + std::get<0>(button->forms).getLocalBounds().size.x
 			&& cursor_pos_released.y >= std::get<0>(button->forms).getPosition().y
 			&& cursor_pos_released.y <= std::get<0>(button->forms).getPosition().y + std::get<0>(button->forms).getLocalBounds().size.y)
-	{
+		{
 			rw.draw(std::get<1>(button->forms));
 			rw.display();
 
@@ -85,12 +85,12 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(caption);
 	target.draw(songs[current_song].first);
-	std::for_each(buttons.begin(), buttons.end(), [&target](const auto&b) {target.draw(b);});
+	std::for_each(buttons.begin(), buttons.end(), [&target](const auto& b) {target.draw(b); });
 }
 
-auto Music_Player::idle(Music_Player &mp) -> void
+auto Music_Player::idle(Music_Player& mp) -> void
 {
-	 if (!mp)
+	if (!mp)
 	{
 		mode = ButtonMode::on;
 		const auto& play = buttons[Util::to_int(ButtonName::play)];
