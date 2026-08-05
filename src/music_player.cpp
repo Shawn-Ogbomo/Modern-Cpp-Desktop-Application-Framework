@@ -4,6 +4,7 @@
 using namespace Button_Interface;
 using namespace std::chrono_literals;
 namespace fs = std::filesystem;
+namespace B_I = Button_Interface;
 
 Music_Player::Music_Player()
 {
@@ -100,32 +101,28 @@ auto Music_Player::idle(Music_Player& mp) -> void
 
 auto Button::operator()(Music_Player& mp)const ->void
 {
-	if (name == ButtonName::prev)
+	switch (name)
 	{
+	case B_I::ButtonName::prev:
 		mp.stop();
 		mp.prev();
 		mp.play();
-	}
-
-	else if (name == ButtonName::pause)
-	{
+		break;
+	case B_I::ButtonName::pause:
 		mp.pause();
-	}
-
-	else if (name == ButtonName::play)
-	{
+		break;
+	case B_I::ButtonName::play:
 		mp.play();
-	}
-
-	else if (name == ButtonName::next)
-	{
+		break;
+	case B_I::ButtonName::next:
 		mp.stop();
 		mp.next();
 		mp.play();
-	}
-
-	else if (name == ButtonName::stop)
-	{
+		break;
+	case B_I::ButtonName::stop:
 		mp.stop();
+		break;
+	default:
+		break;
 	}
 }
