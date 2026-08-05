@@ -62,10 +62,9 @@ Board::Board(Deck& d)
 auto Board::operator ()(sf::Vector2f cursor_pos) ->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator
 {
 	return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
-		const auto& [card_size_x, card_size_y] = piles.back().second.back().first.img().first.getLocalBounds().size;
-		const auto& [card_pos_x, card_pos_y] = p.second.back().first.img().first.getPosition();
-		return (p.first && cursor_pos.x >= card_pos_x && cursor_pos.x <= card_pos_x + card_size_x
-			&& cursor_pos.y >= card_pos_y && cursor_pos.y <= card_pos_y + card_size_y);
+		auto& [active, pile] = p;
+		const auto& [face, reverse] = pile.back().first.img();
+		return active && face.getGlobalBounds().contains(cursor_pos);
 		});
 }
 

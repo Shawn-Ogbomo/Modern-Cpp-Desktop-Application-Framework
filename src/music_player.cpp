@@ -44,7 +44,7 @@ Music_Player::Music_Player()
 
 auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) ->void
 {
-	const auto button = std::find_if(buttons.begin(), buttons.end(), [&](auto& b) {
+	const auto button = std::find_if(buttons.begin(), buttons.end(), [&](const auto& b) {
 		return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
 		});
 
