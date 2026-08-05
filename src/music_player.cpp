@@ -1,7 +1,6 @@
 #include "../include/music_player.hpp"
 #include "../include/util.hpp"
 
-using namespace Button_Interface;
 using namespace std::chrono_literals;
 namespace fs = std::filesystem;
 namespace B_I = Button_Interface;
@@ -87,14 +86,14 @@ auto Music_Player::idle(Music_Player& mp) -> void
 {
 	if (!mp)
 	{
-		mode = ButtonMode::on;
-		const auto& play = buttons[Util::to_int(ButtonName::play)];
+		mode = B_I::ButtonMode::on;
+		const auto& play = buttons[Util::to_int(B_I::ButtonName::play)];
 		play.operator()(mp);
 	}
 
 	else if (const auto& done = songs[current_song].second; done.getPlayingOffset() >= done.getDuration() - 500000us)
 	{
-		const auto& next = buttons[Util::to_int(ButtonName::next)];
+		const auto& next = buttons[Util::to_int(B_I::ButtonName::next)];
 		next.operator()(mp);
 	}
 }
