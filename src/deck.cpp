@@ -16,15 +16,15 @@ Deck::Deck()
 {
 	fs::current_path("../../../../assets/");
 
-    cm.load_textures();
-     auto& [name,back_card] = cm.textures.front();
-	 cards.reserve(Board::total_piles * Board::cards_pile);
+	cm.load_textures();
+	auto& [name, back_card] = cm.textures.front();
+	cards.reserve(Board::total_piles * Board::cards_pile);
 
-    std::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto & textures){
-        auto& [name, texture] = textures;
-        cards.emplace_back(name.string(), texture, back_card); });
+	std::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
+		auto& [name, texture] = textures;
+		cards.emplace_back(name.string(), texture, back_card); });
 
-    shuffle();
+	shuffle();
 }
 
 auto Deck::draw() ->Card

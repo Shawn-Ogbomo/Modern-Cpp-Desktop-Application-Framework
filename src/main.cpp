@@ -119,11 +119,14 @@ public:
 				{
 					if (active_card != std::end(b.piles))
 					{
-						//save original position of card before moving...
-						//check for collision here
-						//turn on shader while card is in bounds of the correct destination pile
 						active_card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
 						active_card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+
+						//check for collision here
+						//turn on shader while card is in bounds of the correct destination pile
+			/*			if (active_card)
+						{
+						}*/
 					}
 				}
 
