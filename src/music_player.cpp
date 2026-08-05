@@ -121,7 +121,5 @@ auto Button::operator()(Music_Player& mp)const ->void
 	case B_I::ButtonName::stop:
 		mp.stop();
 		break;
-	default:
-		break;
 	}
 }
