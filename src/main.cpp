@@ -92,7 +92,7 @@ public:
 		auto b = Board{ de };
 		auto db = DashBoard{};
 
-		auto active_card = std::end(b.piles);
+		auto card = std::end(b.piles);
 
 		// run the program as long as the window is open
 		while (window.isOpen())
@@ -117,22 +117,26 @@ public:
 
 				else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
 				{
-					if (active_card != std::end(b.piles))
+					if (card != std::end(b.piles))
 					{
-						active_card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
-						active_card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+						card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+						card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
 
 						//check for collision here
 						//turn on shader while card is in bounds of the correct destination pile
-			/*			if (active_card)
+
+						if (auto destination_pile = b(card->second.back().first.img().first.getGlobalBounds().position); destination_pile->second.back().second == card->second.back().first.value())
 						{
-						}*/
+							//if we are in the middle pile, and the face up card is a king, swap...
+							//draw the glove shader on the pile...
+							std::cout << "I am here...\n";
+						}
 					}
 				}
 
 				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
 				{
-					if (mouseButtonReleased->button == sf::Mouse::Button::Left && active_card != std::end(b.piles))
+					if (mouseButtonReleased->button == sf::Mouse::Button::Left && card != std::end(b.piles))
 					{
 						//if it is dropped in the correct destination pile
 						// add it to the front of the queue std::move
@@ -153,9 +157,9 @@ public:
 						//
 						//
 						// if button left click is released while dragging card, and it is not dropped on the correct destination pile, return it to its original position...
-						active_card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
-						active_card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
-						active_card = std::end(b.piles);
+						card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
+						card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
+						card = std::end(b.piles);
 					}
 				}
 
@@ -165,7 +169,7 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 						db.mp(window, cursor_pos);
-						active_card = b(cursor_pos);
+						card = b(cursor_pos);
 					}
 				}
 			}

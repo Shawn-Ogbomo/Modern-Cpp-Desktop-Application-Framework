@@ -66,6 +66,9 @@ auto Board::operator ()(sf::Vector2f cursor_pos) ->std::array < std::pair<bool, 
 		const auto& [face, reverse] = pile.back().first.img();
 		return active && face.getGlobalBounds().contains(cursor_pos);
 		});
+
+	//return a pair of piles
+		//active and destination
 }
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
