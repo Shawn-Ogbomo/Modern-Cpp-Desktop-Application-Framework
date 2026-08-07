@@ -59,7 +59,7 @@ public:
 
 		auto glowWidth = 10.f;
 
-		auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2, glowWidth * 2) };
+		auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2 , glowWidth * 2) };
 
 		glow_rect.setSize(outerSize);
 
@@ -93,7 +93,8 @@ public:
 		auto db = DashBoard{};
 
 		auto card = std::end(b.piles);
-
+		auto destination_pile = std::end(b.piles);
+		
 		// run the program as long as the window is open
 		while (window.isOpen())
 		{
@@ -121,16 +122,6 @@ public:
 					{
 						card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
 						card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
-
-						//check for collision here
-						//turn on shader while card is in bounds of the correct destination pile
-
-						if (auto destination_pile = b(card->second.back().first.img().first.getGlobalBounds().position); destination_pile->second.back().second == card->second.back().first.value())
-						{
-							//if we are in the middle pile, and the face up card is a king, swap...
-							//draw the glove shader on the pile...
-							std::cout << "I am here...\n";
-						}
 					}
 				}
 
@@ -157,9 +148,9 @@ public:
 						//
 						//
 						// if button left click is released while dragging card, and it is not dropped on the correct destination pile, return it to its original position...
-						card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
-						card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
-						card = std::end(b.piles);
+					/*	card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
+						card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });*/
+						//card = std::end(b.piles);
 					}
 				}
 
@@ -169,7 +160,7 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 						db.mp(window, cursor_pos);
-						card = b(cursor_pos);
+						card = b(card, cursor_pos);
 					}
 				}
 			}
@@ -190,11 +181,15 @@ public:
 			//draw to window
 			window.draw(db);
 
-			//if card collides with the correct destination pile, enable the shader on the correct destination pile...
-			//b(window, glow_rect, glow_shader);
+			if (destination_pile = b(card); destination_pile != std::end(b.piles) && destination_pile->second.back().second == card->second.back().first.value())
+			{
+				auto pos = destination_pile->second.back().first.img().first.getPosition();
+				glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
+				window.draw(glow_rect,&glow_shader);
+			}
 
 			window.draw(b);
-
+			
 			// end the current frame
 			window.display();
 		}
