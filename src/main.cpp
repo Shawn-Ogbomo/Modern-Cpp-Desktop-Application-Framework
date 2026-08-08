@@ -86,6 +86,17 @@ public:
 		window.setIcon(sf::Image{ std::filesystem::path{"../../../../assets/icon/7_diamonds_new.png"} });
 	}
 
+	auto enable_shader(const Board& b) ->void
+	{
+		if (b.destination_pile != std::end(b.piles) && b.source_pile != std::end(b.piles)
+			&& b.destination_pile->second.back().second == b.source_pile->second.back().first.value())
+		{
+			const auto pos = b.destination_pile->second.front().first.img().first.getPosition();
+			glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
+			window.draw(glow_rect, &glow_shader);
+		}
+	}
+
 	auto run() -> void
 	{
 		auto de = Deck{};
@@ -147,9 +158,9 @@ public:
 						//
 						//
 						// if button left click is released while dragging card, and it is not dropped on the correct destination pile, return it to its original position...
-					/*	card->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
-						card->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });*/
-						//card = std::end(b.piles);
+						b.source_pile->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
+						b.source_pile->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
+						b.source_pile= std::end(b.piles);
 					}
 				}
 
@@ -169,15 +180,10 @@ public:
 
 			//draw to window
 			window.draw(db);
-
-			if (b.destination_pile != std::end(b.piles) && b.destination_pile->second.back().second == b.source_pile->second.back().first.value())
-			{
-				const auto pos = b.destination_pile->second.front().first.img().first.getPosition();
-				glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
-				window.draw(glow_rect,&glow_shader);
-			}
-
-			window.draw(b);
+			
+			enable_shader(b);
+			
+			window.draw(b, &glow_shader);
 			
 			// end the current frame
 			window.display();

@@ -22,9 +22,9 @@ public:
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	std::array <std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles > piles{};
 	Board_It source_pile;
 	Board_It destination_pile;
+	std::array <std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles > piles{};
 };
 
 #endif // BOARD_HPP 
