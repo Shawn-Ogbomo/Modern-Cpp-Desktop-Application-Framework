@@ -87,13 +87,13 @@ auto Music_Player::idle(Music_Player& mp) -> void
 	if (!mp)
 	{
 		mode = B_I::ButtonMode::on;
-		const auto& play = buttons[Util::to_int(B_I::ButtonName::play)];
+		const auto& play = buttons[static_cast<int>((B_I::ButtonName::play))];
 		play.operator()(mp);
 	}
 
 	else if (const auto& done = songs[current_song].second; done.getPlayingOffset() >= done.getDuration() - 500000us)
 	{
-		const auto& next = buttons[Util::to_int(B_I::ButtonName::next)];
+		const auto& next = buttons[static_cast<int>(B_I::ButtonName::next)];
 		next.operator()(mp);
 	}
 }

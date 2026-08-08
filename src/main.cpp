@@ -92,9 +92,6 @@ public:
 		auto b = Board{ de };
 		auto db = DashBoard{};
 
-		auto card = std::end(b.piles);
-		auto destination_pile = std::end(b.piles);
-		
 		// run the program as long as the window is open
 		while (window.isOpen())
 		{
@@ -118,17 +115,18 @@ public:
 
 				else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
 				{
-					if (card != std::end(b.piles))
+					if (b.source_pile != std::end(b.piles))
 					{
-						card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
-						card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
-						destination_pile = b(card->second.back().first.img().first.getPosition());
+						const auto pos = sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f };
+						b.source_pile->second.back().first.img().first.setPosition(pos);
+						b.source_pile->second.back().first.img().second.setPosition(pos);
+						b.destination_pile = b(b.source_pile,b.destination_pile,b.source_pile->second.back().first.img().first.getPosition());
 					}
 				}
 
 				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
 				{
-					if (mouseButtonReleased->button == sf::Mouse::Button::Left && card != std::end(b.piles))
+					if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
 					{
 						//if it is dropped in the correct destination pile
 						// add it to the front of the queue std::move
@@ -159,9 +157,9 @@ public:
 				{
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 					{
-						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
+						auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x + .0f, sf::Mouse::getPosition(window).y + .0f};
 						db.mp(window, cursor_pos);
-						card = b(cursor_pos);
+						b.source_pile = b(b.source_pile,b.destination_pile,cursor_pos);
 					}
 				}
 			}
@@ -172,9 +170,9 @@ public:
 			//draw to window
 			window.draw(db);
 
-			if (destination_pile != std::end(b.piles) && destination_pile->second.back().second == card->second.back().first.value())
+			if (b.destination_pile != std::end(b.piles) && b.destination_pile->second.back().second == b.source_pile->second.back().first.value())
 			{
-				auto pos = destination_pile->second.back().first.img().first.getPosition();
+				const auto pos = b.destination_pile->second.back().first.img().first.getPosition();
 				glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
 				window.draw(glow_rect,&glow_shader);
 			}

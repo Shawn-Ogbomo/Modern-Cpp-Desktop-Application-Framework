@@ -24,7 +24,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 		return;
 	}
 
-	const auto a = sf::Angle{ sf::radians(static_cast<float>(v1 * 2.0f * pi / (v2 - 1.0f) - (pi / 2.0f))) };
+	const auto a = sf::Angle{ sf::radians(v1 * 2.0f * pi / (v2 - 1.0f) - (pi / 2.0f)) };
 
 	auto a_radians = a.asRadians();
 	auto pos = sf::Vector2f{ center_x + radius * std::cos(a_radians) - (pos_card.x / 2.0f), center_y + (radius * std::sin(a_radians)) - pos_card.y / 2.0f };
@@ -34,6 +34,8 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 }
 
 Board::Board(Deck& d)
+	:source_pile{std::end(piles)},
+	destination_pile{std::end(piles)}
 {
 	for (auto index = 0; auto& pile : piles)
 	{
@@ -59,12 +61,13 @@ Board::Board(Deck& d)
 	card.position() = Card_State::face_up;
 }
 
-auto Board::operator ()(sf::Vector2f pos) ->std::array <std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator
+auto Board::operator ()(Board_It src, Board_It dest, sf::Vector2f pos) ->Board_It
 {	
 	 return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
 		 auto& [active, pile] = p;
 		 const auto& [face, reverse] = pile.back().first.img();
-		 return (active && face.getGlobalBounds().contains(pos) ) || face.getGlobalBounds().contains(pos);
+		 return (active && face.getGlobalBounds().contains(pos) ) || src != std::end(piles) 
+			 && face.getGlobalBounds().findIntersection(src->second.back().first.img().first.getGlobalBounds());
 		 });
 }
 

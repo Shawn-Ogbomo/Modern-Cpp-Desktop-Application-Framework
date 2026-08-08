@@ -20,11 +20,6 @@ namespace Util
 		auto& [state, cards] = stack;
 		std::ranges::fill_n(std::back_inserter(cards), Board::cards_pile, std::pair{ Card{},Rank_Lib::Rank{} });
 	}
-
-	inline auto to_int(auto b) -> int
-	{
-		return static_cast<int>(b);
-	}
 }
 
 #endif // UTIL_HPP
