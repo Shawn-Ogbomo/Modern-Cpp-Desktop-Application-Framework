@@ -106,7 +106,10 @@ public:
 			const auto pos = b.destination_pile->second.front().first.img().first.getPosition();
 			glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
 			window.draw(glow_rect, &glow_shader);
+			shader_enabled = true; 
 		}
+
+		shader_enabled = false;
 	}
 
 	auto run() -> void
@@ -208,6 +211,7 @@ private:
 	sf::Image						 cursor_image{ std::filesystem::path{assets_dir() / "cursor/cursor_ice_white.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
 	sf::RectangleShape			 glow_rect;
+	bool shader_enabled{};
 };
 
 auto main() -> int
