@@ -65,7 +65,7 @@ auto Board::operator ()(Board_It src, Board_It dest, sf::Vector2f pos) ->Board_I
 {	
 	 return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
 		 auto& [active, pile] = p;
-		 const auto& [face, reverse] = pile.back().first.img();
+		 const auto& [face, reverse] = pile.front().first.img();
 		 return (active && face.getGlobalBounds().contains(pos) ) || src != std::end(piles) 
 			 && face.getGlobalBounds().findIntersection(src->second.back().first.img().first.getGlobalBounds());
 		 });
