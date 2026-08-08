@@ -172,7 +172,7 @@ public:
 
 			if (b.destination_pile != std::end(b.piles) && b.destination_pile->second.back().second == b.source_pile->second.back().first.value())
 			{
-				const auto pos = b.destination_pile->second.back().first.img().first.getPosition();
+				const auto pos = b.destination_pile->second.front().first.img().first.getPosition();
 				glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
 				window.draw(glow_rect,&glow_shader);
 			}
