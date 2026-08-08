@@ -154,7 +154,9 @@ public:
 				{
 					if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
 					{
-						//if it is dropped in the correct destination pile
+						if (shader_enabled)
+						{
+							//if it is dropped in the correct destination pile
 						// add it to the front of the queue std::move
 						// pop the moved from card from its original pile
 						// flip back card face up in destination pile
@@ -164,18 +166,17 @@ public:
 						// move it to the front
 						// set new back card face up
 						// keep active pile on current pile
-						//
 						// if a card is already face up in dest pile and move from object value matched dest pile
 						// move both cards to the back and flip new back card face up
 						// change active pile to new dest
 						// turn prov active off
-						//
-						//
-						//
+						}
+						
 						// if button left click is released while dragging card, and it is not dropped on the correct destination pile, return it to its original position...
 						b.source_pile->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
 						b.source_pile->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
 						b.source_pile= std::end(b.piles);
+						b.destination_pile = std::end(b.piles);
 					}
 				}
 
@@ -190,6 +191,8 @@ public:
 				}
 			}
 
+			//win condition 
+			
 			// clear the window with blue color
 			window.clear(sf::Color{ 33,46,82 });
 
