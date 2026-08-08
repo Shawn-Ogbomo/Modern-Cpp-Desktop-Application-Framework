@@ -59,19 +59,12 @@ Board::Board(Deck& d)
 	card.position() = Card_State::face_up;
 }
 
-auto Board::operator ()(std::array < std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator source_pile, sf::Vector2f cursor_pos) ->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator
+auto Board::operator ()(sf::Vector2f pos) ->std::array <std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator
 {	
-	if (source_pile != std::end(piles))
-	{
-		return  std::find_if(piles.begin(), piles.end(), [&](auto& internal_p) {
-			return internal_p.second.back().first.img().first.getGlobalBounds().contains(source_pile->second.back().first.img().first.getPosition());
-			});
-	}
-
 	 return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
 		 auto& [active, pile] = p;
 		 const auto& [face, reverse] = pile.back().first.img();
-		 return active && face.getGlobalBounds().contains(cursor_pos);
+		 return (active && face.getGlobalBounds().contains(pos) ) || face.getGlobalBounds().contains(pos);
 		 });
 }
 

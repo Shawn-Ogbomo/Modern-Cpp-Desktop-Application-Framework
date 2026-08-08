@@ -122,6 +122,7 @@ public:
 					{
 						card->second.back().first.img().first.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
 						card->second.back().first.img().second.setPosition(sf::Vector2f{ static_cast<float>(mouseMoved->position.x),static_cast<float>(mouseMoved->position.y) });
+						destination_pile = b(card->second.back().first.img().first.getPosition());
 					}
 				}
 
@@ -160,20 +161,10 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y) };
 						db.mp(window, cursor_pos);
-						card = b(card, cursor_pos);
+						card = b(cursor_pos);
 					}
 				}
 			}
-
-			//what if we start with a king in the middle
-				// we have to swap it
-				//
-				//
-			//check win cond here....
-				//4 kings face up in the middle
-					//all cards face up?
-						//win
-					//lose
 
 			// clear the window with blue color
 			window.clear(sf::Color{ 33,46,82 });
@@ -181,7 +172,7 @@ public:
 			//draw to window
 			window.draw(db);
 
-			if (destination_pile = b(card); destination_pile != std::end(b.piles) && destination_pile->second.back().second == card->second.back().first.value())
+			if (destination_pile != std::end(b.piles) && destination_pile->second.back().second == card->second.back().first.value())
 			{
 				auto pos = destination_pile->second.back().first.img().first.getPosition();
 				glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });

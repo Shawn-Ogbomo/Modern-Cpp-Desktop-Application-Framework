@@ -17,7 +17,7 @@ public:
 	auto operator =(const Board&) ->Board & = delete;
 	Board(Board&&) = delete;
 	auto operator =(Board&&) ->Board & = delete;
-	auto operator ()(std::array < std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator source_pile, sf::Vector2f cursor_pos = {})->std::array < std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator;
+	auto operator ()(sf::Vector2f pos)->std::array <std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles>::iterator;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	std::array <std::pair<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>>, total_piles > piles{};
 };
