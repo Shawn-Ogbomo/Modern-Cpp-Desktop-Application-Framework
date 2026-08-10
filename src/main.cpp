@@ -95,20 +95,21 @@ public:
 		settings.antiAliasingLevel = 15;
 		window.setVerticalSyncEnabled(true);
 		window.setMouseCursor(cursor.value());
-		window.setIcon(sf::Image{assets_dir() / "icon/7_diamonds_new.png"} );
+		window.setIcon(sf::Image{ assets_dir() / "icon/7_diamonds_new.png" });
 	}
 
-	auto enable_shader(const Board& b) ->void
+	auto enable_shader(const Board& b) -> void
 	{
 		if (b.destination_pile != std::end(b.piles) && b.source_pile != std::end(b.piles)
-			&& b.destination_pile->second.back().second == b.source_pile->second.back().first.value())
+			&& std::get<1>(*b.destination_pile).back().second == std::get<1>(*b.source_pile).back().first.value())
 		{
-			const auto pos = b.destination_pile->second.front().first.img().first.getPosition();
+			const auto pos = std::get<1>(*b.destination_pile).front().first.img().first.getPosition();
 			glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
 			window.draw(glow_rect, &glow_shader);
-			shader_enabled = true; 
+			shader_enabled = true;
+			return;
 		}
-
+		
 		shader_enabled = false;
 	}
 
@@ -144,67 +145,65 @@ public:
 					if (b.source_pile != std::end(b.piles))
 					{
 						const auto pos = sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f };
-						b.source_pile->second.back().first.img().first.setPosition(pos);
-						b.source_pile->second.back().first.img().second.setPosition(pos);
-						b.destination_pile = b(b.source_pile,b.destination_pile,b.source_pile->second.back().first.img().first.getPosition());
+						std::get<1>(*b.source_pile).back().first.img().first.setPosition(pos);
+						std::get<1>(*b.source_pile).back().first.img().second.setPosition(pos);
+						b.destination_pile = b(b.source_pile, std::get<1>(*b.source_pile).back().first.img().first.getPosition());
 					}
 				}
 
 				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
 				{
-					if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
-					{
-						if (shader_enabled)
+						if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
 						{
-							//if it is dropped in the correct destination pile
-						// add it to the front of the queue std::move
-						// pop the moved from card from its original pile
-						// flip back card face up in destination pile
-						// turn off active pile of the moved from pile
-						// turn on active on the new destination pile
-						// if the back card has the same value as the destination pile
-						// move it to the front
-						// set new back card face up
-						// keep active pile on current pile
-						// if a card is already face up in dest pile and move from object value matched dest pile
-						// move both cards to the back and flip new back card face up
-						// change active pile to new dest
-						// turn prov active off
-						}
+							if (shader_enabled)
+							{
+								//monitor.destination_pile->second.insert(monitor.destination_pile->second.begin(),std::move(monitor.source_pile->second.back())); 
+								////check if there is another card face up behind it....
+								//	//move it to the front 
+
+								//monitor.source_pile->second.pop_back();
+								//monitor.destination_pile->second.back().first.position() = Card_State::face_up;
+								//
+								//monitor.destination_pile->second.back().first.img().first.setPosition(monitor.destination_pile->second.front().first.img().first.getPosition());
+								//monitor.destination_pile->second.back().first.img().first.setPosition(monitor.destination_pile->second.front().first.img().second.getPosition());
+
+								//monitor.source_pile->first = false;
+								//monitor.destination_pile->first = true;
 						
-						// if button left click is released while dragging card, and it is not dropped on the correct destination pile, return it to its original position...
-						b.source_pile->second.back().first.img().first.setPosition(sf::Vector2f{ 452, 313 });
-						b.source_pile->second.back().first.img().second.setPosition(sf::Vector2f{ 452, 313 });
-						b.source_pile= std::end(b.piles);
-						b.destination_pile = std::end(b.piles);
-					}
+							}
+
+							std::get<1>(*b.source_pile).back().first.img().first.setPosition(std::get<2>(*b.source_pile));
+							std::get<1>(*b.source_pile).back().first.img().second.setPosition(std::get<2>(*b.source_pile));
+
+							b.source_pile = std::end(b.piles);
+							b.destination_pile = std::end(b.piles);
+						}
 				}
 
 				else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
 				{
 					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 					{
-						auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x + .0f, sf::Mouse::getPosition(window).y + .0f};
+						auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x + .0f, sf::Mouse::getPosition(window).y + .0f };
 						db.mp(window, cursor_pos);
-						b.source_pile = b(b.source_pile,b.destination_pile,cursor_pos);
+						b.source_pile = b(b.source_pile, cursor_pos);
 					}
 				}
 			}
+				//win condition
 
-			//win condition 
-			
-			// clear the window with blue color
-			window.clear(sf::Color{ 33,46,82 });
+				// clear the window with blue color
+				window.clear(sf::Color{ 33,46,82 });
 
-			//draw to window
-			window.draw(db);
-			
-			enable_shader(b);
-			
-			window.draw(b, &glow_shader);
-			
-			// end the current frame
-			window.display();
+				//draw to window
+				window.draw(db);
+
+				enable_shader(b);
+
+				window.draw(b);
+
+				// end the current frame
+				window.display();
 		}
 	}
 private:

@@ -35,12 +35,12 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 
 Board::Board(Deck& d)
 	:source_pile{std::end(piles)},
-	destination_pile{std::end(piles)}
+	destination_pile(std::end(piles))
 {
 	for (auto index = 0; auto& pile : piles)
 	{
 		Util::allocate(pile);
-		auto& [state, cards] = pile;
+		auto& [state, cards, pos] = pile;
 
 		for (auto& [card, rank] : cards)
 		{
@@ -51,31 +51,35 @@ Board::Board(Deck& d)
 			position_card(face, reverse, rank, index, total_piles);
 		}
 
+		pos = std::get<1>(pile).back().first.img().first.getPosition();
+
 		++index;
 	}
 
-	auto& [state, cards] = piles.back();
+	auto& [state, cards,pos] = piles.back();
 	state = true;
 
-	auto& [card, rank] = piles.back().second.back();
+	auto& [card, rank] = cards.back();
 	card.position() = Card_State::face_up;
 }
 
-auto Board::operator ()(Board_It src, Board_It dest, sf::Vector2f pos) ->Board_It
-{	
-	 return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
-		 auto& [active, pile] = p;
-		 const auto& [face, reverse] = pile.front().first.img();
-		 return (active && face.getGlobalBounds().contains(pos) ) || src != std::end(piles) 
-			 && face.getGlobalBounds().findIntersection(src->second.back().first.img().first.getGlobalBounds());
-		 });
+auto Board::operator ()(Pile_It src, sf::Vector2f pos)->Pile_It
+{
+	return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
+		auto& [active, pile,internal_pos] = p;
+		const auto& [face, reverse] = pile.front().first.img();
+		return (active && face.getGlobalBounds().contains(pos)) || src != std::end(piles)
+			&& face.getGlobalBounds().findIntersection(std::get<1>(*src).back().first.img().first.getGlobalBounds());
+	});
 }
 
+//revise this to draw the active pile on top --last 
+// you can use ranges:views here....
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (auto& pile : piles)
 	{
-		auto& [state, cards] = pile;
+		auto& [state, cards,pos] = pile;
 
 		for (const auto& [card, rank] : cards)
 		{

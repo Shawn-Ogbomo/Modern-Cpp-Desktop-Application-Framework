@@ -42,3 +42,9 @@ auto::Util::local_time()->std::string
 
 	return std::format("{:%a:%b:%d:%y %I:%M %p}", time_now.get_local_time());
 }
+
+auto::Util::allocate(std::tuple<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>, sf::Vector2f>& stack) -> void
+{
+	auto& [state, cards, pos] = stack;
+	std::ranges::fill_n(std::back_inserter(cards), Board::cards_pile, std::pair{ Card{},Rank_Lib::Rank{} });
+}
