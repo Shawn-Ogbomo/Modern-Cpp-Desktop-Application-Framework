@@ -17,7 +17,9 @@ Game_Status::Game_Status()
 
 	move.setFont(font);
 	move.setCharacterSize(26);
-	move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
+	
+	update();
+	
 	move.setPosition(sf::Vector2f{ 0,842 });
 	move.setFillColor(sf::Color{ 63, 59, 147 });
 
@@ -26,6 +28,12 @@ Game_Status::Game_Status()
 	game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
 	game_state.setPosition(sf::Vector2f{ 0,816 });
 	game_state.setFillColor(sf::Color{ 63, 59, 147 });
+}
+
+auto::Game_Status::update() -> void
+{
+	 ++move_count; 
+	move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
 }
 
 void Game_Status::draw(sf::RenderTarget& target, sf::RenderStates states) const

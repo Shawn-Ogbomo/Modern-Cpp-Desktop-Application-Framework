@@ -157,23 +157,29 @@ public:
 						{
 							if (shader_enabled)
 							{
-								//monitor.destination_pile->second.insert(monitor.destination_pile->second.begin(),std::move(monitor.source_pile->second.back())); 
-								////check if there is another card face up behind it....
-								//	//move it to the front 
+								std::get<1>(*b.destination_pile).insert(std::get<1>(*b.destination_pile).begin(), std::move(std::get<1>(*b.source_pile).back()));
+								//check if there is another card face up behind it....
+									//move it to the front 
 
-								//monitor.source_pile->second.pop_back();
-								//monitor.destination_pile->second.back().first.position() = Card_State::face_up;
-								//
-								//monitor.destination_pile->second.back().first.img().first.setPosition(monitor.destination_pile->second.front().first.img().first.getPosition());
-								//monitor.destination_pile->second.back().first.img().first.setPosition(monitor.destination_pile->second.front().first.img().second.getPosition());
+								std::get<1>(*b.source_pile).pop_back();
+								std::get<1>(*b.destination_pile).back().first.position() = Card_State::face_up;
+								
+								std::get<1>(*b.destination_pile).front().first.img().first.setPosition(std::get<2>(*b.destination_pile));
+								std::get<1>(*b.destination_pile).front().first.img().second.setPosition(std::get<2>(*b.destination_pile));
 
-								//monitor.source_pile->first = false;
-								//monitor.destination_pile->first = true;
-						
+								std::get<0>(*b.source_pile) = false;
+								std::get<0>(*b.destination_pile) = true;
+								
+								db.gs.update();
 							}
 
-							std::get<1>(*b.source_pile).back().first.img().first.setPosition(std::get<2>(*b.source_pile));
-							std::get<1>(*b.source_pile).back().first.img().second.setPosition(std::get<2>(*b.source_pile));
+							else
+							{
+								//move is invalid 
+								//find a way to remove redundant else...
+								std::get<1>(*b.source_pile).back().first.img().first.setPosition(std::get<2>(*b.source_pile));
+								std::get<1>(*b.source_pile).back().first.img().second.setPosition(std::get<2>(*b.source_pile));
+							}
 
 							b.source_pile = std::end(b.piles);
 							b.destination_pile = std::end(b.piles);
@@ -186,7 +192,7 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x + .0f, sf::Mouse::getPosition(window).y + .0f };
 						db.mp(window, cursor_pos);
-						b.source_pile = b(b.source_pile, cursor_pos);
+						 b.source_pile = b(b.source_pile,cursor_pos);
 					}
 				}
 			}

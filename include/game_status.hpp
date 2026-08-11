@@ -7,7 +7,7 @@
 #include "state.hpp"
 #include "random_number_gen.hpp"
 
-struct Game_Status : public sf::Drawable
+class Game_Status : public sf::Drawable
 {
 	sf::Font font;
 public:
@@ -17,8 +17,9 @@ public:
 	Game_Status(Game_Status&&) = delete;
 	auto operator = (Game_Status&&) -> Game_Status& = delete;
 	
+	auto update() -> void;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
+private:
 	sf::Text move{ font };
 	sf::Text game_id_t{ font };
 	sf::Text game_state{ font };

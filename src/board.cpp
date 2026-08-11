@@ -1,4 +1,5 @@
 #include <cmath>
+#include <ranges>
 #include <iterator>
 #include <iostream>
 #include <algorithm>
@@ -7,6 +8,7 @@
 #include "../include/util.hpp"
 #include "../include/board.hpp"
 
+namespace rng = std::ranges;
 using namespace std::numbers;
 
 auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int v1, int v2) -> void
