@@ -32,7 +32,6 @@ Game_Status::Game_Status()
 
 auto::Game_Status::update() -> void
 {
-	 ++move_count; 
 	move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
 }
 
