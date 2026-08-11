@@ -35,6 +35,12 @@ auto::Game_Status::update() -> void
 	move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
 }
 
+auto::Game_Status::operator++() ->const Game_Status&
+{ 
+	++move_count; 
+	update();
+	return *this;
+}
 void Game_Status::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(game_id_t);

@@ -16,10 +16,10 @@ public:
 	auto operator = (const 	Time_Status&)->Time_Status & = delete;
 	Time_Status(Time_Status&&) = delete;
 	auto operator = (Time_Status&&)->Time_Status & = delete;
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	auto update(sf::Clock& c) -> void;
 private:
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	sf::Text date{ font };
 	sf::Text elapsed_time{ font };
 

@@ -62,9 +62,8 @@ public:
 	auto operator =(Music_Player&&) -> Music_Player & = delete;
 	auto operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 	operator bool() const { return static_cast<bool>(mode);};
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	auto idle(Music_Player& mp) -> void;
 	auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
 	auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };

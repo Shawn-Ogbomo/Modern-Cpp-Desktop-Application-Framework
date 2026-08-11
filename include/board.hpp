@@ -9,8 +9,8 @@
 
 struct Board : public sf::Drawable
 {
-	static constexpr auto total_piles = 13;
 	static constexpr auto cards_pile = 4;
+	static constexpr auto total_piles = 13;
 	using Pile_It = std::array <std::tuple<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>,sf::Vector2f>, Board::total_piles>::iterator;
 public:
 	Board() = delete;

@@ -15,10 +15,9 @@ public:
 	auto operator = (const Deck&)->Deck & = delete;
 	Deck(Deck&&) = delete;
 	auto operator = (Deck&&)->Deck & = delete;
-
 	auto draw() -> Card;
-	auto shuffle() -> void { std::ranges::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g); }
 private:
+	auto shuffle() -> void;
 	Card_Manager cm;
 	std::vector<Card> cards;
 };

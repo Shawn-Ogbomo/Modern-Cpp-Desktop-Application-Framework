@@ -171,7 +171,6 @@ public:
 								std::get<0>(*b.destination_pile) = true;
 								
 								++db.gs;
-								db.gs.update();
 							}
 
 							else

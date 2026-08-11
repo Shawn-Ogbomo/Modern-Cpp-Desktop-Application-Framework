@@ -20,8 +20,8 @@ public:
 	auto position() -> Card_State& { return state; };
 	auto value()const -> Rank_Lib::Rank { return rank; }
 	auto img() -> std::pair<sf::Sprite&, sf::Sprite&> { return{ std::ref(face),std::ref(reverse) }; }
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const { state == Card_State::face_up ? target.draw(face) : target.draw(reverse); }
 private:
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const { state == Card_State::face_up ? target.draw(face) : target.draw(reverse); }
 	Suit suit{};
 	Card_State state{};
 	Rank_Lib::Rank rank{};

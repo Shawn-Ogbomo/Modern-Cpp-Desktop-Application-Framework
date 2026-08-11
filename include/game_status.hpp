@@ -16,10 +16,11 @@ public:
 	auto operator = (const Game_Status&) -> Game_Status& = delete;
 	Game_Status(Game_Status&&) = delete;
 	auto operator = (Game_Status&&) -> Game_Status& = delete;
-	Game_Status& operator++() { ++move_count; return *this; }
+	auto operator++() ->const Game_Status&;
+private:
 	auto update() -> void;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-private:
+
 	sf::Text move{ font };
 	sf::Text game_id_t{ font };
 	sf::Text game_state{ font };

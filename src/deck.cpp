@@ -27,6 +27,11 @@ Deck::Deck()
 	shuffle();
 }
 
+auto::Deck::shuffle() -> void 
+{ 
+	std::ranges::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g); 
+}
+
 auto Deck::draw() ->Card
 {
 	if (cards.empty())
