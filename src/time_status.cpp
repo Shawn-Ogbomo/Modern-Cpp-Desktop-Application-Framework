@@ -26,11 +26,9 @@ auto Time_Status::update(sf::Clock& c) ->void
 	date.setString("Date: " + Util::local_time());
 }
 
-Time_Status::Time_Status(sf::Clock& c)
+Time_Status::Time_Status() 
 {
-	Util::load_font(std::filesystem::path{"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf"}, font);
-
-	update(c);
+	Util::load_font(std::filesystem::path{ "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
 
 	elapsed_time.setFont(font);
 	elapsed_time.setCharacterSize(26);

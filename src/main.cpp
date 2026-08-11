@@ -8,7 +8,7 @@
 #include "../include/util.hpp"
 #include "../include/deck.hpp"
 #include "../include/board.hpp"
-#include "../include/exceptions.hpp"
+#include "../include/dash_board.hpp"
 #include "../include/time_status.hpp"
 #include "../include/game_status.hpp"
 #include "../include/music_player.hpp"
@@ -26,29 +26,6 @@ namespace
 }
 
 sf::Clock clock1;
-
-struct DashBoard : sf::Drawable
-{
-public:
-	DashBoard()
-	{
-		dash.setFillColor(sf::Color{ 228, 193, 156 });
-		dash.setPosition(sf::Vector2f{ 0.f,770.f });
-	}
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
-	{
-		target.draw(dash);
-		target.draw(gs);
-		target.draw(ts);
-		target.draw(mp);
-	}
-
-	Game_Status gs;
-	Time_Status ts{ clock1 };
-	Music_Player mp;
-	sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
-};
 
 class Application
 {
@@ -125,7 +102,7 @@ public:
 			db.mp(window);
 
 			db.ts.update(clock1);
-
+			
 			// check all the window's events that were triggered since the last iteration of the loop
 			while (const std::optional event = window.pollEvent())
 			{
