@@ -135,14 +135,14 @@ public:
 						{
 							if (shader_enabled)
 							{
-								std::get<1>(*b.destination_pile).insert(std::get<1>(*b.destination_pile).begin(), std::move(std::get<1>(*b.source_pile).back()));
+								std::get<1>(*b.destination_pile).push_front(std::move(std::get<1>(*b.source_pile).back()));
+
+								std::get<1>(*b.source_pile).pop_back();
 
 								if (auto& destination_card_state = std::get<1>(*b.destination_pile).back().position(); destination_card_state == Card_State::face_down) 
 								{
 									destination_card_state = Card_State::face_up;
 								}
-
-								std::get<1>(*b.source_pile).pop_back();
 
 								std::get<1>(*b.destination_pile).front().img().first.setPosition(std::get<3>(*b.destination_pile));
 								std::get<1>(*b.destination_pile).front().img().second.setPosition(std::get<3>(*b.destination_pile));
@@ -150,10 +150,10 @@ public:
 								std::get<0>(*b.source_pile) = false;
 								std::get<0>(*b.destination_pile) = true;
 					
-						/*		const auto sorted_end = std::ranges::is_sorted_until(b.piles, [&](auto a, auto b) {
+						/*		const auto sorted_end = std::ranges::is_sorted_until(b.piles, [](const auto& a, const auto& b) {
 										return std::get<0>(a) > std::get<0>(b);
-									});
-*/
+									});*/
+
 								++db.gs;
 							}
 
