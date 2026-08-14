@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iterator>
 #include <iostream>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
@@ -78,9 +79,9 @@ public:
 	auto enable_shader(const Board& b) -> void
 	{
 		if (b.destination_pile != std::end(b.piles) && b.source_pile != std::end(b.piles)
-			&& std::get<1>(*b.destination_pile).back().second == std::get<1>(*b.source_pile).back().first.value())
+			&& std::get<2>(*b.destination_pile) == std::get<1>(*b.source_pile).back().value())
 		{
-			const auto pos = std::get<1>(*b.destination_pile).front().first.img().first.getPosition();
+			const auto pos = std::get<1>(*b.destination_pile).front().img().first.getPosition();
 			glow_rect.setPosition(sf::Vector2f{ pos.x - 10,pos.y - 10 });
 			window.draw(glow_rect, &glow_shader);
 			shader_enabled = true;
@@ -122,9 +123,9 @@ public:
 					if (b.source_pile != std::end(b.piles))
 					{
 						const auto pos = sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f };
-						std::get<1>(*b.source_pile).back().first.img().first.setPosition(pos);
-						std::get<1>(*b.source_pile).back().first.img().second.setPosition(pos);
-						b.destination_pile = b(b.source_pile, std::get<1>(*b.source_pile).back().first.img().first.getPosition());
+						std::get<1>(*b.source_pile).back().img().first.setPosition(pos);
+						std::get<1>(*b.source_pile).back().img().second.setPosition(pos);
+						b.destination_pile = b(b.source_pile, std::get<1>(*b.source_pile).back().img().first.getPosition());
 					}
 				}
 
@@ -135,27 +136,32 @@ public:
 							if (shader_enabled)
 							{
 								std::get<1>(*b.destination_pile).insert(std::get<1>(*b.destination_pile).begin(), std::move(std::get<1>(*b.source_pile).back()));
-								//check if there is another card face up behind it....
-									//move it to the front 
+
+								if (auto& destination_card_state = std::get<1>(*b.destination_pile).back().position(); destination_card_state == Card_State::face_down) 
+								{
+									destination_card_state = Card_State::face_up;
+								}
 
 								std::get<1>(*b.source_pile).pop_back();
-								std::get<1>(*b.destination_pile).back().first.position() = Card_State::face_up;
-								
-								std::get<1>(*b.destination_pile).front().first.img().first.setPosition(std::get<2>(*b.destination_pile));
-								std::get<1>(*b.destination_pile).front().first.img().second.setPosition(std::get<2>(*b.destination_pile));
 
+								std::get<1>(*b.destination_pile).front().img().first.setPosition(std::get<3>(*b.destination_pile));
+								std::get<1>(*b.destination_pile).front().img().second.setPosition(std::get<3>(*b.destination_pile));
+								
 								std::get<0>(*b.source_pile) = false;
 								std::get<0>(*b.destination_pile) = true;
-								
+					
+						/*		const auto sorted_end = std::ranges::is_sorted_until(b.piles, [&](auto a, auto b) {
+										return std::get<0>(a) > std::get<0>(b);
+									});
+*/
 								++db.gs;
 							}
 
 							else
 							{
 								//move is invalid 
-								//find a way to remove redundant else...
-								std::get<1>(*b.source_pile).back().first.img().first.setPosition(std::get<2>(*b.source_pile));
-								std::get<1>(*b.source_pile).back().first.img().second.setPosition(std::get<2>(*b.source_pile));
+								std::get<1>(*b.source_pile).back().img().first.setPosition(std::get<3>(*b.source_pile));
+								std::get<1>(*b.source_pile).back().img().second.setPosition(std::get<3>(*b.source_pile));
 							}
 
 							b.source_pile = std::end(b.piles);

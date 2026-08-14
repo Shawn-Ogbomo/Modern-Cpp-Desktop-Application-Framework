@@ -42,9 +42,9 @@ Board::Board(Deck& d)
 	for (auto index = 0; auto& pile : piles)
 	{
 		Util::allocate(pile);
-		auto& [state, cards, pos] = pile;
+		auto& [state, cards, rank,pos] = pile;
 
-		for (auto& [card, rank] : cards)
+		for (auto& card : cards)
 		{
 			card = d.draw();
 			rank = Rank_Lib::ranks[index];
@@ -53,37 +53,43 @@ Board::Board(Deck& d)
 			position_card(face, reverse, rank, index, total_piles);
 		}
 
-		pos = std::get<1>(pile).back().first.img().first.getPosition();
+		pos = std::get<1>(pile).back().img().first.getPosition();
 
 		++index;
 	}
 
-	auto& [state, cards,pos] = piles.back();
+	auto& [state, cards, rank, pos] = piles.back();
 	state = true;
 
-	auto& [card, rank] = cards.back();
-	card.position() = Card_State::face_up;
+	cards.back().position() = Card_State::face_up;
 }
 
 auto Board::operator ()(Pile_It src, sf::Vector2f pos)->Pile_It
 {
-	return std::find_if(piles.begin(), piles.end(), [&](auto& p) {
-		auto& [active, pile,internal_pos] = p;
-		const auto& [face, reverse] = pile.front().first.img();
+	return std::ranges::find_if(piles.begin(), piles.end(), [&](auto& p) {
+		auto& [active, pile, rank, internal_pos] = p;
+		const auto& [face, reverse] = pile.front().img();
 		return (active && face.getGlobalBounds().contains(pos)) || src != std::end(piles)
-			&& face.getGlobalBounds().findIntersection(std::get<1>(*src).back().first.img().first.getGlobalBounds());
+			&& face.getGlobalBounds().findIntersection(std::get<1>(*src).back().img().first.getGlobalBounds());
 	});
 }
 
-//revise this to draw the active pile on top --last 
-// you can use ranges:views here....
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (auto& pile : piles)
+	auto pile_active = [](auto p) { return std::get<0>(p); };
+	auto pile_inactive = [](auto internal_p) -> bool{ return !(std::get<0>(internal_p)); };
+	
+	for (auto& pile :std::views::elements<1>(piles |std::views::filter(pile_inactive)))
 	{
-		auto& [state, cards,pos] = pile;
+		for (const auto& card : pile)
+		{
+			target.draw(card);
+		}
+	}
 
-		for (const auto& [card, rank] : cards)
+	for (auto& pile : std::views::elements<1>(piles | std::views::filter(pile_active)))
+	{
+		for (const auto& card : pile)
 		{
 			target.draw(card);
 		}

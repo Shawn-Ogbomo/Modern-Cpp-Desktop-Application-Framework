@@ -14,7 +14,7 @@ namespace Util
 	auto load_font(const std::filesystem::path& p, sf::Font& f) -> void;
 	auto delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void;
 	auto local_time() -> std::string;
-	auto allocate(std::tuple<bool, std::deque<std::pair<Card, Rank_Lib::Rank>>, sf::Vector2f>& stack) -> void;
+	auto allocate(std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>& stack) -> void;
 }
 
 #endif // UTIL_HPP

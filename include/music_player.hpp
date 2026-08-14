@@ -11,6 +11,8 @@
 #include "../include/state.hpp"
 #include "../include/texture_manager.hpp"
 
+class Music_Player;
+
 class Button : public sf::Drawable
 {
 	sf::Texture t;
