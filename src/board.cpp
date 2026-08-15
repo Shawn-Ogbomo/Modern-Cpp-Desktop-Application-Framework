@@ -36,13 +36,13 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 }
 
 Board::Board(Deck& d)
-	:source_pile{std::end(piles)},
+	:source_pile{ std::end(piles) },
 	destination_pile(std::end(piles))
 {
 	for (auto index = 0; auto& pile : piles)
 	{
 		Util::allocate(pile);
-		auto& [state, cards, rank,pos] = pile;
+		auto& [state, cards, rank, pos] = pile;
 		rank = Rank_Lib::ranks[index];
 
 		for (auto& card : cards)
@@ -66,28 +66,17 @@ Board::Board(Deck& d)
 
 auto Board::operator ()(Pile_It src, sf::Vector2f pos)->Pile_It
 {
-	return std::ranges::find_if(piles.begin(), piles.end(), [&](auto& p) {
+	return rng::find_if(piles.begin(), piles.end(), [&](auto& p) {
 		auto& [active, pile, rank, internal_pos] = p;
 		const auto& [face, reverse] = pile.front().img();
 		return (active && face.getGlobalBounds().contains(pos)) || src != std::end(piles)
 			&& face.getGlobalBounds().findIntersection(std::get<1>(*src).back().img().first.getGlobalBounds());
-	});
+		});
 }
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	auto pile_active = [](auto p) { return std::get<0>(p); };
-	auto pile_inactive = [](auto internal_p) -> bool{ return !(std::get<0>(internal_p)); };
-	
-	for (auto& pile :std::views::elements<1>(piles |std::views::filter(pile_inactive)))
-	{
-		for (const auto& card : pile)
-		{
-			target.draw(card);
-		}
-	}
-
-	for (auto& pile : std::views::elements<1>(piles | std::views::filter(pile_active)))
+	for (auto& pile : rng::views::elements<1>(piles))
 	{
 		for (const auto& card : pile)
 		{

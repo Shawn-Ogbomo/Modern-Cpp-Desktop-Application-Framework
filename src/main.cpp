@@ -149,14 +149,15 @@ public:
 
 							std::get<0>(*b.source_pile) = false;
 							std::get<0>(*b.destination_pile) = true;
-							/*
-										const auto sorted_end = std::ranges::is_sorted_until(b.piles, [](const auto& a, const auto& b) {
-												return std::get<0>(a) < std::get<0>(b);
-											});
 
-										std::ranges::sort(sorted_end, b.piles.end(),[](const auto& a, const auto& b) {
-											return std::get<0>(a) < std::get<0>(b);
-											});*/
+							////if not sorted...
+							//if (!std::ranges::is_sorted(b.piles.begin(),))
+							//{
+							//}
+							std::ranges::sort(b.piles.begin(), b.piles.end(), [](const auto& a, const auto& b) {
+								return std::get<0>(a) < std::get<0>(b);
+								});
+							//end if
 
 							++db.gs;
 						}
