@@ -87,7 +87,7 @@ public:
 			shader_enabled = true;
 			return;
 		}
-		
+
 		shader_enabled = false;
 	}
 
@@ -103,7 +103,7 @@ public:
 			db.mp(window);
 
 			db.ts.update(clock1);
-			
+
 			// check all the window's events that were triggered since the last iteration of the loop
 			while (const std::optional event = window.pollEvent())
 			{
@@ -131,42 +131,46 @@ public:
 
 				else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
 				{
-						if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
+					if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
+					{
+						if (shader_enabled)
 						{
-							if (shader_enabled)
+							std::get<1>(*b.destination_pile).push_front(std::move(std::get<1>(*b.source_pile).back()));
+
+							std::get<1>(*b.source_pile).pop_back();
+
+							if (auto& destination_card_state = std::get<1>(*b.destination_pile).back().position(); destination_card_state == Card_State::face_down)
 							{
-								std::get<1>(*b.destination_pile).push_front(std::move(std::get<1>(*b.source_pile).back()));
-
-								std::get<1>(*b.source_pile).pop_back();
-
-								if (auto& destination_card_state = std::get<1>(*b.destination_pile).back().position(); destination_card_state == Card_State::face_down) 
-								{
-									destination_card_state = Card_State::face_up;
-								}
-
-								std::get<1>(*b.destination_pile).front().img().first.setPosition(std::get<3>(*b.destination_pile));
-								std::get<1>(*b.destination_pile).front().img().second.setPosition(std::get<3>(*b.destination_pile));
-								
-								std::get<0>(*b.source_pile) = false;
-								std::get<0>(*b.destination_pile) = true;
-					
-						/*		const auto sorted_end = std::ranges::is_sorted_until(b.piles, [](const auto& a, const auto& b) {
-										return std::get<0>(a) > std::get<0>(b);
-									});*/
-
-								++db.gs;
+								destination_card_state = Card_State::face_up;
 							}
 
-							else
-							{
-								//move is invalid 
-								std::get<1>(*b.source_pile).back().img().first.setPosition(std::get<3>(*b.source_pile));
-								std::get<1>(*b.source_pile).back().img().second.setPosition(std::get<3>(*b.source_pile));
-							}
+							std::get<1>(*b.destination_pile).front().img().first.setPosition(std::get<3>(*b.destination_pile));
+							std::get<1>(*b.destination_pile).front().img().second.setPosition(std::get<3>(*b.destination_pile));
 
-							b.source_pile = std::end(b.piles);
-							b.destination_pile = std::end(b.piles);
+							std::get<0>(*b.source_pile) = false;
+							std::get<0>(*b.destination_pile) = true;
+							/*
+										const auto sorted_end = std::ranges::is_sorted_until(b.piles, [](const auto& a, const auto& b) {
+												return std::get<0>(a) < std::get<0>(b);
+											});
+
+										std::ranges::sort(sorted_end, b.piles.end(),[](const auto& a, const auto& b) {
+											return std::get<0>(a) < std::get<0>(b);
+											});*/
+
+							++db.gs;
 						}
+
+						else
+						{
+							//move is invalid
+							std::get<1>(*b.source_pile).back().img().first.setPosition(std::get<3>(*b.source_pile));
+							std::get<1>(*b.source_pile).back().img().second.setPosition(std::get<3>(*b.source_pile));
+						}
+
+						b.source_pile = std::end(b.piles);
+						b.destination_pile = std::end(b.piles);
+					}
 				}
 
 				else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
@@ -175,24 +179,24 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x + .0f, sf::Mouse::getPosition(window).y + .0f };
 						db.mp(window, cursor_pos);
-						 b.source_pile = b(b.source_pile,cursor_pos);
+						b.source_pile = b(b.source_pile, cursor_pos);
 					}
 				}
 			}
-				//win condition
+			//win condition
 
-				// clear the window with blue color
-				window.clear(sf::Color{ 33,46,82 });
+			// clear the window with blue color
+			window.clear(sf::Color{ 33,46,82 });
 
-				//draw to window
-				window.draw(db);
+			//draw to window
+			window.draw(db);
 
-				enable_shader(b);
+			enable_shader(b);
 
-				window.draw(b);
+			window.draw(b);
 
-				// end the current frame
-				window.display();
+			// end the current frame
+			window.display();
 		}
 	}
 private:

@@ -43,11 +43,11 @@ Board::Board(Deck& d)
 	{
 		Util::allocate(pile);
 		auto& [state, cards, rank,pos] = pile;
+		rank = Rank_Lib::ranks[index];
 
 		for (auto& card : cards)
 		{
 			card = d.draw();
-			rank = Rank_Lib::ranks[index];
 
 			auto [face, reverse] = card.img();
 			position_card(face, reverse, rank, index, total_piles);
