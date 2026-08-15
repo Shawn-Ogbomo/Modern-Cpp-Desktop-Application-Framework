@@ -42,6 +42,7 @@ Board::Board(Deck& d)
 	for (auto index = 0; auto& pile : piles)
 	{
 		Util::allocate(pile);
+
 		auto& [state, cards, rank, pos] = pile;
 		rank = Rank_Lib::ranks[index];
 

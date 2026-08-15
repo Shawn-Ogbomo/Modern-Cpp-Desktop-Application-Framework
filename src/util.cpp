@@ -1,23 +1,23 @@
 #include "../include/util.hpp"
 
-auto Util::check_stream(const std::istream& is, const std::filesystem::path& p, const std::string& message, const std::string& message2) -> void
+auto Util::check_stream(const std::istream& is, std::filesystem::path& p, std::string& message, std::string& message2) -> void
 {
 	if (is.eof())
 	{
-		throw Terminate{ message + message2 };
+		throw Terminate{ std::move(message + message2) };
 	}
 
 	if (is.fail())
 	{
-		throw std::invalid_argument{ std::filesystem::absolute(p).string() + message };
+		throw std::invalid_argument{ std::move(std::filesystem::absolute(p).string() + message) };
 	}
 }
 
 auto Util::load_font(const std::filesystem::path& p, sf::Font& f) ->void
 {
-	if (!f.openFromFile(p.string()))
+	if (const auto& p_string = p.string(); !f.openFromFile(p_string))
 	{
-		throw Invalid_file{ "Invalid file: " + p.string() + "\n" };
+		throw Invalid_file{ "Invalid file: " + p_string + "\n" };
 	}
 }
 
@@ -45,6 +45,6 @@ auto::Util::local_time()->std::string
 
 auto::Util::allocate(std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>& stack) -> void
 {
-	auto& [state, card, rank,pos] = stack;
+	auto& [state, card, rank, pos] = stack;
 	std::ranges::fill_n(std::back_inserter(card), Board::cards_pile, Card{});
 }

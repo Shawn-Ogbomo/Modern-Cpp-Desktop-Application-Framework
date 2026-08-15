@@ -23,10 +23,10 @@ auto Time_Status::update(sf::Clock& c) ->void
 	elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count()) + " minutes: " + std::to_string(s.count())
 		+ " seconds");
 
-	date.setString("Date: " + Util::local_time());
+	date.setString(("Date: " + Util::local_time()));
 }
 
-Time_Status::Time_Status() 
+Time_Status::Time_Status()
 {
 	Util::load_font(std::filesystem::path{ "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
 
