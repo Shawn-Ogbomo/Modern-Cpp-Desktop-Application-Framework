@@ -167,13 +167,6 @@ public:
 						std::get<0>(*b.source_pile) = false;
 						std::get<0>(*b.destination_pile) = true;
 
-						auto ascending = [](const auto& a, const auto& b) {	return std::get<0>(a) < std::get<0>(b); };
-
-						if (!std::ranges::is_sorted(b.destination_pile, b.piles.end(), ascending))
-						{
-							std::ranges::swap(*b.destination_pile, b.piles.back());
-						}
-
 						++db.gs;
 
 						b.source_pile = std::end(b.piles);
@@ -193,7 +186,7 @@ public:
 			}
 
 			//win condition
-
+			//
 			// clear the window with blue color
 			window.clear(sf::Color{ 33,46,82 });
 
