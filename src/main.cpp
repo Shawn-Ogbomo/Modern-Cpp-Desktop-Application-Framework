@@ -123,9 +123,12 @@ public:
 					if (b.source_pile != std::end(b.piles))
 					{
 						const auto pos = sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f };
-						std::get<1>(*b.source_pile).back().img().first.setPosition(pos);
-						std::get<1>(*b.source_pile).back().img().second.setPosition(pos);
-						b.destination_pile = b(b.source_pile, std::get<1>(*b.source_pile).back().img().first.getPosition());
+						const auto& [face, reverse] = std::get<1>(*b.source_pile).back().img();
+
+						face.setPosition(pos);
+						reverse.setPosition(pos);
+
+						b.destination_pile = b(b.source_pile, face.getPosition());
 					}
 				}
 
@@ -133,41 +136,45 @@ public:
 				{
 					if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
 					{
-						if (shader_enabled)
+						if (!shader_enabled)
 						{
-							std::get<1>(*b.destination_pile).push_front(std::move(std::get<1>(*b.source_pile).back()));
+							const auto& source_pile_pos = std::get<3>(*b.source_pile);
+							const auto& [face_src, reverse_src] = std::get<1>(*b.source_pile).back().img();
 
-							std::get<1>(*b.source_pile).pop_back();
+							face_src.setPosition(source_pile_pos);
+							reverse_src.setPosition(source_pile_pos);
 
-							if (auto& destination_card_state = std::get<1>(*b.destination_pile).back().position(); destination_card_state == Card_State::face_down)
-							{
-								destination_card_state = Card_State::face_up;
-							}
-
-							std::get<1>(*b.destination_pile).front().img().first.setPosition(std::get<3>(*b.destination_pile));
-							std::get<1>(*b.destination_pile).front().img().second.setPosition(std::get<3>(*b.destination_pile));
-
-							std::get<0>(*b.source_pile) = false;
-							std::get<0>(*b.destination_pile) = true;
-
-							////if not sorted...
-							//if (!std::ranges::is_sorted(b.piles.begin(),))
-							//{
-							//}
-							std::ranges::sort(b.piles.begin(), b.piles.end(), [](const auto& a, const auto& b) {
-								return std::get<0>(a) < std::get<0>(b);
-								});
-							//end if
-
-							++db.gs;
+							b.source_pile = std::end(b.piles);
+							b.destination_pile = std::end(b.piles);
+							continue;
 						}
 
-						else
+						std::get<1>(*b.destination_pile).push_front(std::move(std::get<1>(*b.source_pile).back()));
+
+						std::get<1>(*b.source_pile).pop_back();
+
+						if (auto& destination_card_state = std::get<1>(*b.destination_pile).back().position(); destination_card_state == Card_State::face_down)
 						{
-							//move is invalid
-							std::get<1>(*b.source_pile).back().img().first.setPosition(std::get<3>(*b.source_pile));
-							std::get<1>(*b.source_pile).back().img().second.setPosition(std::get<3>(*b.source_pile));
+							destination_card_state = Card_State::face_up;
 						}
+
+						const auto& destination_pile_pos = std::get<3>(*b.destination_pile);
+						const auto& [face_dest, reverse_dest] = std::get<1>(*b.destination_pile).front().img();
+
+						face_dest.setPosition(destination_pile_pos);
+						reverse_dest.setPosition(destination_pile_pos);
+
+						std::get<0>(*b.source_pile) = false;
+						std::get<0>(*b.destination_pile) = true;
+
+						auto ascending = [](const auto& a, const auto& b) {	return std::get<0>(a) < std::get<0>(b); };
+
+						if (!std::ranges::is_sorted(b.destination_pile, b.piles.end(), ascending))
+						{
+							std::ranges::sort(b.destination_pile, b.piles.end(), ascending);
+						}
+
+						++db.gs;
 
 						b.source_pile = std::end(b.piles);
 						b.destination_pile = std::end(b.piles);
@@ -184,6 +191,7 @@ public:
 					}
 				}
 			}
+
 			//win condition
 
 			// clear the window with blue color
