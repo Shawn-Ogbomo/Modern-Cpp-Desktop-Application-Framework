@@ -171,7 +171,7 @@ public:
 
 						if (!std::ranges::is_sorted(b.destination_pile, b.piles.end(), ascending))
 						{
-							std::ranges::sort(b.destination_pile, b.piles.end(), ascending);
+							std::ranges::swap(*b.destination_pile, b.piles.back());
 						}
 
 						++db.gs;
