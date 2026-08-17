@@ -114,7 +114,7 @@ public:
 					if (b.source_pile != std::end(b.piles))
 					{
 						b.update_position(std::get<1>(*b.source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f });
-						b.destination_pile = b(b.source_pile, std::get<1>(*b.source_pile).back().img().first.getPosition());
+						b(std::get<1>(*b.source_pile).back().img().first.getPosition());
 					}
 				}
 
@@ -152,7 +152,7 @@ public:
 					{
 						auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x + .0f, sf::Mouse::getPosition(window).y + .0f };
 						db.mp(window, cursor_pos);
-						b.source_pile = b(b.source_pile, cursor_pos);
+						b(cursor_pos);
 					}
 				}
 			}

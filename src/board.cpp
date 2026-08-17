@@ -79,14 +79,32 @@ Board::Board(Deck& d)
 	cards.back().position() = Card_State::face_up;
 }
 
-auto Board::operator ()(Pile_It src, sf::Vector2f pos)->Pile_It
+/// TODO: refractor this to update the src or destination pile within the operator and not by return...
+ /// Why does src = found not work but source_pile = found does???
+ /// Why does the function work without passing in any iterator and the instance b of source and destination are updated?
+ /// Why does passing in iterators and assigning them to the returned iterator of found result in end iterator when returning from the function??
+ 
+auto Board::operator ()(sf::Vector2f pos)->void
 {
-	return rng::find_if(piles.begin(), piles.end(), [&](auto& p) {
+	auto found = rng::find_if(piles.begin(), piles.end(), [&](auto& p) {
 		auto& [active, pile, rank, internal_pos] = p;
 		const auto& [face, reverse] = pile.front().img();
-		return (active && face.getGlobalBounds().contains(pos)) || src != std::end(piles)
-			&& face.getGlobalBounds().findIntersection(std::get<1>(*src).back().img().first.getGlobalBounds());
-		});
+		return (active && face.getGlobalBounds().contains(pos)) || source_pile != std::end(piles)
+			&& face.getGlobalBounds().findIntersection(std::get<1>(*source_pile).back().img().first.getGlobalBounds()); });
+
+	//source_pile = found != std::end(piles) && source_pile == std::end(piles) ? found : source_pile;
+	//destination_pile = found != std::end(piles) && source_pile != std::end(piles) ? found : destination_pile;
+
+	if (found != std::end(piles))
+	{
+		if (source_pile != std::end(piles))
+		{
+			destination_pile = found;
+			return;
+		}
+		
+		source_pile = found; 
+	}
 }
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
