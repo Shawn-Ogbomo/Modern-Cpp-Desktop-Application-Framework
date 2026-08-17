@@ -11,6 +11,20 @@
 namespace rng = std::ranges;
 using namespace std::numbers;
 
+auto::Board::update_position(std::pair<sf::Sprite&, sf::Sprite&> img, sf::Vector2f dest_pos, bool update_It_state) -> void
+{
+	auto& [face, reverse] = img;
+
+	face.setPosition(dest_pos);
+	reverse.setPosition(dest_pos);
+
+	if (update_It_state)
+	{
+		source_pile = std::end(piles);
+		destination_pile = std::end(piles);
+	}
+}
+
 auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int v1, int v2) -> void
 {
 	const auto center_x = 500.0f;

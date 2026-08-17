@@ -13,18 +13,7 @@
 #include "../include/time_status.hpp"
 #include "../include/game_status.hpp"
 #include "../include/music_player.hpp"
-
-namespace
-{
-	std::filesystem::path assets_dir()
-	{
-#ifdef SFML_SYSTEM_IOS
-		return "";
-#else
-		return "../../../../assets/";
-#endif
-	}
-}
+#include "../include/directory_manager.hpp"
 
 sf::Clock clock1;
 
@@ -38,7 +27,7 @@ public:
 			throw std::runtime_error{ "Shaders are not supported on this GPU...\n" };
 		}
 
-		if (std::filesystem::path shader = { assets_dir() / "shader/effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
+		if (std::filesystem::path shader = { Directory_Manager::assets_dir() / "shader/effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
 		{
 			throw std::invalid_argument{ "\nFailed to load shader: " + shader.filename().string() + "\n in path: " + shader.parent_path().string() + "\n" };
 		}
@@ -73,7 +62,7 @@ public:
 		settings.antiAliasingLevel = 15;
 		window.setVerticalSyncEnabled(true);
 		window.setMouseCursor(cursor.value());
-		window.setIcon(sf::Image{ assets_dir() / "icon/7_diamonds_new.png" });
+		window.setIcon(sf::Image{ Directory_Manager::assets_dir() / "icon/7_diamonds_new.png" });
 	}
 
 	auto enable_shader(const Board& b) -> void
@@ -115,20 +104,17 @@ public:
 				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 				{
 					if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+					{
 						window.close();
+					}
 				}
 
 				else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
 				{
 					if (b.source_pile != std::end(b.piles))
 					{
-						const auto pos = sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f };
-						const auto& [face, reverse] = std::get<1>(*b.source_pile).back().img();
-
-						face.setPosition(pos);
-						reverse.setPosition(pos);
-
-						b.destination_pile = b(b.source_pile, face.getPosition());
+						b.update_position(std::get<1>(*b.source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f });
+						b.destination_pile = b(b.source_pile, std::get<1>(*b.source_pile).back().img().first.getPosition());
 					}
 				}
 
@@ -138,14 +124,7 @@ public:
 					{
 						if (!shader_enabled)
 						{
-							const auto& source_pile_pos = std::get<3>(*b.source_pile);
-							const auto& [face_src, reverse_src] = std::get<1>(*b.source_pile).back().img();
-
-							face_src.setPosition(source_pile_pos);
-							reverse_src.setPosition(source_pile_pos);
-
-							b.source_pile = std::end(b.piles);
-							b.destination_pile = std::end(b.piles);
+							b.update_position(std::get<1>(*b.source_pile).back().img(), std::get<3>(*b.source_pile),true);
 							continue;
 						}
 
@@ -157,20 +136,13 @@ public:
 						{
 							destination_card_state = Card_State::face_up;
 						}
-
-						const auto& destination_pile_pos = std::get<3>(*b.destination_pile);
-						const auto& [face_dest, reverse_dest] = std::get<1>(*b.destination_pile).front().img();
-
-						face_dest.setPosition(destination_pile_pos);
-						reverse_dest.setPosition(destination_pile_pos);
-
+			
 						std::get<0>(*b.source_pile) = false;
 						std::get<0>(*b.destination_pile) = true;
 
-						++db.gs;
+						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile),true);
 
-						b.source_pile = std::end(b.piles);
-						b.destination_pile = std::end(b.piles);
+						++db.gs;
 					}
 				}
 
@@ -186,7 +158,7 @@ public:
 			}
 
 			//win condition
-			//
+			
 			// clear the window with blue color
 			window.clear(sf::Color{ 33,46,82 });
 
@@ -204,8 +176,8 @@ public:
 private:
 	sf::RenderWindow			 window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
 	sf::ContextSettings		     settings;
-	sf::Shader						 glow_shader{ std::filesystem::path{assets_dir() / "shader/effect.frag"}, sf::Shader::Type::Fragment };
-	sf::Image						 cursor_image{ std::filesystem::path{assets_dir() / "cursor/cursor_ice_white.png"} };
+	sf::Shader						 glow_shader{ std::filesystem::path{Directory_Manager::assets_dir() / "shader/effect.frag"}, sf::Shader::Type::Fragment };
+	sf::Image						 cursor_image{ std::filesystem::path{Directory_Manager::assets_dir() / "cursor/cursor_ice_white.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
 	sf::RectangleShape			 glow_rect;
 	bool shader_enabled{};

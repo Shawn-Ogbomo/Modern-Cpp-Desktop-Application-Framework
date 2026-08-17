@@ -1,5 +1,6 @@
 #include "../include/music_player.hpp"
 #include "../include/util.hpp"
+#include"../include/directory_manager.hpp"
 
 using namespace std::chrono_literals;
 namespace fs = std::filesystem;
@@ -7,13 +8,13 @@ namespace B_I = Button_Interface;
 
 Music_Player::Music_Player()
 {
-	Util::load_font(std::string{ "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
+	Util::load_font( Directory_Manager::assets_dir()/"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" , font);
 	caption.setFillColor(sf::Color{ 63, 59, 147 });
 	caption.setString("Song: ");
 	caption.setCharacterSize(26);
 	caption.setPosition(sf::Vector2f{ 600,842 });
 
-	for (auto index = 0; const auto& song : fs::directory_iterator{ "audio" })
+	for (auto index = 0; const auto& song : fs::directory_iterator{ Directory_Manager::assets_dir()/"audio" })
 	{
 		songs.emplace_back(sf::Text{ font, song.path().filename().stem().string() }, song);
 

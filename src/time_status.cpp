@@ -6,6 +6,7 @@
 #include"../include/util.hpp"
 #include "../include/exceptions.hpp"
 #include "../include/time_status.hpp"
+#include"../include/directory_manager.hpp"
 #include"../include/random_number_gen.hpp"
 
 auto Time_Status::update(sf::Clock& c) ->void
@@ -28,7 +29,7 @@ auto Time_Status::update(sf::Clock& c) ->void
 
 Time_Status::Time_Status()
 {
-	Util::load_font(std::filesystem::path{ "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
+	Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()/"fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
 
 	elapsed_time.setFont(font);
 	elapsed_time.setCharacterSize(26);

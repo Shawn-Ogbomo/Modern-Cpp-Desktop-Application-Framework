@@ -4,6 +4,7 @@
 
 #include "../include/util.hpp"
 #include "../include/texture_manager.hpp"
+#include "../include/directory_manager.hpp"
 
 namespace fs = std::filesystem;
 
@@ -11,7 +12,7 @@ auto Card_Manager::load_textures() ->void
 {
 	textures.reserve((Board::total_piles * Board::cards_pile) + 1);
 
-	for (const auto& dir_entry : fs::directory_iterator{ "images" })
+	for (const auto& dir_entry : fs::directory_iterator{ Directory_Manager::assets_dir()/"images" })
 	{
 		auto& card_name = dir_entry.path();
 		textures.emplace_back(std::pair{ card_name.filename().stem(),sf::Texture{card_name} });
@@ -20,7 +21,7 @@ auto Card_Manager::load_textures() ->void
 
 auto Button_Manager::load_textures() ->void
 {
-	const auto buttons = sf::Image{ "buttons/buttons_clock_solitare.png" };
+	const auto buttons = sf::Image{ Directory_Manager::assets_dir()/"buttons/buttons_clock_solitare.png" };
 	const auto dimmensions_button = sf::Vector2i{ 30,30 };
 	const auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 
