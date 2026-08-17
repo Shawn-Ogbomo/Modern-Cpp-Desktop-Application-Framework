@@ -92,9 +92,6 @@ auto Board::operator ()(sf::Vector2f pos)->void
 		return (active && face.getGlobalBounds().contains(pos)) || source_pile != std::end(piles)
 			&& face.getGlobalBounds().findIntersection(std::get<1>(*source_pile).back().img().first.getGlobalBounds()); });
 
-	//source_pile = found != std::end(piles) && source_pile == std::end(piles) ? found : source_pile;
-	//destination_pile = found != std::end(piles) && source_pile != std::end(piles) ? found : destination_pile;
-
 	if (found != std::end(piles))
 	{
 		if (source_pile != std::end(piles))
