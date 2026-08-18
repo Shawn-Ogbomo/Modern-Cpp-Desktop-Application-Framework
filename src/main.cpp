@@ -129,23 +129,15 @@ public:
 						}
 
 						std::get<1>(*b.destination_pile).push_front(std::move(std::get<1>(*b.source_pile).back()));
-
 						std::get<1>(*b.source_pile).pop_back();
 
-						if (auto& destination_card_state = std::get<1>(*b.destination_pile).back().position(); destination_card_state == Card_State::face_down)
-						{
-							destination_card_state = Card_State::face_up;
-						}
-
+						std::get<1>(*b.destination_pile).back().position() = Card_State::face_up;
 						std::get<0>(*b.source_pile) = false;
 						std::get<0>(*b.destination_pile) = true;
 
-						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile), true);
+						std::ranges::swap(*b.destination_pile, b.piles.back());
 
-						if (!std::ranges::is_sorted(b.piles.begin(), b.piles.end(), Util::ascending))
-						{
-							std::ranges::sort(b.piles.begin(), b.piles.end(), Util::ascending);
-						}
+						b.update_position(std::get<1>(b.piles.back()).front().img(), std::get<3>(b.piles.back()), true);
 
 						++db.gs;
 					}

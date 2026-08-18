@@ -15,7 +15,6 @@ namespace Util
 	auto delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void;
 	auto local_time() -> std::string;
 	auto allocate(std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>& stack) -> void;
-	inline auto ascending = [](auto& a, auto& b) -> bool { return std::get<0>(a) < std::get<0>(b); };
 }
 
 #endif // UTIL_HPP
