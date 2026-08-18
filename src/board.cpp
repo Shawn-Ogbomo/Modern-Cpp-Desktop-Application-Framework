@@ -86,22 +86,22 @@ Board::Board(Deck& d)
  /// The moving card triggers the shader on if it is ont touching any other cards if it has touched the correct pile.
 auto Board::operator ()(sf::Vector2f pos)->void
 {
-	auto found = rng::find_if(piles.begin(), piles.end(), [&](auto& p) {
-		auto& [active, pile, rank, internal_pos] = p;
-		const auto& [face, reverse] = pile.front().img();
-		return (active && face.getGlobalBounds().contains(pos)) || source_pile != std::end(piles)
-			&& face.getGlobalBounds().findIntersection(std::get<1>(*source_pile).back().img().first.getGlobalBounds()); });
-
-	if (found != std::end(piles))
+	for (auto it = piles.begin(); it != piles.end(); ++it)
 	{
-		if (source_pile != std::end(piles))
+		auto& [active, pile, rank, internal_pos] = *it;
+		const auto& [face, reverse] = pile.front().img();
+
+		if (active && face.getGlobalBounds().contains(pos))
 		{
-			destination_pile = found;
+			source_pile = it;
 			return;
 		}
-		
-		source_pile = found; 
-		return;
+
+		if (source_pile != std::end(piles) && face.getGlobalBounds().findIntersection(std::get<1>(*source_pile).back().img().first.getGlobalBounds()))
+		{
+			destination_pile = it;
+			return;
+		}
 	}
 
 	destination_pile = std::end(piles);
