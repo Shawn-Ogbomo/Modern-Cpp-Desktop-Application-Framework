@@ -104,18 +104,7 @@ auto Board::operator ()(sf::Vector2f pos)->void
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	auto pile_active = [](auto p) { return std::get<0>(p); };
-	auto pile_inactive = [](auto internal_p) -> bool { return !(std::get<0>(internal_p)); };
-
-	for (auto& pile : std::views::elements<1>(piles | std::views::filter(pile_inactive)))
-	{
-		for (const auto& card : pile)
-		{
-			target.draw(card);
-		}
-	}
-
-	for (auto& pile : std::views::elements<1>(piles | std::views::filter(pile_active)))
+	for (auto& pile : std::views::elements<1>(piles))
 	{
 		for (const auto& card : pile)
 		{

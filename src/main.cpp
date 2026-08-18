@@ -124,7 +124,7 @@ public:
 					{
 						if (!shader_enabled)
 						{
-							b.update_position(std::get<1>(*b.source_pile).back().img(), std::get<3>(*b.source_pile),true);
+							b.update_position(std::get<1>(*b.source_pile).back().img(), std::get<3>(*b.source_pile), true);
 							continue;
 						}
 
@@ -136,11 +136,16 @@ public:
 						{
 							destination_card_state = Card_State::face_up;
 						}
-			
+
 						std::get<0>(*b.source_pile) = false;
 						std::get<0>(*b.destination_pile) = true;
 
-						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile),true);
+						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile), true);
+
+						if (!std::ranges::is_sorted(b.piles.begin(), b.piles.end(), Util::ascending))
+						{
+							std::ranges::sort(b.piles.begin(), b.piles.end(), Util::ascending);
+						}
 
 						++db.gs;
 					}
@@ -158,7 +163,7 @@ public:
 			}
 
 			//win condition
-			
+
 			// clear the window with blue color
 			window.clear(sf::Color{ 33,46,82 });
 
