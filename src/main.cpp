@@ -132,6 +132,7 @@ public:
 						std::get<1>(*b.source_pile).pop_back();
 
 						std::get<1>(*b.destination_pile).back().position() = Card_State::face_up;
+
 						std::get<0>(*b.source_pile) = false;
 						std::get<0>(*b.destination_pile) = true;
 
