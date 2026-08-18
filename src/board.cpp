@@ -79,11 +79,6 @@ Board::Board(Deck& d)
 	cards.back().position() = Card_State::face_up;
 }
 
-/// TODO: refractor this to update the src or destination pile within the operator and not by return...
- /// Why does src = found not work but source_pile = found does???
- /// Why does the function work without passing in any iterator and the instance b of source and destination are updated?
- /// Why does passing in iterators and assigning them to the returned iterator of found result in end iterator when returning from the function??
- /// The moving card triggers the shader on if it is ont touching any other cards if it has touched the correct pile.
 auto Board::operator ()(sf::Vector2f pos)->void
 {
 	for (auto it = piles.begin(); it != piles.end(); ++it)
