@@ -83,7 +83,7 @@ Board::Board(Deck& d)
  /// Why does src = found not work but source_pile = found does???
  /// Why does the function work without passing in any iterator and the instance b of source and destination are updated?
  /// Why does passing in iterators and assigning them to the returned iterator of found result in end iterator when returning from the function??
- 
+ /// The moving card triggers the shader on if it is ont touching any other cards if it has touched the correct pile.
 auto Board::operator ()(sf::Vector2f pos)->void
 {
 	auto found = rng::find_if(piles.begin(), piles.end(), [&](auto& p) {
@@ -101,7 +101,10 @@ auto Board::operator ()(sf::Vector2f pos)->void
 		}
 		
 		source_pile = found; 
+		return;
 	}
+
+	destination_pile = std::end(piles);
 }
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
