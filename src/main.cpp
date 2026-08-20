@@ -136,11 +136,13 @@ public:
 						std::get<0>(*b.source_pile) = false;
 						std::get<0>(*b.destination_pile) = true;
 
-						std::ranges::swap(*b.destination_pile, b.piles.back());
+						//std::ranges::swap(*b.destination_pile, b.piles.back());
 
-						b.update_position(std::get<1>(b.piles.back()).front().img(), std::get<3>(b.piles.back()), true);
+						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile), true);
 
 						++db.gs;
+
+						db.gs(b.piles);
 					}
 				}
 
@@ -154,8 +156,6 @@ public:
 					}
 				}
 			}
-
-			//win condition
 
 			// clear the window with blue color
 			window.clear(sf::Color{ 33,46,82 });

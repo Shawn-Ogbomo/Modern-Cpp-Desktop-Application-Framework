@@ -8,9 +8,9 @@
 #include "random_number_gen.hpp"
 ///		TODO: Supply a call operator() overload to monitor the status of the game
 ///		This will update it in the dashboard, whether it is set to playing, paused, win, or lose
-///		If the status is win or lose, render the correct text box to the screen
-///		It will also check for the win condition as well
-///		If the status in win, log it to database SQLTE
+///		 If the status is win or lose, render the correct text box to the screen
+///		 It will also check for the win condition as well
+///		 If the status in win, log it to database SQLTE
 class Game_Status : public sf::Drawable
 {
 	sf::Font font;
@@ -20,6 +20,7 @@ public:
 	auto operator = (const Game_Status&) -> Game_Status & = delete;
 	Game_Status(Game_Status&&) = delete;
 	auto operator = (Game_Status&&) -> Game_Status & = delete;
+	auto operator()(const Board::Piles& p) -> void;
 	auto operator++() ->const Game_Status&;
 private:
 	auto update() -> void;

@@ -11,7 +11,8 @@ struct Board : public sf::Drawable
 {
 	static constexpr auto cards_pile = 4;
 	static constexpr auto total_piles = 13;
-	using Pile_It = std::array <std::tuple<bool, std::deque<Card>, Rank_Lib::Rank ,sf::Vector2f>, Board::total_piles>::iterator;
+	using Piles = std::array <std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>, total_piles >;
+	using Pile_It = std::array <std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>, Board::total_piles>::iterator;
 public:
 	Board() = delete;
 	explicit Board(Deck& d);
@@ -25,7 +26,7 @@ public:
 
 	Pile_It source_pile;
 	Pile_It destination_pile;
-	std::array <std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>, total_piles > piles{};
+	Piles piles{};
 };
 
 #endif // BOARD_HPP 
