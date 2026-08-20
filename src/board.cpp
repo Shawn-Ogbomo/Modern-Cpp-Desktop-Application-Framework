@@ -104,29 +104,27 @@ auto Board::operator ()(sf::Vector2f pos)->void
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (auto index = 0, pos = 0, sz = static_cast<int>(piles.size()); const auto& pile: piles)
+	for (auto i = 0, pos = 0; i < total_piles; ++i)
 	{
-		if (std::get<0>(pile))
+		if (!std::get<0>(piles[i]))
 		{
-			pos = index;
-		}
-
-		else if (!std::get<0>(pile))
-		{
-			for (const auto& card : std::get<1>(pile))
+			for (const auto& card : std::get<1>(piles[i]))
 			{
 				target.draw(card);
 			}
 		}
 
-		if (index == sz - 1)
+		else if (std::get<0>(piles[i]))
+		{
+			pos = i;
+		}
+
+		if (std::get<2>(piles[i]) == Rank_Lib::Rank::king)
 		{
 			for (const auto& card : std::get<1>(piles[pos]))
 			{
 				target.draw(card);
 			}
 		}
-
-		++index;
 	}
 }
