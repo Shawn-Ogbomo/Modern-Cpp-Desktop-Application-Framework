@@ -114,7 +114,7 @@ public:
 					if (b.source_pile != std::end(b.piles))
 					{
 						b.update_position(std::get<1>(*b.source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f });
-						b(); ///This returns end sometimes.
+						b();
 					}
 				}
 

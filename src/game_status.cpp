@@ -8,7 +8,8 @@
 namespace rng = std::ranges;
 
 Game_Status::Game_Status()
-	:game_id{ Random_Number_Gen::g() }
+	:game_id{ Random_Number_Gen::g() },
+	move_count{ 1 }
 {
 	Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir() / "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
 
@@ -35,7 +36,7 @@ Game_Status::Game_Status()
 
 auto::Game_Status::update() -> void
 {
-	move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
+	move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count - 1));
 }
 
 /// TODO: start with the win condition...
@@ -52,17 +53,21 @@ auto::Game_Status::operator()(const Board::Piles& p) ->void
 	const auto& lose_condition = [](auto c) -> int {
 		return c.value() == Rank_Lib::Rank::king && c.position() == Card_State::face_up; };
 
+	///Why am I winning on both move 51 and 52
+	///Why were all cards face up on move 51
 	if (move_count == Board::cards_pile * Board::total_piles)
 	{
-		///change state to win and halt all UI  functions 
-		std::cout << "You win...\n";
+		///change state to win and halt all UI  functions
+		/// Prompt to save win log -- Dim Screen
+		///dim screen and prompt to play again
+		game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Win");
 	}
 
-	///Why is an extra move for this to execute.
-	///Debug for when you are moving the last king into the middle pile.
 	else if (auto num_kings = std::count_if(std::get<1>(p.back()).begin(), std::get<1>(p.back()).end(), lose_condition); num_kings == Board::cards_pile)
 	{
-		std::cout << "There are 4 kings in the middle...\n";
+		///change state to lose and halt all UI  functions
+		///dim screen and prompt to play again
+		game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Lose");
 	}
 }
 

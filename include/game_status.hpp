@@ -11,6 +11,10 @@
 ///		 If the status is win or lose, render the correct text box to the screen
 ///		 It will also check for the win condition as well
 ///		 If the status in win, log it to database SQLTE
+///    Make Game_Status a friend class of Time_Status to access elapsed time and date in the Game_Status operator when writing to SQLITE....
+
+/// Or make Game_Status operator a friend class of Time_status
+/// Or make a free function to write to the database that takes both Game_Status and Time_Status...
 class Game_Status : public sf::Drawable
 {
 	sf::Font font;
@@ -31,7 +35,7 @@ private:
 	sf::Text game_state{ font };
 
 	std::size_t game_id{};
-	std::size_t move_count{};
+	std::size_t move_count{ };
 };
 
 #endif // GAME_STATUS_HPP

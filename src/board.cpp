@@ -2,8 +2,8 @@
 #include <ranges>
 #include <iterator>
 #include <iostream>
-#include <algorithm>
 #include <numbers>
+#include <algorithm>
 
 #include "../include/util.hpp"
 #include "../include/board.hpp"
