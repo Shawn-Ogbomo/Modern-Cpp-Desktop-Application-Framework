@@ -58,10 +58,8 @@ public:
 	friend class Button;
 
 	Music_Player();
-	Music_Player(const Music_Player&) = delete;
-	auto operator =(const Music_Player&) -> Music_Player & = delete;
-	Music_Player(Music_Player&&) = delete;
-	auto operator =(Music_Player&&) -> Music_Player & = delete;
+	Music_Player(Music_Player&&) noexcept = default;
+	auto operator =(Music_Player&&) noexcept -> Music_Player &;
 	auto operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos = {}) ->void;
 	operator bool() const { return static_cast<bool>(mode);};
 private:

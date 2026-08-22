@@ -21,8 +21,12 @@ namespace Button_Interface
 
 enum class Card_State
 {
-	face_down,
-	face_up
+	face_down,face_up
+};
+
+enum class Game_State
+{
+	playing, paused, win, lose
 };
 
 #endif // STATE_HPP

@@ -10,8 +10,8 @@
 ///		This will update it in the dashboard, whether it is set to playing, paused, win, or lose
 ///		 If the status is win or lose, render the correct text box to the screen
 ///		 It will also check for the win condition as well
-///		 If the status in win, log it to database SQLTE
-///    Make Game_Status a friend class of Time_Status to access elapsed time and date in the Game_Status operator when writing to SQLITE....
+///		 If the status is win, log it to database SQLTE
+///     Make Game_Status a friend class of Time_Status to access elapsed time and date in the Game_Status operator when writing to SQLITE....
 
 /// Or make Game_Status operator a friend class of Time_status
 /// Or make a free function to write to the database that takes both Game_Status and Time_Status...
@@ -20,11 +20,7 @@ class Game_Status : public sf::Drawable
 	sf::Font font;
 public:
 	Game_Status();
-	Game_Status(const Game_Status&) = delete;
-	auto operator = (const Game_Status&) -> Game_Status & = delete;
-	Game_Status(Game_Status&&) = delete;
-	auto operator = (Game_Status&&) -> Game_Status & = delete;
-	auto operator()(const Board::Piles& p) -> void;
+	auto operator()(Board::Piles& p) -> void;
 	auto operator++() ->const Game_Status&;
 private:
 	auto update() -> void;
@@ -36,6 +32,7 @@ private:
 
 	std::size_t game_id{};
 	std::size_t move_count{ };
+	Game_State state{};
 };
 
 #endif // GAME_STATUS_HPP

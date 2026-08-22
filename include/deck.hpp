@@ -11,10 +11,6 @@ class Deck
 {
 public:
 	Deck();
-	Deck(const Deck&) = delete;
-	auto operator = (const Deck&)->Deck & = delete;
-	Deck(Deck&&) = delete;
-	auto operator = (Deck&&)->Deck & = delete;
 	auto draw() -> Card;
 private:
 	auto shuffle() -> void;
