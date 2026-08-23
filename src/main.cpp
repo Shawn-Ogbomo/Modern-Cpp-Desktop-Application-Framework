@@ -127,20 +127,26 @@ public:
 							b.update_position(std::get<1>(*b.source_pile).back().img(), std::get<3>(*b.source_pile), true);
 							continue;
 						}
-
-						std::get<1>(*b.destination_pile).push_front(std::move(std::get<1>(*b.source_pile).back()));
-						std::get<1>(*b.source_pile).pop_back();
-
-						std::get<1>(*b.destination_pile).back().position() = Card_State::face_up;
-
-						std::get<0>(*b.source_pile) = false;
-						std::get<0>(*b.destination_pile) = true;
 						
+						auto& src_cards = std::get<1>(*b.source_pile);
+						auto& dst_cards = std::get<1>(*b.destination_pile);
+
+						dst_cards.push_front(std::move(src_cards.back()));
+						src_cards.pop_back();
+
+						dst_cards.back().position() = Card_State::face_up;
+						
+						auto& src_pile_state = std::get<0>(*b.source_pile);
+						auto& dst_pile_state = std::get<0>(*b.destination_pile);
+						
+						src_pile_state = false;
+						dst_pile_state = true;
+
 						++db.gs;
 
-						db.gs(b.piles,std::get<0>(*b.destination_pile));
+						db.gs(b.piles,dst_pile_state);
 
-						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile), true);
+						b.update_position(dst_cards.front().img(), std::get<3>(*b.destination_pile), true);
 					}
 				}
 
@@ -176,7 +182,7 @@ private:
 	sf::Image						 cursor_image{ std::filesystem::path{Directory_Manager::assets_dir() / "cursor/cursor_ice_white.png"} };
 	std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10,10 }, sf::Vector2u{ 0,0 });
 	sf::RectangleShape			 glow_rect;
-	bool shader_enabled{};
+	bool								 shader_enabled{};
 };
 
 auto main() -> int

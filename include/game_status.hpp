@@ -20,7 +20,7 @@ class Game_Status : public sf::Drawable
 	sf::Font font;
 public:
 	Game_Status();
-	auto operator()(const Board::Piles& p, bool& dest_p_state) -> void;
+	auto operator()(const Board::Piles& p, bool& pile_state) -> void;
 	auto operator++() ->const Game_Status&;
 private:
 	auto update() -> void;

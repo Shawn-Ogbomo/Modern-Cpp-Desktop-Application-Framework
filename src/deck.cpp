@@ -29,7 +29,6 @@ auto::Deck::shuffle() -> void
 	rng::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g); 
 }
 
-/// TODO: Use setTexture() here to transfer ownership of the cards...
 auto Deck::draw() ->Card
 {
 	if (cards.empty())

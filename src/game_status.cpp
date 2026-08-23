@@ -52,15 +52,7 @@ auto::Game_Status::update() -> void
 	}
 }
 
-/// TODO: start with the win condition...
-///			Render the win message to the screen -- text box with a play again and quit option. 
-///			Prompt user  to log their win to the database 3 character alias for their name
-///			end if
-/// render the you lose message to the screen with a play again and quit screen
-///		Pause the game while text box is active
-///		Add pause, resume, and help -- list game objective functionality
-
-auto::Game_Status::operator()( const Board::Piles& p, bool& dest_p_state) ->void
+auto::Game_Status::operator()( const Board::Piles& p, bool& pile_state) ->void
 {
 	const auto& lose_condition = [](auto c) -> int {
 		return c.value() == Rank_Lib::Rank::king && c.position() == Card_State::face_up; };
@@ -68,14 +60,14 @@ auto::Game_Status::operator()( const Board::Piles& p, bool& dest_p_state) ->void
 	if (move_count  == Board::cards_pile * Board::total_piles )
 	{
 		state = Game_State::win;
-		dest_p_state = false;
+		pile_state = false;
 		update();
 	}
 
 	else if (auto num_kings = rng::count_if(std::get<1>(p.back()).begin(), std::get<1>(p.back()).end(), lose_condition); num_kings == Board::cards_pile)
 	{
 		state = Game_State::lose;
-		dest_p_state = false;
+		pile_state = false;
 		update();
 	}
 }
