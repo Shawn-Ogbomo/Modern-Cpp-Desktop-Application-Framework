@@ -135,12 +135,12 @@ public:
 
 						std::get<0>(*b.source_pile) = false;
 						std::get<0>(*b.destination_pile) = true;
-
-						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile), true);
-
+						
 						++db.gs;
 
-						db.gs(b.piles);
+						db.gs(b.piles,std::get<0>(*b.destination_pile));
+
+						b.update_position(std::get<1>(*b.destination_pile).front().img(), std::get<3>(*b.destination_pile), true);
 					}
 				}
 

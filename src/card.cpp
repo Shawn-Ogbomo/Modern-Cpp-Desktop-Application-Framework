@@ -6,8 +6,6 @@
 #include "../include/suit.hpp"
 #include "../include/card.hpp"
 
-namespace fs = std::filesystem;
-
 Card::Card(std::string_view card_name, sf::Texture& f,  sf::Texture& re, Card_State st)
 	:face{f},
 	reverse{re},

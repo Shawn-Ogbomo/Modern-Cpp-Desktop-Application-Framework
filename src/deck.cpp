@@ -9,8 +9,7 @@
 #include"../include/exceptions.hpp"
 #include "../include/texture_manager.hpp"
 
-using namespace Rank_Lib;
-namespace fs = std::filesystem;
+namespace rng = std::ranges;
 
 Deck::Deck()
 {
@@ -18,7 +17,7 @@ Deck::Deck()
 	auto& [name, back_card] = cm.textures.front();
 	cards.reserve(Board::total_piles * Board::cards_pile);
 
-	std::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
+	rng::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
 		auto& [name, texture] = textures;
 		cards.emplace_back(name.string(), texture, back_card); });
 
@@ -27,9 +26,10 @@ Deck::Deck()
 
 auto::Deck::shuffle() -> void 
 { 
-	std::ranges::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g); 
+	rng::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g); 
 }
 
+/// TODO: Use setTexture() here to transfer ownership of the cards...
 auto Deck::draw() ->Card
 {
 	if (cards.empty())

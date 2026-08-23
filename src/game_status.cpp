@@ -60,26 +60,23 @@ auto::Game_Status::update() -> void
 ///		Pause the game while text box is active
 ///		Add pause, resume, and help -- list game objective functionality
 
-auto::Game_Status::operator()( Board::Piles& p) ->void
+auto::Game_Status::operator()( const Board::Piles& p, bool& dest_p_state) ->void
 {
 	const auto& lose_condition = [](auto c) -> int {
 		return c.value() == Rank_Lib::Rank::king && c.position() == Card_State::face_up; };
 	
 	if (move_count  == Board::cards_pile * Board::total_piles )
 	{
-		///change state to win and halt all UI  functions
-		/// Prompt to save win log -- Dim Screen
-		///dim screen and prompt to play again
 		state = Game_State::win;
+		dest_p_state = false;
 		update();
 	}
 
-	else if (auto num_kings = std::count_if(std::get<1>(p.back()).begin(), std::get<1>(p.back()).end(), lose_condition); num_kings == Board::cards_pile)
+	else if (auto num_kings = rng::count_if(std::get<1>(p.back()).begin(), std::get<1>(p.back()).end(), lose_condition); num_kings == Board::cards_pile)
 	{
 		state = Game_State::lose;
+		dest_p_state = false;
 		update();
-		///dim screen and prompt to play again
-		///change state to lose and halt all UI  functions
 	}
 }
 

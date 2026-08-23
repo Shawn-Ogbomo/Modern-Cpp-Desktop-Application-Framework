@@ -8,7 +8,6 @@
 #include "../include/util.hpp"
 #include "../include/board.hpp"
 
-namespace rng = std::ranges;
 using namespace std::numbers;
 
 auto::Board::update_position(std::pair<sf::Sprite&, sf::Sprite&> img, sf::Vector2f dest_pos, bool update_It_state) -> void
@@ -40,7 +39,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 		return;
 	}
 
-	const auto a = sf::Angle{ sf::radians(v1 * 2.0f * pi / (v2 - 1.0f) - (pi / 2.0f)) };
+	const auto a = sf::Angle{ sf::radians(static_cast<float>(v1 * 2.0f * pi / (v2 - 1.0f) - (pi / 2.0f))) };
 
 	auto a_radians = a.asRadians();
 	auto pos = sf::Vector2f{ center_x + radius * std::cos(a_radians) - (pos_card.x / 2.0f), center_y + (radius * std::sin(a_radians)) - pos_card.y / 2.0f };
@@ -57,7 +56,7 @@ Board::Board(Deck& d)
 	{
 		Util::allocate(pile);
 
-		auto& [state, cards, rank, pos] = pile;
+		auto& [pile_active, cards, rank, pos] = pile;
 		rank = Rank_Lib::ranks[index];
 
 		for (auto& card : cards)
@@ -73,8 +72,8 @@ Board::Board(Deck& d)
 		++index;
 	}
 
-	auto& [state, cards, rank, pos] = piles.back();
-	state = true;
+	auto& [pile_active, cards, rank, pos] = piles.back();
+	pile_active = true;
 
 	cards.back().position() = Card_State::face_up;
 }
@@ -83,10 +82,10 @@ auto Board::operator ()(sf::Vector2f pos)->void
 {
 	for (auto it = piles.begin(); it != piles.end(); ++it)
 	{
-		auto& [active, pile, rank, internal_pos] = *it;
+		auto& [pile_active, pile, rank, internal_pos] = *it;
 		const auto& [face, reverse] = pile.front().img();
 
-		if (active && face.getGlobalBounds().contains(pos))
+		if (pile_active && face.getGlobalBounds().contains(pos))
 		{
 			source_pile = it;
 			return;
