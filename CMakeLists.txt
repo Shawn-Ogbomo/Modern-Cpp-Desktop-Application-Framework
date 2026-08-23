@@ -10,7 +10,14 @@ FetchContent_Declare(SFML
     GIT_SHALLOW ON
     EXCLUDE_FROM_ALL
     SYSTEM)
-FetchContent_MakeAvailable(SFML)
+
+FetchContent_Declare(
+    GSL
+    GIT_REPOSITORY "https://github.com/microsoft/GSL.git"
+    GIT_TAG        v4.2.2
+)
+
+FetchContent_MakeAvailable(SFML GSL)
 
 add_executable(main "src/main.cpp" "src/board.cpp" "src/card.cpp" "src/deck.cpp"  "src/texture_manager.cpp" "src/util.cpp" "src/time_status.cpp" "src/game_status.cpp" "src/music_player.cpp" )
 if(MSVC)
@@ -21,6 +28,6 @@ if(MSVC)
     target_compile_options(main PRIVATE /external:W0)
 endif()
 target_compile_features(main PRIVATE cxx_std_20)
-target_link_libraries(main PRIVATE SFML::Graphics SFML::Audio)
+target_link_libraries(main PRIVATE SFML::Graphics SFML::Audio Microsoft.GSL::GSL)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
