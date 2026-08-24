@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "../include/directory_manager.hpp"
-#include "../include/exceptions.hpp"
 #include "../include/game_status.hpp"
 #include "../include/util.hpp"
 
@@ -58,18 +57,20 @@ auto::Game_Status::operator()(const std::deque<Card>& p, bool& pile_state)-> voi
         return c.value() == Rank_Lib::Rank::king && c.position() == Card_State::face_up;
         };
 
-    if (move_count == Board::cards_pile * Board::total_piles)
-    {
-        state = Game_State::win;
+    const auto& update_game_state = [&](Game_State gs) -> void {
+        state = gs;
         pile_state = false;
         update();
+        };
+
+    if (move_count == Board::cards_pile * Board::total_piles)
+    {
+        update_game_state(Game_State::win);
     }
 
     else if (const auto num_kings = rng::count_if(p, lose_condition); num_kings == Board::cards_pile)
     {
-        state = Game_State::lose;
-        pile_state = false;
-        update();
+        update_game_state(Game_State::lose);
     }
 }
 

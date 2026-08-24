@@ -4,8 +4,6 @@
 #include <SFML/Graphics/Transformable.hpp>
 
 #include "../include/directory_manager.hpp"
-#include "../include/exceptions.hpp"
-#include "../include/random_number_gen.hpp"
 #include "../include/time_status.hpp"
 #include "../include/util.hpp"
 

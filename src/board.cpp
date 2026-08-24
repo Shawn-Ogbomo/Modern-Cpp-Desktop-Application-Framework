@@ -1,9 +1,7 @@
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 #include <iterator>
 #include <numbers>
-#include <ranges>
 
 #include "../include/board.hpp"
 #include "../include/util.hpp"
