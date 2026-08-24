@@ -13,8 +13,6 @@
 #include "../include/music_player.hpp"
 #include "../include/time_status.hpp"
 
-sf::Clock clock1;
-
 class Application
 {
 public:
@@ -75,6 +73,8 @@ public:
 
     auto run() -> void
     {
+        sf::Clock clock1;
+
         auto de = Deck{};
         auto b = Board{ de };
         auto db = DashBoard{};
