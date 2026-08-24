@@ -10,12 +10,12 @@
 class Deck
 {
 public:
-	Deck();
-	auto draw() -> Card;
+    Deck();
+    auto draw() -> Card;
 private:
-	auto shuffle() -> void;
-	Card_Manager cm;
-	std::vector<Card> cards;
+    auto shuffle() -> void;
+    Card_Manager cm;
+    std::vector<Card> cards;
 };
 
 #endif // DECK_HPP

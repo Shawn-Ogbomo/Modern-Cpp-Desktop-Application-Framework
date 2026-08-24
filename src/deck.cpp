@@ -1,44 +1,44 @@
-#include <utility>
 #include <array>
-#include <vector>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
+#include <utility>
+#include <vector>
 
-#include "../include/util.hpp"
 #include "../include/deck.hpp"
-#include"../include/exceptions.hpp"
+#include "../include/exceptions.hpp"
 #include "../include/texture_manager.hpp"
+#include "../include/util.hpp"
 
 namespace rng = std::ranges;
 
 Deck::Deck()
 {
-	cm.load_textures();
-	auto& [name, back_card] = cm.textures.front();
-	cards.reserve(Board::total_piles * Board::cards_pile);
+    cm.load_textures();
+    auto& [name, back_card] = cm.textures.front();
+    cards.reserve(Board::total_piles * Board::cards_pile);
 
-	rng::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
-		auto& [name, texture] = textures;
-		cards.emplace_back(name.string(), texture, back_card); });
+    rng::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
+        auto& [name, texture] = textures;
+        cards.emplace_back(name.string(), texture, back_card); });
 
-	shuffle();
+    shuffle();
 }
 
-auto::Deck::shuffle() -> void 
-{ 
-	rng::shuffle(cards.begin(), cards.end(), Random_Number_Gen::g); 
-}
-
-auto Deck::draw() ->Card
+auto ::Deck::shuffle() -> void
 {
-	if (cards.empty())
-	{
-		throw Invalid_card_count{ "Insufficient cards...\n" };
-	}
+    rng::shuffle(cards, Random_Number_Gen::g);
+}
 
-	auto last_card = std::move(cards.back());
+auto Deck::draw() -> Card
+{
+    if (cards.empty())
+    {
+        throw Invalid_card_count{ "Insufficient cards...\n" };
+    }
 
-	cards.pop_back();
+    auto last_card = std::move(cards.back());
 
-	return last_card;
+    cards.pop_back();
+
+    return last_card;
 }

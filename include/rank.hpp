@@ -5,26 +5,26 @@
 
 namespace Rank_Lib
 {
-	enum class Rank
-	{
-		ace = 1,
-		two,
-		three,
-		four,
-		five,
-		six,
-		seven,
-		eight,
-		nine,
-		ten,
-		jack,
-		queen,
-		king
-	};
+    enum class Rank
+    {
+        ace = 1,
+        two,
+        three,
+        four,
+        five,
+        six,
+        seven,
+        eight,
+        nine,
+        ten,
+        jack,
+        queen,
+        king
+    };
 
-	 inline std::array<Rank, 13> ranks{
-	 Rank::queen, Rank::ace, Rank::two, Rank::three, Rank::four, Rank::five, Rank::six,
-		   Rank::seven, Rank::eight, Rank::nine, Rank::ten, Rank::jack, Rank::king };
+    inline std::array<Rank, 13> ranks{
+    Rank::queen, Rank::ace, Rank::two, Rank::three, Rank::four, Rank::five, Rank::six,
+          Rank::seven, Rank::eight, Rank::nine, Rank::ten, Rank::jack, Rank::king };
 };
 
 #endif // RANK_HPP

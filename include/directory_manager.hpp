@@ -1,16 +1,18 @@
 #ifndef DIRECTORY_MANAGER_HPP
 #define DIRECTORY_MANAGER_HPP
 
+#include <filesystem>
+
 namespace Directory_Manager
 {
-	inline std::filesystem::path assets_dir()
-	{
+    inline std::filesystem::path assets_dir()
+    {
 #ifdef SFML_SYSTEM_IOS
-		return "";
+        return "";
 #else
-		return "../../../../assets/";
+        return "../../../../assets/";
 #endif
-	}
+    }
 }
 
 #endif //DIRECTORY_MANAGER_HPP
