@@ -65,7 +65,7 @@ auto::Game_Status::operator()(const std::deque<Card>& p, bool& pile_state)-> voi
         update();
     }
 
-    else if (auto num_kings = rng::count_if(p, lose_condition); num_kings == Board::cards_pile)
+    else if (const auto num_kings = rng::count_if(p, lose_condition); num_kings == Board::cards_pile)
     {
         state = Game_State::lose;
         pile_state = false;
