@@ -1,4 +1,4 @@
-# 🃏 Clock Solitaire (SFML + C++20)
+# 🃏 Clock Solitaire (SFML + C++17/C++20)
 
 A highly optimized desktop implementation of the classic **Clock Solitaire** card game built using modern C++20 and the SFML graphics/audio library. 
 
