@@ -33,7 +33,7 @@ auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void
     }
 }
 
-auto ::Util::local_time() -> std::string
+auto Util::local_time() -> std::string
 {
     const auto time_now = std::chrono::zoned_time<std::chrono::system_clock::duration
         , const std::chrono::time_zone*>
@@ -45,7 +45,7 @@ auto ::Util::local_time() -> std::string
     return std::format("{:%a:%b:%d:%y %I:%M %p}", time_now.get_local_time());
 }
 
-auto ::Util::allocate(std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>& stack)
+auto Util::allocate(std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>& stack)
 -> void
 {
     auto& [state, card, rank, pos] = stack;

@@ -20,7 +20,7 @@ Deck::Deck()
     shuffle();
 }
 
-auto ::Deck::shuffle() -> void
+auto Deck::shuffle() -> void
 {
     rng::shuffle(cards, Random_Number_Gen::g);
 }

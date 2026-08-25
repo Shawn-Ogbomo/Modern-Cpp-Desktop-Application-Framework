@@ -8,7 +8,7 @@
 
 using namespace std::numbers;
 
-auto ::Board::update_position(std::pair<sf::Sprite&, sf::Sprite&> img, sf::Vector2f dest_pos
+auto Board::update_position(std::pair<sf::Sprite&, sf::Sprite&> img, sf::Vector2f dest_pos
     , bool update_It_state) -> void
 {
     auto& [face, reverse] = img;
