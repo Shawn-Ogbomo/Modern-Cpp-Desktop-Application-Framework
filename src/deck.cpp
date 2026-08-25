@@ -1,5 +1,4 @@
 #include <filesystem>
-#include <utility>
 #include <vector>
 
 #include "../include/deck.hpp"
@@ -18,7 +17,6 @@ Deck::Deck()
     rng::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
         auto& [name, texture] = textures;
         cards.emplace_back(name.string(), texture, back_card); });
-
     shuffle();
 }
 
@@ -34,7 +32,7 @@ auto Deck::draw() -> Card
         throw Invalid_card_count{ "Insufficient cards...\n" };
     }
 
-    auto last_card = std::move(cards.back());
+    auto last_card = cards.back();
 
     cards.pop_back();
 
