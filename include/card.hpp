@@ -16,7 +16,7 @@ class Card : public sf::Drawable
     sf::Texture t;
 public:
     Card() = default;
-    explicit Card(std::string_view card_name, sf::Texture& f, sf::Texture& re, Card_State st = Card_State::face_down);
+    explicit Card(std::string_view card_name, const sf::Texture& f, const sf::Texture& re, Card_State st = Card_State::face_down);
     auto position() -> Card_State& { return state; };
     auto value()const -> Rank_Lib::Rank { return rank; }
     auto img() -> std::pair<sf::Sprite&, sf::Sprite&> { return{ std::ref(face),std::ref(reverse) }; }

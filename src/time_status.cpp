@@ -1,5 +1,3 @@
-#include <format>
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
