@@ -14,21 +14,21 @@ Game_Status::Game_Status() : game_id{ Random_Number_Gen::g() }
     game_id_t.setFont(font);
     game_id_t.setCharacterSize(26);
     game_id_t.setString(std::string{ "Game Id" }.append(11, ' ') + ": " + std::to_string(game_id));
-    game_id_t.setPosition(sf::Vector2f{ 0, 790 });
-    game_id_t.setFillColor(sf::Color{ 63, 59, 147 });
+    game_id_t.setPosition({0, 790 });
+    game_id_t.setFillColor({ 63, 59, 147 });
 
     move.setFont(font);
     move.setCharacterSize(26);
 
     update();
 
-    move.setPosition(sf::Vector2f{ 0, 842 });
-    move.setFillColor(sf::Color{ 63, 59, 147 });
+    move.setPosition({ 0, 842 });
+    move.setFillColor({ 63, 59, 147 });
 
     game_state.setFont(font);
     game_state.setCharacterSize(26);
-    game_state.setPosition(sf::Vector2f{ 0, 816 });
-    game_state.setFillColor(sf::Color{ 63, 59, 147 });
+    game_state.setPosition({ 0, 816 });
+    game_state.setFillColor({ 63, 59, 147 });
 }
 
 auto Game_Status::update() -> void

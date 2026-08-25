@@ -12,10 +12,10 @@ Music_Player::Music_Player()
     Util::load_font(Directory_Manager::assets_dir()
         / "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf", font);
 
-    caption.setFillColor(sf::Color{ 63, 59, 147 });
+    caption.setFillColor({ 63, 59, 147 });
     caption.setString("Song: ");
     caption.setCharacterSize(26);
-    caption.setPosition(sf::Vector2f{ 600, 842 });
+    caption.setPosition({ 600, 842 });
 
     for (auto index = 0; const auto& song : fs::directory_iterator{ Directory_Manager::assets_dir()
         / "audio" })
@@ -24,8 +24,8 @@ Music_Player::Music_Player()
 
         auto& [name, file] = songs[index];
 
-        name.setFillColor(sf::Color{ 63, 59, 147 });
-        name.setPosition(sf::Vector2f{ 674, 842 });
+        name.setFillColor({ 63, 59, 147 });
+        name.setPosition({ 674, 842 });
         name.setCharacterSize(26);
 
         ++index;
@@ -41,7 +41,7 @@ Music_Player::Music_Player()
 
     for (auto internal_index = 0; const auto& texture : bm.textures)
     {
-        buttons.push_back(Button{ texture, internal_index, button_pos });
+        buttons.push_back({ texture, internal_index, button_pos });
         ++internal_index;
         button_pos.x += 35;
     }
