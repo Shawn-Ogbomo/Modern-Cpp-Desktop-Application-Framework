@@ -18,6 +18,16 @@ public:
     auto operator++() -> const Game_Status&;
 
 private:
+    struct Update_Game_State
+    {
+        auto operator()(Game_Status& gs, Game_State g_state, bool& pile_state) ->void;
+    };
+
+    struct Lose_Condition
+    {
+        auto operator()(Card card)->bool;
+    };
+
     auto update() -> void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

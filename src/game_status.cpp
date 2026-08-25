@@ -51,26 +51,29 @@ auto::Game_Status::update() -> void
     }
 }
 
+auto::Game_Status::Update_Game_State::operator()(Game_Status& gs, Game_State g_state
+    , bool& pile_state) -> void
+{
+    gs.state = g_state;
+    pile_state = false;
+    gs.update();
+}
+
+auto Game_Status::Lose_Condition::operator()(Card card) ->bool
+{
+    return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
+}
+
 auto::Game_Status::operator()(const std::deque<Card>& p, bool& pile_state)-> void
 {
-    const auto& lose_condition = [](auto c) -> int {
-        return c.value() == Rank_Lib::Rank::king && c.position() == Card_State::face_up;
-        };
-
-    const auto& update_game_state = [&](Game_State gs) -> void {
-        state = gs;
-        pile_state = false;
-        update();
-        };
-
     if (move_count == Board::cards_pile * Board::total_piles)
     {
-        update_game_state(Game_State::win);
+        Update_Game_State()(*this, Game_State::win, pile_state);
     }
 
-    else if (const auto num_kings = rng::count_if(p, lose_condition); num_kings == Board::cards_pile)
+    else if (const auto num_kings = rng::count_if(p, Lose_Condition()); num_kings == Board::cards_pile)
     {
-        update_game_state(Game_State::lose);
+        Update_Game_State()(*this, Game_State::lose, pile_state);
     }
 }
 

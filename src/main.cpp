@@ -23,9 +23,11 @@ public:
             throw std::runtime_error{ "Shaders are not supported on this GPU...\n" };
         }
 
-        if (std::filesystem::path shader = { Directory_Manager::assets_dir() / "shader/effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
+        if (std::filesystem::path shader = { Directory_Manager::assets_dir()
+            / "shader/effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
         {
-            throw std::invalid_argument{ "\nFailed to load shader: " + shader.filename().string() + "\n in path: " + shader.parent_path().string() + "\n" };
+            throw std::invalid_argument{ "\nFailed to load shader: " + shader.filename().string() + "\n in path: "
+                + shader.parent_path().string() + "\n" };
         }
 
         static const sf::Texture dummyTexture(sf::Vector2u(1, 1));
@@ -48,7 +50,8 @@ public:
 
         auto parchment_white = sf::Color{ 240, 245, 245 };
 
-        glow_shader.setUniform("u_glowColor", sf::Glsl::Vec4(parchment_white.r / 255.f, parchment_white.g / 255.f, parchment_white.b / 255.f, parchment_white.a / 255.f));
+        glow_shader.setUniform("u_glowColor", sf::Glsl::Vec4(parchment_white.r / 255.f, parchment_white.g
+            / 255.f, parchment_white.b / 255.f, parchment_white.a / 255.f));
 
         window.setFramerateLimit(60);
         settings.antiAliasingLevel = 15;
@@ -59,7 +62,8 @@ public:
 
     auto enable_shader(const Board& b) -> void
     {
-        if (b.destination_pile != std::end(b.piles) && b.source_pile != std::end(b.piles) && std::get<2>(*b.destination_pile) == std::get<1>(*b.source_pile).back().value())
+        if (b.destination_pile != std::end(b.piles) && b.source_pile != std::end(b.piles)
+            && std::get<2>(*b.destination_pile) == std::get<1>(*b.source_pile).back().value())
         {
             const auto pos = std::get<1>(*b.destination_pile).front().img().first.getPosition();
             glow_rect.setPosition(sf::Vector2f{ pos.x - 10, pos.y - 10 });
@@ -107,7 +111,8 @@ public:
                 {
                     if (b.source_pile != std::end(b.piles))
                     {
-                        b.update_position(std::get<1>(*b.source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x + .0f, mouseMoved->position.y + .0f });
+                        b.update_position(std::get<1>(*b.source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x
+                            + .0f, mouseMoved->position.y + .0f });
                         b();
                     }
                 }
@@ -148,7 +153,8 @@ public:
                 {
                     if (mouseButtonPressed->button == sf::Mouse::Button::Left)
                     {
-                        auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x + .0f, sf::Mouse::getPosition(window).y + .0f };
+                        auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
+                            + .0f, sf::Mouse::getPosition(window).y + .0f };
                         db.mp(window, cursor_pos);
                         b(cursor_pos);
                     }
