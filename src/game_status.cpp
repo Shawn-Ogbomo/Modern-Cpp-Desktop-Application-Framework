@@ -59,7 +59,7 @@ auto::Game_Status::Update_Game_State::operator()(Game_Status& gs, Game_State g_s
     gs.update();
 }
 
-auto Game_Status::Lose_Condition::operator()(Card card) ->bool
+auto Game_Status::Lose_Condition::operator()(Card card)const ->bool
 {
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
