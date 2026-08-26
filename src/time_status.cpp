@@ -30,13 +30,13 @@ Time_Status::Time_Status()
 
     elapsed_time.setFont(font);
     elapsed_time.setCharacterSize(26);
-    elapsed_time.setPosition(sf::Vector2f{ 0, 871 });
-    elapsed_time.setFillColor(sf::Color{ 63, 59, 147 });
+    elapsed_time.setPosition({ 0, 871 });
+    elapsed_time.setFillColor({ 63, 59, 147 });
 
     date.setFont(font);
     date.setCharacterSize(26);
-    date.setPosition(sf::Vector2f{ 600, 871 });
-    date.setFillColor(sf::Color{ 63, 59, 147 });
+    date.setPosition({ 600, 871 });
+    date.setFillColor({ 63, 59, 147 });
 }
 
 void Time_Status::draw(sf::RenderTarget& target, sf::RenderStates states) const
