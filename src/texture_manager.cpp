@@ -25,9 +25,9 @@ auto Button_Manager::load_textures() -> void
     const auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 
     const auto& t = [&](int x, int y = 0) -> std::tuple<sf::Texture, sf::Texture, sf::Texture> {
-        return std::make_tuple(sf::Texture{ buttons, false, { sf::Vector2i{ x, y }, dimmensions_button } },
-            sf::Texture{ buttons, false, { sf::Vector2i{ x, (y + dimmensions_button.y) }, dimmensions_button } },
-            sf::Texture{ buttons, false, { sf::Vector2i{ x, (y + (dimmensions_button.y * 2)) }, dimmensions_button } });
+        return std::make_tuple(sf::Texture{ buttons, false, { { x, y }, dimmensions_button } },
+            sf::Texture{ buttons, false, { { x, (y + dimmensions_button.y) }, dimmensions_button } },
+            sf::Texture{ buttons, false, { { x, (y + (dimmensions_button.y * 2)) }, dimmensions_button } });
         };
 
     textures.reserve(buttons.getSize().x / dimmensions_button.x);
