@@ -5,7 +5,7 @@
 #include "../include/time_status.hpp"
 #include "../include/util.hpp"
 
-auto Time_Status::update(sf::Clock& c) -> void
+auto Time_Status::update(sf::Clock& c) & -> void
 {
     auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
 

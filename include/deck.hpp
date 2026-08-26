@@ -11,9 +11,9 @@ class Deck
 {
 public:
     Deck();
-    auto draw() -> Card;
+    auto draw() & ->Card;
 private:
-    auto shuffle() -> void;
+    auto shuffle() & -> void;
     Card_Manager cm;
     std::vector<Card> cards;
 };

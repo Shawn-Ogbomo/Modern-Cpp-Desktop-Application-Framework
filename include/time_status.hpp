@@ -12,7 +12,7 @@ class Time_Status : public sf::Drawable
     sf::Font font;
 public:
     Time_Status();
-    auto update(sf::Clock& c) -> void;
+    auto update(sf::Clock& c) & -> void;
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

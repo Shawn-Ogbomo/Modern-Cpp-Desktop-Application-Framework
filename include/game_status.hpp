@@ -15,7 +15,7 @@ class Game_Status : public sf::Drawable
 public:
     Game_Status();
     auto operator()(const std::deque<Card>& p, bool& pile_state) -> void;
-    auto operator++() -> const Game_Status&;
+    auto operator++() & -> const Game_Status&;
 
 private:
     struct Update_Game_State
@@ -28,7 +28,7 @@ private:
         auto operator()(Card card)const ->bool;
     };
 
-    auto update() -> void;
+    auto update() & -> void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     sf::Text move{ font };

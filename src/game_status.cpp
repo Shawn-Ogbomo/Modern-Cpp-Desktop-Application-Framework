@@ -14,7 +14,7 @@ Game_Status::Game_Status() : game_id{ Random_Number_Gen::g() }
     game_id_t.setFont(font);
     game_id_t.setCharacterSize(26);
     game_id_t.setString(std::string{ "Game Id" }.append(11, ' ') + ": " + std::to_string(game_id));
-    game_id_t.setPosition({0, 790 });
+    game_id_t.setPosition({ 0, 790 });
     game_id_t.setFillColor({ 63, 59, 147 });
 
     move.setFont(font);
@@ -31,7 +31,7 @@ Game_Status::Game_Status() : game_id{ Random_Number_Gen::g() }
     game_state.setFillColor({ 63, 59, 147 });
 }
 
-auto Game_Status::update() -> void
+auto Game_Status::update() & -> void
 {
     switch (state)
     {
@@ -64,7 +64,7 @@ auto Game_Status::Lose_Condition::operator()(Card card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
-auto Game_Status::operator()(const std::deque<Card>& p, bool& pile_state)-> void
+auto Game_Status::operator()(const std::deque<Card>& p, bool& pile_state) -> void
 {
     if (move_count == Board::cards_pile * Board::total_piles)
     {
@@ -77,7 +77,7 @@ auto Game_Status::operator()(const std::deque<Card>& p, bool& pile_state)-> void
     }
 }
 
-auto Game_Status::operator++() -> const Game_Status&
+auto Game_Status::operator++() & -> const Game_Status&
 {
     ++move_count;
     update();
