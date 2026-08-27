@@ -32,7 +32,7 @@ auto Deck::draw() & -> Card
         throw Invalid_card_count{ "Insufficient cards...\n" };
     }
 
-    auto last_card = cards.back();
+    auto last_card = std::move(cards.back());
 
     cards.pop_back();
 
