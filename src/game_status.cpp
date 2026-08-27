@@ -9,7 +9,7 @@ namespace rng = std::ranges;
 Game_Status::Game_Status() : game_id{ Random_Number_Gen::g() }
 {
     Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
+        / "fonts"/"galafera-med-font"/"GalaferaMediumItalic-JpXJK.ttf" }, font);
 
     game_id_t.setFont(font);
     game_id_t.setCharacterSize(26);
