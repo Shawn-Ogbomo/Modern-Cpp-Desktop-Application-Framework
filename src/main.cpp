@@ -24,7 +24,7 @@ public:
         }
 
         if (std::filesystem::path shader = { Directory_Manager::assets_dir()
-            / "shader/effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
+            / "shader" / "effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
         {
             throw std::invalid_argument{ "\nFailed to load shader: " + shader.filename().string() + "\n in path: "
                 + shader.parent_path().string() + "\n" };
@@ -57,7 +57,7 @@ public:
         settings.antiAliasingLevel = 15;
         window.setVerticalSyncEnabled(true);
         window.setMouseCursor(cursor.value());
-        window.setIcon(sf::Image{ Directory_Manager::assets_dir() / "icon/7_diamonds_new.png" });
+        window.setIcon(sf::Image{ Directory_Manager::assets_dir() / "icon" / "7_diamonds_new.png" });
     }
 
     auto enable_shader(const Board& b) -> void
@@ -83,6 +83,19 @@ public:
         auto b = Board{ de };
         auto db = DashBoard{};
 
+        sf::Texture t{ Directory_Manager::assets_dir() / "blue_button_pause_resume.png" };
+        sf::Sprite test{ t };
+        test.setPosition({ 452.0f - 35.0f, 800.0f });
+
+        sf::Font te{ Directory_Manager::assets_dir() / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" };
+        sf::Text tex{ te };
+        tex.setFillColor({ 236,203,180 });
+        tex.setString("PAUSE");
+       
+        //tex.setString("RESUME");
+        
+        tex.setOrigin({ tex.getLocalBounds().size / 2.0f });
+        tex.setPosition({ 500.0f, 810.0f });
         // run the program as long as the window is open
         while (window.isOpen())
         {
@@ -162,11 +175,13 @@ public:
             }
 
             // clear the window with blue color
-            window.clear(sf::Color{ 33, 46, 82 });
+            window.clear({ 33, 46, 82 });
 
             // draw to window
             window.draw(db);
-
+            window.draw(test);
+            window.draw(tex);
+            
             enable_shader(b);
 
             window.draw(b);

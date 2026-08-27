@@ -26,17 +26,17 @@ auto Time_Status::update(sf::Clock& c) & -> void
 Time_Status::Time_Status()
 {
     Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf" }, font);
+        / "fonts" / "galafera-med-font"/ "GalaferaMediumItalic-JpXJK.ttf" }, font);
 
     elapsed_time.setFont(font);
     elapsed_time.setCharacterSize(26);
     elapsed_time.setPosition({ 0, 871 });
-    elapsed_time.setFillColor({ 63, 59, 147 });
+    elapsed_time.setFillColor({ 236,203,180 });
 
     date.setFont(font);
     date.setCharacterSize(26);
     date.setPosition({ 600, 871 });
-    date.setFillColor({ 63, 59, 147 });
+    date.setFillColor({ 236,203,180 });
 }
 
 void Time_Status::draw(sf::RenderTarget& target, sf::RenderStates states) const

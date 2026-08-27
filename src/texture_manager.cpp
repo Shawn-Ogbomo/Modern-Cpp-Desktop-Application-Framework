@@ -20,7 +20,7 @@ auto Card_Manager::load_textures() -> void
 
 auto Button_Manager::load_textures() -> void
 {
-    const auto buttons = sf::Image{ Directory_Manager::assets_dir() / "buttons/buttons_clock_solitare.png" };
+    const auto buttons = sf::Image{ Directory_Manager::assets_dir() / "buttons" / "buttons_clock_solitare.png" };
     const auto dimmensions_button = sf::Vector2i{ 30, 30 };
     const auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 

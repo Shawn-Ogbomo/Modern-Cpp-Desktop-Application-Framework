@@ -10,7 +10,7 @@ struct DashBoard : sf::Drawable
 public:
     DashBoard()
     {
-        dash.setFillColor(sf::Color{ 228, 193, 156 });
+        dash.setFillColor({ 33, 46, 82 });
         dash.setPosition(sf::Vector2f{ 0.f,770.f });
     }
 

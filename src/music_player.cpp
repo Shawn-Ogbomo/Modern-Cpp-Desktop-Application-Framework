@@ -12,7 +12,7 @@ Music_Player::Music_Player()
     Util::load_font(Directory_Manager::assets_dir()
         / "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf", font);
 
-    caption.setFillColor({ 63, 59, 147 });
+    caption.setFillColor({ 236,203,180 });
     caption.setString("Song: ");
     caption.setCharacterSize(26);
     caption.setPosition({ 600, 842 });
@@ -24,7 +24,7 @@ Music_Player::Music_Player()
 
         auto& [name, file] = songs[index];
 
-        name.setFillColor({ 63, 59, 147 });
+        name.setFillColor({ 236,203,180 });
         name.setPosition({ 674, 842 });
         name.setCharacterSize(26);
 
