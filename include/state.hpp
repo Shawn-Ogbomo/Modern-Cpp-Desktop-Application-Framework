@@ -17,7 +17,7 @@ namespace Button_Interface
 
         enum class General 
         {
-            yes, no, ok, quit, hint, restart
+            yes, no, ok, quit, hint, restart, leaderboards
         };
     };
 
