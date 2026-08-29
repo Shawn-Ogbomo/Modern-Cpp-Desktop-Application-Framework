@@ -22,7 +22,7 @@ public:
     Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos)
         :forms{ txtrs }
     {
-        const auto bounds = std::pair<int, int>{ 0,5 };
+        const auto bounds = std::pair<int, int>{ 0,8 };
 
         const auto& [lower_bound, upper_bound] = bounds;
 

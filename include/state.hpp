@@ -3,9 +3,10 @@
 
 namespace Button_Interface
 {
+    /// TODO: add pause, resume, restart, yes, and no.
     enum class ButtonName
     {
-        prev, pause, play, next, stop
+        prev, pause, play, next, stop, resume, restart, yes, no
     };
 
     enum class ButtonState

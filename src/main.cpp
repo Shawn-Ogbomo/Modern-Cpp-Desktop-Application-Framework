@@ -83,6 +83,7 @@ public:
         auto b = Board{ de };
         auto db = DashBoard{};
 
+        //remove this later///////////////////////////////////////////////////////////////////////////////////////////////////////////
         sf::Texture t{ Directory_Manager::assets_dir()/ "blue_button_pause_resume.png" };
         sf::Sprite test{ t };
         test.setPosition({ 452.0f - 35.0f, 800.0f });
@@ -100,6 +101,9 @@ public:
         sf::Text help{ te };
         help.setFillColor({ 236,203,180 });
         help.setString("HELP");
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+
 
         // run the program as long as the window is open
         while (window.isOpen())

@@ -49,6 +49,7 @@ Music_Player::Music_Player()
 
 auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) -> void
 {
+    /// TODO: Template this to accommodate the pause, resume, and restart, yes and no
     const auto button = rng::find_if(buttons, [&](const auto& b) {
         return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
         });
@@ -106,6 +107,7 @@ auto Music_Player::idle(Music_Player& mp) -> void
     }
 }
 
+/// TODO: Template this to accommodate the pause, resume, and restart, yes and no
 auto Button::operator()(Music_Player& mp) const -> void
 {
     switch (name)

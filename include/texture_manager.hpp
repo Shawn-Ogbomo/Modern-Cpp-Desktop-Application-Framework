@@ -16,6 +16,8 @@ public:
     std::vector<std::pair<std::filesystem::path, sf::Texture>> textures;
 };
 
+/// TODO: Why not nest two types within Button Manager? 
+///One for Media_Player and the other for Game_Stat?
 struct Button_Manager : public Texture_Manager_Interface {
 public:
     auto load_textures() -> void override;
