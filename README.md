@@ -6,7 +6,7 @@ A highly optimized desktop implementation of the classic **Clock Solitaire** car
 
 ## 🕹️ Application Demonstration
 
-[![Watch the Demo](https://github.com/user-attachments/assets/a5e45d06-a30c-4c48-8792-9c5a15022484)](https://youtu.be/PGnCHys6Qxk)
+[![Watch the Demo](https://github.com/user-attachments/assets/82db3c69-f86c-4d09-9397-ddbc1e598974)](https://youtu.be/PGnCHys6Qxk)
 
 *Click the thumbnail image above to watch the full application demonstration on YouTube.*
 
