@@ -95,40 +95,39 @@ auto Music_Player::idle(Music_Player& mp) -> void
     if (!mp)
     {
         mode = B_I::ButtonMode::on;
-        const auto& play = buttons[static_cast<int>((B_I::ButtonName::play))];
+        const auto& play = buttons[static_cast<int>((B_I::Button_Names::Media::play))];
         play.operator()(mp);
     }
 
     else if (const auto& done = songs[current_song].second; done.getPlayingOffset()
         >= done.getDuration() - 500000us)
     {
-        const auto& next = buttons[static_cast<int>(B_I::ButtonName::next)];
+        const auto& next = buttons[static_cast<int>(B_I::Button_Names::Media::next)];
         next.operator()(mp);
     }
 }
 
-/// TODO: Template this to accommodate the pause, resume, and restart, yes and no
 auto Button::operator()(Music_Player& mp) const -> void
 {
     switch (name)
     {
-    case B_I::ButtonName::prev:
+    case B_I::Button_Names::Media::prev:
         mp.stop();
         mp.prev();
         mp.play();
         break;
-    case B_I::ButtonName::pause:
+    case B_I::Button_Names::Media::pause:
         mp.pause();
         break;
-    case B_I::ButtonName::play:
+    case B_I::Button_Names::Media::play:
         mp.play();
         break;
-    case B_I::ButtonName::next:
+    case B_I::Button_Names::Media::next:
         mp.stop();
         mp.next();
         mp.play();
         break;
-    case B_I::ButtonName::stop:
+    case B_I::Button_Names::Media::stop:
         mp.stop();
         break;
     }

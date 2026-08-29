@@ -31,7 +31,7 @@ public:
             throw std::out_of_range{ "No button name corresponding to value: " + std::to_string(val) };
         }
 
-        name = static_cast<Button_Interface::ButtonName>(val);
+        name = static_cast<Button_Interface::Button_Names::Media>(val);
 
         auto& [form_1, form_2, form_3] = forms;
 
@@ -48,7 +48,7 @@ public:
     }
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
-    Button_Interface::ButtonName name{};
+    Button_Interface::Button_Names::Media name{};
 };
 
 class  Music_Player : public sf::Drawable

@@ -100,10 +100,23 @@ public:
 
         sf::Text help{ te };
         help.setFillColor({ 236,203,180 });
-        help.setString("HELP");
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+        help.setString("Hint");
 
+        sf::Text quit{ te };
+        quit.setFillColor({ 236,203,180 });
+        quit.setString("Quit");
+        quit.setPosition({ 0,120 });
+
+        sf::Text restart{ te };
+        restart.setFillColor({ 236,203,180 });
+        restart.setString("Restart");
+        restart.setPosition({ 0,40 });
+
+        sf::Text leaderboads{ te };
+        leaderboads.setFillColor({ 236,203,180 });
+        leaderboads.setString("LeaderBoards");
+        leaderboads.setPosition({ 0,80 });
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // run the program as long as the window is open
         while (window.isOpen())
@@ -188,9 +201,15 @@ public:
 
             // draw to window
             window.draw(db);
+
+            ///////test/////////////
             window.draw(test);
             window.draw(tex);
             window.draw(help);
+            window.draw(leaderboads);
+            window.draw(restart);
+            window.draw(quit);
+            //////test//////////////
 
             enable_shader(b);
 

@@ -3,10 +3,22 @@
 
 namespace Button_Interface
 {
-    /// TODO: add pause, resume, restart, yes, and no.
-    enum class ButtonName
+    namespace Button_Names
     {
-        prev, pause, play, next, stop, resume, restart, yes, no
+        enum class Media
+        {
+            prev, pause, play, next, stop
+        };
+
+        enum class Status
+        {
+             pause, resume
+        };
+
+        enum class General 
+        {
+            yes, no, ok, quit, hint, restart
+        };
     };
 
     enum class ButtonState
