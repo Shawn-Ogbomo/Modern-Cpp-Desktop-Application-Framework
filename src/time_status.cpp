@@ -5,20 +5,23 @@
 #include "../include/time_status.hpp"
 #include "../include/util.hpp"
 
-auto Time_Status::update(sf::Clock& c) & -> void
+auto Time_Status::update(sf::Clock& c , Game_State gs) & -> void
 {
-    auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
+    if (gs == Game_State::playing)
+    {
+        auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
 
-    h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
-    elapsed -= h;
+        h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
+        elapsed -= h;
 
-    m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
-    elapsed -= m;
+        m = std::chrono::duration_cast<std::chrono::minutes>(static_cast<std::chrono::microseconds>(elapsed));
+        elapsed -= m;
 
-    s = std::chrono::duration_cast<std::chrono::seconds>(static_cast<std::chrono::microseconds>(elapsed));
+        s = std::chrono::duration_cast<std::chrono::seconds>(static_cast<std::chrono::microseconds>(elapsed));
 
-    elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count())
-        + " minutes: " + std::to_string(s.count()) + " seconds");
+        elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count())
+            + " minutes: " + std::to_string(s.count()) + " seconds");
+    }
 
     date.setString(("Date: " + Util::local_time()));
 }

@@ -84,38 +84,33 @@ public:
         auto db = DashBoard{};
 
         //remove this later///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        sf::Texture t{ Directory_Manager::assets_dir()/ "blue_button_pause_resume.png" };
-        sf::Sprite test{ t };
-        test.setPosition({ 452.0f - 35.0f, 800.0f });
+        //sf::Texture t{ Directory_Manager::assets_dir()/ "blue_button_pause_resume.png" };
+        //sf::Sprite test{ t };
+        //test.setPosition({ 452.0f - 35.0f, 800.0f });
 
-        sf::Font te{ Directory_Manager::assets_dir() / "fonts"/"galafera-med-font"/"GalaferaMediumItalic-JpXJK.ttf" };
-        sf::Text tex{ te };
-        tex.setFillColor({ 236,203,180 });
-        tex.setString("PAUSE");
+        //sf::Font te{ Directory_Manager::assets_dir() / "fonts"/"galafera-med-font"/"GalaferaMediumItalic-JpXJK.ttf" };
+        //sf::Text tex{ te };
+        //tex.setFillColor({ 236,203,180 });
+        //tex.setString("PAUSE");
        
-        //tex.setString("RESUME");
-        
-        tex.setOrigin({ tex.getLocalBounds().size / 2.0f });
-        tex.setPosition({ 500.0f, 810.0f });
+        ////tex.setString("RESUME");
+        //
+        //tex.setOrigin({ tex.getLocalBounds().size / 2.0f });
+        //tex.setPosition({ 500.0f, 810.0f });
 
-        sf::Text help{ te };
-        help.setFillColor({ 236,203,180 });
-        help.setString("Hint");
+        //sf::Text help{ te };
+        //help.setFillColor({ 236,203,180 });
+        //help.setString("Hint");
 
-        sf::Text quit{ te };
-        quit.setFillColor({ 236,203,180 });
-        quit.setString("Quit");
-        quit.setPosition({ 0,120 });
+        //sf::Text quit{ te };
+        //quit.setFillColor({ 236,203,180 });
+        //quit.setString("Quit");
+        //quit.setPosition({ 0,80 });
 
-        sf::Text restart{ te };
-        restart.setFillColor({ 236,203,180 });
-        restart.setString("Restart");
-        restart.setPosition({ 0,40 });
-
-        sf::Text leaderboads{ te };
-        leaderboads.setFillColor({ 236,203,180 });
-        leaderboads.setString("LeaderBoards");
-        leaderboads.setPosition({ 0,80 });
+        //sf::Text restart{ te };
+        //restart.setFillColor({ 236,203,180 });
+        //restart.setString("Restart");
+        //restart.setPosition({ 0,40 });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // run the program as long as the window is open
@@ -123,7 +118,7 @@ public:
         {
             db.mp(window);
 
-            db.ts.update(clock1);
+            db.ts.update(clock1 , db.gs.status());
 
             // check all the window's events that were triggered since the last
             // iteration of the loop
@@ -203,12 +198,11 @@ public:
             window.draw(db);
 
             ///////test/////////////
-            window.draw(test);
-            window.draw(tex);
-            window.draw(help);
-            window.draw(leaderboads);
-            window.draw(restart);
-            window.draw(quit);
+            //window.draw(test);
+            //window.draw(tex);
+            //window.draw(help);
+            //window.draw(restart);
+            //window.draw(quit);
             //////test//////////////
 
             enable_shader(b);
@@ -221,8 +215,8 @@ public:
     }
 
 private:
-    sf::RenderWindow           window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
     sf::ContextSettings           settings;
+    sf::RenderWindow           window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
     sf::Shader                       glow_shader{ std::filesystem::path{ Directory_Manager::assets_dir() / "shader/effect.frag" }, sf::Shader::Type::Fragment };
     sf::Image                        cursor_image{ std::filesystem::path{ Directory_Manager::assets_dir() / "cursor/cursor_ice_white.png" } };
     std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10, 10 }, sf::Vector2u{ 0, 0 });

@@ -7,7 +7,7 @@
 
 namespace fs = std::filesystem;
 
-auto Card_Manager::load_textures() -> void
+auto Card_Manager::load_textures() & -> void
 {
     textures.reserve((Board::total_piles * Board::cards_pile) + 1);
 
@@ -18,7 +18,7 @@ auto Card_Manager::load_textures() -> void
     }
 }
 
-auto Button_Manager::load_textures() -> void
+auto Button_Manager::load_textures() & -> void
 {
     const auto buttons = sf::Image{ Directory_Manager::assets_dir() / "buttons" / "buttons_clock_solitare.png" };
     const auto dimmensions_button = sf::Vector2i{ 30, 30 };
@@ -36,4 +36,12 @@ auto Button_Manager::load_textures() -> void
     {
         textures.emplace_back(t(i));
     }
+}
+
+auto General_Buttons::load_textures() & -> void
+{
+     textures = std::make_tuple(
+        sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_1.png" },
+        sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_2.png" },
+        sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_3.png" });
 }

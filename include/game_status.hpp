@@ -17,6 +17,7 @@ public:
     auto operator()(const std::deque<Card>& p, bool& pile_state) -> void;
     auto operator++() & -> const Game_Status&;
 
+    auto status() const & -> const Game_State& { return state; };
 private:
     struct Update_Game_State
     {

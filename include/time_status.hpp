@@ -7,12 +7,14 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include "../include/state.hpp"
+
 class Time_Status : public sf::Drawable
 {
     sf::Font font;
 public:
     Time_Status();
-    auto update(sf::Clock& c) & -> void;
+    auto update(sf::Clock& c, Game_State gs) & -> void;
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

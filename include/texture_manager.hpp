@@ -8,48 +8,60 @@ struct Texture_Manager_Interface
 {
 public:
     virtual ~Texture_Manager_Interface() = default;
-    virtual auto load_textures() -> void = 0;
+    virtual auto load_textures() & -> void = 0;
 };
 
 struct Card_Manager : public Texture_Manager_Interface 
 {
 public:
-    auto load_textures() -> void override;
+    auto load_textures() & -> void override;
     std::vector<std::pair<std::filesystem::path, sf::Texture>> textures;
 };
 
+//change this from button manager to Media_Buttons
 struct Button_Manager : public Texture_Manager_Interface 
 {
 public:
-    auto load_textures() -> void override;
+    auto load_textures() & -> void override;
     std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
 };
 
-///Test
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// prev, pause, play , next, stop 
-struct Media : public Button_Manager
+struct General_Buttons : public Texture_Manager_Interface //rename the derived class
 {
-public: 
-    auto load_textures() -> void override;
-    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
+    sf::Texture t{};
+public:
+    auto load_textures() & -> void override;
+   
+    auto get_textures() & -> const General_Buttons&
+    {
+        static auto texture_manager = General_Buttons{};
+        return texture_manager;
+    }
+
+    std::tuple<sf::Texture, sf::Texture, sf::Texture> textures{t,t,t};
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The following 3 types share the same textures...
+// prev, pause, play , next, stop 
+//struct Media : public Button_Manager
+//{
+//public: 
+//    auto load_textures() -> void override;
+//    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
+//};
 
 //pause, resume, restart 
-struct State : public Button_Manager //rename the derived class
-{
-public:
-    auto load_textures() -> void override;
-    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
-};
 
-// yes, no, ok, quit , hint 
-struct General : public Button_Manager
-{
-public:
-    auto load_textures() -> void override;
-    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
-};
+//
+//// yes, no, ok, quit , hint 
+//struct General : public Button_Manager
+//{
+//public:
+//    auto load_textures() -> void override;
+//    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
+//};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // TEXTURE_MANAGER_HPP
