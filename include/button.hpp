@@ -49,11 +49,11 @@ public:
     }
 };
 
+class Music_Player;
+
 struct Media_Button : public Button
 {
 public:
-    friend class Music_Player;
-    
     Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
 
     auto operator()(Music_Player& mp)const & -> void;
