@@ -4,11 +4,47 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <tuple>
+
 #include "../include/music_player.hpp"
 #include "../include/state.hpp"
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
-    
+
+/// TODO: encapsulate this properly.
+///Namespace?
+template <typename T, typename T2>
+auto name_this_later(const std::vector<T>& buttons, T2& obj, sf::Vector2f cursor_pos, sf::RenderWindow& rw) -> void
+{
+    const auto button = std::ranges::find_if(buttons, [&](const auto& b) {
+        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
+        });
+
+    if (button != std::end(buttons))
+    {
+        rw.draw(std::get<1>(button->forms));
+        rw.display();
+
+        while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            rw.draw(std::get<2>(button->forms));
+            rw.display();
+        }
+
+        if (const auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
+            std::get<0>(button->forms).getGlobalBounds().contains(cursor_pos_released))
+        {
+            rw.draw(std::get<1>(button->forms));
+            rw.display();
+
+            rw.draw(std::get<0>(button->forms));
+            rw.display();
+            button->operator()(obj);
+            return;
+        }
+    }
+}
+
 class Button : public sf::Drawable
 {
 public:
@@ -21,6 +57,10 @@ class Media_Button : public Button
 {
 public:
     friend class Music_Player;
+    
+    ///TODO: If you use a struct you wont need a friend class declaration to access the private members of the buttons
+    template <typename T, typename T2>
+    friend  auto name_this_later(const std::vector<T>& buttons, T2& obj, sf::Vector2f cursor_pos, sf::RenderWindow& rw) ->void;
 
     Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
 

@@ -49,36 +49,7 @@ Music_Player::Music_Player()
 
 auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos)& -> void
 {
-    /// TODO: Template this to accommodate the pause, resume, and restart, yes and no.
-    /// TODO: Make this a function; It will be used in Media_Button, General_Button, and Game_State_Button.
-    const auto button = rng::find_if(buttons, [&](const auto& b) {
-        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
-        });
-
-    if (button != std::end(buttons))
-    {
-        rw.draw(std::get<1>(button->forms));
-        rw.display();
-
-        while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-        {
-            rw.draw(std::get<2>(button->forms));
-            rw.display();
-        }
-
-        if (const auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
-            std::get<0>(button->forms).getGlobalBounds().contains(cursor_pos_released))
-        {
-            rw.draw(std::get<1>(button->forms));
-            rw.display();
-
-            rw.draw(std::get<0>(button->forms));
-            rw.display();
-            button->operator()(*this);
-            return;
-        }
-    }
-
+    name_this_later(buttons, *this, cursor_pos, rw);
     idle(*this);
 }
 
