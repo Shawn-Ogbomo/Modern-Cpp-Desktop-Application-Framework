@@ -73,6 +73,4 @@ public:
     Button_Interface::Button_Names::Media name{};
 };
 
-
-
 #endif //BUTTON_HPP
