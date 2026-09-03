@@ -15,6 +15,38 @@ public:
     static const sf::Texture t;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual ~Button() = default;
+
+    template <typename T, typename T2>
+    static auto operator()(const std::vector<T>& buttons, T2& obj, sf::Vector2f cursor_pos, sf::RenderWindow& rw) -> void
+    {
+        const auto button = std::ranges::find_if(buttons, [&](const auto& b) {
+            return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
+            });
+
+        if (button != std::end(buttons))
+        {
+            rw.draw(std::get<1>(button->forms));
+            rw.display();
+
+            while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+            {
+                rw.draw(std::get<2>(button->forms));
+                rw.display();
+            }
+
+            if (const auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
+                std::get<0>(button->forms).getGlobalBounds().contains(cursor_pos_released))
+            {
+                rw.draw(std::get<1>(button->forms));
+                rw.display();
+
+                rw.draw(std::get<0>(button->forms));
+                rw.display();
+                button->operator()(obj);
+                return;
+            }
+        }
+    }
 };
 
 struct Media_Button : public Button
@@ -41,38 +73,6 @@ public:
     Button_Interface::Button_Names::Media name{};
 };
 
-/// TODO: encapsulate this properly.
-///NameSpace?
-template <typename T, typename T2>
-auto name_this_later(const std::vector<T>& buttons, T2& obj, sf::Vector2f cursor_pos, sf::RenderWindow& rw) -> void
-{
-    const auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
-        });
 
-    if (button != std::end(buttons))
-    {
-        rw.draw(std::get<1>(button->forms));
-        rw.display();
-
-        while (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-        {
-            rw.draw(std::get<2>(button->forms));
-            rw.display();
-        }
-
-        if (const auto cursor_pos_released = static_cast<sf::Vector2f>(sf::Mouse::getPosition(rw));
-            std::get<0>(button->forms).getGlobalBounds().contains(cursor_pos_released))
-        {
-            rw.draw(std::get<1>(button->forms));
-            rw.display();
-
-            rw.draw(std::get<0>(button->forms));
-            rw.display();
-            button->operator()(obj);
-            return;
-        }
-    }
-}
 
 #endif //BUTTON_HPP

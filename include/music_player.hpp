@@ -15,7 +15,7 @@ class  Music_Player : public sf::Drawable
 {
     sf::Font font;
 public:
-    friend class Media_Button;
+    friend struct Media_Button;
 
     Music_Player();
     Music_Player(Music_Player&&) noexcept = default;

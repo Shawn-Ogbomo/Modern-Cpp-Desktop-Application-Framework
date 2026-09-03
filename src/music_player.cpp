@@ -49,7 +49,7 @@ Music_Player::Music_Player()
 
 auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos)& -> void
 {
-    name_this_later(buttons, *this, cursor_pos, rw);
+    Button::operator()(buttons, *this, cursor_pos, rw);
     idle(*this);
 }
 
