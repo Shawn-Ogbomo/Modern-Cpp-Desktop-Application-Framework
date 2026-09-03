@@ -3,7 +3,7 @@
 namespace B_I = Button_Interface;
 using B_I_N_M = Button_Interface::Button_Names::Media;
 
-auto name_this_later(B_I_N_M& internal_name, std::tuple<sf::Sprite,sf::Sprite,sf::Sprite>& forms, int val, sf::Vector2f pos) ->void
+auto update_button(B_I_N_M& internal_name, std::tuple<sf::Sprite,sf::Sprite,sf::Sprite>& forms, int val, sf::Vector2f pos) ->void
 {
     internal_name = static_cast<B_I_N_M>(val);            
 
@@ -17,7 +17,7 @@ auto name_this_later(B_I_N_M& internal_name, std::tuple<sf::Sprite,sf::Sprite,sf
 Media_Button::Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos)
     :forms{txtrs}
 {
-    name_this_later(name, forms, val, pos);
+    update_button(name, forms, val, pos);
 }
 
 auto Media_Button::operator()(Music_Player& mp)const & -> void
@@ -49,5 +49,5 @@ auto Media_Button::operator()(Music_Player& mp)const & -> void
 Game_State_Button::Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos)
     :forms{ txtrs }
 {
-    name_this_later(name, forms, val, pos);
+    update_button(name, forms, val, pos);
 }
