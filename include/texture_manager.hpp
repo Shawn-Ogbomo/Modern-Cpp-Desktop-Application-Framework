@@ -18,7 +18,6 @@ public:
     std::vector<std::pair<std::filesystem::path, sf::Texture>> textures;
 };
 
-//change this from button manager to Media_Buttons
 struct Button_Manager : public Texture_Manager_Interface 
 {
 public:
@@ -26,7 +25,7 @@ public:
     std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
 };
 
-struct General_Buttons : public Texture_Manager_Interface //rename the derived class
+struct General_Buttons : public Texture_Manager_Interface
 {
     sf::Texture t{};
 public:
@@ -40,28 +39,5 @@ public:
 
     std::tuple<sf::Texture, sf::Texture, sf::Texture> textures{t,t,t};
 };
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The following 3 types share the same textures...
-// prev, pause, play , next, stop 
-//struct Media : public Button_Manager
-//{
-//public: 
-//    auto load_textures() -> void override;
-//    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
-//};
-
-//pause, resume, restart 
-
-//
-//// yes, no, ok, quit , hint 
-//struct General : public Button_Manager
-//{
-//public:
-//    auto load_textures() -> void override;
-//    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
-//};
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // TEXTURE_MANAGER_HPP

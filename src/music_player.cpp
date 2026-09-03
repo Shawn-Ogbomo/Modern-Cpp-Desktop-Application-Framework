@@ -47,9 +47,10 @@ Music_Player::Music_Player()
     }
 }
 
-auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) -> void
+auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos)& -> void
 {
-    /// TODO: Template this to accommodate the pause, resume, and restart, yes and no
+    /// TODO: Template this to accommodate the pause, resume, and restart, yes and no.
+    /// TODO: Make this a function; It will be used in Media_Button, General_Button, and Game_State_Button.
     const auto button = rng::find_if(buttons, [&](const auto& b) {
         return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
         });
@@ -90,7 +91,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
         });
 }
 
-auto Music_Player::idle(Music_Player& mp) -> void
+auto Music_Player::idle(Music_Player& mp)& -> void
 {
     if (!mp)
     {
@@ -104,31 +105,5 @@ auto Music_Player::idle(Music_Player& mp) -> void
     {
         const auto& next = buttons[static_cast<int>(B_I::Button_Names::Media::next)];
         next.operator()(mp);
-    }
-}
-
-auto Button::operator()(Music_Player& mp) const -> void
-{
-    switch (name)
-    {
-    case B_I::Button_Names::Media::prev:
-        mp.stop();
-        mp.prev();
-        mp.play();
-        break;
-    case B_I::Button_Names::Media::pause:
-        mp.pause();
-        break;
-    case B_I::Button_Names::Media::play:
-        mp.play();
-        break;
-    case B_I::Button_Names::Media::next:
-        mp.stop();
-        mp.next();
-        mp.play();
-        break;
-    case B_I::Button_Names::Media::stop:
-        mp.stop();
-        break;
     }
 }

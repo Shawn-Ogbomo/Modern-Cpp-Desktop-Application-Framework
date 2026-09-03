@@ -12,7 +12,9 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main "src/main.cpp" "src/board.cpp" "src/card.cpp" "src/deck.cpp"  "src/texture_manager.cpp" "src/util.cpp" "src/time_status.cpp" "src/game_status.cpp" "src/music_player.cpp" )
+add_executable(main "src/main.cpp" "src/board.cpp" "src/card.cpp" "src/deck.cpp"  "src/texture_manager.cpp" 
+"src/util.cpp" "src/time_status.cpp" "src/game_status.cpp" "src/music_player.cpp" "src/button.cpp" )
+
 if(MSVC)
     # Sets warning level 4 (/W4) for the Visual Studio compiler
     target_compile_options(main PRIVATE /W4)

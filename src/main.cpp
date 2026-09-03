@@ -160,7 +160,7 @@ public:
                         auto& src_cards = std::get<1>(*b.source_pile);
                         auto& dst_cards = std::get<1>(*b.destination_pile);
 
-                        dst_cards.push_front(std::move(src_cards.back()));
+                        dst_cards.emplace_front(src_cards.back());
                         src_cards.pop_back();
 
                         dst_cards.back().position() = Card_State::face_up;
