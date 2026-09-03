@@ -26,11 +26,11 @@ public:
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     auto idle(Music_Player& mp)& -> void;
-    auto next() -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
-    auto prev() -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
-    auto stop() -> void { songs[current_song].second.stop(); };
-    auto pause() -> void { songs[current_song].second.pause(); };
-    auto play() -> void { songs[current_song].second.play(); };
+    auto next()& -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
+    auto prev()& -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
+    auto stop()& -> void { songs[current_song].second.stop(); };
+    auto pause()& -> void { songs[current_song].second.pause(); };
+    auto play()& -> void { songs[current_song].second.play(); };
 
     sf::Text caption{ font };
     std::size_t limit{};

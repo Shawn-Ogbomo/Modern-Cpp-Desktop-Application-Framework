@@ -11,13 +11,11 @@
     
 class Button : public sf::Drawable
 {
-    //why doesn't the program compile when declaring the texture object here...
 public:
     static const sf::Texture t;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual ~Button() = default;
 };
-
 
 class Media_Button : public Button
 {
@@ -30,6 +28,16 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {target.draw(std::get<0>(forms));}
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{t,t,t};
+    Button_Interface::Button_Names::Media name{};
+};
+
+class Game_State_Button : public Button
+{
+public:
+    Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { target.draw(std::get<0>(forms)); }
+private:
+    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
     Button_Interface::Button_Names::Media name{};
 };
 
