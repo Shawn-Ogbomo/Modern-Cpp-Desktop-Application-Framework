@@ -23,32 +23,25 @@ public:
             throw std::runtime_error{ "Shaders are not supported on this GPU...\n" };
         }
 
-        if (std::filesystem::path shader = { Directory_Manager::assets_dir()
-            /"shader"/"effect.frag" }; !glow_shader.loadFromFile(shader, sf::Shader::Type::Fragment))
-        {
-            throw std::invalid_argument{ "\nFailed to load shader: " + shader.filename().string() + "\n in path: "
-                + shader.parent_path().string() + "\n" };
-        }
+        static const auto dummyTexture = sf::Texture(sf::Vector2u(1, 1));
 
-        static const sf::Texture dummyTexture(sf::Vector2u(1, 1));
+        const auto innerSize = sf::Vector2f(96, 144);
 
-        auto innerSize = sf::Vector2f(96, 144);
+       const  auto glowWidth = 10.f;
 
-        auto glowWidth = 10.f;
-
-        auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2, glowWidth * 2) };
+        const auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2, glowWidth * 2) };
 
         glow_rect.setSize(outerSize);
 
         glow_rect.setTexture(&dummyTexture); // Forces SFML to supply UV map coordinates
 
-        auto ratioX = innerSize.x / outerSize.x;
-        auto ratioY = innerSize.y / outerSize.y;
+        const auto ratioX = innerSize.x / outerSize.x;
+        const auto ratioY = innerSize.y / outerSize.y;
 
         glow_shader.setUniform("u_glowRatioX", ratioX);
         glow_shader.setUniform("u_glowRatioY", ratioY);
 
-        auto parchment_white = sf::Color{ 240, 245, 245 };
+        const auto parchment_white = sf::Color{ 240, 245, 245 };
 
         glow_shader.setUniform("u_glowColor", sf::Glsl::Vec4(parchment_white.r / 255.f, parchment_white.g
             / 255.f, parchment_white.b / 255.f, parchment_white.a / 255.f));
@@ -179,8 +172,8 @@ public:
 private:
     sf::ContextSettings           settings;
     sf::RenderWindow           window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
-    sf::Shader                       glow_shader{ std::filesystem::path{ Directory_Manager::assets_dir() / "shader/effect.frag" }, sf::Shader::Type::Fragment };
-    sf::Image                        cursor_image{ std::filesystem::path{ Directory_Manager::assets_dir() / "cursor/cursor_ice_white.png" } };
+    sf::Shader                       glow_shader{ std::filesystem::path{ Directory_Manager::assets_dir() / "shader"/"effect.frag" }, sf::Shader::Type::Fragment };
+    sf::Image                        cursor_image{ std::filesystem::path{ Directory_Manager::assets_dir() / "cursor"/"cursor_ice_white.png" } };
     std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10, 10 }, sf::Vector2u{ 0, 0 });
     sf::RectangleShape          glow_rect;
     bool                               shader_enabled{};
