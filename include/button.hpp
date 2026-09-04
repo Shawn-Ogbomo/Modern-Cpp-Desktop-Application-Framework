@@ -72,9 +72,7 @@ class Media_Button : public Button
 public:
     Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
     auto operator()(Music_Player& mp)const & -> void;
-
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {target.draw(std::get<0>(forms));}
-
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const & override { return forms; }
     const Button_Interface::Button_Names::Media& type() const & { return name; }
 private:
