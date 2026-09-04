@@ -17,7 +17,6 @@ class  Music_Player : public sf::Drawable
 {
     sf::Font font;
 public:
-
     Music_Player();
     Music_Player(Music_Player&&) noexcept = default;
     //use reference qualifiers with assignment operators as well...

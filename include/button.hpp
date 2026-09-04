@@ -15,7 +15,6 @@ public:
     static const sf::Texture t;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states() const & = 0;
-    virtual  const Button_Interface::Button_Names::Media& type() const = 0;
     virtual ~Button() = default;
 
     template <typename T, typename T2>
@@ -53,6 +52,19 @@ public:
     }
 };
 
+///TODO: Write a concept to make this exclusive to enums, namely, your button enums.
+template <typename T>
+auto update_button(T& internal_name, std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms, int val, sf::Vector2f pos) -> void
+{
+    internal_name = static_cast<T>(val);
+
+    auto& [form_1, form_2, form_3] = forms;
+
+    form_1.setPosition(pos);
+    form_2.setPosition(pos);
+    form_3.setPosition(pos);
+}
+
 class Music_Player;
 
 class Media_Button : public Button
@@ -64,22 +76,22 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {target.draw(std::get<0>(forms));}
 
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const & override { return forms; }
-    const Button_Interface::Button_Names::Media& type() const override { return name; }
+    const Button_Interface::Button_Names::Media& type() const & { return name; }
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{t,t,t};
     Button_Interface::Button_Names::Media name{};
 };
 
-//class  Game_State_Button : public Button
-//{
-//public:
-//    Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
-//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { target.draw(std::get<0>(forms)); }
-//    const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const override { return forms; }
-//    const Button_Interface::Button_Names::Status& type() const override { return name; }
-//private:
-//    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
-//    Button_Interface::Button_Names::Status name{};
-//};
+class  Game_State_Button : public Button
+{
+public:
+    Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { target.draw(std::get<0>(forms)); }
+    const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const & override { return forms; }
+    const Button_Interface::Button_Names::Status& type() const & { return name; }
+private:
+    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
+    Button_Interface::Button_Names::Status name{};
+};
 
 #endif //BUTTON_HPP
