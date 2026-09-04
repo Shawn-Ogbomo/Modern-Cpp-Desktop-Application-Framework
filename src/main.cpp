@@ -83,36 +83,6 @@ public:
         auto b = Board{ de };
         auto db = DashBoard{};
 
-        //remove this later///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //sf::Texture t{ Directory_Manager::assets_dir()/ "blue_button_pause_resume.png" };
-        //sf::Sprite test{ t };
-        //test.setPosition({ 452.0f - 35.0f, 800.0f });
-
-        //sf::Font te{ Directory_Manager::assets_dir() / "fonts"/"galafera-med-font"/"GalaferaMediumItalic-JpXJK.ttf" };
-        //sf::Text tex{ te };
-        //tex.setFillColor({ 236,203,180 });
-        //tex.setString("PAUSE");
-       
-        ////tex.setString("RESUME");
-        //
-        //tex.setOrigin({ tex.getLocalBounds().size / 2.0f });
-        //tex.setPosition({ 500.0f, 810.0f });
-
-        //sf::Text help{ te };
-        //help.setFillColor({ 236,203,180 });
-        //help.setString("Hint");
-
-        //sf::Text quit{ te };
-        //quit.setFillColor({ 236,203,180 });
-        //quit.setString("Quit");
-        //quit.setPosition({ 0,80 });
-
-        //sf::Text restart{ te };
-        //restart.setFillColor({ 236,203,180 });
-        //restart.setString("Restart");
-        //restart.setPosition({ 0,40 });
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         // run the program as long as the window is open
         while (window.isOpen())
         {
@@ -196,14 +166,6 @@ public:
 
             // draw to window
             window.draw(db);
-
-            ///////test/////////////
-            //window.draw(test);
-            //window.draw(tex);
-            //window.draw(help);
-            //window.draw(restart);
-            //window.draw(quit);
-            //////test//////////////
 
             enable_shader(b);
 
