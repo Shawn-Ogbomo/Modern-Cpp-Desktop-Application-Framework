@@ -46,9 +46,7 @@ public:
         glow_shader.setUniform("u_glowColor", sf::Glsl::Vec4(parchment_white.r / 255.f, parchment_white.g
             / 255.f, parchment_white.b / 255.f, parchment_white.a / 255.f));
 
-        window.setFramerateLimit(60);
         settings.antiAliasingLevel = 15;
-        window.setVerticalSyncEnabled(true);
         window.setMouseCursor(cursor.value());
         window.setIcon(sf::Image{ Directory_Manager::assets_dir()/ "icon"/"7_diamonds_new.png" });
     }
