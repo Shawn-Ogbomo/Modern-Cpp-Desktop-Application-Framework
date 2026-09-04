@@ -27,7 +27,7 @@ public:
 
         const auto innerSize = sf::Vector2f(96, 144);
 
-       const  auto glowWidth = 10.f;
+        const auto glowWidth = 10.f;
 
         const auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2, glowWidth * 2) };
 
