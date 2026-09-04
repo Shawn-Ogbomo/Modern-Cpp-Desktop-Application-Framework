@@ -48,7 +48,7 @@ public:
 
         settings.antiAliasingLevel = 15;
         window.setMouseCursor(cursor.value());
-        window.setIcon(sf::Image{ Directory_Manager::assets_dir()/ "icon"/"7_diamonds_new.png" });
+        window.setIcon(sf::Image{ Directory_Manager::assets_dir() / "icon" / "7_diamonds_new.png" });
     }
 
     auto enable_shader(const Board& b) -> void
@@ -79,7 +79,7 @@ public:
         {
             db.mp(window);
 
-            db.ts.update(clock1 , db.gs.status());
+            db.ts.update(clock1, db.gs.status());
 
             // check all the window's events that were triggered since the last
             // iteration of the loop
@@ -151,7 +151,7 @@ public:
                     }
                 }
             }
-
+            
             // clear the window with blue color
             window.clear({ 33, 46, 82 });
 
@@ -170,8 +170,8 @@ public:
 private:
     sf::ContextSettings           settings;
     sf::RenderWindow           window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
-    sf::Shader                       glow_shader{ std::filesystem::path{ Directory_Manager::assets_dir() / "shader"/"effect.frag" }, sf::Shader::Type::Fragment };
-    sf::Image                        cursor_image{ std::filesystem::path{ Directory_Manager::assets_dir() / "cursor"/"cursor_ice_white.png" } };
+    sf::Shader                       glow_shader{ std::filesystem::path{ Directory_Manager::assets_dir() / "shader" / "effect.frag" }, sf::Shader::Type::Fragment };
+    sf::Image                        cursor_image{ std::filesystem::path{ Directory_Manager::assets_dir() / "cursor" / "cursor_ice_white.png" } };
     std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10, 10 }, sf::Vector2u{ 0, 0 });
     sf::RectangleShape          glow_rect;
     bool                               shader_enabled{};

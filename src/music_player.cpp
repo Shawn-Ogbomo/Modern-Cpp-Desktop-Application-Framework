@@ -10,7 +10,7 @@ namespace rng = std::ranges;
 Music_Player::Music_Player()
 {
     Util::load_font(Directory_Manager::assets_dir()
-        / "fonts/galafera-med-font/GalaferaMediumItalic-JpXJK.ttf", font);
+        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf", font);
 
     caption.setFillColor({ 236,203,180 });
     caption.setString("Song: ");
@@ -47,7 +47,7 @@ Music_Player::Music_Player()
     }
 }
 
-auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos)& -> void
+auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) & -> void
 {
     Button::operator()(buttons, *this, cursor_pos, rw);
     idle(*this);
@@ -62,7 +62,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
         });
 }
 
-auto Music_Player::idle(Music_Player& mp)& -> void
+auto Music_Player::idle(Music_Player& mp) & -> void
 {
     if (!mp)
     {
