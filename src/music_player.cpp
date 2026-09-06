@@ -39,7 +39,7 @@ Music_Player::Music_Player()
 
     auto button_pos = sf::Vector2f{ 452.0f - 35.0f, 842.0f };
 
-    for (auto internal_index = 0; const auto& texture : bm.textures)
+    for (auto internal_index = B_I::Button_Names::Media{}; const auto& texture : bm.textures)
     {
         buttons.push_back({ texture, internal_index, button_pos });
         ++internal_index;
@@ -53,6 +53,8 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) & -
     idle(*this);
 }
 
+/// TODO: Revise this function so that it can draw the correct button state when the mouse left click is held down and reset when released to drop state 0. 
+///Doing so will not block the game loop in the main thread.
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(caption);

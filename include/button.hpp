@@ -52,11 +52,11 @@ public:
     }
 };
 
-///TODO: Write a concept to make this exclusive to enums, namely, your button enums.
+///TODO: Write a concept to make this exclusive to enums, namely, your button enum for compile-time safety.
 template <typename T>
-auto update_button(T& internal_name, std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms, int val, sf::Vector2f pos) -> void
+auto update_button(T& internal_name, std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms, T val, sf::Vector2f pos) -> void
 {
-    internal_name = static_cast<T>(val);
+    internal_name = val;
 
     auto& [form_1, form_2, form_3] = forms;
 
@@ -70,7 +70,10 @@ class Music_Player;
 class Media_Button : public Button
 {
 public:
-    Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
+    template <typename T>
+        Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, T val, sf::Vector2f pos)
+        :forms{ txtrs }{update_button(name, forms, val, pos);}
+
     auto operator()(Music_Player& mp)const & -> void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {target.draw(std::get<0>(forms));}
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const & override { return forms; }
@@ -83,7 +86,10 @@ private:
 class  Game_State_Button : public Button
 {
 public:
-    Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, int val, sf::Vector2f pos);
+    template <typename T>
+   Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, T val, sf::Vector2f pos)
+        :forms{ txtrs } {  update_button(name, forms, val, pos);}
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { target.draw(std::get<0>(forms)); }
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const & override { return forms; }
     const Button_Interface::Button_Names::Status& type() const & { return name; }

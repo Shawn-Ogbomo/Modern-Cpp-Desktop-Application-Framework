@@ -33,7 +33,7 @@ public:
    
     auto get_textures() & -> const General_Buttons&
     {
-        static auto texture_manager = General_Buttons{};
+        static const auto texture_manager = General_Buttons{};
         return texture_manager;
     }
 

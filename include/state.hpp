@@ -10,6 +10,11 @@ namespace Button_Interface
             prev, pause, play, next, stop
         };
 
+        inline Media& operator++(Media& m)
+        {
+            return m = (m == Media::stop ? Media::prev : static_cast<Media>(static_cast<int>(m) + 1));
+        }
+
         enum class Status
         {
              pause, resume
