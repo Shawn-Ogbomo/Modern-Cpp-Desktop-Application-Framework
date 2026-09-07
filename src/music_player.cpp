@@ -53,8 +53,7 @@ auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) & -
     idle(*this);
 }
 
-/// TODO: Revise this function so that it can draw the correct button state when the mouse left click is held down and reset when released to drop state 0. 
-///Doing so will not block the game loop in the main thread.
+/// TODO: Revise this function so that it can draw the correct button state when the mouse left click is held down and reset when released to drop state 0. Doing so will not block the game loop in the main thread.
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(caption);
