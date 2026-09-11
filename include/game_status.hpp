@@ -5,19 +5,19 @@
 #include <SFML/Graphics/Text.hpp>
 
 #include"../include/board.hpp"
+#include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
 #include "../include/state.hpp"
+#include "../include/util.hpp"
 
 class Game_Status : public sf::Drawable
 {
-    sf::Font font;
-
 public:
     Game_Status();
     auto operator()(const std::deque<Card>& p, bool& pile_state) -> void;
     auto operator++() & -> const Game_Status&;
 
-    auto status() const & -> const Game_State& { return state; };
+    auto status() const& -> const Game_State& { return state; };
 private:
     struct Update_Game_State
     {
@@ -32,9 +32,12 @@ private:
     auto update() & -> void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    sf::Text move{ font };
-    sf::Text game_id_t{ font };
-    sf::Text game_state{ font };
+    sf::Text move{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
+        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
+    sf::Text game_id_t{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
+        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
+    sf::Text game_state{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
+        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
 
     std::size_t game_id{};
     std::size_t move_count{};

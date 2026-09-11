@@ -7,22 +7,25 @@ namespace Button_Interface
     {
         enum class Media
         {
-            prev, pause, play, next, stop
+            prev, pause, play, next, stop = 4
         };
 
-        inline Media& operator++(Media& m)
+        /// TODO: Finish template this operator.
+        /// TODO: Write a concept to make this operator exclusive to enums in Button_Interface::Button_Names
+        inline auto operator++(auto& m) -> decltype(m)
         {
-            return m = (m == Media::stop ? Media::prev : static_cast<Media>(static_cast<int>(m) + 1));
+            return m = (m == Media::stop ? static_cast<std::remove_reference<decltype(m)>::type>(0)
+                : static_cast<std::remove_reference<decltype(m)>::type>(static_cast<int>(m) + 1));
         }
 
         enum class Status
         {
-             pause, resume
+            pause, resume = 1
         };
 
-        enum class General 
+        enum class General
         {
-            yes, no, ok, quit, hint, restart, leaderboards
+            yes, no, ok, quit, hint, restart, leaderboards = 6
         };
     };
 

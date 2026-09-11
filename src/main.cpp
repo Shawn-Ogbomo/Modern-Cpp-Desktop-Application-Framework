@@ -77,12 +77,11 @@ public:
         // run the program as long as the window is open
         while (window.isOpen())
         {
-            db.mp(window);
+            db.mp.idle();
 
             db.ts.update(clock1, db.gs.status());
 
-            // check all the window's events that were triggered since the last
-            // iteration of the loop
+            // check all the window's events that were triggered since the last iteration of the loop
             while (const std::optional event = window.pollEvent())
             {
                 if (event->is<sf::Event::Closed>())
@@ -110,33 +109,39 @@ public:
 
                 else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
                 {
-                    if (mouseButtonReleased->button == sf::Mouse::Button::Left && b.source_pile != std::end(b.piles))
+                    if (mouseButtonReleased->button == sf::Mouse::Button::Left)
                     {
-                        if (!shader_enabled)
+                        db.mp.release_listener(sf::Vector2f{ sf::Mouse::getPosition(window).x
+                            + .0f, sf::Mouse::getPosition(window).y + .0f });
+
+                        if (b.source_pile != std::end(b.piles))
                         {
-                            b.update_position(std::get<1>(*b.source_pile).back().img(), std::get<3>(*b.source_pile), true);
-                            continue;
+                            if (!shader_enabled)
+                            {
+                                b.update_position(std::get<1>(*b.source_pile).back().img(), std::get<3>(*b.source_pile), true);
+                                continue;
+                            }
+
+                            auto& src_cards = std::get<1>(*b.source_pile);
+                            auto& dst_cards = std::get<1>(*b.destination_pile);
+
+                            dst_cards.emplace_front(src_cards.back());
+                            src_cards.pop_back();
+
+                            dst_cards.back().position() = Card_State::face_up;
+
+                            auto& src_pile_state = std::get<0>(*b.source_pile);
+                            auto& dst_pile_state = std::get<0>(*b.destination_pile);
+
+                            src_pile_state = false;
+                            dst_pile_state = true;
+
+                            ++db.gs;
+
+                            db.gs(std::get<1>(b.piles.back()), dst_pile_state);
+
+                            b.update_position(dst_cards.front().img(), std::get<3>(*b.destination_pile), true);
                         }
-
-                        auto& src_cards = std::get<1>(*b.source_pile);
-                        auto& dst_cards = std::get<1>(*b.destination_pile);
-
-                        dst_cards.emplace_front(src_cards.back());
-                        src_cards.pop_back();
-
-                        dst_cards.back().position() = Card_State::face_up;
-
-                        auto& src_pile_state = std::get<0>(*b.source_pile);
-                        auto& dst_pile_state = std::get<0>(*b.destination_pile);
-
-                        src_pile_state = false;
-                        dst_pile_state = true;
-
-                        ++db.gs;
-
-                        db.gs(std::get<1>(b.piles.back()), dst_pile_state);
-
-                        b.update_position(dst_cards.front().img(), std::get<3>(*b.destination_pile), true);
                     }
                 }
 
@@ -146,12 +151,12 @@ public:
                     {
                         auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                             + .0f, sf::Mouse::getPosition(window).y + .0f };
-                        db.mp(window, cursor_pos);
+                        db.mp.click_listener(cursor_pos);
                         b(cursor_pos);
                     }
                 }
             }
-            
+
             // clear the window with blue color
             window.clear({ 33, 46, 82 });
 

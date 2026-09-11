@@ -14,12 +14,16 @@ auto Util::check_stream(const std::istream& is, std::filesystem::path& p, std::s
     }
 }
 
-auto Util::load_font(const std::filesystem::path& p, sf::Font& f) -> void
+auto Util::load_font(const std::filesystem::path& p) -> sf::Font&
 {
+    static auto f = sf::Font{};
+
     if (const auto& p_string = p.string(); !f.openFromFile(p_string))
     {
         throw Invalid_file{ "Invalid file: " + p_string + "\n" };
     }
+
+    return f;
 }
 
 auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void

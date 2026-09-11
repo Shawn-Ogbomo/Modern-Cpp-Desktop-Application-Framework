@@ -1,11 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
-#include "../include/directory_manager.hpp"
 #include "../include/time_status.hpp"
 #include "../include/util.hpp"
 
-auto Time_Status::update(sf::Clock& c , Game_State gs) & -> void
+auto Time_Status::update(sf::Clock& c, Game_State gs) & -> void
 {
     if (gs == Game_State::playing)
     {
@@ -28,15 +27,10 @@ auto Time_Status::update(sf::Clock& c , Game_State gs) & -> void
 
 Time_Status::Time_Status()
 {
-    Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font"/ "GalaferaMediumItalic-JpXJK.ttf" }, font);
-
-    elapsed_time.setFont(font);
     elapsed_time.setCharacterSize(26);
     elapsed_time.setPosition({ 0, 871 });
     elapsed_time.setFillColor({ 236,203,180 });
 
-    date.setFont(font);
     date.setCharacterSize(26);
     date.setPosition({ 600, 871 });
     date.setFillColor({ 236,203,180 });

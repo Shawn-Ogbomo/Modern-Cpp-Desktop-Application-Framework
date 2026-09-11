@@ -4,23 +4,22 @@
 
 using namespace std::chrono_literals;
 namespace B_I = Button_Interface;
+namespace D_M = Directory_Manager;
 namespace fs = std::filesystem;
 namespace rng = std::ranges;
 
 Music_Player::Music_Player()
 {
-    Util::load_font(Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf", font);
-
     caption.setFillColor({ 236,203,180 });
     caption.setString("Song: ");
     caption.setCharacterSize(26);
     caption.setPosition({ 600, 842 });
 
-    for (auto index = 0; const auto& song : fs::directory_iterator{ Directory_Manager::assets_dir()
+    for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir()
         / "audio" })
     {
-        songs.emplace_back(sf::Text{ font, song.path().filename().stem().string() }, song);
+        songs.emplace_back(sf::Text{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
+        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }), song.path().filename().stem().string() }, song);
 
         auto& [name, file] = songs[index];
 
@@ -45,37 +44,37 @@ Music_Player::Music_Player()
         ++internal_index;
         button_pos.x += 35;
     }
+
+    mode = B_I::ButtonMode::on;
+    const auto& play = buttons[static_cast<int>((B_I::Button_Names::Media::play))];
+    play.operator()(*this);
 }
 
-auto Music_Player::operator()(sf::RenderWindow& rw, sf::Vector2f cursor_pos) & -> void
+auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
 {
-    Button::operator()(buttons, *this, cursor_pos, rw);
-    idle(*this);
+    Button::click_listener(buttons, cursor_pos);
 }
 
-/// TODO: Revise this function so that it can draw the correct button state when the mouse left click is held down and reset when released to drop state 0. Doing so will not block the game loop in the main thread.
+auto Music_Player::release_listener(sf::Vector2f cursor_pos) & ->void
+{
+    Button::release_listener(buttons, *this, cursor_pos);
+}
+
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(caption);
     target.draw(songs[current_song].first);
-    rng::for_each(buttons, [&target](const auto& b) {
-        target.draw(b);
+    rng::for_each(buttons, [&target](const auto& button) {
+        target.draw(button);
         });
 }
 
-auto Music_Player::idle(Music_Player& mp) & -> void
+auto Music_Player::idle() & -> void
 {
-    if (!mp)
-    {
-        mode = B_I::ButtonMode::on;
-        const auto& play = buttons[static_cast<int>((B_I::Button_Names::Media::play))];
-        play.operator()(mp);
-    }
-
-    else if (const auto& done = songs[current_song].second; done.getPlayingOffset()
+    if (const auto& done = songs[current_song].second; done.getPlayingOffset()
         >= done.getDuration() - 500000us)
     {
         const auto& next = buttons[static_cast<int>(B_I::Button_Names::Media::next)];
-        next.operator()(mp);
+        next.operator()(*this);
     }
 }

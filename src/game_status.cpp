@@ -1,23 +1,16 @@
 #include <SFML/Graphics.hpp>
 
-#include "../include/directory_manager.hpp"
 #include "../include/game_status.hpp"
-#include "../include/util.hpp"
 
 namespace rng = std::ranges;
 
 Game_Status::Game_Status() : game_id{ Random_Number_Gen::g() }
 {
-    Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts"/"galafera-med-font"/"GalaferaMediumItalic-JpXJK.ttf" }, font);
-
-    game_id_t.setFont(font);
     game_id_t.setCharacterSize(26);
     game_id_t.setString(std::string{ "Game Id" }.append(11, ' ') + ": " + std::to_string(game_id));
     game_id_t.setPosition({ 0, 790 });
     game_id_t.setFillColor({ 236,203,180 });
 
-    move.setFont(font);
     move.setCharacterSize(26);
 
     update();
@@ -25,7 +18,6 @@ Game_Status::Game_Status() : game_id{ Random_Number_Gen::g() }
     move.setPosition({ 0, 842 });
     move.setFillColor({ 236,203,180 });
 
-    game_state.setFont(font);
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
