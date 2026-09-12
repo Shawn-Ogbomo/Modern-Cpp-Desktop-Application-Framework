@@ -1,11 +1,11 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
-#include <string>
 #include <chrono>
+#include <string>
 
-#include "../include/card.hpp"
 #include "../include/board.hpp"
+#include "../include/card.hpp"
 #include "../include/exceptions.hpp"
 
 namespace Util
