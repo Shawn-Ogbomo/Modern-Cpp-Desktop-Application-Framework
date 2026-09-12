@@ -111,8 +111,10 @@ public:
                 {
                     if (mouseButtonReleased->button == sf::Mouse::Button::Left)
                     {
-                        db.mp.release_listener(sf::Vector2f{ sf::Mouse::getPosition(window).x
-                            + .0f, sf::Mouse::getPosition(window).y + .0f });
+                        auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
+                            + .0f, sf::Mouse::getPosition(window).y + .0f };
+
+                        db.mp.release_listener(cursor_pos);
 
                         if (b.source_pile != std::end(b.piles))
                         {
@@ -151,6 +153,7 @@ public:
                     {
                         auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                             + .0f, sf::Mouse::getPosition(window).y + .0f };
+
                         db.mp.click_listener(cursor_pos);
                         b(cursor_pos);
                     }

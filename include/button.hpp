@@ -9,16 +9,22 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
+class Music_Player;
+
 struct Button : public sf::Drawable
 {
 public:
     static const sf::Texture t;
 
     virtual operator bool() const& = 0;
+    virtual void operator()(Music_Player&) const& = 0;
+    virtual ~Button() = default;
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states() const& = 0;
     virtual Button_Interface::ButtonMode& mode() & = 0;
-    virtual ~Button() = default;
+
+    static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
     static auto click_listener(auto& buttons, sf::Vector2f cursor_pos) -> void
     {
@@ -29,22 +35,25 @@ public:
         if (button != std::end(buttons))
         {
             button->mode() = Button_Interface::ButtonMode::on;
+            Button::ob = &(*button);
         }
     }
 
-    /// TODO: This function does not fulfill its intent.
-    static auto release_listener(auto& buttons, auto& obj, sf::Vector2f cursor_pos) -> void
+    static auto release_listener(auto& obj, sf::Vector2f cursor_pos) -> void
     {
-        auto button = std::ranges::find_if(buttons, [&](auto& b) {
-            return std::get<0>(b.states()).getGlobalBounds().contains(cursor_pos) && b.mode() == Button_Interface::ButtonMode::on;
-            });
-
-        if (button != std::end(buttons) && *button)
+        if (ob)
         {
-            button->mode() = Button_Interface::ButtonMode::off;
-            button->operator()(obj);
+            if (std::get<0>((*ob)->states()).getGlobalBounds().contains(cursor_pos))
+            {
+                Button::operator()(*ob, obj);
+            }
+
+            ob.value()->mode() = Button_Interface::ButtonMode::off;
+            ob = std::nullopt;
         }
     }
+
+    static inline std::optional<Button*> ob;
 };
 
 ///TODO: Write a concept to make this exclusive to enums, namely, your button enum for compile-time safety.
@@ -64,8 +73,6 @@ auto display_manager(const auto& button, sf::RenderTarget& target) -> void
     button ? target.draw(std::get<2>(button.states())) : target.draw(std::get<0>(button.states()));
 }
 
-class Music_Player;
-
 class Media_Button : public Button
 {
 public:
@@ -76,7 +83,7 @@ public:
     }
 
     operator bool() const& override { return static_cast<int>(setting); }
-    auto operator()(Music_Player& mp)const& -> void;
+    void operator()(Music_Player& mp)const& override;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { display_manager(*this, target); }
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
     const Button_Interface::Button_Names::Media& type() const& { return name; }
@@ -95,6 +102,7 @@ public:
     {
         update_button(name, forms, val, pos);
     }
+
     operator bool() const& override { return static_cast<int>(setting); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { display_manager(*this, target); }
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }

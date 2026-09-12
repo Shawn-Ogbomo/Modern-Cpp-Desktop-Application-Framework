@@ -57,7 +57,7 @@ auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
 
 auto Music_Player::release_listener(sf::Vector2f cursor_pos) & ->void
 {
-    Button::release_listener(buttons, *this, cursor_pos);
+    Button::release_listener(*this, cursor_pos);
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
