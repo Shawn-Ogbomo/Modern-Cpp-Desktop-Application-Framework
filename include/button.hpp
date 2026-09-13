@@ -49,7 +49,7 @@ public:
         {
             if (std::get<0>((*ob)->states()).getGlobalBounds().contains(cursor_pos))
             {
-                Some_Interface::operator()(*ob, obj);
+                operator()(*ob, obj);
             }
 
             ob.value()->mode() = Button_Interface::ButtonMode::off;
