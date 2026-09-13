@@ -2,7 +2,7 @@
 
 namespace B_I = Button_Interface;
 
-void Media_Button::operator()(Music_Player& mp)const&
+auto Media_Button::operator()(Music_Player& mp)const& ->void
 {
     switch (name)
     {

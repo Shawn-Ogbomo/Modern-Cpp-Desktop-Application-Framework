@@ -17,13 +17,17 @@ public:
     static const sf::Texture t;
 
     virtual operator bool() const& = 0;
-    virtual void operator()(Music_Player&) const& = 0;
     virtual ~Button() = default;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states() const& = 0;
     virtual Button_Interface::ButtonMode& mode() & = 0;
+};
 
+template <typename T>
+struct Some_Interface
+{
+public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
     static auto click_listener(auto& buttons, sf::Vector2f cursor_pos) -> void
@@ -35,7 +39,7 @@ public:
         if (button != std::end(buttons))
         {
             button->mode() = Button_Interface::ButtonMode::on;
-            Button::ob = &(*button);
+            ob = &(*button);
         }
     }
 
@@ -45,7 +49,7 @@ public:
         {
             if (std::get<0>((*ob)->states()).getGlobalBounds().contains(cursor_pos))
             {
-                Button::operator()(*ob, obj);
+                Some_Interface::operator()(*ob, obj);
             }
 
             ob.value()->mode() = Button_Interface::ButtonMode::off;
@@ -53,25 +57,25 @@ public:
         }
     }
 
-    static inline std::optional<Button*> ob;
+    ///TODO: Write a concept to make this exclusive to enums, namely, your button enum for compile-time safety.
+    static auto update_button(auto& internal_name, std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms, auto val, sf::Vector2f pos) -> void
+    {
+        internal_name = val;
+
+        auto& [form_1, form_2, form_3] = forms;
+
+        form_1.setPosition(pos);
+        form_2.setPosition(pos);
+        form_3.setPosition(pos);
+    }
+
+    static auto display_manager(const auto& button, sf::RenderTarget& target) -> void
+    {
+        button ? target.draw(std::get<2>(button.states())) : target.draw(std::get<0>(button.states()));
+    }
+
+    static inline std::optional<T*> ob;
 };
-
-///TODO: Write a concept to make this exclusive to enums, namely, your button enum for compile-time safety.
-auto update_button(auto& internal_name, std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms, auto val, sf::Vector2f pos) -> void
-{
-    internal_name = val;
-
-    auto& [form_1, form_2, form_3] = forms;
-
-    form_1.setPosition(pos);
-    form_2.setPosition(pos);
-    form_3.setPosition(pos);
-}
-
-auto display_manager(const auto& button, sf::RenderTarget& target) -> void
-{
-    button ? target.draw(std::get<2>(button.states())) : target.draw(std::get<0>(button.states()));
-}
 
 class Media_Button : public Button
 {
@@ -79,12 +83,17 @@ public:
     Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos)
         :forms{ txtrs }
     {
-        update_button(name, forms, val, pos);
+        Some_Interface<Media_Button>::update_button(name, forms, val, pos);
     }
 
     operator bool() const& override { return static_cast<int>(setting); }
-    void operator()(Music_Player& mp)const& override;
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { display_manager(*this, target); }
+    auto operator()(Music_Player& mp)const& ->void;
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        Some_Interface<Media_Button>::display_manager(*this, target);
+    }
+
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
     const Button_Interface::Button_Names::Media& type() const& { return name; }
     Button_Interface::ButtonMode& mode() & override { return setting; }
@@ -100,11 +109,16 @@ public:
     Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos)
         :forms{ txtrs }
     {
-        update_button(name, forms, val, pos);
+        Some_Interface<Game_State_Button>::update_button(name, forms, val, pos);
     }
 
     operator bool() const& override { return static_cast<int>(setting); }
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override { display_manager(*this, target); }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        Some_Interface<Game_State_Button>::display_manager(*this, target);
+    }
+
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
     const Button_Interface::Button_Names::Status& type() const& { return name; }
     Button_Interface::ButtonMode& mode() & override { return setting; }
