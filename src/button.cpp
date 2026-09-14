@@ -1,28 +1,28 @@
 #include "../include/button.hpp"
 
-namespace B_I = Button_Interface;
+namespace B_N = Button_Names;
 
 auto Media_Button::operator()(Music_Player& mp)const& ->void
 {
     switch (name)
     {
-    case B_I::Button_Names::Media::prev:
+    case B_N::Media::prev:
         mp.stop();
         mp.prev();
         mp.play();
         break;
-    case B_I::Button_Names::Media::pause:
+    case B_N::Media::pause:
         mp.pause();
         break;
-    case B_I::Button_Names::Media::play:
+    case B_N::Media::play:
         mp.play();
         break;
-    case B_I::Button_Names::Media::next:
+    case B_N::Media::next:
         mp.stop();
         mp.next();
         mp.play();
         break;
-    case B_I::Button_Names::Media::stop:
+    case B_N::Media::stop:
         mp.stop();
         break;
     }

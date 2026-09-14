@@ -3,7 +3,6 @@
 #include "../include/util.hpp"
 
 using namespace std::chrono_literals;
-namespace B_I = Button_Interface;
 namespace D_M = Directory_Manager;
 namespace fs = std::filesystem;
 namespace rng = std::ranges;
@@ -38,26 +37,26 @@ Music_Player::Music_Player()
 
     auto button_pos = sf::Vector2f{ 452.0f - 35.0f, 842.0f };
 
-    for (auto internal_index = B_I::Button_Names::Media{}; const auto& texture : bm.textures)
+    for (auto internal_index = Button_Names::Media{}; const auto& texture : bm.textures)
     {
         buttons.push_back({ texture, internal_index, button_pos });
         ++internal_index;
         button_pos.x += 35;
     }
 
-    mode = B_I::ButtonMode::on;
-    const auto& play = buttons[static_cast<int>((B_I::Button_Names::Media::play))];
+    mode = ButtonMode::on;
+    const auto& play = buttons[static_cast<int>((Button_Names::Media::play))];
     play.operator()(*this);
 }
 
 auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
 {
-    Some_Interface<Media_Button>::click_listener(buttons, cursor_pos);
+    Button_Interface<Media_Button>::click_listener(buttons, cursor_pos);
 }
 
 auto Music_Player::release_listener(sf::Vector2f cursor_pos) & ->void
 {
-    Some_Interface<Media_Button>::release_listener(*this, cursor_pos);
+    Button_Interface<Media_Button>::release_listener(*this, cursor_pos);
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -74,7 +73,7 @@ auto Music_Player::idle() & -> void
     if (const auto& done = songs[current_song].second; done.getPlayingOffset()
         >= done.getDuration() - 500000us)
     {
-        const auto& next = buttons[static_cast<int>(B_I::Button_Names::Media::next)];
+        const auto& next = buttons[static_cast<int>(Button_Names::Media::next)];
         next.operator()(*this);
     }
 }

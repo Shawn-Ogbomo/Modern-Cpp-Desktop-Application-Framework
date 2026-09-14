@@ -44,7 +44,7 @@ private:
     std::vector<std::pair<sf::Text, sf::Music>> songs;
     std::vector<Media_Button> buttons;
     Button_Manager bm;
-    Button_Interface::ButtonMode mode{};
+    ButtonMode mode{};
 };
 
 #endif // MUSIC_PLAYER_HPP

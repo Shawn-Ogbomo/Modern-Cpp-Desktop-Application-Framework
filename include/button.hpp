@@ -21,11 +21,11 @@ public:
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states() const& = 0;
-    virtual Button_Interface::ButtonMode& mode() & = 0;
+    virtual ButtonMode& mode() & = 0;
 };
 
 template <typename T>
-struct Some_Interface
+class Button_Interface
 {
 public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
@@ -38,7 +38,7 @@ public:
 
         if (button != std::end(buttons))
         {
-            button->mode() = Button_Interface::ButtonMode::on;
+            button->mode() = ButtonMode::on;
             ob = &(*button);
         }
     }
@@ -52,7 +52,7 @@ public:
                 operator()(*ob, obj);
             }
 
-            ob.value()->mode() = Button_Interface::ButtonMode::off;
+            ob.value()->mode() = ButtonMode::off;
             ob = std::nullopt;
         }
     }
@@ -73,7 +73,7 @@ public:
     {
         button ? target.draw(std::get<2>(button.states())) : target.draw(std::get<0>(button.states()));
     }
-
+private:
     static inline std::optional<T*> ob;
 };
 
@@ -83,7 +83,7 @@ public:
     Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos)
         :forms{ txtrs }
     {
-        Some_Interface<Media_Button>::update_button(name, forms, val, pos);
+        Button_Interface<Media_Button>::update_button(name, forms, val, pos);
     }
 
     operator bool() const& override { return static_cast<int>(setting); }
@@ -91,16 +91,16 @@ public:
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
-        Some_Interface<Media_Button>::display_manager(*this, target);
+        Button_Interface<Media_Button>::display_manager(*this, target);
     }
 
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
-    const Button_Interface::Button_Names::Media& type() const& { return name; }
-    Button_Interface::ButtonMode& mode() & override { return setting; }
+    const Button_Names::Media& type() const& { return name; }
+    ButtonMode& mode() & override { return setting; }
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
-    Button_Interface::Button_Names::Media name{};
-    Button_Interface::ButtonMode setting{};
+    Button_Names::Media name{};
+    ButtonMode setting{};
 };
 
 class  Game_State_Button : public Button
@@ -109,23 +109,23 @@ public:
     Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos)
         :forms{ txtrs }
     {
-        Some_Interface<Game_State_Button>::update_button(name, forms, val, pos);
+        Button_Interface<Game_State_Button>::update_button(name, forms, val, pos);
     }
 
     operator bool() const& override { return static_cast<int>(setting); }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
-        Some_Interface<Game_State_Button>::display_manager(*this, target);
+        Button_Interface<Game_State_Button>::display_manager(*this, target);
     }
 
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
-    const Button_Interface::Button_Names::Status& type() const& { return name; }
-    Button_Interface::ButtonMode& mode() & override { return setting; }
+    const Button_Names::Status& type() const& { return name; }
+    ButtonMode& mode() & override { return setting; }
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
-    Button_Interface::Button_Names::Status name{};
-    Button_Interface::ButtonMode setting{};
+    Button_Names::Status name{};
+    ButtonMode setting{};
 };
 
 #endif //BUTTON_HPP
