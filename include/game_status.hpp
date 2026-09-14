@@ -26,7 +26,7 @@ private:
 
     struct Lose_Condition
     {
-        auto operator()(Card card)const ->bool;
+        auto operator()(const Card& card)const ->bool;
     };
 
     auto update() & -> void;
