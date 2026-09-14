@@ -17,8 +17,7 @@ Music_Player::Music_Player()
     for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir()
         / "audio" })
     {
-        songs.emplace_back(sf::Text{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }), song.path().filename().stem().string() }, song);
+        songs.emplace_back(sf::Text{ Util::load_font(), song.path().filename().stem().string() }, song);
 
         auto& [name, file] = songs[index];
 

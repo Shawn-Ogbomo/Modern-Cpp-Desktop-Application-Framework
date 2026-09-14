@@ -19,11 +19,9 @@ public:
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    sf::Text date{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
+    sf::Text date{ Util::load_font() };
 
-    sf::Text elapsed_time{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
+    sf::Text elapsed_time{ Util::load_font() };
 
     std::string date_today;
 

@@ -36,8 +36,7 @@ public:
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    sf::Text caption{ Util::load_font(Directory_Manager::assets_dir() / "fonts" / "galafera-med-font"
-        / "GalaferaMediumItalic-JpXJK.ttf") };
+    sf::Text caption{ Util::load_font() };
 
     std::size_t limit{};
     std::size_t current_song{};

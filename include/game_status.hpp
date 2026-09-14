@@ -32,12 +32,9 @@ private:
     auto update() & -> void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    sf::Text move{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
-    sf::Text game_id_t{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
-    sf::Text game_state{ Util::load_font(std::filesystem::path{ Directory_Manager::assets_dir()
-        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" }) };
+    sf::Text move{ Util::load_font() };
+    sf::Text game_id_t{ Util::load_font() };
+    sf::Text game_state{ Util::load_font() };
 
     std::size_t game_id{};
     std::size_t move_count{};

@@ -1,3 +1,4 @@
+#include "../include/directory_manager.hpp"
 #include "../include/util.hpp"
 
 auto Util::check_stream(const std::istream& is, std::filesystem::path& p, std::string& message
@@ -14,14 +15,10 @@ auto Util::check_stream(const std::istream& is, std::filesystem::path& p, std::s
     }
 }
 
-auto Util::load_font(const std::filesystem::path& p) -> sf::Font&
+auto Util::load_font() -> const sf::Font&
 {
-    static auto f = sf::Font{};
-
-    if (const auto& p_string = p.string(); !f.openFromFile(p_string))
-    {
-        throw Invalid_file{ "Invalid file: " + p_string + "\n" };
-    }
+    static const auto f = sf::Font{ Directory_Manager::assets_dir()
+        / "fonts" / "galafera-med-font" / "GalaferaMediumItalic-JpXJK.ttf" };
 
     return f;
 }
