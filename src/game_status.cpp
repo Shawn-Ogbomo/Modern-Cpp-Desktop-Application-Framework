@@ -56,7 +56,7 @@ auto Game_Status::Lose_Condition::operator()(const Card& card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
-auto Game_Status::operator()(const std::deque<Card>& p, bool& pile_state) -> void
+auto Game_Status::operator()(const rng::ref_view<std::deque<Card>> p, bool& pile_state) -> void
 {
     if (move_count == Board::cards_pile * Board::total_piles)
     {

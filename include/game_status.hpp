@@ -4,6 +4,8 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 
+#include <ranges>
+
 #include"../include/board.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
@@ -14,7 +16,7 @@ class Game_Status : public sf::Drawable
 {
 public:
     Game_Status();
-    auto operator()(const std::deque<Card>& p, bool& pile_state) -> void;
+    auto operator()(const std::ranges::ref_view<std::deque<Card>> p, bool& pile_state) -> void;
     auto operator++() & -> const Game_Status&;
 
     auto status() const& -> const Game_State& { return state; };

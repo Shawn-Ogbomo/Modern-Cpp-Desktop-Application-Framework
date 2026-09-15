@@ -26,7 +26,7 @@ auto Util::load_font() -> const sf::Font&
 auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void
 {
     const auto t = c.getElapsedTime();
-    auto         t2 = c.getElapsedTime();
+    auto          t2 = c.getElapsedTime();
 
     while (t2 < t + ms)
     {

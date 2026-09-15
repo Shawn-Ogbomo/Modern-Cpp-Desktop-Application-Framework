@@ -10,6 +10,7 @@ namespace Button_Names
 
     /// TODO: Finish template this operator.
     /// TODO: Write a concept to make this operator exclusive to enums in Button_Interface::Button_Names
+    /// Read CPP ref RTTI Type_Id
     inline auto operator++(auto& m) -> decltype(m)
     {
         return m = (m == Media::stop ? static_cast<std::remove_reference<decltype(m)>::type>(0)
