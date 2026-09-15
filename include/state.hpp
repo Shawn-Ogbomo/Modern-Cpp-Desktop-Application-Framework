@@ -1,21 +1,14 @@
 #ifndef   STATE_HPP
 #define	 STATE_HPP
 
+#include <iostream>
+
 namespace Button_Names
 {
     enum class Media
     {
         prev, pause, play, next, stop = 4
     };
-
-    /// TODO: Finish template this operator.
-    /// TODO: Write a concept to make this operator exclusive to enums in Button_Interface::Button_Names
-    /// Read CPP ref RTTI Type_Id
-    inline auto operator++(auto& m) -> decltype(m)
-    {
-        return m = (m == Media::stop ? static_cast<std::remove_reference<decltype(m)>::type>(0)
-            : static_cast<std::remove_reference<decltype(m)>::type>(static_cast<int>(m) + 1));
-    }
 
     enum class Status
     {
@@ -24,8 +17,35 @@ namespace Button_Names
 
     enum class General
     {
-        yes, no, ok, quit, hint, restart, leaderboards = 6
+        yes, no, ok, quit, hint, restart = 5
     };
+
+    /// TODO: Write a concept to make this operator exclusive to enums in Button_Interface::Button_Names
+    inline auto operator++(auto& m) -> decltype(m)
+    {
+        const auto& t = [m]() {
+            if (typeid(m) == typeid(Media))
+            {
+                return static_cast<int>(Media::stop);
+            }
+
+            else if (typeid(m) == typeid(Status))
+            {
+                return static_cast<int>(Status::resume);
+            }
+
+            else if (typeid(m) == typeid(General))
+            {
+                return static_cast<int>(General::restart);
+            }
+
+            throw std::invalid_argument{ "Button_Names::operator ++ (auto& m) The target object is of an invalid type.\n" };
+            };
+
+        return m = (m == static_cast<std::remove_reference<decltype(m)>::type>(t())
+            ? static_cast<std::remove_reference<decltype(m)>::type>(0)
+            : static_cast<std::remove_reference<decltype(m)>::type>(static_cast<int>(m) + 1));
+    }
 };
 
 enum class ButtonState
