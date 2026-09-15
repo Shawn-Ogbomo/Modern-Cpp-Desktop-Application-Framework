@@ -23,7 +23,7 @@ namespace Button_Names
     /// TODO: Write a concept to make this operator exclusive to enums in Button_Interface::Button_Names
     inline auto operator++(auto& m) -> decltype(m)
     {
-        const auto& t = [m]() {
+        const auto& t = [m]() -> int {
             if (typeid(m) == typeid(Media))
             {
                 return static_cast<int>(Media::stop);
