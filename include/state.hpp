@@ -28,7 +28,7 @@ namespace Button_Names
 
     inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {
-        const auto& t = [m]() -> int {
+        const auto& last_button = [m]() -> int {
             if (std::is_same_v<std::remove_reference<decltype(m)>, Media >)
             {
                 return static_cast<int>(Media::stop);
@@ -42,7 +42,7 @@ namespace Button_Names
             return static_cast<int>(General::restart);
             };
 
-        return m = (m == static_cast<std::remove_reference<decltype(m)>::type>(t())
+        return m = (m == static_cast<std::remove_reference<decltype(m)>::type>(last_button())
             ? static_cast<std::remove_reference<decltype(m)>::type>(0)
             : static_cast<std::remove_reference<decltype(m)>::type>(static_cast<int>(m) + 1));
     }
