@@ -1,20 +1,6 @@
 #include "../include/directory_manager.hpp"
 #include "../include/util.hpp"
 
-auto Util::check_stream(const std::istream& is, std::filesystem::path& p, std::string& message
-    , std::string& message2) -> void
-{
-    if (is.eof())
-    {
-        throw Terminate{ std::move(message + message2) };
-    }
-
-    if (is.fail())
-    {
-        throw std::invalid_argument{ std::move(std::filesystem::absolute(p).string() + message) };
-    }
-}
-
 auto Util::load_font() -> const sf::Font&
 {
     static const auto f = sf::Font{ Directory_Manager::assets_dir()
