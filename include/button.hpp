@@ -57,8 +57,9 @@ public:
         }
     }
 
-    ///TODO: Write a concept to make this exclusive to enums, namely, your button enum for compile-time safety.
-    static auto update_button(auto& internal_name, std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms, auto val, sf::Vector2f pos) -> void
+    static auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
+        , std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms
+        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos) -> void
     {
         internal_name = val;
 
