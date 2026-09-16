@@ -1,7 +1,7 @@
 #ifndef   STATE_HPP
 #define	 STATE_HPP
 
-#include <iostream>
+#include <concepts>
 
 namespace Button_Names
 {
@@ -20,26 +20,26 @@ namespace Button_Names
         yes, no, ok, quit, hint, restart = 5
     };
 
-    /// TODO: Write a concept to make this operator exclusive to enums in Button_Interface::Button_Names
-    inline auto operator++(auto& m) -> decltype(m)
+    template<typename T>
+    concept Is_Valid_Enum = std::is_enum_v<T>
+        && (std::same_as<T, Media>
+            || std::same_as<T, Status>
+            || std::same_as<T, General>);
+
+    inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {
-        const auto& t = [m] -> int {
-            if (typeid(m) == typeid(Media))
+        const auto& t = [m]() -> int {
+            if (std::is_same_v<std::remove_reference<decltype(m)>, Media >)
             {
                 return static_cast<int>(Media::stop);
             }
 
-            else if (typeid(m) == typeid(Status))
+            else if (std::is_same_v<std::remove_reference<decltype(m)>, Status >)
             {
                 return static_cast<int>(Status::resume);
             }
 
-            else if (typeid(m) == typeid(General))
-            {
-                return static_cast<int>(General::restart);
-            }
-
-            throw std::invalid_argument{ "Button_Names::operator ++ (auto& m) The target object is of an invalid type.\n" };
+            return static_cast<int>(General::restart);
             };
 
         return m = (m == static_cast<std::remove_reference<decltype(m)>::type>(t())
