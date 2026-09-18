@@ -18,10 +18,7 @@ class  Music_Player : public sf::Drawable
 {
 public:
     Music_Player();
-    Music_Player(Music_Player&&) noexcept = default;
 
-    ///TODO: use reference qualifiers with assignment operators as well.
-    auto operator =(Music_Player&&) noexcept -> Music_Player&;
     operator bool() const& { return static_cast<bool>(mode); };
 
     auto click_listener(sf::Vector2f cursor_pos) & ->void;
