@@ -30,16 +30,16 @@ class Button_Interface
 public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
-    static auto click_listener(auto& buttons, sf::Vector2f cursor_pos) -> void
+    static auto click_listener(auto buttons, sf::Vector2f cursor_pos) -> void
     {
-        const auto button = std::ranges::find_if(buttons, [&](const auto& b) {
+         auto button = std::ranges::find_if(buttons, [&](const auto& b) {
             return std::get<0>(b.states()).getGlobalBounds().contains(cursor_pos);
             });
 
         if (button != std::end(buttons))
         {
             button->mode() = ButtonMode::on;
-            ob = &(*button);
+            ob =  &(*button);
         }
     }
 

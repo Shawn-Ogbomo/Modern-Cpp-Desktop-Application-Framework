@@ -1,3 +1,5 @@
+#include <ranges>
+
 #include "../include/directory_manager.hpp"
 #include "../include/music_player.hpp"
 #include "../include/util.hpp"
@@ -50,7 +52,7 @@ Music_Player::Music_Player()
 
 auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
 {
-    Button_Interface<Media_Button>::click_listener(buttons, cursor_pos);
+    Button_Interface<Media_Button>::click_listener(std::span{ buttons }, cursor_pos);
 }
 
 auto Music_Player::release_listener(sf::Vector2f cursor_pos) & ->void
