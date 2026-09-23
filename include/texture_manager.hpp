@@ -2,7 +2,15 @@
 #define TEXTURE_MANAGER_HPP
 
 #include <SFML/Graphics.hpp>
+
 #include <filesystem>
+#include <ranges>
+
+inline auto default_texture() -> const sf::Texture&
+{
+    static const auto  t = sf::Texture{};
+    return t;
+}
 
 struct Texture_Manager_Interface 
 {
@@ -37,7 +45,9 @@ public:
         return texture_manager;
     }
 
-    std::tuple<sf::Texture, sf::Texture, sf::Texture> textures{t,t,t};
+    std::tuple<sf::Texture, sf::Texture, sf::Texture> textures{default_texture()
+        ,default_texture(),default_texture() };
 };
+
 
 #endif // TEXTURE_MANAGER_HPP

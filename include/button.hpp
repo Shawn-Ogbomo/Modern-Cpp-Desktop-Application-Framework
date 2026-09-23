@@ -14,8 +14,6 @@ class Music_Player;
 struct Button : public sf::Drawable
 {
 public:
-    static const sf::Texture t;
-
     virtual operator bool() const& = 0;
     virtual ~Button() = default;
 
@@ -99,7 +97,9 @@ public:
     const Button_Names::Media& type() const& { return name; }
     ButtonMode& mode() & override { return setting; }
 private:
-    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
+    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
+        ,default_texture(),default_texture()};
+
     Button_Names::Media name{};
     ButtonMode setting{};
 };
@@ -124,7 +124,9 @@ public:
     const Button_Names::Status& type() const& { return name; }
     ButtonMode& mode() & override { return setting; }
 private:
-    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ t,t,t };
+    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
+        ,default_texture(),default_texture()};
+
     Button_Names::Status name{};
     ButtonMode setting{};
 };

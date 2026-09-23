@@ -13,7 +13,6 @@
 
 class Card : public sf::Drawable
 {
-    sf::Texture t;
 public:
     Card() = default;
     explicit Card(std::string_view card_name, const sf::Texture& f, const sf::Texture& re, Card_State st = Card_State::face_down);
@@ -30,8 +29,8 @@ private:
     Suit suit{};
     Card_State state{};
     Rank_Lib::Rank rank{};
-    sf::Sprite face{ t };
-    sf::Sprite reverse{ t };
+    sf::Sprite face{ default_texture()};
+    sf::Sprite reverse{ default_texture()};
 };
 
 #endif // CARD_HPP
