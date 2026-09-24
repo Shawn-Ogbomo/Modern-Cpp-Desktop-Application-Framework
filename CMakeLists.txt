@@ -37,6 +37,7 @@ set(GAME_SOURCES
     "src/game_status.cpp"
     "src/music_player.cpp"
     "src/button.cpp"
+    "src/menu.cpp"
 )
 
 # 4. Create the Executable Target

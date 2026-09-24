@@ -35,15 +35,14 @@ public:
 
 struct General_Buttons : public Texture_Manager_Interface
 {
-    sf::Texture t{};
 public:
     auto load_textures() & -> void override;
    
-    auto get_textures() & -> const General_Buttons&
-    {
-        static const auto texture_manager = General_Buttons{};
-        return texture_manager;
-    }
+    //auto get_textures() & -> const General_Buttons&
+    //{
+    //    static const auto texture_manager = General_Buttons{};
+    //    return texture_manager;
+    //}
 
     std::tuple<sf::Texture, sf::Texture, sf::Texture> textures{default_texture()
         ,default_texture(),default_texture() };

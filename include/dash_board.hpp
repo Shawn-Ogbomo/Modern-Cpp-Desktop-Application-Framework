@@ -1,6 +1,7 @@
 #ifndef  DASH_BOARD_HPP
 #define  DASH_BOARD_HPP
 
+#include "../include/menu.hpp"
 #include "./game_status.hpp"
 #include "./music_player.hpp"
 #include "./time_status.hpp"
@@ -20,11 +21,13 @@ public:
         target.draw(gs);
         target.draw(ts);
         target.draw(mp);
+        target.draw(gsm);
     }
 
     Game_Status gs;
     Time_Status ts;
     Music_Player mp;
+    Game_State_Menu gsm;
     sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
 };
 

@@ -27,3 +27,16 @@ auto Media_Button::operator()(Music_Player& mp)const& ->void
         break;
     }
 }
+
+auto Game_State_Button::operator()(Game_State_Menu& gsm)const& ->void
+{
+    if (name == B_N::Status::pause)
+    {
+       
+    }
+
+    if (name == B_N::Status::resume)
+    {
+
+    }
+}
