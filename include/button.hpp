@@ -19,6 +19,7 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states() const& = 0;
     virtual ButtonMode& mode() & = 0;
+
 };
 
 template <typename T>

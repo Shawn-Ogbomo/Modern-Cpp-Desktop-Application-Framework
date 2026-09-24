@@ -13,5 +13,8 @@ Game_State_Menu::Game_State_Menu()
 
 void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    ///TODO: draw the associated button with the game state. 
+    /// If the state is paused, draw resume button 
+    /// else draw the pause button 
     target.draw(state_buttons[0]);
 }
