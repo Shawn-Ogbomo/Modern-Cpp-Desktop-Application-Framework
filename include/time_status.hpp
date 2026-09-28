@@ -19,8 +19,9 @@ public:
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    sf::Text date{ Util::load_font() };
+    auto update_clock(sf::Clock& c, Game_State gs) & -> void;
 
+    sf::Text date{ Util::load_font() };
     sf::Text elapsed_time{ Util::load_font() };
 
     std::string date_today;

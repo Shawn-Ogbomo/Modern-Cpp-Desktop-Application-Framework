@@ -7,16 +7,17 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
 {
     gb_interface.load_textures();
 
-    ///TODO: Remove this magic constant
-    state_buttons.reserve(2);
+    constexpr auto limit = 2;
+
+    state_buttons.reserve(limit);
 
     state_buttons.push_back({ gb_interface.textures,B_N::Status::pause, {417,800}, "Pause" });
     state_buttons.push_back({ gb_interface.textures,B_N::Status::resume, {502,800}, "Resume" });
 
     game_id_t.setCharacterSize(26);
-    game_id_t.setString(std::string{ "Game Id" }.append(11, ' ') + ": " + std::to_string(game_id));
     game_id_t.setPosition({ 0, 790 });
     game_id_t.setFillColor({ 236,203,180 });
+    game_id_t.setString(std::string{ "Game Id" }.append(11, ' ') + ": " + std::to_string(game_id));
 
     move.setCharacterSize(26);
 
@@ -24,6 +25,7 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
 
     move.setPosition({ 0, 842 });
     move.setFillColor({ 236,203,180 });
+    move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
 
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
@@ -55,7 +57,7 @@ auto Game_State_Menu::operator()(Game_State gs) & -> void
 auto Game_State_Menu::operator++() & -> const Game_State_Menu&
 {
     ++move_count;
-    update();
+    move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
     return *this;
 }
 
@@ -96,7 +98,6 @@ auto Game_State_Menu::update() & -> void
     {
     case Game_State::playing:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
-        move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
         break;
     case Game_State::paused:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Paused");
