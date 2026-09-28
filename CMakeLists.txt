@@ -34,7 +34,6 @@ set(GAME_SOURCES
     "src/texture_manager.cpp"
     "src/util.cpp"
     "src/time_status.cpp"
-    "src/game_status.cpp"
     "src/music_player.cpp"
     "src/button.cpp"
     "src/menu.cpp"

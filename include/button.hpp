@@ -19,7 +19,6 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states() const& = 0;
     virtual ButtonMode& mode() & = 0;
-
 };
 
 template <typename T>
@@ -28,16 +27,22 @@ class Button_Interface
 public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
+    /// TODO: Write a concept for this so it only accepts a game_state_button
+    static auto operator()(auto gsb) -> void { on = (!(static_cast<int>(gsb.type()))) ? false : true; }
+
     static auto click_listener(auto buttons, sf::Vector2f cursor_pos) -> void
     {
-         auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-            return std::get<0>(b.states()).getGlobalBounds().contains(cursor_pos);
-            });
-
-        if (button != std::end(buttons))
+        if (on)
         {
-            button->mode() = ButtonMode::on;
-            ob =  &(*button);
+            auto button = std::ranges::find_if(buttons, [&](const auto& b) {
+                return std::get<0>(b.states()).getGlobalBounds().contains(cursor_pos);
+                });
+
+            if (button != std::end(buttons))
+            {
+                button->mode() = ButtonMode::on;
+                ob = &(*button);
+            }
         }
     }
 
@@ -55,9 +60,9 @@ public:
         }
     }
 
-    static auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
+    static auto update_button(Button_Names::Details::Is_Valid_Enum auto& internal_name
         , std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms
-        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos) -> void
+        , Button_Names::Details::Is_Valid_Enum auto val, sf::Vector2f pos) -> void
     {
         internal_name = val;
 
@@ -74,6 +79,7 @@ public:
     }
 private:
     static inline std::optional<T*> ob;
+    static inline bool on = true;
 };
 
 class Music_Player;
@@ -81,8 +87,7 @@ class Music_Player;
 class Media_Button : public Button
 {
 public:
-    Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos)
-        :forms{ txtrs }
+    Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos) :forms{ txtrs }
     {
         Button_Interface<Media_Button>::update_button(name, forms, val, pos);
     }
@@ -100,7 +105,7 @@ public:
     ButtonMode& mode() & override { return setting; }
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
-        ,default_texture(),default_texture()};
+        ,default_texture(),default_texture() };
 
     Button_Names::Media name{};
     ButtonMode setting{};
@@ -111,17 +116,18 @@ class Game_State_Menu;
 class Game_State_Button : public Button
 {
 public:
-    Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos, std::string_view target_label)
-        :forms{ txtrs }
+    Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
     {
         Button_Interface<Game_State_Button>::update_button(name, forms, val, pos);
         label.setString(target_label);
         label.setFillColor({ 236,203,180 });
-        label.setPosition({ 417 + 42.5, 800 });
+
+        label.setCharacterSize(22);
+        label.setPosition({ pos.x, pos.y });
     }
 
     operator bool() const& override { return static_cast<int>(setting); }
-    
     auto operator()(Game_State_Menu& gsm)const& ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -135,8 +141,8 @@ public:
     ButtonMode& mode() & override { return setting; }
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
-        ,default_texture(),default_texture()};
-    
+        ,default_texture(),default_texture() };
+
     sf::Text label{ Util::load_font() };
     Button_Names::Status name{};
     ButtonMode setting{};

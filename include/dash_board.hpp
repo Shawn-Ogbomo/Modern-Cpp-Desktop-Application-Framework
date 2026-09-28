@@ -2,7 +2,6 @@
 #define  DASH_BOARD_HPP
 
 #include "../include/menu.hpp"
-#include "./game_status.hpp"
 #include "./music_player.hpp"
 #include "./time_status.hpp"
 
@@ -18,13 +17,11 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         target.draw(dash);
-        target.draw(gs);
+        target.draw(gsm);
         target.draw(ts);
         target.draw(mp);
-        target.draw(gsm);
     }
 
-    Game_Status gs;
     Time_Status ts;
     Music_Player mp;
     Game_State_Menu gsm;

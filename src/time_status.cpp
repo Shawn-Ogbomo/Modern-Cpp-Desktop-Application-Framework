@@ -6,8 +6,16 @@
 
 auto Time_Status::update(sf::Clock& c, Game_State gs) & -> void
 {
-    if (gs == Game_State::playing)
+    auto t0 = std::chrono::steady_clock::now();
+    if (gs != Game_State::playing)
     {
+        c.stop();
+    }
+
+    else if (gs == Game_State::playing)
+    {
+        c.start();
+
         auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
 
         h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
@@ -23,6 +31,10 @@ auto Time_Status::update(sf::Clock& c, Game_State gs) & -> void
     }
 
     date.setString(("Date: " + Util::local_time()));
+    auto t1 = std::chrono::steady_clock::now();
+
+    std::chrono::duration<double, std::milli> d{ t1 - t0 };
+    std::cout << d.count() << "ms\n";
 }
 
 Time_Status::Time_Status()

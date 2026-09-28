@@ -1,15 +1,15 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+
 #include <chrono>
 #include <iostream>
 #include <iterator>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/System/Clock.hpp>
 
 #include "../include/board.hpp"
 #include "../include/dash_board.hpp"
 #include "../include/deck.hpp"
 #include "../include/directory_manager.hpp"
-#include "../include/game_status.hpp"
+#include "../include/menu.hpp"
 #include "../include/music_player.hpp"
 #include "../include/time_status.hpp"
 
@@ -79,7 +79,7 @@ public:
         {
             db.mp.idle();
 
-            db.ts.update(clock1, db.gs.status());
+            db.ts.update(clock1, db.gsm.status());
 
             // check all the window's events that were triggered since the last iteration of the loop
             while (const std::optional event = window.pollEvent())
@@ -117,6 +117,7 @@ public:
                             + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                         db.mp.release_listener(cursor_pos);
+                        db.gsm.release_listener(cursor_pos);
 
                         if (b.source_pile != std::end(b.piles))
                         {
@@ -140,9 +141,9 @@ public:
                             src_pile_state = false;
                             dst_pile_state = true;
 
-                            ++db.gs;
+                            ++db.gsm;
 
-                            db.gs(std::get<1>(b.piles.back()), dst_pile_state);
+                            db.gsm(std::get<1>(b.piles.back()), dst_pile_state);
 
                             b.update_position(dst_cards.front().img(), std::get<3>(*b.destination_pile), true);
                         }
@@ -157,6 +158,7 @@ public:
                             + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                         db.mp.click_listener(cursor_pos);
+                        db.gsm.click_listener(cursor_pos);
                         b(cursor_pos);
                     }
                 }

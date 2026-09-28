@@ -20,13 +20,21 @@ namespace Button_Names
         yes, no, ok, quit, hint, restart = 5
     };
 
-    template<typename T>
-    concept Is_Valid_Enum = std::is_enum_v<T>
-        && (std::same_as<T, Media>
-            || std::same_as<T, Status>
-            || std::same_as<T, General>);
+    namespace Details {
 
-    inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
+        template<typename T>
+        concept Is_Valid_Enum = std::is_enum_v<T>
+            && (std::same_as<T, Button_Names::Media>
+                || std::same_as<T, Button_Names::Status>
+                || std::same_as<T, Button_Names::General>);
+
+        ///TODO: This is the concept for the operator taking an object with the name gsb in the static button interface
+        //template<typename T>
+        //concept Is_Valid_Button = std::same_as<T, Media_Button>
+        //    || std::same_as<T, Game_State_Button>;
+    };
+
+    inline auto operator++(Details::Is_Valid_Enum auto& m) -> decltype(m)
     {
         const auto& last_button = [m]() -> int {
             if (std::is_same_v<std::remove_reference<decltype(m)>, Media >)
