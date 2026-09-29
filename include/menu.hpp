@@ -2,6 +2,7 @@
 #define MENU_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 
 #include <ranges>
 #include <vector>
@@ -36,6 +37,8 @@ public:
     auto click_listener(sf::Vector2f cursor_pos) & ->void;
     auto release_listener(sf::Vector2f cursor_pos) & ->void;
     auto status() const& -> const Game_State& { return state; };
+    auto set_clock(std::shared_ptr<sf::Clock> shptr_c) & ->void { c_sp = shptr_c; }
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
@@ -60,6 +63,9 @@ private:
 
     Game_State state{};
 
+    std::shared_ptr<sf::Clock> c_sp;
+    std::shared_ptr<Board> c_s2;
+    
     General_Buttons gb_interface;
     std::vector<Game_State_Button> state_buttons;
 };

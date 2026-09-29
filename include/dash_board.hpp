@@ -8,10 +8,12 @@
 struct DashBoard : sf::Drawable
 {
 public:
-    DashBoard()
+    DashBoard(std::shared_ptr<sf::Clock> shptr_c)
     {
         dash.setFillColor({ 33, 46, 82 });
         dash.setPosition(sf::Vector2f{ 0.f,770.f });
+        ts.set_clock(shptr_c);
+        gsm.set_clock(shptr_c);
     }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const

@@ -5,6 +5,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/Text.hpp>
 
 #include "../include/directory_manager.hpp"
@@ -15,11 +16,10 @@ class Time_Status : public sf::Drawable
 {
 public:
     Time_Status();
-    auto update(sf::Clock& c, Game_State gs) & -> void;
+    auto set_clock(std::shared_ptr<sf::Clock>shrptr_c) & -> void { c_sp_ts = shrptr_c; }
+    auto update() & -> void;
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-    auto update_clock(sf::Clock& c, Game_State gs) & -> void;
 
     sf::Text date{ Util::load_font() };
     sf::Text elapsed_time{ Util::load_font() };
@@ -29,6 +29,8 @@ private:
     std::chrono::hours h{};
     std::chrono::minutes m{};
     std::chrono::seconds s{};
+
+    std::shared_ptr<sf::Clock> c_sp_ts;
 };
 
 #endif // TIME_STATUS_HPP

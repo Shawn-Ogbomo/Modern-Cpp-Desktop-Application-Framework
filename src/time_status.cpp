@@ -4,11 +4,9 @@
 #include "../include/time_status.hpp"
 #include "../include/util.hpp"
 
-auto Time_Status::update(sf::Clock& c, Game_State gs) & -> void
+auto Time_Status::update() & -> void
 {
-    update_clock(c, gs);
-
-    auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
+    auto elapsed = sf::Time{ std::chrono::microseconds(c_sp_ts->getElapsedTime()) };
 
     h = std::chrono::duration_cast<std::chrono::hours>(static_cast<std::chrono::microseconds>(elapsed));
     elapsed -= h;
@@ -39,17 +37,4 @@ void Time_Status::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(date);
     target.draw(elapsed_time);
-}
-
-auto Time_Status::update_clock(sf::Clock& c, Game_State gs) & -> void
-{
-    if (c.isRunning() && gs != Game_State::playing)
-    {
-        c.stop();
-    }
-
-    else if (!c.isRunning() && gs == Game_State::playing)
-    {
-        c.start();
-    }
 }

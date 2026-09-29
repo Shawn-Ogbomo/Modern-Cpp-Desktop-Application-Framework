@@ -68,18 +68,18 @@ public:
 
     auto run() -> void
     {
-        sf::Clock clock1;
+        auto sp_clock = std::make_shared<sf::Clock>(sf::Clock{});
 
         auto de = Deck{};
         auto b = Board{ de };
-        auto db = DashBoard{};
+        auto db = DashBoard{sp_clock};
 
         // run the program as long as the window is open
         while (window.isOpen())
         {
             db.mp.idle();
 
-            db.ts.update(clock1, db.gsm.status());
+            db.ts.update();
 
             // check all the window's events that were triggered since the last iteration of the loop
             while (const std::optional event = window.pollEvent())

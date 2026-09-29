@@ -89,8 +89,7 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
-/// TODO: Make this an interface and lock the board here.
-/// TODO: Manage the clock here as well so update_clock() in Time_Status doesn't run every frame
+/// TODO:  Lock the board here.
 auto Game_State_Menu::update() & -> void
 {
     switch (state)
@@ -98,18 +97,22 @@ auto Game_State_Menu::update() & -> void
     case Game_State::playing:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
         Button_Interface<Media_Button>::operator()(state_buttons.back());
+        c_sp->start();
         break;
     case Game_State::paused:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Paused");
         Button_Interface<Media_Button>::operator()(state_buttons.front());
+        c_sp->stop();
         break;
     case Game_State::win:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Win");
         Button_Interface<Game_State_Button>::operator()(state_buttons.front());
+        c_sp->stop();
         break;
     case Game_State::lose:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Lose");
         Button_Interface<Game_State_Button>::operator()(state_buttons.front());
+        c_sp->stop();
         break;
     }
 }
