@@ -21,7 +21,7 @@ struct Menu : public sf::Drawable
 public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual void click_listener(sf::Vector2f cursor_pos) & = 0;
-    virtual void release_listener(sf::Vector2f cursor_pos) & =0;
+    virtual void release_listener(sf::Vector2f cursor_pos) & = 0;
     virtual ~Menu() = default;
 };
 
@@ -30,7 +30,7 @@ class Game_State_Menu : public Menu
 public:
     Game_State_Menu();
     auto operator()(const std::ranges::ref_view<std::deque<Card>> p, bool& pile_state) -> void;
-    auto operator()(Game_State gs) &-> void;
+    auto operator()(Game_State gs) & -> void;
     auto operator++() & -> const Game_State_Menu&;
 
     auto click_listener(sf::Vector2f cursor_pos) & ->void;
@@ -41,7 +41,7 @@ public:
 private:
     struct  Update_Game_State
     {
-        auto operator()(Game_State_Menu& gsm, Game_State g_state, bool& pile_state) -> void;
+        auto operator()(Game_State_Menu& gsm, Game_State g_state) -> void;
     };
 
     struct Lose_Condition
@@ -49,7 +49,6 @@ private:
         auto operator()(const Card& card)const ->bool;
     };
 
-    auto name_this_later(bool& pile_state) & -> void { pile_state = false; }
     auto update() & -> void;
 
     sf::Text move{ Util::load_font() };

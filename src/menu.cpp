@@ -21,8 +21,6 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
 
     move.setCharacterSize(26);
 
-    update();
-
     move.setPosition({ 0, 842 });
     move.setFillColor({ 236,203,180 });
     move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
@@ -30,28 +28,28 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
+    game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
+
 }
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p, bool& pile_state) -> void
 {
     if (move_count == Board::cards_pile * Board::total_piles)
     {
-        Update_Game_State()(*this, Game_State::win, pile_state);
+        Update_Game_State()(*this, Game_State::win);
+        update();
     }
 
     else if (const auto num_kings = rng::count_if(p, Lose_Condition()); num_kings == Board::cards_pile)
     {
-        Update_Game_State()(*this, Game_State::lose, pile_state);
+        Update_Game_State()(*this, Game_State::lose);
+        update();
     }
 }
 
 auto Game_State_Menu::operator()(Game_State gs) & -> void
 {
-    ///TODO: Remove the l-value object test
-    /// Remove the pile_State parameter from update_game_state function object
-    /// lock the board another way
-    bool test = false;
-    Update_Game_State()(*this, gs, test);
+    Update_Game_State()(*this, gs);
 }
 
 auto Game_State_Menu::operator++() & -> const Game_State_Menu&
@@ -80,10 +78,9 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
     target.draw(state_buttons.back());
 }
 
-auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_State g_state, bool& pile_state) -> void
+auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_State g_state) -> void
 {
     gsm.state = g_state;
-    pile_state = false;
     gsm.update();
 }
 
@@ -92,21 +89,27 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
+/// TODO: Make this an interface and lock the board here.
+/// TODO: Manage the clock here as well so update_clock() in Time_Status doesn't run every frame
 auto Game_State_Menu::update() & -> void
 {
     switch (state)
     {
     case Game_State::playing:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
+        Button_Interface<Media_Button>::operator()(state_buttons.back());
         break;
     case Game_State::paused:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Paused");
+        Button_Interface<Media_Button>::operator()(state_buttons.front());
         break;
     case Game_State::win:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Win");
+        Button_Interface<Game_State_Button>::operator()(state_buttons.front());
         break;
     case Game_State::lose:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Lose");
+        Button_Interface<Game_State_Button>::operator()(state_buttons.front());
         break;
     }
 }

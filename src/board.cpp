@@ -48,7 +48,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
     back.setPosition(pos);
 }
 
-Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile(std::end(piles))
+Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::end(piles) }
 {
     for (auto index = 0; auto& pile : piles)
     {

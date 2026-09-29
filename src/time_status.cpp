@@ -43,12 +43,12 @@ void Time_Status::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 auto Time_Status::update_clock(sf::Clock& c, Game_State gs) & -> void
 {
-    if (gs != Game_State::playing)
+    if (c.isRunning() && gs != Game_State::playing)
     {
         c.stop();
     }
 
-    else if (!c.isRunning())
+    else if (!c.isRunning() && gs == Game_State::playing)
     {
         c.start();
     }

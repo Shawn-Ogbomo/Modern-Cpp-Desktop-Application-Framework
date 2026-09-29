@@ -32,15 +32,11 @@ auto Game_State_Button::operator()(Game_State_Menu& gsm)const& ->void
 {
     if (name == B_N::Status::pause)
     {
-        ///TODO: Disable the board here
-        Button_Interface<Media_Button>::operator()(*this);
         gsm.operator()(Game_State::paused);
     }
 
     else if (name == B_N::Status::resume)
     {
-        ///TODO: Enable the board here.
-        Button_Interface<Media_Button>::operator()(*this);
         gsm.operator()(Game_State::playing);
     }
 }

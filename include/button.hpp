@@ -27,8 +27,7 @@ class Button_Interface
 public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
-    /// TODO: Write a concept for this so it only accepts a game_state_button
-    static auto operator()(auto gsb) -> void { on = (!(static_cast<int>(gsb.type()))) ? false : true; }
+    static auto operator()(auto b) -> void { on = (!(static_cast<int>(b.type()))) ? false : true; }
 
     static auto click_listener(auto buttons, sf::Vector2f cursor_pos) -> void
     {
