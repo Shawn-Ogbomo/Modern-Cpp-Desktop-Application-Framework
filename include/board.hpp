@@ -28,7 +28,10 @@ public:
     auto update_position(std::pair<sf::Sprite&, sf::Sprite&> img,
         sf::Vector2f dest_pos, bool update_It_state = false)
         & -> void;
+    
+    auto set_pile_state() & ->void;
 
+    int pos_prev{};
     Pile_It source_pile;
     Pile_It destination_pile;
     Piles piles{};

@@ -30,7 +30,7 @@ class Game_State_Menu : public Menu
 {
 public:
     Game_State_Menu();
-    auto operator()(const std::ranges::ref_view<std::deque<Card>> p, bool& pile_state) -> void;
+    auto operator()(const std::ranges::ref_view<std::deque<Card>> p) -> void;
     auto operator()(Game_State gs) & -> void;
     auto operator++() & -> const Game_State_Menu&;
 
@@ -38,6 +38,7 @@ public:
     auto release_listener(sf::Vector2f cursor_pos) & ->void;
     auto status() const& -> const Game_State& { return state; };
     auto set_clock(std::shared_ptr<sf::Clock> shptr_c) & ->void { c_sp = shptr_c; }
+    auto set_board(std::shared_ptr<Board> shptr_b) & -> void { b_sp = shptr_b; }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -64,7 +65,7 @@ private:
     Game_State state{};
 
     std::shared_ptr<sf::Clock> c_sp;
-    std::shared_ptr<Board> c_s2;
+    std::shared_ptr<Board> b_sp;
     
     General_Buttons gb_interface;
     std::vector<Game_State_Button> state_buttons;

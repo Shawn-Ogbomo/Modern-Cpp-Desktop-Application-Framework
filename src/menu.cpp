@@ -32,18 +32,16 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
 
 }
 
-auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p, bool& pile_state) -> void
+auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p) -> void
 {
     if (move_count == Board::cards_pile * Board::total_piles)
     {
         Update_Game_State()(*this, Game_State::win);
-        update();
     }
 
     else if (const auto num_kings = rng::count_if(p, Lose_Condition()); num_kings == Board::cards_pile)
     {
         Update_Game_State()(*this, Game_State::lose);
-        update();
     }
 }
 
@@ -89,7 +87,6 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
-/// TODO:  Lock the board here.
 auto Game_State_Menu::update() & -> void
 {
     switch (state)
@@ -97,21 +94,25 @@ auto Game_State_Menu::update() & -> void
     case Game_State::playing:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
         Button_Interface<Media_Button>::operator()(state_buttons.back());
+        b_sp->set_pile_state();
         c_sp->start();
         break;
     case Game_State::paused:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Paused");
         Button_Interface<Media_Button>::operator()(state_buttons.front());
+        b_sp->set_pile_state();
         c_sp->stop();
         break;
     case Game_State::win:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Win");
         Button_Interface<Game_State_Button>::operator()(state_buttons.front());
+        b_sp->set_pile_state();
         c_sp->stop();
         break;
     case Game_State::lose:
         game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Lose");
         Button_Interface<Game_State_Button>::operator()(state_buttons.front());
+        b_sp->set_pile_state();
         c_sp->stop();
         break;
     }

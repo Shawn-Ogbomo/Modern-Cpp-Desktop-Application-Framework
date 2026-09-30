@@ -68,11 +68,13 @@ public:
 
     auto run() -> void
     {
-        auto sp_clock = std::make_shared<sf::Clock>(sf::Clock{});
-
+        auto sp_clock = std::make_shared<sf::Clock>();
+        
         auto de = Deck{};
-        auto b = Board{ de };
-        auto db = DashBoard{sp_clock};
+        
+        auto b = std::make_shared<Board>(de);
+        
+        auto db = DashBoard{sp_clock, b};
 
         // run the program as long as the window is open
         while (window.isOpen())
@@ -101,11 +103,11 @@ public:
 
                 else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
                 {
-                    if (b.source_pile != std::end(b.piles))
+                    if (b->source_pile != std::end(b->piles))
                     {
-                        b.update_position(std::get<1>(*b.source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x
+                        b->update_position(std::get<1>(*b->source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x
                             + .0f, mouseMoved->position.y + .0f });
-                        b();
+                        b->operator()();
                     }
                 }
 
@@ -119,33 +121,33 @@ public:
                         db.mp.release_listener(cursor_pos);
                         db.gsm.release_listener(cursor_pos);
 
-                        if (b.source_pile != std::end(b.piles))
+                        if (b->source_pile != std::end(b->piles))
                         {
                             if (!shader_enabled)
                             {
-                                b.update_position(std::get<1>(*b.source_pile).back().img(), std::get<3>(*b.source_pile), true);
+                                b->update_position(std::get<1>(*b->source_pile).back().img(), std::get<3>(*b->source_pile), true);
                                 continue;
                             }
 
-                            auto& src_cards = std::get<1>(*b.source_pile);
-                            auto& dst_cards = std::get<1>(*b.destination_pile);
+                            auto& src_cards = std::get<1>(*b->source_pile);
+                            auto& dst_cards = std::get<1>(*b->destination_pile);
 
                             dst_cards.emplace_front(src_cards.back());
                             src_cards.pop_back();
 
                             dst_cards.back().position() = Card_State::face_up;
 
-                            auto& src_pile_state = std::get<0>(*b.source_pile);
-                            auto& dst_pile_state = std::get<0>(*b.destination_pile);
+                            auto& src_pile_state = std::get<0>(*b->source_pile);
+                            auto& dst_pile_state = std::get<0>(*b->destination_pile);
 
                             src_pile_state = false;
                             dst_pile_state = true;
 
                             ++db.gsm;
 
-                            db.gsm(std::get<1>(b.piles.back()), dst_pile_state);
+                            db.gsm(std::get<1>(b->piles.back()));
 
-                            b.update_position(dst_cards.front().img(), std::get<3>(*b.destination_pile), true);
+                            b->update_position(dst_cards.front().img(), std::get<3>(*b->destination_pile), true);
                         }
                     }
                 }
@@ -159,7 +161,7 @@ public:
 
                         db.mp.click_listener(cursor_pos);
                         db.gsm.click_listener(cursor_pos);
-                        b(cursor_pos);
+                        b->operator()(cursor_pos);
                     }
                 }
             }
@@ -170,9 +172,9 @@ public:
             // draw to window
             window.draw(db);
 
-            enable_shader(b);
+            enable_shader(*b);
 
-            window.draw(b);
+            window.draw(*b);
 
             // end the current frame
             window.display();
