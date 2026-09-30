@@ -28,7 +28,7 @@ namespace Button_Names
                 || std::same_as<T, Button_Names::Status>
                 || std::same_as<T, Button_Names::General>);
 
-        ///TODO: This is the concept for the operator taking an object with the name gsb in the static button interface
+        ///TODO: This is the concept for the operator taking an object with the name b in the static button interface
         //template<typename T>
         //concept Is_Valid_Button = std::same_as<T, Media_Button>
         //    || std::same_as<T, Game_State_Button>;
