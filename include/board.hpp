@@ -7,6 +7,7 @@
 
 #include "../include/deck.hpp"
 
+/// TODO: protect the member variables here.
 struct Board : public sf::Drawable
 {
     static constexpr auto cards_pile = 4;
@@ -28,11 +29,6 @@ public:
     auto update_position(std::pair<sf::Sprite&, sf::Sprite&> img,
         sf::Vector2f dest_pos, bool update_It_state = false)
         & -> void;
-    
-    /// TODO: Move this to the game_State_menu. 
-    /// You can access all the member through the shared pointer.
-    /// Make it private
-    auto set_pile_state() & ->void;
 
     int pos_prev{};
     Pile_It source_pile;

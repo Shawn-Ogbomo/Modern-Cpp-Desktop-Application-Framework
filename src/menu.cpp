@@ -1,7 +1,11 @@
+#include <any>
+
 #include "../include/menu.hpp"
 
 namespace B_N = Button_Names;
 namespace rng = std::ranges;
+
+using namespace std::literals;
 
 Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
 {
@@ -17,19 +21,18 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
     game_id_t.setCharacterSize(26);
     game_id_t.setPosition({ 0, 790 });
     game_id_t.setFillColor({ 236,203,180 });
-    game_id_t.setString(std::string{ "Game Id" }.append(11, ' ') + ": " + std::to_string(game_id));
+    game_id_t.setString("Game Id"s.append(11, ' ') + ": " + std::to_string(game_id));
 
     move.setCharacterSize(26);
 
     move.setPosition({ 0, 842 });
     move.setFillColor({ 236,203,180 });
-    move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
+    move.setString("Move"s.append(15, ' ') + ": " + std::to_string(move_count));
 
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
-    game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
-
+    game_state.setString("State"s.append(16, ' ') + ": " + "Playing");
 }
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p) -> void
@@ -53,7 +56,7 @@ auto Game_State_Menu::operator()(Game_State gs) & -> void
 auto Game_State_Menu::operator++() & -> const Game_State_Menu&
 {
     ++move_count;
-    move.setString(std::string{ "Move" }.append(15, ' ') + ": " + std::to_string(move_count));
+    move.setString("Move"s.append(15, ' ') + ": " + std::to_string(move_count));
     return *this;
 }
 
@@ -78,8 +81,32 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
 
 auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_State g_state) -> void
 {
+    const auto& enable_components = [&]()->void {
+        Button_Interface<Media_Button>::operator()(gsm.state_buttons.back());
+        gsm.set_pile_state();
+        gsm.c_sp->start();
+        };
+
+    const auto& disable_components = [&]()->void {
+        Button_Interface<Media_Button>::operator()(gsm.state_buttons.front());
+        gsm.set_pile_state();
+        gsm.c_sp->stop();
+        };
+
     gsm.state = g_state;
-    gsm.update();
+
+    switch (gsm.state)
+    {
+    case Game_State::playing:
+        enable_components();
+        break;
+    case Game_State::paused:
+    case Game_State::win:
+    case Game_State::lose:
+        disable_components();
+    default:
+        break;
+    }
 }
 
 auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
@@ -87,33 +114,18 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
-auto Game_State_Menu::update() & -> void
+auto Game_State_Menu::set_pile_state() & -> void
 {
-    switch (state)
+    auto active_pile = std::ranges::find_if(b_sp->piles, [](auto& p) { return std::get<0>(p); });
+
+    if (active_pile != std::end(b_sp->piles))
     {
-    case Game_State::playing:
-        game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Playing");
-        Button_Interface<Media_Button>::operator()(state_buttons.back());
-        b_sp->set_pile_state();
-        c_sp->start();
-        break;
-    case Game_State::paused:
-        game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Paused");
-        Button_Interface<Media_Button>::operator()(state_buttons.front());
-        b_sp->set_pile_state();
-        c_sp->stop();
-        break;
-    case Game_State::win:
-        game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Win");
-        Button_Interface<Game_State_Button>::operator()(state_buttons.front());
-        b_sp->set_pile_state();
-        c_sp->stop();
-        break;
-    case Game_State::lose:
-        game_state.setString(std::string{ "State" }.append(16, ' ') + ": " + "Lose");
-        Button_Interface<Game_State_Button>::operator()(state_buttons.front());
-        b_sp->set_pile_state();
-        c_sp->stop();
-        break;
+        std::get<0>(*active_pile) = false;
+        b_sp->pos_prev = static_cast<int>(std::get<2>(*active_pile));
+        return;
     }
+
+    b_sp->pos_prev == static_cast<int>(Rank_Lib::Rank::king) ? b_sp->pos_prev-- : b_sp->pos_prev;
+
+    std::get<0>(b_sp->piles[b_sp->pos_prev]) = true;;
 }

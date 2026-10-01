@@ -126,19 +126,3 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
         }
     }
 }
-
-auto Board::set_pile_state() & -> void
-{
-    auto active_pile = std::ranges::find_if(piles, [](auto& p) { return std::get<0>(p); });
-    
-    if (active_pile != std::end(piles))
-    {
-        std::get<0>(*active_pile) = false;
-        pos_prev = static_cast<int>(std::get<2>(*active_pile));
-        return;
-    }
-
-    pos_prev == static_cast<int>(Rank_Lib::Rank::king) ? --pos_prev : pos_prev;
-
-    std::get<0>(piles[pos_prev]) = true;;
-}

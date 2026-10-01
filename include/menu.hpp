@@ -53,7 +53,7 @@ private:
         auto operator()(const Card& card)const ->bool;
     };
 
-    auto update() & -> void;
+    auto set_pile_state() & ->void;
 
     sf::Text move{ Util::load_font() };
     sf::Text game_id_t{ Util::load_font() };
@@ -66,7 +66,7 @@ private:
 
     std::shared_ptr<sf::Clock> c_sp;
     std::shared_ptr<Board> b_sp;
-    
+
     General_Buttons gb_interface;
     std::vector<Game_State_Button> state_buttons;
 };
