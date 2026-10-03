@@ -1,6 +1,6 @@
-# 🃏 Clock Solitaire (SFML + C++17/C++20)
+# 🃏 Clock Solitaire (SFML 3 + C++20)
 
-A highly optimized desktop implementation of the classic **Clock Solitaire** card game built using modern C++20 and the SFML graphics/audio library. 
+A performance-focused desktop simulation of the classic **Clock Solitaire** card game built using modern C++20 and the SFML graphics/audio library framework.
 
 ---
 
@@ -12,34 +12,34 @@ A highly optimized desktop implementation of the classic **Clock Solitaire** car
 
 ---
 
-## 🚀 Key Technical Highlights
+## 🚀 Architectural & Technical Highlights
 
-This application serves as a high-performance portfolio project showcasing precise data structure management and hardware-level loop optimizations:
-- **Modern C++20 Standard:** Leverages modern paradigms including structured bindings inside range-based loops, standard library customization points, and explicit constraint awareness.
-- **Stable Memory Architecture:** Utilizes a highly disciplined container strategy using **`std::vector` and `std::deque`**. By combining localized `reserve()` configurations with `std::deque`'s non-relocating memory nature, all iterators and object references remain perfectly stable across the entire runtime without the overhead of heap-allocated smart pointers.
-- **Cache-Friendly Loop Performance:** Prioritizes values over heap allocations, keeping card data contiguous in memory. Bypasses branch prediction penalties entirely by allowing primitive-type pointer and iterator comparisons to resolve directly in the hardware pipeline.
-- **Upcoming Integrations:** Core system logic is extensively decoupled and refactored to support seamless sequential expansion into localized **SQLite storage** for player analytics alongside async **multi-threading capabilities**.
+This application serves as a portfolio project showcasing modern C++ design patterns, deterministic resource tracking, and frame-loop state optimization:
 
+* **Static Dispatch & Compile-Time Constraints:** Leverages C++20 `<concepts>` to validate template type traits across real-time user interface events. Features a custom constraint (`Is_Valid\_Enum`) to bound state-button configurations, providing clean compiler diagnostics and eliminating runtime exception pathways.
+* **Hybrid Stable Memory Architecture:** Implements a calculated container arrangement pairing a contiguous asset registry with individual pile layout structures. By utilizing `std::vector::reserve` alongside `std::deque` allocations for cards, the engine achieves true O(1) front/back insertions without element-shifting penalties or iterator invalidation.
+* **Data Locality & Resource Decoupling:** Prioritizes object locality by storing card elements sequentially in block allocations to maximize CPU L1/L2 cache-line retention. Telemetry evaluations are decoupled from the tight frame rendering pass by sharing a clock resource via smart pointers, restricting state checks strictly to active menu boundaries to reduce background CPU cycles.
+* **Modern Idioms & Clean Interfaces:** Eliminates raw pointer indirection by leveraging standard library customization points, structured bindings, directory iterators (`std::filesystem`), and ranges algorithms (`std::ranges::find_if`) to process layout maps safely.
 
 ---
 
 ## 🛠️ Quick Start & Build Guide
 
 ### Prerequisites
-Ensure you have [Git](https://git-scm.com/downloads) and [CMake](https://cmake.org/download/) installed on your machine.
+Ensure your local environment includes a valid installation of Git and CMake.
 
 ### Command Line Installation
-Clone this repository and compile the build targets using the following standard commands in your root terminal workspace:
+Execute the following standard build configuration commands inside your native terminal environment to compile the application binaries:
 
 ```bash
 git clone https://github.com
-cd Clock-Solitaire
+cd clock_solitaire
 cmake -B build
 cmake --build build
 ```
 
 ### Linux Dependencies
-If you are building the application on a Debian-based Linux environment (like Ubuntu), install the native SFML support libraries beforehand:
+When building on a Debian-based Linux distribution (such as Ubuntu), install the native SFML supporting dependencies beforehand:
 ```bash
 sudo apt update
 sudo apt install \
@@ -50,23 +50,23 @@ sudo apt install \
 
 ---
 
-## 💻 IDE Workspaces
+## 💻 Workspace Integration
 
-This project features native cross-platform configuration file structures (`CMakeLists.txt`) compatible with all major modern text editors:
-* **Visual Studio:** Choose **File > Open > Folder** to load the root workspace directory. Visual Studio will natively generate the local CMake cache configurations automatically.
-* **VS Code:** Supported directly via the official **CMake Tools Extension**.
-* **CLion / Qt Creator:** Handled seamlessly through native project layout importing hooks.
+The cross-platform `CMakeLists.txt` build automation schema interfaces natively with all standard contemporary development environments:
+* **Visual Studio:** Load via **File > Open > Folder** to trigger auto-generation of the internal CMake cache configuration.
+* **VS Code:** Supported directly through integration with the official **CMake Tools Extension**.
+* **CLion / Qt Creator:** Handled smoothly through native project directory workspace importing hooks.
 
 ---
 
-## ⚙️ Build Options
+## ⚙️ Compilation Configurations
 
-### Changing Compiler Optimizations
-CMake abstracts compiler flags via the `CMAKE_BUILD_TYPE` parameter. By default, `Release` mode is recommended to activate maximum code optimizations:
+### Optimization Toggles
+The CMake abstraction flags are mapped via the standard `CMAKE_BUILD_TYPE` flag parameter. For general runtime execution, `Release` mode is recommended to activate full compiler optimizations:
 ```bash
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 ```
-For deep profiling and step-through debugging targets, pass the `Debug` variable hook instead:
+To expose step-through debugger hooks and enable granular binary profiling passes, configure the build directory using the `Debug` parameter variable instead:
 ```bash
 cmake -B build -DCMAKE_BUILD_TYPE=Debug
 ```
@@ -74,4 +74,4 @@ cmake -B build -DCMAKE_BUILD_TYPE=Debug
 ---
 
 ## 📜 License
-The underlying source code of this application is dual-licensed under Public Domain and the MIT License. Feel free to use, modify, or reference it as you see fit.
+The underlying source code of this application is dual-licensed under Public Domain and the MIT License.
