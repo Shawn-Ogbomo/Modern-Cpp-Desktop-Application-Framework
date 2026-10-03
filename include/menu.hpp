@@ -17,6 +17,8 @@
 
 class Game_State_Button;
 
+using namespace std::literals::string_literals;
+
 struct Menu : public sf::Drawable
 {
 public:
@@ -52,6 +54,20 @@ private:
     {
         auto operator()(const Card& card)const ->bool;
     };
+
+    struct State_Label
+    {
+        std::string playing = "State"s.append(16, ' ') + ": " + "Playing";
+        std::string paused = "State"s.append(16, ' ') + ": " + "Paused";
+        std::string win = "State"s.append(16, ' ') + ": " + "Win";
+        std::string lose = "State"s.append(16, ' ') + ": " + "Lose";
+    };
+
+    auto get_labels() & -> const State_Label&
+    {
+        static const auto labels = State_Label{};
+        return labels;
+    }
 
     auto set_pile_state() & ->void;
 

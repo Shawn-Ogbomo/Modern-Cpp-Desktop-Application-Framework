@@ -69,12 +69,12 @@ public:
     auto run() -> void
     {
         auto sp_clock = std::make_shared<sf::Clock>();
-        
+
         auto de = Deck{};
-        
+
         auto b = std::make_shared<Board>(de);
-        
-        auto db = DashBoard{sp_clock, b};
+
+        auto db = DashBoard{ sp_clock, b };
 
         // run the program as long as the window is open
         while (window.isOpen())

@@ -32,7 +32,7 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
-    game_state.setString("State"s.append(16, ' ') + ": " + "Playing");
+    game_state.setString(get_labels().playing);
 }
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p) -> void
@@ -82,7 +82,9 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
 auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_State g_state) -> void
 {
     const auto& enable_components = [&]()->void {
+        gsm.game_state.setString(gsm.get_labels().playing);
         Button_Interface<Media_Button>::operator()(gsm.state_buttons.back());
+        ///TODO: Revise set_pile_state
         gsm.set_pile_state();
         gsm.c_sp->start();
         };
@@ -104,7 +106,6 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_S
     case Game_State::win:
     case Game_State::lose:
         disable_components();
-    default:
         break;
     }
 }

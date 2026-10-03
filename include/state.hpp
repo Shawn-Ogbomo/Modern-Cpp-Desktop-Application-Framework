@@ -21,7 +21,6 @@ namespace Button_Names
     };
 
     namespace Details {
-
         template<typename T>
         concept Is_Valid_Enum = std::is_enum_v<T>
             && (std::same_as<T, Button_Names::Media>
@@ -37,17 +36,8 @@ namespace Button_Names
     inline auto operator++(Details::Is_Valid_Enum auto& m) -> decltype(m)
     {
         const auto& last_button = [m]() -> int {
-            if (std::is_same_v<std::remove_reference<decltype(m)>, Media >)
-            {
-                return static_cast<int>(Media::stop);
-            }
-
-            else if (std::is_same_v<std::remove_reference<decltype(m)>, Status >)
-            {
-                return static_cast<int>(Status::resume);
-            }
-
-            return static_cast<int>(General::restart);
+            return (std::is_same_v<std::remove_reference<decltype(m)>, Media >) ?
+                static_cast<int>(Media::stop) : static_cast<int>(General::restart);
             };
 
         return m = (m == static_cast<std::remove_reference<decltype(m)>::type>(last_button())
