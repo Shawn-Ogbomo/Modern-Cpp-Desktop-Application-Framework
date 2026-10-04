@@ -73,7 +73,8 @@ private:
         return labels;
     }
 
-    auto set_pile_state() & ->void;
+    auto enable_piles() & ->void;
+    auto disable_piles() & ->void;
 
     sf::Text move{ Util::load_font() };
     sf::Text game_id_t{ Util::load_font() };

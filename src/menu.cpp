@@ -1,5 +1,3 @@
-#include <any>
-
 #include "../include/menu.hpp"
 
 namespace B_N = Button_Names;
@@ -84,14 +82,14 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_S
     const auto& enable_components = [&]
         {
             Button_Interface<Media_Button>::operator()(gsm.state_buttons.back());
-            gsm.set_pile_state();
+            gsm.enable_piles();
             gsm.c_sp->start();
         };
 
     const auto& disable_components = [&]
         {
             Button_Interface<Media_Button>::operator()(gsm.state_buttons.front());
-            gsm.set_pile_state();
+            gsm.disable_piles();
             gsm.c_sp->stop();
         };
 
@@ -117,20 +115,19 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
-auto Game_State_Menu::set_pile_state() & -> void
+auto Game_State_Menu::enable_piles() & -> void
 {
-    //auto active_pile = std::ranges::find_if(b_sp->piles, [](auto& p) { return std::get<0>(p); });
+    b_sp->pos_prev == static_cast<int>(Rank_Lib::Rank::king) ? b_sp->pos_prev-- : b_sp->pos_prev;
 
-    //if (active_pile != std::end(b_sp->piles) && state != Game_State::playing)
-    //{
-    //    std::get<0>(*active_pile) = false;
-    //    b_sp->pos_prev = static_cast<int>(std::get<2>(*active_pile));
-    //    return;
-    //}
+    std::get<0>(b_sp->piles[b_sp->pos_prev]) = true;;
+}
 
-    //else if (state == Game_State::playing)
-    //{
-    //    b_sp->pos_prev == static_cast<int>(Rank_Lib::Rank::king) ? b_sp->pos_prev-- : b_sp->pos_prev;
-    //    std::get<0>(b_sp->piles[b_sp->pos_prev]) = true;;
-    //}
+auto Game_State_Menu::disable_piles() & -> void
+{
+    if (auto active_pile = std::ranges::find_if(b_sp->piles, [](auto& p) { return std::get<0>(p); });
+        active_pile != std::end(b_sp->piles))
+    {
+        std::get<0>(*active_pile) = false;
+        b_sp->pos_prev = static_cast<int>(std::get<2>(*active_pile));
+    }
 }
