@@ -7,7 +7,6 @@
 
 #include "../include/deck.hpp"
 
-/// TODO: protect the member variables here.
 struct Board : public sf::Drawable
 {
     static constexpr auto cards_pile = 4;

@@ -32,7 +32,7 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
-    game_state.setString(get_labels().playing);
+    game_state.setString(get_labels().states.front());
 }
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p) -> void
@@ -81,21 +81,23 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
 
 auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_State g_state) -> void
 {
-    const auto& enable_components = [&]()->void {
-        gsm.game_state.setString(gsm.get_labels().playing);
-        Button_Interface<Media_Button>::operator()(gsm.state_buttons.back());
-        ///TODO: Revise set_pile_state
-        gsm.set_pile_state();
-        gsm.c_sp->start();
+    const auto& enable_components = [&]
+        {
+            Button_Interface<Media_Button>::operator()(gsm.state_buttons.back());
+            gsm.set_pile_state();
+            gsm.c_sp->start();
         };
 
-    const auto& disable_components = [&]()->void {
-        Button_Interface<Media_Button>::operator()(gsm.state_buttons.front());
-        gsm.set_pile_state();
-        gsm.c_sp->stop();
+    const auto& disable_components = [&]
+        {
+            Button_Interface<Media_Button>::operator()(gsm.state_buttons.front());
+            gsm.set_pile_state();
+            gsm.c_sp->stop();
         };
 
+    const auto& tag = gsm.get_labels().states[static_cast<int>(gsm.state)];
     gsm.state = g_state;
+    gsm.game_state.setString(tag);
 
     switch (gsm.state)
     {

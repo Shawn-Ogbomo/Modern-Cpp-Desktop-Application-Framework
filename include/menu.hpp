@@ -4,7 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
+#include <functional>
 #include <ranges>
+#include <string>
 #include <vector>
 
 #include"../include/board.hpp"
@@ -57,10 +59,12 @@ private:
 
     struct State_Label
     {
-        std::string playing = "State"s.append(16, ' ') + ": " + "Playing";
-        std::string paused = "State"s.append(16, ' ') + ": " + "Paused";
-        std::string win = "State"s.append(16, ' ') + ": " + "Win";
-        std::string lose = "State"s.append(16, ' ') + ": " + "Lose";
+        std::array <std::string, 4> states{
+            "State"s.append(16, ' ') + ": " + "Playing",
+            "State"s.append(16, ' ') + ": " + "Paused",
+            "State"s.append(16, ' ') + ": " + "Win",
+            "State"s.append(16, ' ') + ": " + "Lose"
+        };
     };
 
     auto get_labels() & -> const State_Label&
