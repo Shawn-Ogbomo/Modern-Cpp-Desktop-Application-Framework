@@ -95,9 +95,9 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_S
             gsm.c_sp->stop();
         };
 
-    const auto& tag = gsm.get_labels().states[static_cast<int>(gsm.state)];
     gsm.state = g_state;
-    gsm.game_state.setString(tag);
+
+    gsm.game_state.setString(gsm.get_labels().states[static_cast<int>(gsm.state)]);
 
     switch (gsm.state)
     {
@@ -119,16 +119,18 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
 
 auto Game_State_Menu::set_pile_state() & -> void
 {
-    auto active_pile = std::ranges::find_if(b_sp->piles, [](auto& p) { return std::get<0>(p); });
+    //auto active_pile = std::ranges::find_if(b_sp->piles, [](auto& p) { return std::get<0>(p); });
 
-    if (active_pile != std::end(b_sp->piles))
-    {
-        std::get<0>(*active_pile) = false;
-        b_sp->pos_prev = static_cast<int>(std::get<2>(*active_pile));
-        return;
-    }
+    //if (active_pile != std::end(b_sp->piles) && state != Game_State::playing)
+    //{
+    //    std::get<0>(*active_pile) = false;
+    //    b_sp->pos_prev = static_cast<int>(std::get<2>(*active_pile));
+    //    return;
+    //}
 
-    b_sp->pos_prev == static_cast<int>(Rank_Lib::Rank::king) ? b_sp->pos_prev-- : b_sp->pos_prev;
-
-    std::get<0>(b_sp->piles[b_sp->pos_prev]) = true;;
+    //else if (state == Game_State::playing)
+    //{
+    //    b_sp->pos_prev == static_cast<int>(Rank_Lib::Rank::king) ? b_sp->pos_prev-- : b_sp->pos_prev;
+    //    std::get<0>(b_sp->piles[b_sp->pos_prev]) = true;;
+    //}
 }

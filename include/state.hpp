@@ -36,7 +36,7 @@ namespace Button_Names
 
     inline auto operator++(Details::Is_Valid_Enum auto& m) -> decltype(m)
     {
-        const auto& last_button = [m]() -> int {
+        const auto& last_button = [m] -> int {
             return (std::is_same_v<std::remove_reference<decltype(m)>, Media >) ?
                 static_cast<int>(Media::stop) : static_cast<int>(General::restart);
             };
