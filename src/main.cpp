@@ -140,6 +140,8 @@ public:
                             auto& src_pile_state = std::get<0>(*b->source_pile);
                             auto& dst_pile_state = std::get<0>(*b->destination_pile);
 
+                            b->pos_prev = std::get<2>(*b->destination_pile);
+
                             src_pile_state = false;
                             dst_pile_state = true;
 

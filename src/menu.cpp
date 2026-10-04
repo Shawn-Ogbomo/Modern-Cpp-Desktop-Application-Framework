@@ -82,6 +82,7 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_S
     const auto& enable_components = [&]
         {
             Button_Interface<Media_Button>::operator()(gsm.state_buttons.back());
+            Button_Interface<Game_State_Button>::operator()(gsm.state_buttons.back());
             gsm.enable_piles();
             gsm.c_sp->start();
         };
@@ -103,9 +104,12 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_S
         enable_components();
         break;
     case Game_State::paused:
+        disable_components();
+        break;
     case Game_State::win:
     case Game_State::lose:
         disable_components();
+        Button_Interface<Game_State_Button>::operator()(gsm.state_buttons.front());
         break;
     }
 }
@@ -117,9 +121,9 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
 
 auto Game_State_Menu::enable_piles() & -> void
 {
-    b_sp->pos_prev == static_cast<int>(Rank_Lib::Rank::king) ? b_sp->pos_prev-- : b_sp->pos_prev;
+    b_sp->pos_prev = b_sp->pos_prev == Rank_Lib::Rank::king ? Rank_Lib::Rank::queen : b_sp->pos_prev;
 
-    std::get<0>(b_sp->piles[b_sp->pos_prev]) = true;;
+    std::get<0>(b_sp->piles[static_cast<int>(b_sp->pos_prev)]) = true;;
 }
 
 auto Game_State_Menu::disable_piles() & -> void
@@ -128,6 +132,6 @@ auto Game_State_Menu::disable_piles() & -> void
         active_pile != std::end(b_sp->piles))
     {
         std::get<0>(*active_pile) = false;
-        b_sp->pos_prev = static_cast<int>(std::get<2>(*active_pile));
+        b_sp->pos_prev = std::get<2>(*active_pile);
     }
 }

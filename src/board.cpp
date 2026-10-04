@@ -49,7 +49,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 }
 
 Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::end(piles) }
-, pos_prev{ total_piles - 1 }
+, pos_prev{ Rank_Lib::ranks[total_piles - 1] }
 {
     for (auto index = 0; auto& pile : piles)
     {
