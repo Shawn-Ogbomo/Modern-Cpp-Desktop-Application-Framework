@@ -30,6 +30,7 @@ public:
         & -> void;
 
     Rank_Lib::Rank pos_prev{};
+
     Pile_It source_pile;
     Pile_It destination_pile;
     Piles piles{};

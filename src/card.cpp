@@ -14,5 +14,6 @@ Card::Card(std::string_view card_name, const sf::Texture& f, const sf::Texture& 
     auto result = 0;
 
     std::from_chars(card_name.data() + (card_name.find_last_of("-") + 1), card_name.data() + card_name.size(), result);
-    rank = static_cast<Rank_Lib::Rank>(result);
+  
+   rank = static_cast<Rank_Lib::Rank>(result);
 }

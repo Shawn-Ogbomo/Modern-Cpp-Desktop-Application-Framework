@@ -7,7 +7,8 @@ namespace Rank_Lib
 {
     enum class Rank
     {
-        ace = 1,
+        queen,
+        ace,
         two,
         three,
         four,
@@ -18,7 +19,6 @@ namespace Rank_Lib
         nine,
         ten,
         jack,
-        queen,
         king
     };
 
