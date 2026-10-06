@@ -62,9 +62,9 @@ public:
         }
     }
 
-    static auto update_button(Button_Names::Details::Is_Valid_Enum auto& internal_name
+    static auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
         , std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms
-        , Button_Names::Details::Is_Valid_Enum auto val, sf::Vector2f pos) -> void
+        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos) -> void
     {
         internal_name = val;
 

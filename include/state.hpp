@@ -20,18 +20,16 @@ namespace Button_Names
         yes, no, ok, quit, hint, restart = 5
     };
 
-    namespace Details {
         template<typename T>
         concept Is_Valid_Enum = std::is_enum_v<T>
             && (std::same_as<T, Button_Names::Media>
                 || std::same_as<T, Button_Names::Status>
                 || std::same_as<T, Button_Names::General>);
-    };
 
-    inline auto operator++(Details::Is_Valid_Enum auto& m) -> decltype(m)
+    inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {
         const auto& last_button = [m] -> int {
-            return (std::is_same_v<std::remove_reference<decltype(m)>, Media >) ?
+            return (std::same_as<std::remove_reference<decltype(m)>::type, Media >) ?
                 static_cast<int>(Media::stop) : static_cast<int>(General::restart);
             };
 
