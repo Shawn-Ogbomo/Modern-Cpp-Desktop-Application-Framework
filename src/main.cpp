@@ -93,8 +93,7 @@ public:
 
                 if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
                 {
-                    ///TODO: Give your Quit button the same value as sf::Keyboard::Scancode:Escape to exit on click.
-                    ///TODO: Or do it in the click listener.
+                    /// TODO: esc key must invoke the confirmation menu. 
                     if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
                     {
                         window.close();
@@ -120,6 +119,7 @@ public:
 
                         db.mp.release_listener(cursor_pos);
                         db.gsm.release_listener(cursor_pos);
+                        db.em.release_listener(cursor_pos);
 
                         if (b->source_pile != std::end(b->piles))
                         {
@@ -163,6 +163,7 @@ public:
 
                         db.mp.click_listener(cursor_pos);
                         db.gsm.click_listener(cursor_pos);
+                        db.em.click_listener(cursor_pos);
                         b->operator()(cursor_pos);
                     }
                 }

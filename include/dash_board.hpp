@@ -23,11 +23,13 @@ public:
         target.draw(gsm);
         target.draw(ts);
         target.draw(mp);
+        target.draw(em);
     }
 
     Time_Status ts;
     Music_Player mp;
     Game_State_Menu gsm;
+    Exit_Menu em{gsm.texture_interface()};
     sf::RectangleShape dash{ sf::Vector2f{ 1000.f,130.f } };
 };
 

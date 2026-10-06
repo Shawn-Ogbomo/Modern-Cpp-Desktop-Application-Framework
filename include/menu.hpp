@@ -17,17 +17,32 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
-class Game_State_Button;
-
 using namespace std::literals::string_literals;
+
+class Game_State_Button;
 
 struct Menu : public sf::Drawable
 {
+    static constexpr auto limit = 2;
 public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual void click_listener(sf::Vector2f cursor_pos) & = 0;
     virtual void release_listener(sf::Vector2f cursor_pos) & = 0;
     virtual ~Menu() = default;
+};
+
+class Exit_Menu_Button;
+
+class Exit_Menu : public Menu
+{
+public:
+    Exit_Menu(const General_Buttons& gb);
+
+    auto click_listener(sf::Vector2f cursor_pos) & ->void;
+    auto release_listener(sf::Vector2f cursor_pos) & ->void;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+private:
+    std::vector<Exit_Menu_Button> buttons;
 };
 
 class Game_State_Menu : public Menu
@@ -43,7 +58,7 @@ public:
     auto status() const& -> const Game_State& { return state; };
     auto set_clock(std::shared_ptr<sf::Clock> shptr_c) & ->void { c_sp = shptr_c; }
     auto set_board(std::shared_ptr<Board> shptr_b) & -> void { b_sp = shptr_b; }
-
+    auto texture_interface() -> const General_Buttons& { return gb_interface; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

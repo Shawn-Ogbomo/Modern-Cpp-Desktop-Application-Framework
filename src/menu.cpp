@@ -9,9 +9,7 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
 {
     gb_interface.load_textures();
 
-    constexpr auto limit = 2;
-
-    state_buttons.reserve(limit);
+    state_buttons.reserve(Menu::limit);
 
     state_buttons.push_back({ gb_interface.textures,B_N::Status::pause, {417,800}, "Pause" });
     state_buttons.push_back({ gb_interface.textures,B_N::Status::resume, {502,800}, "Resume" });
@@ -128,3 +126,27 @@ auto Game_State_Menu::disable_piles() & -> void
 {
     std::get<0>(b_sp->piles[static_cast<int>(b_sp->pos_prev)]) = false;;
 }
+
+Exit_Menu::Exit_Menu(const General_Buttons& gb)
+{
+    buttons.reserve(Menu::limit);
+
+    buttons.push_back({ gb.textures,B_N::General::restart, {5, 0}, "Reset" });
+    buttons.push_back({ gb.textures,B_N::General::quit, {5, 40}, "Quit" });
+}
+
+auto Exit_Menu::click_listener(sf::Vector2f cursor_pos) & ->void 
+{
+    Button_Interface<Exit_Menu_Button>::click_listener(std::span{ buttons },cursor_pos);
+}
+
+auto Exit_Menu::release_listener(sf::Vector2f cursor_pos) & ->void 
+{
+    Button_Interface<Exit_Menu_Button>::release_listener(*this, cursor_pos);
+}
+
+void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    target.draw(buttons.front());
+    target.draw(buttons.back());
+ }

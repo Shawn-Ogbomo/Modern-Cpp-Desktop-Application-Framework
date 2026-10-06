@@ -40,3 +40,18 @@ auto Game_State_Button::operator()(Game_State_Menu& gsm)const& ->void
         gsm.operator()(Game_State::playing);
     }
 }
+
+auto Exit_Menu_Button::operator()(Exit_Menu& em) const&->void
+{
+    if (name == B_N::General::quit)
+    {
+        ///confirmation screen 
+        ///close the window
+    }
+
+    else if (name == B_N::General::restart)
+    {
+        ///confirmation screen 
+        ///restart application
+    }
+}

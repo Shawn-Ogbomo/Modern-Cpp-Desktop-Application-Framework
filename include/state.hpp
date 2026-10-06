@@ -17,7 +17,7 @@ namespace Button_Names
 
     enum class General
     {
-        yes, no, ok, quit, hint, restart = 5
+        no, yes, ok, quit, hint, restart = 5
     };
 
         template<typename T>
@@ -29,7 +29,7 @@ namespace Button_Names
     inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {
         const auto& last_button = [m] -> int {
-            return (std::same_as<std::remove_reference<decltype(m)>::type, Media >) ?
+            return (std::same_as<std::remove_reference<decltype(m)>::type, Media>) ?
                 static_cast<int>(Media::stop) : static_cast<int>(General::restart);
             };
 

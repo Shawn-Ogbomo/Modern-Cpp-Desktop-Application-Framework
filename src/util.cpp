@@ -37,4 +37,5 @@ auto Util::allocate(std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vecto
 {
     auto& [state, card, rank, pos] = stack;
     std::ranges::fill_n(std::back_inserter(card), Board::cards_pile, Card{});
+
 }

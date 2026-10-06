@@ -150,4 +150,43 @@ private:
     ButtonMode setting{};
 };
 
+class Exit_Menu;
+
+class Exit_Menu_Button : public Button
+{
+public:
+    Exit_Menu_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
+    {
+        Button_Interface<Exit_Menu_Button>::update_button(name, forms, val, pos);
+        label.setString(target_label);
+        label.setFillColor({ 236,203,180 });
+
+        label.setCharacterSize(22);
+        label.setPosition({ pos.x, pos.y });
+    }
+
+    operator bool() const& override { return static_cast<int>(setting); }
+
+    auto operator()(Exit_Menu& em)const& ->void;
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        Button_Interface<Game_State_Button>::display_manager(*this, target);
+        target.draw(label);
+    }
+
+    const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
+
+    ButtonMode& mode() & override { return setting; }
+
+private:
+    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
+    ,default_texture(),default_texture() };
+
+    sf::Text label{ Util::load_font() };
+    Button_Names::General name{};
+    ButtonMode setting{};
+};
+
 #endif //BUTTON_HPP
