@@ -21,13 +21,16 @@ public:
     virtual ButtonMode& mode() & = 0;
 };
 
+template<typename T>
+concept Is_Valid_Button = std::derived_from<T, Button>;
+
 template <typename T>
 class Button_Interface
 {
 public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
-    static auto operator()(auto b) -> void { on = (!(static_cast<int>(b.type()))) ? false : true; }
+    static auto operator()(Is_Valid_Button auto b) -> void { on = (!(static_cast<int>(b.type()))) ? false : true; }
 
     static auto click_listener(auto buttons, sf::Vector2f cursor_pos) -> void
     {

@@ -48,5 +48,4 @@ public:
         ,default_texture(),default_texture() };
 };
 
-
 #endif // TEXTURE_MANAGER_HPP

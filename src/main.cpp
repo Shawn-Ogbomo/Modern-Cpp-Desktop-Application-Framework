@@ -93,7 +93,7 @@ public:
 
                 if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
                 {
-                    ///TODO: Give your Quit button the same value as sf::Keyboard::Scancode:Escape so that you can exit on click.
+                    ///TODO: Give your Quit button the same value as sf::Keyboard::Scancode:Escape to exit on click.
                     ///TODO: Or do it in the click listener.
                     if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
                     {
