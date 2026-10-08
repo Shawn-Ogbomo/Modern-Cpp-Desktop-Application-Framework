@@ -11,8 +11,8 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
 
     state_buttons.reserve(Menu::limit);
 
-    state_buttons.push_back({ gb_interface.textures,B_N::Status::pause, {417,800}, "Pause" });
-    state_buttons.push_back({ gb_interface.textures,B_N::Status::resume, {502,800}, "Resume" });
+    state_buttons.push_back({ gb_interface.textures,B_N::Game_State::paused, {417,800}, "Pause" });
+    state_buttons.push_back({ gb_interface.textures,B_N::Game_State::playing, {502,800}, "Resume" });
 
     game_id_t.setCharacterSize(26);
     game_id_t.setPosition({ 0, 790 });
@@ -25,26 +25,28 @@ Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
     move.setFillColor({ 236,203,180 });
     move.setString("Move"s.append(15, ' ') + ": " + std::to_string(move_count));
 
+    state = B_N::Game_State::playing;
+
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
-    game_state.setString(get_labels().states.front());
+    game_state.setString(get_labels().states[static_cast<int>(state)]);
 }
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p) -> void
 {
     if (move_count == Board::cards_pile * Board::total_piles)
     {
-        Update_Game_State()(*this, Game_State::win);
+        Update_Game_State()(*this, B_N::Game_State::win);
     }
 
     else if (const auto num_kings = rng::count_if(p, Lose_Condition()); num_kings == Board::cards_pile)
     {
-        Update_Game_State()(*this, Game_State::lose);
+        Update_Game_State()(*this, B_N::Game_State::lose);
     }
 }
 
-auto Game_State_Menu::operator()(Game_State gs) & -> void
+auto Game_State_Menu::operator()(B_N::Game_State gs) & -> void
 {
     Update_Game_State()(*this, gs);
 }
@@ -75,7 +77,7 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
     target.draw(state_buttons.back());
 }
 
-auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_State g_state) -> void
+auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, B_N::Game_State g_state) -> void
 {
     const auto& enable_components = [&]
         {
@@ -94,20 +96,25 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, Game_S
 
     gsm.state = g_state;
 
-    gsm.game_state.setString(gsm.get_labels().states[static_cast<int>(gsm.state)]);
+    gsm.game_state.setString(gsm.get_labels()
+        .states[static_cast<int>(gsm.state)]);
 
     switch (gsm.state)
     {
-    case Game_State::playing:
+    case B_N::Game_State::playing:
+    case B_N::Game_State::restart:
         enable_components();
         break;
-    case Game_State::paused:
+    case B_N::Game_State::paused:
         disable_components();
         break;
-    case Game_State::win:
-    case Game_State::lose:
+    case B_N::Game_State::win:
+    case B_N::Game_State::lose:
         disable_components();
         Button_Interface<Game_State_Button>()(gsm.state_buttons.front());
+        break;
+    case B_N::Game_State::quit:
+       (*gsm.ow)->close();
         break;
     }
 }
@@ -131,8 +138,8 @@ Exit_Menu::Exit_Menu(const General_Buttons& gb)
 {
     buttons.reserve(Menu::limit);
 
-    buttons.push_back({ gb.textures,B_N::General::restart, {5, 0}, "Reset" });
-    buttons.push_back({ gb.textures,B_N::General::quit, {5, 40}, "Quit" });
+    buttons.push_back({ gb.textures,B_N::Game_State::restart, {5, 0}, "Reset" });
+    buttons.push_back({ gb.textures,B_N::Game_State::quit, {5, 40}, "Quit" });
 }
 
 auto Exit_Menu::click_listener(sf::Vector2f cursor_pos) & ->void 

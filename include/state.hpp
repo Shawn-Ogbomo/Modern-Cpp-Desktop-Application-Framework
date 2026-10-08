@@ -10,27 +10,27 @@ namespace Button_Names
         prev, pause, play, next, stop = 4
     };
 
-    enum class Status
-    {
-        pause, resume = 1
-    };
-
     enum class General
     {
-        no, yes, ok, quit, hint, restart = 5
+        no, yes, ok, hint
+    };
+
+    enum class Game_State
+    {
+        paused, playing, win, lose, restart, quit
     };
 
         template<typename T>
         concept Is_Valid_Enum = std::is_enum_v<T>
             && (std::same_as<T, Button_Names::Media>
-                || std::same_as<T, Button_Names::Status>
+                || std::same_as<T, Game_State>
                 || std::same_as<T, Button_Names::General>);
 
     inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {
         const auto& last_button = [m] -> int {
             return (std::same_as<std::remove_reference<decltype(m)>::type, Media>) ?
-                static_cast<int>(Media::stop) : static_cast<int>(General::restart);
+                static_cast<int>(Media::stop) : static_cast<int>(General::hint);
             };
 
         return m = (m == static_cast<std::remove_reference<decltype(m)>::type>(last_button())
@@ -52,11 +52,6 @@ enum class ButtonMode
 enum class Card_State
 {
     face_down, face_up
-};
-
-enum class Game_State
-{
-    playing, paused, win, lose
 };
 
 #endif // STATE_HPP

@@ -139,14 +139,14 @@ public:
     }
 
     const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
-    const Button_Names::Status& type() const& { return name; }
+    const  Button_Names::Game_State& type() const& { return name; }
     ButtonMode& mode() & override { return setting; }
 private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
         ,default_texture(),default_texture() };
 
     sf::Text label{ Util::load_font() };
-    Button_Names::Status name{};
+    Button_Names::Game_State name{};
     ButtonMode setting{};
 };
 
@@ -185,7 +185,7 @@ private:
     ,default_texture(),default_texture() };
 
     sf::Text label{ Util::load_font() };
-    Button_Names::General name{};
+    Button_Names::Game_State name{};
     ButtonMode setting{};
 };
 

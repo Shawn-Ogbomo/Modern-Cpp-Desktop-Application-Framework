@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include <functional>
 #include <ranges>
 #include <string>
 #include <vector>
@@ -19,8 +18,6 @@
 
 using namespace std::literals::string_literals;
 
-class Game_State_Button;
-
 struct Menu : public sf::Drawable
 {
     static constexpr auto limit = 2;
@@ -31,40 +28,30 @@ public:
     virtual ~Menu() = default;
 };
 
-class Exit_Menu_Button;
-
-class Exit_Menu : public Menu
-{
-public:
-    Exit_Menu(const General_Buttons& gb);
-
-    auto click_listener(sf::Vector2f cursor_pos) & ->void;
-    auto release_listener(sf::Vector2f cursor_pos) & ->void;
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-private:
-    std::vector<Exit_Menu_Button> buttons;
-};
+class Game_State_Button;
 
 class Game_State_Menu : public Menu
 {
 public:
     Game_State_Menu();
     auto operator()(const std::ranges::ref_view<std::deque<Card>> p) -> void;
-    auto operator()(Game_State gs) & -> void;
+    auto operator()(Button_Names::Game_State gs) & -> void;
     auto operator++() & -> const Game_State_Menu&;
 
     auto click_listener(sf::Vector2f cursor_pos) & ->void;
     auto release_listener(sf::Vector2f cursor_pos) & ->void;
-    auto status() const& -> const Game_State& { return state; };
+    auto status() const& -> const  Button_Names::Game_State& { return state; };
+
     auto set_clock(std::shared_ptr<sf::Clock> shptr_c) & ->void { c_sp = shptr_c; }
     auto set_board(std::shared_ptr<Board> shptr_b) & -> void { b_sp = shptr_b; }
+    auto set_window(sf::Window& w) & -> void { ow = &w; }
+
     auto texture_interface() -> const General_Buttons& { return gb_interface; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
 private:
     struct  Update_Game_State
     {
-        auto operator()(Game_State_Menu& gsm, Game_State g_state) -> void;
+        auto operator()(Game_State_Menu& gsm, Button_Names::Game_State g_state) -> void;
     };
 
     struct Lose_Condition
@@ -74,11 +61,13 @@ private:
 
     struct State_Label
     {
-        std::array <std::string, 4> states{
-            "State"s.append(16, ' ') + ": " + "Playing",
+        std::array <std::string, 6> states{
             "State"s.append(16, ' ') + ": " + "Paused",
+            "State"s.append(16, ' ') + ": " + "Playing",
             "State"s.append(16, ' ') + ": " + "Win",
-            "State"s.append(16, ' ') + ": " + "Lose"
+            "State"s.append(16, ' ') + ": " + "Lose",
+            "State"s.append(16, ' ') + ": " + "Restart",
+            "State"s.append(16, ' ') + ": " + "Quit"
         };
     };
 
@@ -98,13 +87,32 @@ private:
     std::size_t game_id{};
     std::size_t move_count{};
 
-    Game_State state{};
+    Button_Names::Game_State state{};
 
     std::shared_ptr<sf::Clock> c_sp;
     std::shared_ptr<Board> b_sp;
 
+    std::optional<sf::Window*> ow;
+
     General_Buttons gb_interface;
     std::vector<Game_State_Button> state_buttons;
+};
+
+class Exit_Menu_Button;
+
+class Exit_Menu : public Menu
+{
+public:
+    Exit_Menu(const General_Buttons& gbm);
+
+    auto click_listener(sf::Vector2f cursor_pos) & ->void;
+    auto release_listener(sf::Vector2f cursor_pos) & ->void;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    auto set_gs_menu(Game_State_Menu& gsm) & ->void { o_gsm = &gsm; }
+    auto gsm() const& -> const std::optional<Game_State_Menu*> { return o_gsm; }
+private:
+    std::vector<Exit_Menu_Button> buttons;
+    std::optional<Game_State_Menu*> o_gsm;
 };
 
 #endif //MENU_HPP

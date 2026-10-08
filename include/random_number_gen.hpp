@@ -3,8 +3,6 @@
 
 #include <random>
 
-/// TODO: Revise this to generate real random. 
-///Consult pg 124 of the modern C++ cookbook 
 struct Random_Number_Gen
 {
 public:

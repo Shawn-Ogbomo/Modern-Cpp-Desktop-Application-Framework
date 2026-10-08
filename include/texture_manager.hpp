@@ -33,9 +33,6 @@ public:
     std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
 };
 
-/// TODO: Provide a way for each type using this to share the same instance
-/// TODO: This will eliminate declaring an instance of general_Buttons_Interface in every type that is using the textures 
-/// TODO: Use a reference or a std::shared_ptr
 struct General_Buttons : public Texture_Manager_Interface
 {
 public:

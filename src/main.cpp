@@ -74,7 +74,7 @@ public:
 
         auto b = std::make_shared<Board>(de);
 
-        auto db = DashBoard{ sp_clock, b };
+        auto db = DashBoard{ sp_clock, b, window };
 
         // run the program as long as the window is open
         while (window.isOpen())
@@ -93,7 +93,7 @@ public:
 
                 if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
                 {
-                    /// TODO: esc key must invoke the confirmation menu. 
+                    /// TODO: esc key must invoke the confirmation menu.
                     if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
                     {
                         window.close();

@@ -30,28 +30,11 @@ auto Media_Button::operator()(Music_Player& mp)const& ->void
 
 auto Game_State_Button::operator()(Game_State_Menu& gsm)const& ->void
 {
-    if (name == B_N::Status::pause)
-    {
-        gsm.operator()(Game_State::paused);
-    }
-
-    else if (name == B_N::Status::resume)
-    {
-        gsm.operator()(Game_State::playing);
-    }
+        gsm.operator()(name);
 }
 
 auto Exit_Menu_Button::operator()(Exit_Menu& em) const&->void
 {
-    if (name == B_N::General::quit)
-    {
-        ///confirmation screen 
-        ///close the window
-    }
-
-    else if (name == B_N::General::restart)
-    {
-        ///confirmation screen 
-        ///restart application
-    }
+    ///confirmation screen 
+    (*em.gsm())->operator()(name);
 }
