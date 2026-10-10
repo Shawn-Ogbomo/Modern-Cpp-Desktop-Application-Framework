@@ -80,8 +80,8 @@ public:
         button ? target.draw(std::get<2>(button.states())) : target.draw(std::get<0>(button.states()));
     }
 private:
-    static constinit inline std::optional<T*> ob;
-    static constinit inline bool on = true;
+    static constinit inline auto ob = std::optional<T*>{};
+    static constinit inline auto on = true;
 };
 
 class Music_Player;

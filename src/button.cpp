@@ -30,11 +30,11 @@ auto Media_Button::operator()(Music_Player& mp)const& ->void
 
 auto Game_State_Button::operator()(Game_State_Menu& gsm)const& ->void
 {
-        gsm.operator()(name);
+    gsm.operator()(name);
 }
 
-auto Exit_Menu_Button::operator()(Exit_Menu& em) const&->void
+auto Exit_Menu_Button::operator()(Exit_Menu& em) const& ->void
 {
-    ///confirmation screen 
+    ///confirmation screen
     (*em.gsm())->operator()(name);
 }

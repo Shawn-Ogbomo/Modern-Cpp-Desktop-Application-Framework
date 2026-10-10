@@ -9,17 +9,6 @@ auto Util::load_font() -> const sf::Font&
     return f;
 }
 
-auto Util::delay_time(const sf::Clock& c, std::chrono::microseconds ms) -> void
-{
-    const auto t = c.getElapsedTime();
-    auto          t2 = c.getElapsedTime();
-
-    while (t2 < t + ms)
-    {
-        t2 = c.getElapsedTime();
-    }
-}
-
 auto Util::local_time() -> std::string
 {
     const auto time_now = std::chrono::zoned_time<std::chrono::system_clock::duration
@@ -37,5 +26,4 @@ auto Util::allocate(std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vecto
 {
     auto& [state, card, rank, pos] = stack;
     std::ranges::fill_n(std::back_inserter(card), Board::cards_pile, Card{});
-
 }

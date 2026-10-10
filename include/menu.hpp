@@ -44,7 +44,6 @@ public:
 
     auto set_clock(std::shared_ptr<sf::Clock> shptr_c) & ->void { c_sp = shptr_c; }
     auto set_board(std::shared_ptr<Board> shptr_b) & -> void { b_sp = shptr_b; }
-    auto set_window(sf::Window& w) & -> void { ow = &w; }
 
     auto texture_interface() -> const General_Buttons& { return gb_interface; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -92,8 +91,6 @@ private:
     std::shared_ptr<sf::Clock> c_sp;
     std::shared_ptr<Board> b_sp;
 
-    std::optional<sf::Window*> ow;
-
     General_Buttons gb_interface;
     std::vector<Game_State_Button> state_buttons;
 };
@@ -103,7 +100,7 @@ class Exit_Menu_Button;
 class Exit_Menu : public Menu
 {
 public:
-    Exit_Menu(const General_Buttons& gbm);
+    Exit_Menu(const General_Buttons& gb);
 
     auto click_listener(sf::Vector2f cursor_pos) & ->void;
     auto release_listener(sf::Vector2f cursor_pos) & ->void;

@@ -68,130 +68,139 @@ public:
 
     auto run() -> void
     {
-        auto sp_clock = std::make_shared<sf::Clock>();
-
-        auto de = Deck{};
-
-        auto b = std::make_shared<Board>(de);
-
-        auto db = DashBoard{ sp_clock, b, window };
-
-        // run the program as long as the window is open
-        while (window.isOpen())
+        while (running)
         {
-            db.mp.idle();
+            auto sp_clock = std::make_shared<sf::Clock>();
 
-            db.ts.update();
+            auto de = Deck{};
 
-            // check all the window's events that were triggered since the last iteration of the loop
-            while (const std::optional event = window.pollEvent())
+            auto b = std::make_shared<Board>(de);
+
+            auto db = DashBoard{ sp_clock, b };
+
+            // run the program as long as the window is open
+            while (window.isOpen() && db)
             {
-                if (event->is<sf::Event::Closed>())
-                {
-                    window.close();
-                }
+                db.mp.idle();
 
-                if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+                db.ts.update();
+
+                // check all the window's events that were triggered since the last iteration of the loop
+                while (const std::optional event = window.pollEvent())
                 {
-                    /// TODO: esc key must invoke the confirmation menu.
-                    if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+                    if (event->is<sf::Event::Closed>())
                     {
+                        running = false;
                         window.close();
                     }
-                }
 
-                else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
-                {
-                    if (b->source_pile != std::end(b->piles))
+                    if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
                     {
-                        b->update_position(std::get<1>(*b->source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x
-                            + .0f, mouseMoved->position.y + .0f });
-                        b->operator()();
+                        if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+                        {
+                            running = false;
+                            window.close();
+                        }
                     }
-                }
 
-                else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
-                {
-                    if (mouseButtonReleased->button == sf::Mouse::Button::Left)
+                    else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
                     {
-                        const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
-                            + .0f, sf::Mouse::getPosition(window).y + .0f };
-
-                        db.mp.release_listener(cursor_pos);
-                        db.gsm.release_listener(cursor_pos);
-                        db.em.release_listener(cursor_pos);
-
                         if (b->source_pile != std::end(b->piles))
                         {
-                            if (!shader_enabled)
+                            b->update_position(std::get<1>(*b->source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x
+                                + .0f, mouseMoved->position.y + .0f });
+                            b->operator()();
+                        }
+                    }
+
+                    else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
+                    {
+                        if (mouseButtonReleased->button == sf::Mouse::Button::Left)
+                        {
+                            const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
+                                + .0f, sf::Mouse::getPosition(window).y + .0f };
+
+                            db.mp.release_listener(cursor_pos);
+                            db.gsm.release_listener(cursor_pos);
+                            db.em.release_listener(cursor_pos);
+
+                            if (db.gsm.status() == Button_Names::Game_State::quit)
                             {
-                                b->update_position(std::get<1>(*b->source_pile).back().img(), std::get<3>(*b->source_pile), true);
-                                continue;
+                                running = false;
                             }
 
-                            auto& src_cards = std::get<1>(*b->source_pile);
-                            auto& dst_cards = std::get<1>(*b->destination_pile);
+                            if (b->source_pile != std::end(b->piles))
+                            {
+                                if (!shader_enabled)
+                                {
+                                    b->update_position(std::get<1>(*b->source_pile).back().img(), std::get<3>(*b->source_pile), true);
+                                    continue;
+                                }
 
-                            dst_cards.emplace_front(src_cards.back());
-                            src_cards.pop_back();
+                                auto& src_cards = std::get<1>(*b->source_pile);
+                                auto& dst_cards = std::get<1>(*b->destination_pile);
 
-                            dst_cards.back().position() = Card_State::face_up;
+                                dst_cards.emplace_front(src_cards.back());
+                                src_cards.pop_back();
 
-                            auto& src_pile_state = std::get<0>(*b->source_pile);
-                            auto& dst_pile_state = std::get<0>(*b->destination_pile);
+                                dst_cards.back().position() = Card_State::face_up;
 
-                            b->pos_prev = std::get<2>(*b->destination_pile);
+                                auto& src_pile_state = std::get<0>(*b->source_pile);
+                                auto& dst_pile_state = std::get<0>(*b->destination_pile);
 
-                            src_pile_state = false;
-                            dst_pile_state = true;
+                                b->pos_prev = std::get<2>(*b->destination_pile);
 
-                            ++db.gsm;
+                                src_pile_state = false;
+                                dst_pile_state = true;
 
-                            db.gsm(std::get<1>(b->piles.back()));
+                                ++db.gsm;
 
-                            b->update_position(dst_cards.front().img(), std::get<3>(*b->destination_pile), true);
+                                db.gsm(std::get<1>(b->piles.back()));
+
+                                b->update_position(dst_cards.front().img(), std::get<3>(*b->destination_pile), true);
+                            }
+                        }
+                    }
+
+                    else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+                    {
+                        if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+                        {
+                            const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
+                                + .0f, sf::Mouse::getPosition(window).y + .0f };
+
+                            db.mp.click_listener(cursor_pos);
+                            db.gsm.click_listener(cursor_pos);
+                            db.em.click_listener(cursor_pos);
+                            b->operator()(cursor_pos);
                         }
                     }
                 }
 
-                else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
-                {
-                    if (mouseButtonPressed->button == sf::Mouse::Button::Left)
-                    {
-                        const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
-                            + .0f, sf::Mouse::getPosition(window).y + .0f };
+                // clear the window with blue color
+                window.clear({ 33, 46, 82 });
 
-                        db.mp.click_listener(cursor_pos);
-                        db.gsm.click_listener(cursor_pos);
-                        db.em.click_listener(cursor_pos);
-                        b->operator()(cursor_pos);
-                    }
-                }
+                // draw to window
+                window.draw(db);
+
+                enable_shader(*b);
+
+                window.draw(*b);
+
+                // end the current frame
+                window.display();
             }
-
-            // clear the window with blue color
-            window.clear({ 33, 46, 82 });
-
-            // draw to window
-            window.draw(db);
-
-            enable_shader(*b);
-
-            window.draw(*b);
-
-            // end the current frame
-            window.display();
         }
     }
-
 private:
     sf::ContextSettings           settings;
     sf::RenderWindow           window{ sf::VideoMode({ 1000, 900 }), "Clock Solitaire", sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed };
     sf::Shader                       glow_shader{ std::filesystem::path{ Directory_Manager::assets_dir() / "shader" / "effect.frag" }, sf::Shader::Type::Fragment };
     sf::Image                        cursor_image{ std::filesystem::path{ Directory_Manager::assets_dir() / "cursor" / "cursor_ice_white.png" } };
-    std::optional<sf::Cursor> cursor = sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10, 10 }, sf::Vector2u{ 0, 0 });
+    std::optional<sf::Cursor> cursor{ sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10, 10 }, sf::Vector2u{ 0, 0 }) };
     sf::RectangleShape          glow_rect;
     bool                               shader_enabled{};
+    bool running{ true };
 };
 
 auto main() -> int

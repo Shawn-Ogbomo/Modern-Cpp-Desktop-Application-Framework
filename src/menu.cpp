@@ -79,7 +79,7 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
 
 auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, B_N::Game_State g_state) -> void
 {
-    const auto& enable_components = [&]
+    const auto& enable_components = [&, this]
         {
             Button_Interface<Media_Button>()(gsm.state_buttons.back());
             Button_Interface<Game_State_Button>()(gsm.state_buttons.back());
@@ -87,7 +87,7 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, B_N::G
             gsm.c_sp->start();
         };
 
-    const auto& disable_components = [&]
+    const auto& disable_components = [&, this]
         {
             Button_Interface<Media_Button>()(gsm.state_buttons.front());
             gsm.disable_piles();
@@ -113,9 +113,6 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, B_N::G
         disable_components();
         Button_Interface<Game_State_Button>()(gsm.state_buttons.front());
         break;
-    case B_N::Game_State::quit:
-       (*gsm.ow)->close();
-        break;
     }
 }
 
@@ -138,16 +135,16 @@ Exit_Menu::Exit_Menu(const General_Buttons& gb)
 {
     buttons.reserve(Menu::limit);
 
-    buttons.push_back({ gb.textures,B_N::Game_State::restart, {5, 0}, "Reset" });
-    buttons.push_back({ gb.textures,B_N::Game_State::quit, {5, 40}, "Quit" });
+    buttons.push_back({ gb.textures, B_N::Game_State::restart, {5, 0}, "Reset" });
+    buttons.push_back({ gb.textures, B_N::Game_State::quit, {5, 40}, "Quit" });
 }
 
-auto Exit_Menu::click_listener(sf::Vector2f cursor_pos) & ->void 
+auto Exit_Menu::click_listener(sf::Vector2f cursor_pos) & ->void
 {
-    Button_Interface<Exit_Menu_Button>::click_listener(std::span{ buttons },cursor_pos);
+    Button_Interface<Exit_Menu_Button>::click_listener(std::span{ buttons }, cursor_pos);
 }
 
-auto Exit_Menu::release_listener(sf::Vector2f cursor_pos) & ->void 
+auto Exit_Menu::release_listener(sf::Vector2f cursor_pos) & ->void
 {
     Button_Interface<Exit_Menu_Button>::release_listener(*this, cursor_pos);
 }
@@ -156,4 +153,4 @@ void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(buttons.front());
     target.draw(buttons.back());
- }
+}
