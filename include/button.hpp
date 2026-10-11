@@ -27,7 +27,7 @@ class Button_Interface
 public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
-    static auto operator()(Is_Valid_Button auto b) -> void { on = (!(static_cast<int>(b.name))) ? false : true; }
+    static auto operator()(Is_Valid_Button auto b) -> void { on = (!(static_cast<bool>(b.name))) ? false : true; }
 
     static auto click_listener(auto buttons, sf::Vector2f cursor_pos) -> void
     {
