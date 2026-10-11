@@ -15,8 +15,7 @@
 class Time_Status : public sf::Drawable
 {
 public:
-    Time_Status();
-    auto set_clock(std::shared_ptr<sf::Clock>shrptr_c) & -> void { c_sp_ts = shrptr_c; }
+    Time_Status(std::shared_ptr<sf::Clock>spc);
     auto update() & -> void;
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

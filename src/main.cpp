@@ -6,7 +6,6 @@
 #include <iterator>
 
 #include "../include/board.hpp"
-#include "../include/dash_board.hpp"
 #include "../include/deck.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/menu.hpp"
@@ -76,14 +75,25 @@ public:
 
             auto b = std::make_shared<Board>(de);
 
-            auto db = DashBoard{ sp_clock, b };
+            Time_Status ts{ sp_clock };
+
+            static Music_Player mp;
+
+            Game_State_Menu gsm{ b, sp_clock, window, running };
+
+            Exit_Menu em{ gsm.texture_interface(), gsm };
 
             // run the program as long as the window is open
-            while (window.isOpen() && db)
+            while (window.isOpen())
             {
-                db.mp.idle();
+                if (gsm.status() == Button_Names::Game_State::restart)
+                {
+                    break;
+                }
 
-                db.ts.update();
+                mp.idle();
+
+                ts.update();
 
                 // check all the window's events that were triggered since the last iteration of the loop
                 while (const std::optional event = window.pollEvent())
@@ -120,14 +130,9 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            db.mp.release_listener(cursor_pos);
-                            db.gsm.release_listener(cursor_pos);
-                            db.em.release_listener(cursor_pos);
-
-                            if (db.gsm.status() == Button_Names::Game_State::quit)
-                            {
-                                running = false;
-                            }
+                            mp.release_listener(cursor_pos);
+                            gsm.release_listener(cursor_pos);
+                            em.release_listener(cursor_pos);
 
                             if (b->source_pile != std::end(b->piles))
                             {
@@ -153,9 +158,9 @@ public:
                                 src_pile_state = false;
                                 dst_pile_state = true;
 
-                                ++db.gsm;
+                                ++gsm;
 
-                                db.gsm(std::get<1>(b->piles.back()));
+                                gsm(std::get<1>(b->piles.back()));
 
                                 b->update_position(dst_cards.front().img(), std::get<3>(*b->destination_pile), true);
                             }
@@ -169,9 +174,9 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            db.mp.click_listener(cursor_pos);
-                            db.gsm.click_listener(cursor_pos);
-                            db.em.click_listener(cursor_pos);
+                            mp.click_listener(cursor_pos);
+                            gsm.click_listener(cursor_pos);
+                            em.click_listener(cursor_pos);
                             b->operator()(cursor_pos);
                         }
                     }
@@ -181,9 +186,13 @@ public:
                 window.clear({ 33, 46, 82 });
 
                 // draw to window
-                window.draw(db);
 
                 enable_shader(*b);
+
+                window.draw(gsm);
+                window.draw(ts);
+                window.draw(mp);
+                window.draw(em);
 
                 window.draw(*b);
 

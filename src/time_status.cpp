@@ -22,7 +22,7 @@ auto Time_Status::update() & -> void
     date.setString("Date: " + Util::local_time());
 }
 
-Time_Status::Time_Status()
+Time_Status::Time_Status(std::shared_ptr<sf::Clock> spc) : c_sp_ts{ spc }
 {
     elapsed_time.setCharacterSize(26);
     elapsed_time.setPosition({ 0, 871 });

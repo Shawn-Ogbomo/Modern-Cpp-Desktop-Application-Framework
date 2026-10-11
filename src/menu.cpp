@@ -5,7 +5,9 @@ namespace rng = std::ranges;
 
 using namespace std::literals;
 
-Game_State_Menu::Game_State_Menu() : game_id{ Random_Number_Gen::g() }
+Game_State_Menu::Game_State_Menu(std::shared_ptr<Board> bsp, std::shared_ptr<sf::Clock> csp
+    , sf::RenderWindow& w, bool& i)
+    : game_id{ Random_Number_Gen::g() }, b_sp{ bsp }, c_sp(csp), wp{ &w }, gs_p{ &i }
 {
     gb_interface.load_textures();
 
@@ -79,18 +81,28 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
 
 auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, B_N::Game_State g_state) -> void
 {
+    const auto& disable_piles = [&, this]
+        {
+            std::get<0>(gsm.b_sp->piles[static_cast<int>(gsm.b_sp->pos_prev)]) = false;;
+        };
+
+    const auto& enable_piles = [&, this]
+        {
+            std::get<0>(gsm.b_sp->piles[static_cast<int>(gsm.b_sp->pos_prev)]) = true;;
+        };
+
     const auto& enable_components = [&, this]
         {
             Button_Interface<Media_Button>()(gsm.state_buttons.back());
             Button_Interface<Game_State_Button>()(gsm.state_buttons.back());
-            gsm.enable_piles();
+            enable_piles();
             gsm.c_sp->start();
         };
 
     const auto& disable_components = [&, this]
         {
             Button_Interface<Media_Button>()(gsm.state_buttons.front());
-            gsm.disable_piles();
+            disable_piles();
             gsm.c_sp->stop();
         };
 
@@ -113,6 +125,11 @@ auto Game_State_Menu::Update_Game_State::operator()(Game_State_Menu& gsm, B_N::G
         disable_components();
         Button_Interface<Game_State_Button>()(gsm.state_buttons.front());
         break;
+    case B_N::Game_State::quit:
+        disable_components();
+        *gsm.gs_p = false;
+        gsm.wp->close();
+        break;
     }
 }
 
@@ -121,17 +138,7 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
     return card.value() == Rank_Lib::Rank::king && card.position() == Card_State::face_up;
 }
 
-auto Game_State_Menu::enable_piles() & -> void
-{
-    std::get<0>(b_sp->piles[static_cast<int>(b_sp->pos_prev)]) = true;;
-}
-
-auto Game_State_Menu::disable_piles() & -> void
-{
-    std::get<0>(b_sp->piles[static_cast<int>(b_sp->pos_prev)]) = false;;
-}
-
-Exit_Menu::Exit_Menu(const General_Buttons& gb)
+Exit_Menu::Exit_Menu(const General_Buttons& gb, Game_State_Menu& gsm) : o_gsm{ &gsm }
 {
     buttons.reserve(Menu::limit);
 

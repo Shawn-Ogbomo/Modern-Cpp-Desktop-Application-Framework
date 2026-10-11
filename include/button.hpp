@@ -13,12 +13,9 @@
 struct Button : public sf::Drawable
 {
 public:
-    virtual operator bool() const& = 0;
     virtual ~Button() = default;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-    virtual const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states() const& = 0;
-    virtual ButtonMode& mode() & = 0;
 };
 
 template<typename T>
@@ -30,19 +27,19 @@ class Button_Interface
 public:
     static auto operator()(auto t1, auto& t2) ->void { t1->operator()(t2); }
 
-    static auto operator()(Is_Valid_Button auto b) -> void { on = (!(static_cast<int>(b.type()))) ? false : true; }
+    static auto operator()(Is_Valid_Button auto b) -> void { on = (!(static_cast<int>(b.name))) ? false : true; }
 
     static auto click_listener(auto buttons, sf::Vector2f cursor_pos) -> void
     {
         if (on)
         {
             auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-                return std::get<0>(b.states()).getGlobalBounds().contains(cursor_pos);
+                return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
                 });
 
             if (button != std::end(buttons))
             {
-                button->mode() = ButtonMode::on;
+                button->setting = ButtonMode::on;
                 ob = &(*button);
             }
         }
@@ -52,12 +49,12 @@ public:
     {
         if (ob)
         {
-            if (std::get<0>((*ob)->states()).getGlobalBounds().contains(cursor_pos))
+            if (std::get<0>((*ob)->forms).getGlobalBounds().contains(cursor_pos))
             {
                 operator()(*ob, obj);
             }
 
-            ob.value()->mode() = ButtonMode::off;
+            ob.value()->setting = ButtonMode::off;
             ob = std::nullopt;
         }
     }
@@ -77,7 +74,8 @@ public:
 
     static auto display_manager(const auto& button, sf::RenderTarget& target) -> void
     {
-        button ? target.draw(std::get<2>(button.states())) : target.draw(std::get<0>(button.states()));
+        static_cast<bool>(button.setting) ? target.draw(std::get<2>(button.forms))
+            : target.draw(std::get<0>(button.forms));
     }
 private:
     static constinit inline auto ob = std::optional<T*>{};
@@ -86,7 +84,7 @@ private:
 
 class Music_Player;
 
-class Media_Button : public Button
+struct Media_Button : public Button
 {
 public:
     Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos) :forms{ txtrs }
@@ -94,7 +92,6 @@ public:
         Button_Interface<Media_Button>::update_button(name, forms, val, pos);
     }
 
-    operator bool() const& override { return static_cast<int>(setting); }
     auto operator()(Music_Player& mp)const& ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -102,10 +99,6 @@ public:
         Button_Interface<Media_Button>::display_manager(*this, target);
     }
 
-    const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
-    const Button_Names::Media& type() const& { return name; }
-    ButtonMode& mode() & override { return setting; }
-private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
         ,default_texture(),default_texture() };
 
@@ -115,7 +108,7 @@ private:
 
 class Game_State_Menu;
 
-class Game_State_Button : public Button
+struct Game_State_Button : public Button
 {
 public:
     Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
@@ -129,7 +122,6 @@ public:
         label.setPosition({ pos.x, pos.y });
     }
 
-    operator bool() const& override { return static_cast<int>(setting); }
     auto operator()(Game_State_Menu& gsm)const& ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -138,10 +130,6 @@ public:
         target.draw(label);
     }
 
-    const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
-    const  Button_Names::Game_State& type() const& { return name; }
-    ButtonMode& mode() & override { return setting; }
-private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
         ,default_texture(),default_texture() };
 
@@ -152,7 +140,7 @@ private:
 
 class Exit_Menu;
 
-class Exit_Menu_Button : public Button
+struct Exit_Menu_Button : public Button
 {
 public:
     Exit_Menu_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
@@ -166,8 +154,6 @@ public:
         label.setPosition({ pos.x, pos.y });
     }
 
-    operator bool() const& override { return static_cast<int>(setting); }
-
     auto operator()(Exit_Menu& em)const& ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -176,11 +162,6 @@ public:
         target.draw(label);
     }
 
-    const std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& states()  const& override { return forms; }
-
-    ButtonMode& mode() & override { return setting; }
-
-private:
     std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
     ,default_texture(),default_texture() };
 
