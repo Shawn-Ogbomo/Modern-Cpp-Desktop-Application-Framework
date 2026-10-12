@@ -49,7 +49,8 @@ public:
     {
         if (ob)
         {
-            if (std::get<0>((*ob)->forms).getGlobalBounds().contains(cursor_pos))
+            if (std::get<0>((*ob)->forms)
+                .getGlobalBounds().contains(cursor_pos))
             {
                 operator()(*ob, obj);
             }

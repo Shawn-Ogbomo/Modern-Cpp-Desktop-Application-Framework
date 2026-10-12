@@ -3,21 +3,17 @@
 
 #include <string>
 
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include "../include/directory_manager.hpp"
-#include "../include/state.hpp"
 #include"../include/util.hpp"
 
-class Time_Status : public sf::Drawable
+struct Time_Status : public sf::Drawable
 {
 public:
-    Time_Status(std::shared_ptr<sf::Clock>spc);
-    auto update() & -> void;
-private:
+    Time_Status() = default;
+    auto update(const sf::Clock& c) & -> void;
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     sf::Text date{ Util::load_font() };
@@ -28,8 +24,6 @@ private:
     std::chrono::hours h{};
     std::chrono::minutes m{};
     std::chrono::seconds s{};
-
-    std::shared_ptr<sf::Clock> c_sp_ts;
 };
 
 #endif // TIME_STATUS_HPP

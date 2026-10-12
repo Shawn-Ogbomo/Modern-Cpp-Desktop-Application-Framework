@@ -42,16 +42,16 @@ public:
 
     auto click_listener(sf::Vector2f cursor_pos) & ->void;
     auto release_listener(sf::Vector2f cursor_pos) & ->void;
-    auto status() const& -> const  Button_Names::Game_State& { return state; };
+    auto status() const& -> const Button_Names::Game_State& { return state; };
 
     auto texture_interface() -> const General_Buttons& { return gb_interface; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     struct  Update_Game_State
     {
-        auto operator()(Game_State_Menu& gsm, Button_Names::Game_State g_state) -> void;
+        auto operator()(Game_State_Menu& gsm
+            , Button_Names::Game_State g_state) -> void;
     };
-
     struct Lose_Condition
     {
         auto operator()(const Card& card)const ->bool;

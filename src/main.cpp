@@ -69,19 +69,19 @@ public:
     {
         while (running)
         {
-            auto sp_clock = std::make_shared<sf::Clock>();
+            auto clock = std::make_shared<sf::Clock>();
 
             auto de = Deck{};
 
             auto b = std::make_shared<Board>(de);
 
-            Time_Status ts{ sp_clock };
+            auto ts = Time_Status{ };
 
-            static Music_Player mp;
+            static auto mp = Music_Player{};
 
-            Game_State_Menu gsm{ b, sp_clock, window, running };
+            auto gsm = Game_State_Menu{ b, clock, window, running };
 
-            Exit_Menu em{ gsm.texture_interface(), gsm };
+            auto em = Exit_Menu{ gsm.texture_interface(), gsm };
 
             // run the program as long as the window is open
             while (window.isOpen())
@@ -93,7 +93,7 @@ public:
 
                 mp.idle();
 
-                ts.update();
+                ts.update(*clock);
 
                 // check all the window's events that were triggered since the last iteration of the loop
                 while (const std::optional event = window.pollEvent())
