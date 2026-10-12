@@ -16,14 +16,19 @@ auto Time_Status::update(const sf::Clock& c) & -> void
 
     s = std::chrono::duration_cast<std::chrono::seconds>(static_cast<std::chrono::microseconds>(elapsed));
 
-    elapsed_time = { Util::load_font(), "Elapsed Time: " + std::to_string(h.count()) + " hours: "
-        + std::to_string(m.count()) + " minutes: " + std::to_string(s.count()) + " seconds", 26 };
+    elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count())
+        + " minutes: " + std::to_string(s.count()) + " seconds");
 
+    date.setString("Date: " + Util::local_time());
+}
+
+Time_Status::Time_Status()
+{
+    elapsed_time.setCharacterSize(26);
     elapsed_time.setPosition({ 0, 871 });
     elapsed_time.setFillColor({ 236,203,180 });
 
-    date = { Util::load_font(), "Date: " + Util::local_time(), 26 };
-
+    date.setCharacterSize(26);
     date.setPosition({ 600, 871 });
     date.setFillColor({ 236,203,180 });
 }

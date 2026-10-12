@@ -11,7 +11,7 @@
 struct Time_Status : public sf::Drawable
 {
 public:
-    Time_Status() = default;
+    Time_Status();
     auto update(const sf::Clock& c) & -> void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
