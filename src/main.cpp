@@ -69,31 +69,28 @@ public:
     {
         while (running)
         {
-            auto clock = std::make_shared<sf::Clock>();
-
+            auto clock = sf::Clock{};
             auto de = Deck{};
+            auto b = Board{ de };
 
-            auto b = std::make_shared<Board>(de);
+            auto gb = General_Buttons{};
 
             auto ts = Time_Status{ };
-
             static auto mp = Music_Player{};
-
-            auto gsm = Game_State_Menu{ b, clock, window, running };
-
-            auto em = Exit_Menu{ gsm.texture_interface(), gsm };
+            auto gsm = Game_State_Menu{ gb };
+            auto em = Exit_Menu{ gb };
 
             // run the program as long as the window is open
             while (window.isOpen())
             {
-                if (gsm.status() == Button_Names::Game_State::restart)
+                if (gsm.state == Button_Names::Game_State::restart)
                 {
                     break;
                 }
 
                 mp.idle();
 
-                ts.update(*clock);
+                ts.update(clock);
 
                 // check all the window's events that were triggered since the last iteration of the loop
                 while (const std::optional event = window.pollEvent())
@@ -115,11 +112,11 @@ public:
 
                     else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
                     {
-                        if (b->source_pile != std::end(b->piles))
+                        if (b.source_pile != std::end(b.piles))
                         {
-                            b->update_position(std::get<1>(*b->source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x
+                            b.update_position(std::get<1>(*b.source_pile).back().img(), sf::Vector2f{ mouseMoved->position.x
                                 + .0f, mouseMoved->position.y + .0f });
-                            b->operator()();
+                            b.operator()();
                         }
                     }
 
@@ -131,38 +128,41 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             mp.release_listener(cursor_pos);
-                            gsm.release_listener(cursor_pos);
-                            em.release_listener(cursor_pos);
 
-                            if (b->source_pile != std::end(b->piles))
+                            menu_release_listener(em.gsbp, cursor_pos, running, window, b, clock, gsm);
+                            menu_release_listener(gsm.gsbp, cursor_pos, running, window, b, clock, gsm);
+
+                            if (b.source_pile != std::end(b.piles))
                             {
                                 if (!shader_enabled)
                                 {
-                                    b->update_position(std::get<1>(*b->source_pile).back().img(), std::get<3>(*b->source_pile), true);
+                                    b.update_position(std::get<1>(*b.source_pile).back().img()
+                                        , std::get<3>(*b.source_pile), true);
+
                                     continue;
                                 }
 
-                                auto& src_cards = std::get<1>(*b->source_pile);
-                                auto& dst_cards = std::get<1>(*b->destination_pile);
+                                auto& src_cards = std::get<1>(*b.source_pile);
+                                auto& dst_cards = std::get<1>(*b.destination_pile);
 
                                 dst_cards.emplace_front(src_cards.back());
                                 src_cards.pop_back();
 
                                 dst_cards.back().position() = Card_State::face_up;
 
-                                auto& src_pile_state = std::get<0>(*b->source_pile);
-                                auto& dst_pile_state = std::get<0>(*b->destination_pile);
+                                auto& src_pile_state = std::get<0>(*b.source_pile);
+                                auto& dst_pile_state = std::get<0>(*b.destination_pile);
 
-                                b->pos_prev = std::get<2>(*b->destination_pile);
+                                b.pos_prev = std::get<2>(*b.destination_pile);
 
                                 src_pile_state = false;
                                 dst_pile_state = true;
 
                                 ++gsm;
 
-                                gsm(std::get<1>(b->piles.back()));
+                                gsm(std::get<1>(b.piles.back()), running, window, b, clock);
 
-                                b->update_position(dst_cards.front().img(), std::get<3>(*b->destination_pile), true);
+                                b.update_position(dst_cards.front().img(), std::get<3>(*b.destination_pile), true);
                             }
                         }
                     }
@@ -175,9 +175,10 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             mp.click_listener(cursor_pos);
-                            gsm.click_listener(cursor_pos);
-                            em.click_listener(cursor_pos);
-                            b->operator()(cursor_pos);
+                            menu_click_listener(std::span{ em.buttons }, em.gsbp, cursor_pos);
+                            menu_click_listener(std::span{ gsm.state_buttons }, gsm.gsbp, cursor_pos);
+
+                            b.operator()(cursor_pos);
                         }
                     }
                 }
@@ -187,14 +188,14 @@ public:
 
                 // draw to window
 
-                enable_shader(*b);
+                enable_shader(b);
 
                 window.draw(gsm);
                 window.draw(ts);
                 window.draw(mp);
                 window.draw(em);
 
-                window.draw(*b);
+                window.draw(b);
 
                 // end the current frame
                 window.display();

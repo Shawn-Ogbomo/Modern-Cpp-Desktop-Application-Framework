@@ -12,17 +12,21 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
-class Media_Button;
+struct Media_Button;
 
-class  Music_Player : public sf::Drawable
+struct  Music_Player : public sf::Drawable
 {
 public:
     Music_Player();
 
     operator bool() const& { return static_cast<bool>(mode); };
 
-    auto click_listener(sf::Vector2f cursor_pos) & ->void;
-    auto release_listener(sf::Vector2f cursor_pos) & ->void;
+    auto operator()(Button_Names::Media name) & ->void;
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+    auto click_listener(sf::Vector2f cursor_pos) & -> void;
+    auto release_listener(sf::Vector2f cursor_pos) & -> void;
 
     auto idle() & -> void;
     auto next() & -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
@@ -30,8 +34,6 @@ public:
     auto stop() & -> void { songs[current_song].second.stop(); };
     auto pause() & -> void { songs[current_song].second.pause(); };
     auto play() & -> void { songs[current_song].second.play(); };
-private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     sf::Text caption{ Util::load_font() };
 
@@ -41,6 +43,8 @@ private:
     std::vector<Media_Button> buttons;
     Button_Manager bm;
     ButtonMode mode{};
+
+    Media_Button* mbp{};
 };
 
 #endif // MUSIC_PLAYER_HPP

@@ -47,18 +47,7 @@ Music_Player::Music_Player()
     }
 
     mode = ButtonMode::on;
-    const auto& play = buttons[static_cast<int>((B_N::Media::play))];
-    play.operator()(*this);
-}
-
-auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
-{
-    Button_Interface<Media_Button>::click_listener(std::span{ buttons }, cursor_pos);
-}
-
-auto Music_Player::release_listener(sf::Vector2f cursor_pos) & ->void
-{
-    Button_Interface<Media_Button>::release_listener(*this, cursor_pos);
+    operator()(B_N::Media::play);
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -70,12 +59,65 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
         });
 }
 
+auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
+{
+    auto button = rng::find_if(buttons, [&](const auto& b) {
+        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
+        });
+
+    if (button != std::end(buttons))
+    {
+        button->setting = ButtonMode::on;
+        mbp = &(*button);
+    }
+}
+
+auto Music_Player::release_listener(sf::Vector2f cursor_pos) & -> void
+{
+    if (mbp)
+    {
+        if (std::get<0>(mbp->forms).getGlobalBounds().contains(cursor_pos))
+        {
+            operator()(mbp->name);
+        }
+
+        mbp->setting = ButtonMode::off;
+    }
+
+    mbp = nullptr;
+}
+
 auto Music_Player::idle() & -> void
 {
     if (const auto& done = songs[current_song].second; done.getPlayingOffset()
         >= done.getDuration() - 500000us)
     {
-        const auto& next = buttons[static_cast<int>(B_N::Media::next)];
-        next.operator()(*this);
+        operator()(B_N::Media::next);
+    }
+}
+
+auto Music_Player::operator()(Button_Names::Media name) & ->void
+{
+    switch (name)
+    {
+    case B_N::Media::prev:
+        stop();
+        prev();
+        play();
+        break;
+    case B_N::Media::pause:
+        pause();
+        break;
+    case B_N::Media::play:
+        play();
+        break;
+    case B_N::Media::next:
+        stop();
+        next();
+        play();
+        break;
+    case B_N::Media::stop:
+        stop();
+        break;
     }
 }

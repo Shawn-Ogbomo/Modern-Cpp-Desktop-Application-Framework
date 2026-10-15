@@ -13,7 +13,6 @@
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
 #include "../include/state.hpp"
-#include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
 using namespace std::literals::string_literals;
@@ -23,35 +22,18 @@ struct Menu : public sf::Drawable
     static constexpr auto limit = 2;
 public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-    virtual void click_listener(sf::Vector2f cursor_pos) & = 0;
-    virtual void release_listener(sf::Vector2f cursor_pos) & = 0;
     virtual ~Menu() = default;
 };
 
 struct Game_State_Button;
+struct Exit_Menu_Button;
 
-class Game_State_Menu : public Menu
+template<typename T>
+concept Is_Valid_Menu = std::derived_from<T, Menu>;
+
+struct Game_State_Menu : public Menu
 {
 public:
-    Game_State_Menu(std::shared_ptr<Board> bsp, std::shared_ptr<sf::Clock> spc
-        , sf::RenderWindow& w, bool& i);
-
-    auto operator()(const std::ranges::ref_view<std::deque<Card>> p) -> void;
-    auto operator()(Button_Names::Game_State gs) & -> void;
-    auto operator++() & -> const Game_State_Menu&;
-
-    auto click_listener(sf::Vector2f cursor_pos) & ->void;
-    auto release_listener(sf::Vector2f cursor_pos) & ->void;
-    auto status() const& -> const Button_Names::Game_State& { return state; };
-
-    auto texture_interface() -> const General_Buttons& { return gb_interface; }
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-private:
-    struct  Update_Game_State
-    {
-        auto operator()(Game_State_Menu& gsm
-            , Button_Names::Game_State g_state) -> void;
-    };
     struct Lose_Condition
     {
         auto operator()(const Card& card)const ->bool;
@@ -75,6 +57,18 @@ private:
         return labels;
     }
 
+    Game_State_Menu(General_Buttons& gb);
+
+    auto operator()(const std::ranges::ref_view<std::deque<Card>> p, bool& app_state,
+        sf::RenderWindow& rw, Board& b, sf::Clock& c) -> void;
+
+    auto operator++() & -> const Game_State_Menu&;
+
+    auto update_game_state(Button_Names::Game_State g_state, bool& app_state, sf::RenderWindow& rw
+        , Board& b, sf::Clock& c) & ->void;
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
     sf::Text move{ Util::load_font() };
     sf::Text game_id_t{ Util::load_font() };
     sf::Text game_state{ Util::load_font() };
@@ -84,30 +78,53 @@ private:
 
     Button_Names::Game_State state{};
 
-    std::shared_ptr<sf::Clock> c_sp;
-    std::shared_ptr<Board> b_sp;
-
-    bool* gs_p{};
-    sf::RenderWindow* wp{};
-
-    General_Buttons gb_interface;
+    Game_State_Button* gsbp{};
     std::vector<Game_State_Button> state_buttons;
 };
 
-struct Exit_Menu_Button;
-
-class Exit_Menu : public Menu
+struct Exit_Menu : public Menu
 {
 public:
-    Exit_Menu(const General_Buttons& gb, Game_State_Menu& gsm);
-
-    auto click_listener(sf::Vector2f cursor_pos) & ->void;
-    auto release_listener(sf::Vector2f cursor_pos) & ->void;
+    Exit_Menu(const General_Buttons& gb);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    auto gsm() const& -> const std::optional<Game_State_Menu*> { return o_gsm; }
-private:
-    std::vector<Exit_Menu_Button> buttons;
-    std::optional<Game_State_Menu*> o_gsm;
+
+    Game_State_Button* gsbp{};
+    std::vector<Game_State_Button> buttons;
+};
+
+template <typename T>
+concept Is_Pointer = std::is_pointer_v<Game_State_Button*>;
+
+template <typename T>
+concept Is_Game_State_Button = std::same_as < T, std::span<Game_State_Button>>;
+
+auto menu_click_listener(Is_Game_State_Button auto buttons, Is_Pointer auto& ptr, sf::Vector2f cursor_pos) -> void
+{
+    auto button = std::ranges::find_if(buttons, [&](const auto& b) {
+        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
+        });
+
+    if (button != std::end(buttons))
+    {
+        button->setting = ButtonMode::on;
+        ptr = &(*button);
+    }
+};
+
+auto menu_release_listener(Is_Pointer auto& ptr, sf::Vector2f cursor_pos,
+    bool& app_state, sf::RenderWindow& rw, Board& b, sf::Clock& c, Game_State_Menu& gsm) -> void
+{
+    if (ptr)
+    {
+        if (std::get<0>(ptr->forms).getGlobalBounds().contains(cursor_pos))
+        {
+            gsm.update_game_state(ptr->name, app_state, rw, b, c);
+        }
+
+        ptr->setting = ButtonMode::off;
+    }
+
+    ptr = nullptr;
 };
 
 #endif //MENU_HPP
