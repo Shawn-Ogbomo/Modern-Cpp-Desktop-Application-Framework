@@ -12,6 +12,7 @@
 #include "../include/button.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
+#include "../include/refs.hpp"
 #include "../include/state.hpp"
 #include "../include/util.hpp"
 
@@ -57,15 +58,13 @@ public:
         return labels;
     }
 
-    Game_State_Menu(General_Buttons& gb);
+    Game_State_Menu(const General_Buttons& gb);
 
-    auto operator()(const std::ranges::ref_view<std::deque<Card>> p, bool& app_state,
-        sf::RenderWindow& rw, Board& b, sf::Clock& c) -> void;
+    auto operator()(const std::ranges::ref_view<std::deque<Card>> p, Refs_Components& r_c) -> void;
 
     auto operator++() & -> const Game_State_Menu&;
 
-    auto update_game_state(Button_Names::Game_State g_state, bool& app_state, sf::RenderWindow& rw
-        , Board& b, sf::Clock& c) & ->void;
+    auto update_game_state(Button_Names::Game_State g_state, Refs_Components& r_c) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -77,9 +76,10 @@ public:
     std::size_t move_count{};
 
     Button_Names::Game_State state{};
-
-    Game_State_Button* gsbp{};
+    std::span<Game_State_Button> gsbp{};
     std::vector<Game_State_Button> state_buttons;
+
+    ButtonMode mode{ ButtonMode::on };
 };
 
 struct Exit_Menu : public Menu
@@ -88,17 +88,19 @@ public:
     Exit_Menu(const General_Buttons& gb);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    Game_State_Button* gsbp{};
+    std::span<Game_State_Button> gsbp;
     std::vector<Game_State_Button> buttons;
+    ButtonMode mode{ ButtonMode::on };
 };
 
+/// TODO: Revise this to work for a span.
 template <typename T>
 concept Is_Pointer = std::is_pointer_v<Game_State_Button*>;
 
 template <typename T>
 concept Is_Game_State_Button = std::same_as < T, std::span<Game_State_Button>>;
 
-auto menu_click_listener(Is_Game_State_Button auto buttons, Is_Pointer auto& ptr, sf::Vector2f cursor_pos) -> void
+auto menu_click_listener(Is_Game_State_Button auto buttons, auto& ptr, sf::Vector2f cursor_pos) -> void
 {
     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
         return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
@@ -107,24 +109,25 @@ auto menu_click_listener(Is_Game_State_Button auto buttons, Is_Pointer auto& ptr
     if (button != std::end(buttons))
     {
         button->setting = ButtonMode::on;
-        ptr = &(*button);
+        ptr = { &(*button) ,1 };
     }
 };
 
-auto menu_release_listener(Is_Pointer auto& ptr, sf::Vector2f cursor_pos,
-    bool& app_state, sf::RenderWindow& rw, Board& b, sf::Clock& c, Game_State_Menu& gsm) -> void
+/// TODO: Find a way to distinguish between em and gsm on and off before calling update game_state
+/// For win and lose.
+auto menu_release_listener(Refs_Components& r_c, auto& ptr, sf::Vector2f cursor_pos) -> void
 {
-    if (ptr)
+    if (!ptr.empty())
     {
-        if (std::get<0>(ptr->forms).getGlobalBounds().contains(cursor_pos))
+        if (std::get<0>(ptr.front().forms).getGlobalBounds().contains(cursor_pos))
         {
-            gsm.update_game_state(ptr->name, app_state, rw, b, c);
+            r_c.sp5_gsm.front().update_game_state(ptr.front().name, r_c);
         }
 
-        ptr->setting = ButtonMode::off;
+        ptr.front().setting = ButtonMode::off;
     }
 
-    ptr = nullptr;
+    ptr = {};
 };
 
 #endif //MENU_HPP

@@ -43,8 +43,7 @@ public:
     std::vector<Media_Button> buttons;
     Button_Manager bm;
     ButtonMode mode{};
-
-    Media_Button* mbp{};
+    std::span<Media_Button> mbs;
 };
 
 #endif // MUSIC_PLAYER_HPP

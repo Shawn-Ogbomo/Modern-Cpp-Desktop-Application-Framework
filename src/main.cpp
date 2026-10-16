@@ -10,6 +10,7 @@
 #include "../include/directory_manager.hpp"
 #include "../include/menu.hpp"
 #include "../include/music_player.hpp"
+#include "../include/refs.hpp"
 #include "../include/time_status.hpp"
 
 class Application
@@ -73,12 +74,18 @@ public:
             auto de = Deck{};
             auto b = Board{ de };
 
-            auto gb = General_Buttons{};
+            const auto gb = General_Buttons{};
 
             auto ts = Time_Status{ };
             static auto mp = Music_Player{};
             auto gsm = Game_State_Menu{ gb };
             auto em = Exit_Menu{ gb };
+
+            auto rc = Refs_Components{ clock,b,running,window };
+
+            rc.sp4_mp = { &mp,1 };
+            rc.sp5_gsm = { &gsm,1 };
+            rc.sp6_em = { &em,1 };
 
             // run the program as long as the window is open
             while (window.isOpen())
@@ -128,9 +135,8 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             mp.release_listener(cursor_pos);
-
-                            menu_release_listener(em.gsbp, cursor_pos, running, window, b, clock, gsm);
-                            menu_release_listener(gsm.gsbp, cursor_pos, running, window, b, clock, gsm);
+                            menu_release_listener(rc, em.gsbp, cursor_pos);
+                            menu_release_listener(rc, gsm.gsbp, cursor_pos);
 
                             if (b.source_pile != std::end(b.piles))
                             {
@@ -160,7 +166,7 @@ public:
 
                                 ++gsm;
 
-                                gsm(std::get<1>(b.piles.back()), running, window, b, clock);
+                                gsm(std::get<1>(b.piles.back()), rc);
 
                                 b.update_position(dst_cards.front().img(), std::get<3>(*b.destination_pile), true);
                             }

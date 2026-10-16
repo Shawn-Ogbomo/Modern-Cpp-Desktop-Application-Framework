@@ -68,23 +68,23 @@ auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
     if (button != std::end(buttons))
     {
         button->setting = ButtonMode::on;
-        mbp = &(*button);
+        mbs = { &(*button),1 };
     }
 }
 
 auto Music_Player::release_listener(sf::Vector2f cursor_pos) & -> void
 {
-    if (mbp)
+    if (!mbs.empty())
     {
-        if (std::get<0>(mbp->forms).getGlobalBounds().contains(cursor_pos))
+        if (*this && std::get<0>(mbs.front().forms).getGlobalBounds().contains(cursor_pos))
         {
-            operator()(mbp->name);
+            operator()(mbs.front().name);
         }
 
-        mbp->setting = ButtonMode::off;
+        mbs.front().setting = ButtonMode::off;
     }
 
-    mbp = nullptr;
+    mbs = {};
 }
 
 auto Music_Player::idle() & -> void
