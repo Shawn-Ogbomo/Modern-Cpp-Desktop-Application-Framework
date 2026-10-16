@@ -17,20 +17,19 @@ struct Game_State_Menu;
 struct Refs_Components
 {
 public:
-    explicit Refs_Components(sf::Clock& c, Board& b, bool& app_state, sf::RenderWindow& rw)
-        : sp1_c{ &c,1 }, sp2_b{ &b,1 }, sp3_b{ &app_state, 1 }
-    {
-        sp7_rw = { &rw,1 };
-    }
+    Refs_Components(std::span<bool> bsas, std::span<Board> bs, std::span<sf::Clock> cs, std::span<Exit_Menu>ems,
+        std::span<Music_Player> mps, std::span<sf::RenderWindow> rws, std::span<Game_State_Menu> gsms)
+        : sp1_b{ bsas }, sp2_b{ bs }, sp3_c{ cs }, sp4_em{ ems }, sp5_mp{ mps }, sp6_rw{ rws }, sp7_gsm{ gsms }
+    {}
 
-    std::span<sf::Clock> sp1_c;
+    std::span<bool> sp1_b;
     std::span<Board> sp2_b;
-    std::span<bool> sp3_b;
+    std::span<sf::Clock> sp3_c;
 
-    std::span<Music_Player> sp4_mp;
-    std::span<Game_State_Menu>sp5_gsm;
-    std::span<Exit_Menu> sp6_em;
-    std::span<sf::RenderWindow>sp7_rw;
+    std::span<Exit_Menu> sp4_em;
+    std::span<Music_Player> sp5_mp;
+    std::span<sf::RenderWindow>sp6_rw;
+    std::span<Game_State_Menu>sp7_gsm;
 };
 
 #endif // REFS_HPP

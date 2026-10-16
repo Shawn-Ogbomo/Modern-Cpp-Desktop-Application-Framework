@@ -81,11 +81,8 @@ public:
             auto gsm = Game_State_Menu{ gb };
             auto em = Exit_Menu{ gb };
 
-            auto rc = Refs_Components{ clock,b,running,window };
-
-            rc.sp4_mp = { &mp,1 };
-            rc.sp5_gsm = { &gsm,1 };
-            rc.sp6_em = { &em,1 };
+            auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
+            ,{&mp,1 },{&window,1},{&gsm,1} };
 
             // run the program as long as the window is open
             while (window.isOpen())

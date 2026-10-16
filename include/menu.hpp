@@ -121,7 +121,7 @@ auto menu_release_listener(Refs_Components& r_c, auto& ptr, sf::Vector2f cursor_
     {
         if (std::get<0>(ptr.front().forms).getGlobalBounds().contains(cursor_pos))
         {
-            r_c.sp5_gsm.front().update_game_state(ptr.front().name, r_c);
+            r_c.sp7_gsm.front().update_game_state(ptr.front().name, r_c);
         }
 
         ptr.front().setting = ButtonMode::off;

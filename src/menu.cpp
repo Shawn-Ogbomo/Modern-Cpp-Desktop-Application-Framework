@@ -75,16 +75,16 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
     const auto& enable_components = [&, this]
         {
             enable_piles();
-            r_c.sp1_c.front().start();
-            r_c.sp5_gsm.front().mode = ButtonMode::on;
-            r_c.sp4_mp.front().mode = ButtonMode::on;
+            r_c.sp3_c.front().start();
+            r_c.sp7_gsm.front().mode = ButtonMode::on;
+            r_c.sp5_mp.front().mode = ButtonMode::on;
         };
 
     const auto& disable_components = [&, this]
         {
             disable_piles();
-            r_c.sp1_c.front().stop();
-            r_c.sp4_mp.front().mode = ButtonMode::off;
+            r_c.sp3_c.front().stop();
+            r_c.sp5_mp.front().mode = ButtonMode::off;
         };
 
     state = g_state;
@@ -104,12 +104,12 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
     case B_N::Game_State::win:
     case B_N::Game_State::lose:
         disable_components();
-        r_c.sp5_gsm.front().mode = ButtonMode::off;
+        r_c.sp7_gsm.front().mode = ButtonMode::off;
         break;
     case B_N::Game_State::quit:
         disable_components();
-        r_c.sp3_b.front() = false;
-        r_c.sp7_rw.front().close();
+        r_c.sp1_b.front() = false;
+        r_c.sp6_rw.front().close();
         break;
     }
 }
