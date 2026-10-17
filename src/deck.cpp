@@ -16,7 +16,8 @@ Deck::Deck()
 
     rng::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
         auto& [name, texture] = textures;
-        cards.emplace_back(name.string(), texture, back_card); });
+        cards.emplace_back(name.string(), std::span<sf::Texture>{&texture, 1}
+        , std::span<sf::Texture>{&back_card, 1}); });
     shuffle();
 }
 
