@@ -84,7 +84,7 @@ auto Music_Player::release_listener(sf::Vector2f cursor_pos) & -> void
         mbs.front().setting = ButtonMode::off;
     }
 
-    mbs = {};
+    mbs = std::span<Media_Button>{};
 }
 
 auto Music_Player::idle() & -> void

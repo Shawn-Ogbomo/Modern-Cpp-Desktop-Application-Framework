@@ -132,8 +132,8 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             mp.release_listener(cursor_pos);
-                            menu_release_listener(rc, em.gsbp, cursor_pos);
-                            menu_release_listener(rc, gsm.gsbp, cursor_pos);
+                            menu_release_listener(rc, em.gsbs, cursor_pos);
+                            menu_release_listener(rc, gsm.gsbs, cursor_pos);
 
                             if (b.source_pile != std::end(b.piles))
                             {
@@ -178,8 +178,8 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             mp.click_listener(cursor_pos);
-                            menu_click_listener(std::span{ em.buttons }, em.gsbp, cursor_pos);
-                            menu_click_listener(std::span{ gsm.state_buttons }, gsm.gsbp, cursor_pos);
+                            menu_click_listener(std::span{ em.buttons }, em.gsbs, cursor_pos);
+                            menu_click_listener(std::span{ gsm.state_buttons }, gsm.gsbs, cursor_pos);
 
                             b.operator()(cursor_pos);
                         }

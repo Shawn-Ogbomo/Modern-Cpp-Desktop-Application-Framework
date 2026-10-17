@@ -76,7 +76,7 @@ public:
     std::size_t move_count{};
 
     Button_Names::Game_State state{};
-    std::span<Game_State_Button> gsbp{};
+    std::span<Game_State_Button> gsbs{};
     std::vector<Game_State_Button> state_buttons;
 
     ButtonMode mode{ ButtonMode::on };
@@ -88,7 +88,7 @@ public:
     Exit_Menu(const General_Buttons& gb);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    std::span<Game_State_Button> gsbp;
+    std::span<Game_State_Button> gsbs;
     std::vector<Game_State_Button> buttons;
     ButtonMode mode{ ButtonMode::on };
 };
@@ -100,7 +100,7 @@ concept Is_Pointer = std::is_pointer_v<Game_State_Button*>;
 template <typename T>
 concept Is_Game_State_Button = std::same_as < T, std::span<Game_State_Button>>;
 
-auto menu_click_listener(Is_Game_State_Button auto buttons, auto& ptr, sf::Vector2f cursor_pos) -> void
+auto menu_click_listener(Is_Game_State_Button auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
 {
     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
         return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
@@ -109,25 +109,25 @@ auto menu_click_listener(Is_Game_State_Button auto buttons, auto& ptr, sf::Vecto
     if (button != std::end(buttons))
     {
         button->setting = ButtonMode::on;
-        ptr = { &(*button) ,1 };
+        spn = { &(*button) ,1 };
     }
 };
 
 /// TODO: Find a way to distinguish between em and gsm on and off before calling update game_state
 /// For win and lose.
-auto menu_release_listener(Refs_Components& r_c, auto& ptr, sf::Vector2f cursor_pos) -> void
+auto menu_release_listener(Refs_Components& r_c, auto& spn, sf::Vector2f cursor_pos) -> void
 {
-    if (!ptr.empty())
+    if (!spn.empty())
     {
-        if (std::get<0>(ptr.front().forms).getGlobalBounds().contains(cursor_pos))
+        if (std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
         {
-            r_c.sp7_gsm.front().update_game_state(ptr.front().name, r_c);
+            r_c.sp7_gsm.front().update_game_state(spn.front().name, r_c);
         }
 
-        ptr.front().setting = ButtonMode::off;
+        spn.front().setting = ButtonMode::off;
     }
 
-    ptr = {};
+    spn = std::span<Game_State_Button>{};
 };
 
 #endif //MENU_HPP

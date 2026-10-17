@@ -39,8 +39,10 @@ public:
 
     std::size_t limit{};
     std::size_t current_song{};
+
     std::vector<std::pair<sf::Text, sf::Music>> songs;
     std::vector<Media_Button> buttons;
+
     Button_Manager bm;
     ButtonMode mode{};
     std::span<Media_Button> mbs;
