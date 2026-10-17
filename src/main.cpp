@@ -54,7 +54,7 @@ public:
     auto enable_shader(const Board& b) -> void
     {
         if (b.destination_pile != std::end(b.piles) && b.source_pile != std::end(b.piles)
-            && std::get<2>(*b.destination_pile) == std::get<1>(*b.source_pile).back().value())
+            && std::get<2>(*b.destination_pile) == std::get<1>(*b.source_pile).back().value().front())
         {
             const auto pos = std::get<1>(*b.destination_pile).front().img().first.getPosition();
             glow_rect.setPosition(sf::Vector2f{ pos.x - 10, pos.y - 10 });
@@ -151,7 +151,7 @@ public:
                                 dst_cards.emplace_front(src_cards.back());
                                 src_cards.pop_back();
 
-                                dst_cards.back().position() = Card_State::face_up;
+                                dst_cards.back().position().front() = Card_State::face_up;
 
                                 auto& src_pile_state = std::get<0>(*b.source_pile);
                                 auto& dst_pile_state = std::get<0>(*b.destination_pile);

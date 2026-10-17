@@ -20,11 +20,11 @@ namespace Button_Names
         paused, playing, win, lose, restart, quit
     };
 
-        template<typename T>
-        concept Is_Valid_Enum = std::is_enum_v<T>
-            && (std::same_as<T, Button_Names::Media>
-                || std::same_as<T, Game_State>
-                || std::same_as<T, Button_Names::General>);
+    template<typename T>
+    concept Is_Valid_Enum = std::is_enum_v<T>
+        && (std::same_as<T, Button_Names::Media>
+            || std::same_as<T, Game_State>
+            || std::same_as<T, Button_Names::General>);
 
     inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {

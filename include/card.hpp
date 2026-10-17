@@ -1,10 +1,11 @@
 #ifndef CARD_HPP
 #define CARD_HPP
 
-#include <functional>
-#include <utility>
-
 #include <SFML/Graphics.hpp>
+
+#include <functional>
+#include <span>
+#include <utility>
 
 #include "../include/rank.hpp"
 #include "../include/state.hpp"
@@ -15,10 +16,12 @@ class Card : public sf::Drawable
 {
 public:
     Card() = default;
-    explicit Card(std::string_view card_name, const sf::Texture& f, const sf::Texture& re, Card_State st = Card_State::face_down);
-    auto position() & -> Card_State& { return state; }
-    auto position()const& -> const Card_State& { return state; }
-    auto value() const& -> Rank_Lib::Rank { return rank; }
+    explicit Card(std::string_view card_name, const sf::Texture& f, const sf::Texture& re
+        , Card_State st = Card_State::face_down);
+
+    auto position() & -> std::span<Card_State> { return { &state, 1 }; }
+    auto position()const& -> std::span<const Card_State> { return { &state,1 }; }
+    auto value() const& -> std::span<const Rank_Lib::Rank> { return { &rank, 1 }; }
     auto img() & -> std::pair<sf::Sprite&, sf::Sprite&> { return{ std::ref(face),std::ref(reverse) }; }
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -29,8 +32,8 @@ private:
     Suit suit{};
     Card_State state{};
     Rank_Lib::Rank rank{};
-    sf::Sprite face{ default_texture()};
-    sf::Sprite reverse{ default_texture()};
+    sf::Sprite face{ default_texture() };
+    sf::Sprite reverse{ default_texture() };
 };
 
 #endif // CARD_HPP
