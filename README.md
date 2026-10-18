@@ -6,7 +6,7 @@ A performance-focused native desktop application layout implemented in modern C+
 
 ## 🕹️ Application Framework Demonstration
 
-[![Watch the Demo][("https://github.com/user-attachments/assets/09a51ea8-bd0a-4083-8aba-72d2de01cadb")](https://youtu.be/wYRtLFo7jkg)
+[![Watch the Demo](https://github.com/user-attachments/assets/09a51ea8-bd0a-4083-8aba-72d2de01cadb)](https://youtu.be/wYRtLFo7jkg)
 
 *Click the thumbnail image above to watch the full application engine and framework demonstration on YouTube.*
 
