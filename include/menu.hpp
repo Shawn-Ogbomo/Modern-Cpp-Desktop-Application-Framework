@@ -23,6 +23,7 @@ struct Menu : public sf::Drawable
     static constexpr auto limit = 2;
 public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
+    virtual operator bool() const = 0;
     virtual ~Menu() = default;
 };
 
@@ -64,6 +65,8 @@ public:
 
     auto operator++() & -> const Game_State_Menu&;
 
+    operator bool() const override { return static_cast<bool>(mode); }
+
     auto update_game_state(Button_Names::Game_State g_state, Refs_Components& r_c) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -86,21 +89,22 @@ struct Exit_Menu : public Menu
 {
 public:
     Exit_Menu(const General_Buttons& gb);
+    operator bool() const override { return static_cast<bool>(mode); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     std::span<Game_State_Button> gsbs;
     std::vector<Game_State_Button> buttons;
+
     ButtonMode mode{ ButtonMode::on };
 };
 
-/// TODO: Revise this to work for a span.
 template <typename T>
-concept Is_Pointer = std::is_pointer_v<Game_State_Button*>;
+concept Is_Menu = std::is_pointer_v<Menu*>;
 
 template <typename T>
-concept Is_Game_State_Button = std::same_as < T, std::span<Game_State_Button>>;
+concept Is_GS_Button = std::same_as < T, std::span<Game_State_Button>>;
 
-auto menu_click_listener(Is_Game_State_Button auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
+auto menu_click_listener(Is_GS_Button auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
 {
     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
         return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
@@ -113,13 +117,12 @@ auto menu_click_listener(Is_Game_State_Button auto buttons, auto& spn, sf::Vecto
     }
 };
 
-/// TODO: Find a way to distinguish between em and gsm on and off before calling update game_state
-/// For win and lose.
-auto menu_release_listener(Refs_Components& r_c, auto& spn, sf::Vector2f cursor_pos) -> void
+auto menu_release_listener(const Is_Menu auto& menu, Refs_Components& r_c, auto& spn
+    , sf::Vector2f cursor_pos) -> void
 {
     if (!spn.empty())
     {
-        if (std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
+        if (menu && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
         {
             r_c.sp7_gsm.front().update_game_state(spn.front().name, r_c);
         }

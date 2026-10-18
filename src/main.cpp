@@ -132,8 +132,8 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             mp.release_listener(cursor_pos);
-                            menu_release_listener(rc, em.gsbs, cursor_pos);
-                            menu_release_listener(rc, gsm.gsbs, cursor_pos);
+                            menu_release_listener(em, rc, em.gsbs, cursor_pos);
+                            menu_release_listener(gsm, rc, gsm.gsbs, cursor_pos);
 
                             if (b.source_pile != std::end(b.piles))
                             {
