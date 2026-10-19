@@ -18,7 +18,7 @@ Music_Player::Music_Player()
     caption.setPosition({ 600, 842 });
 
     for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir()
-        / "audio" })
+        / "audio" }) [[likely]]
     {
         songs.emplace_back(sf::Text{ Util::load_font(), song.path().filename().stem().string() }, song);
 
@@ -54,7 +54,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(caption);
     target.draw(songs[current_song].first);
-    rng::for_each(buttons, [&target](const auto& button) {
+    rng::for_each(buttons, [&target](const auto& button) { [[likely]]
         target.draw(button);
         });
 }
@@ -90,7 +90,7 @@ auto Music_Player::release_listener(sf::Vector2f cursor_pos) & -> void
 auto Music_Player::idle() & -> void
 {
     if (const auto& done = songs[current_song].second; done.getPlayingOffset()
-        >= done.getDuration() - 500000us)
+        >= done.getDuration() - 500000us) [[unlikely]]
     {
         operator()(B_N::Media::next);
     }

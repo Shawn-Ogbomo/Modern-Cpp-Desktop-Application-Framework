@@ -51,7 +51,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::end(piles) }
 , pos_prev{ Rank_Lib::ranks.back() }
 {
-    for (auto index = 0; auto& pile : piles)
+    for (auto index = 0; auto& pile : piles) [[likely]]
     {
         Util::allocate(pile);
 
@@ -79,7 +79,7 @@ Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::e
 
 auto Board::operator()(sf::Vector2f pos) -> void
 {
-    for (auto it = piles.begin(); it != piles.end(); ++it)
+    for (auto it = piles.begin(); it != piles.end(); ++it) [[likely]]
     {
         auto& [pile_active, pile, rank, internal_pos] = *it;
         const auto& [face, reverse] = pile.front().img();
@@ -103,7 +103,7 @@ auto Board::operator()(sf::Vector2f pos) -> void
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    for (auto i = 0, pos = 0; i < total_piles; ++i)
+    for (auto i = 0, pos = 0; i < total_piles; ++i) [[likely]]
     {
         if (!std::get<0>(piles[i]))
         {
