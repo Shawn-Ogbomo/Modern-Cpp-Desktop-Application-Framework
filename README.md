@@ -1,12 +1,12 @@
 # ⚙️ Modern C++ 4-Tier Application Framework (SFML 3 + C++20)
 
-A performance-focused native desktop application layout implemented in modern C++20 using the SFML graphics/audio library framework. This repository functions as a modular application blueprint designed to separate visual interface presentation, event interfaces, core logic processing, and data persistence layers.
+A performance-focused native desktop application layout implemented in modern C++20 using the SFML graphics/audio library framework. This repository serves as a modular application blueprint that separates the visual interface, event handling, core logic, and data persistence layers.
 
 ---
 
 ## 🕹️ Application Framework Demonstration
 
-[![Watch the Demo](https://github.com/user-attachments/assets/303c70a1-bcc7-427b-9bab-adde5440f3a7)](https://youtu.be/wYRtLFo7jkg)
+[![Watch the Demo](https://github.com/user-attachments/assets/09a51ea8-bd0a-4083-8aba-72d2de01cadb)](https://youtu.be/wYRtLFo7jkg)
 
 *Click the thumbnail image above to watch the full application engine and framework demonstration on YouTube.*
 
