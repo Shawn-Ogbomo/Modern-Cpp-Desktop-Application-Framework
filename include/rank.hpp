@@ -22,7 +22,7 @@ namespace Rank_Lib
         king
     };
 
-    inline std::array<Rank, 13> ranks{
+    constexpr  std::array<Rank, 13> ranks{
     Rank::queen, Rank::ace, Rank::two, Rank::three, Rank::four, Rank::five, Rank::six,
           Rank::seven, Rank::eight, Rank::nine, Rank::ten, Rank::jack, Rank::king };
 };

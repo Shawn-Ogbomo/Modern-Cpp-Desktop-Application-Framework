@@ -74,7 +74,7 @@ public:
             auto de = Deck{};
             auto b = Board{ de };
 
-            const auto gb = General_Buttons{};
+            auto gb = General_Buttons{};
 
             auto ts = Time_Status{ };
             static auto mp = Music_Player{};
@@ -82,7 +82,7 @@ public:
             auto em = Exit_Menu{ gb };
 
             auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
-            ,{&mp,1 },{&window,1},{&gsm,1} };
+           ,{&mp,1 },{&window,1},{&gsm,1} };
 
             // run the program as long as the window is open
             while (window.isOpen())

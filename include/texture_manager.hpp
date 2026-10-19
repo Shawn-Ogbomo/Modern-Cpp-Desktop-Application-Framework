@@ -36,6 +36,7 @@ public:
 struct General_Buttons : public Texture_Manager_Interface
 {
 public:
+
     General_Buttons() { load_textures(); }
 
     auto load_textures() & -> void override;
