@@ -6,6 +6,7 @@
 #include <iterator>
 
 #include "../include/board.hpp"
+#include "../include/component_handler.hpp"
 #include "../include/deck.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/menu.hpp"
@@ -75,14 +76,17 @@ public:
             auto b = Board{ de };
 
             auto gb = General_Buttons{};
+            auto tbs = Text_Boxes{};
 
             auto ts = Time_Status{ };
             static auto mp = Music_Player{};
-            auto gsm = Game_State_Menu{ gb };
+
             auto em = Exit_Menu{ gb };
+            auto gsm = Game_State_Menu{ gb };
+            auto cm = Confirmation_Menu{ gb,tbs };
 
             auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
-           ,{&mp,1 },{&window,1},{&gsm,1} };
+           ,{&mp,1 },{&window,1},{&gsm,1},{&cm,1} };
 
             // run the program as long as the window is open
             while (window.isOpen())
@@ -132,8 +136,9 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             mp.release_listener(cursor_pos);
-                            menu_release_listener(em, rc, em.gsbs, cursor_pos);
-                            menu_release_listener(gsm, rc, gsm.gsbs, cursor_pos);
+                            component_release_listener(em, rc, em.gsbs, cursor_pos);
+                            component_release_listener(gsm, rc, gsm.gsbs, cursor_pos);
+                            cm.release_listener(rc, cm.cbs, cursor_pos);
 
                             if (b.source_pile != std::end(b.piles))
                             {
@@ -177,10 +182,10 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            mp.click_listener(cursor_pos);
-                            menu_click_listener(std::span{ em.buttons }, em.gsbs, cursor_pos);
-                            menu_click_listener(std::span{ gsm.state_buttons }, gsm.gsbs, cursor_pos);
-
+                            component_click_listener(std::span{mp.buttons}, mp.mbs, cursor_pos);
+                            component_click_listener(std::span{ em.buttons }, em.gsbs, cursor_pos);
+                            component_click_listener(std::span{ gsm.state_buttons }, gsm.gsbs, cursor_pos);
+                            component_click_listener(std::span{ cm.buttons }, cm.cbs, cursor_pos);
                             b.operator()(cursor_pos);
                         }
                     }
@@ -199,6 +204,7 @@ public:
                 window.draw(em);
 
                 window.draw(b);
+                window.draw(cm);
 
                 // end the current frame
                 window.display();
@@ -213,7 +219,7 @@ private:
     std::optional<sf::Cursor> cursor{ sf::Cursor::createFromPixels(cursor_image.getPixelsPtr(), sf::Vector2u{ 10, 10 }, sf::Vector2u{ 0, 0 }) };
     sf::RectangleShape          glow_rect;
     bool                               shader_enabled{};
-    bool running{ true };
+    bool                               running{ true };
 };
 
 auto main() -> int

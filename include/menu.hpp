@@ -10,10 +10,12 @@
 
 #include"../include/board.hpp"
 #include "../include/button.hpp"
+#include "../include/component_handler.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
 #include "../include/refs.hpp"
 #include "../include/state.hpp"
+#include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
 using namespace std::literals::string_literals;
@@ -29,6 +31,7 @@ public:
 
 struct Game_State_Button;
 struct Exit_Menu_Button;
+struct Confirmation_Button;
 
 template<typename T>
 concept Is_Valid_Menu = std::derived_from<T, Menu>;
@@ -49,7 +52,7 @@ public:
             "State"s.append(16, ' ') + ": " + "Win",
             "State"s.append(16, ' ') + ": " + "Lose",
             "State"s.append(16, ' ') + ": " + "Restart",
-            "State"s.append(16, ' ') + ": " + "Quit"
+            "State"s.append(16, ' ') + ": " + "Waiting..."
         };
     };
 
@@ -59,7 +62,7 @@ public:
         return labels;
     }
 
-    Game_State_Menu(const General_Buttons& gb);
+    explicit  Game_State_Menu(const General_Buttons& gb);
 
     auto operator()(const std::ranges::ref_view<std::deque<Card>> p, Refs_Components& r_c) -> void;
 
@@ -79,6 +82,8 @@ public:
     std::size_t move_count{};
 
     Button_Names::Game_State state{};
+    Button_Names::Game_State state_prev{};
+
     std::span<Game_State_Button> gsbs{};
     std::vector<Game_State_Button> state_buttons;
 
@@ -88,7 +93,7 @@ public:
 struct Exit_Menu : public Menu
 {
 public:
-    Exit_Menu(const General_Buttons& gb);
+    explicit  Exit_Menu(const General_Buttons& gb);
     operator bool() const override { return static_cast<bool>(mode); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -98,39 +103,38 @@ public:
     ButtonMode mode{ ButtonMode::on };
 };
 
-template <typename T>
-concept Is_Menu = std::is_pointer_v<Menu*>;
-
-template <typename T>
-concept Is_GS_Button = std::same_as < T, std::span<Game_State_Button>>;
-
-auto menu_click_listener(Is_GS_Button auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
+struct Confirmation_Menu : public Menu
 {
-    auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
-        });
-
-    if (button != std::end(buttons))
+public:
+    struct Prompts
     {
-        button->setting = ButtonMode::on;
-        spn = { &(*button) ,1 };
-    }
-};
+        std::array <std::string, 2> labels{
+            "Are You\nSure?",
+            "Log Win To\nDatabase?"
+        };
+    };
 
-auto menu_release_listener(const Is_Menu auto& menu, Refs_Components& r_c, auto& spn
-    , sf::Vector2f cursor_pos) -> void
-{
-    if (!spn.empty())
+    auto get_prompts() & -> const Prompts&
     {
-        if (menu && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
-        {
-            r_c.sp7_gsm.front().update_game_state(spn.front().name, r_c);
-        }
-
-        spn.front().setting = ButtonMode::off;
+        static const auto messages = Prompts{};
+        return messages;
     }
 
-    spn = std::span<Game_State_Button>{};
+    explicit Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb);
+    operator bool() const override { return static_cast<bool>(mode); }
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    /// Have it take a callable object as well.
+    auto release_listener(Refs_Components& r_c
+        , std::span<Confirmation_Button> spn, sf::Vector2f cursor_pos) -> void;
+
+    std::span<Confirmation_Button> cbs;
+    std::vector<Confirmation_Button> buttons{};
+
+    sf::Text prompt{ Util::load_font() };
+    sf::Sprite text_box{ default_texture() };
+
+    ButtonMode mode{ ButtonMode::off };
 };
 
 #endif //MENU_HPP

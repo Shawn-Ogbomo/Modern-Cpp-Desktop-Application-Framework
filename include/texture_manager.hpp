@@ -36,7 +36,6 @@ public:
 struct General_Buttons : public Texture_Manager_Interface
 {
 public:
-
     General_Buttons() { load_textures(); }
 
     auto load_textures() & -> void override;
@@ -45,4 +44,13 @@ public:
         ,default_texture(),default_texture() };
 };
 
+struct Text_Boxes : public Texture_Manager_Interface
+{
+public:
+    Text_Boxes() { load_textures(); };
+
+    auto load_textures() & -> void override;
+
+    sf::Texture t{ default_texture() };
+};
 #endif // TEXTURE_MANAGER_HPP

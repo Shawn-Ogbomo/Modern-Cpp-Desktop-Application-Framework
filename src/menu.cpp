@@ -76,6 +76,7 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
         {
             enable_piles();
             r_c.sp3_c.front().start();
+            r_c.sp4_em.front().mode = ButtonMode::on;
             r_c.sp7_gsm.front().mode = ButtonMode::on;
             r_c.sp5_mp.front().mode = ButtonMode::on;
         };
@@ -87,6 +88,7 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
             r_c.sp5_mp.front().mode = ButtonMode::off;
         };
 
+    state_prev = state;
     state = g_state;
 
     game_state.setString(get_labels()
@@ -99,17 +101,30 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
         enable_components();
         break;
     case B_N::Game_State::paused:
+        r_c.sp7_gsm.front().mode = ButtonMode::on;
+        r_c.sp4_em.front().mode = ButtonMode::on;
         disable_components();
         break;
     case B_N::Game_State::win:
+        disable_components();
+        r_c.sp8_cm.front().prompt.setString(r_c.sp8_cm.front()
+            .get_prompts().labels.back());
+
+        r_c.sp7_gsm.front().mode = ButtonMode::off;
+        r_c.sp8_cm.front().mode = ButtonMode::on;
+        break;
     case B_N::Game_State::lose:
         disable_components();
         r_c.sp7_gsm.front().mode = ButtonMode::off;
         break;
     case B_N::Game_State::quit:
         disable_components();
-        r_c.sp1_b.front() = false;
-        r_c.sp6_rw.front().close();
+
+        r_c.sp8_cm.front().prompt.setString(r_c.sp8_cm.front()
+            .get_prompts().labels.front());
+        r_c.sp4_em.front().mode = ButtonMode::off;
+        r_c.sp7_gsm.front().mode = ButtonMode::off;
+        r_c.sp8_cm.front().mode = ButtonMode::on;
         break;
     }
 }
@@ -132,4 +147,62 @@ void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(buttons.front());
     target.draw(buttons.back());
+}
+
+Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb) : text_box{ tb.t }
+{
+    prompt.setString(get_prompts().labels.front());
+
+    buttons.reserve(Menu::limit);
+
+    prompt.setFillColor({ 236,203,180 });
+    prompt.setCharacterSize(26);
+
+    ///TODO: Verify this -- positioning math.
+    prompt.setPosition({ ((1000 - 315) / 2) + (315 / 2) - (102 / 2)
+        , ((900 - 180) / 2) + (180 / 2) - 47 });
+
+    text_box.setPosition({ (1000 - 315) / 2, (900 - 180) / 2 });
+
+    ///TODO: Verify this -- positioning math
+    buttons.push_back({ gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y + 115}, "Yes" });
+    buttons.push_back({ gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y + 115}, "No" });
+}
+
+void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    if (mode == ButtonMode::on)
+    {
+        target.draw(text_box);
+        target.draw(prompt);
+        target.draw(buttons.front());
+        target.draw(buttons.back());
+    }
+}
+
+auto Confirmation_Menu::release_listener(Refs_Components& r_c
+    , std::span<Confirmation_Button> spn, sf::Vector2f cursor_pos) -> void
+{
+    if (!spn.empty())
+    {
+        if (*this && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
+        {
+            if (buttons.front().setting == ButtonMode::on) //yes
+            {
+                r_c.sp1_b.front() = false;
+                r_c.sp6_rw.front().close();
+                return;
+            }
+
+            else if (buttons.back().setting == ButtonMode::on)
+            {
+                r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
+                r_c.sp8_cm.front().mode = ButtonMode::off;
+            }
+        }
+
+        spn.front().setting = ButtonMode::off;
+    }
+
+    spn = std::span<Confirmation_Button>{};
 }

@@ -4,8 +4,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#include <vector>
-
 #include "../include/button.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/state.hpp"
@@ -25,7 +23,6 @@ public:
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    auto click_listener(sf::Vector2f cursor_pos) & -> void;
     auto release_listener(sf::Vector2f cursor_pos) & -> void;
 
     auto idle() & -> void;

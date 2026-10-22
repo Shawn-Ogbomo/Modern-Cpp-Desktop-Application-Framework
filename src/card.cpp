@@ -18,3 +18,8 @@ Card::Card(std::string_view card_name, std::span<const sf::Texture>f, std::span<
 
     rank = static_cast<Rank_Lib::Rank>(result);
 }
+
+void Card::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    state == Card_State::face_up ? target.draw(face) : target.draw(reverse);
+}

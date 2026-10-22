@@ -46,3 +46,9 @@ auto General_Buttons::load_textures() & -> void
         sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_2.png" },
         sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_3.png" });
 }
+
+auto Text_Boxes::load_textures() & ->void
+{
+    t = sf::Texture{ Directory_Manager::assets_dir() / "text_box"
+    / "confirmation_menu.png", false, { {05,435}, {315,165 } } };
+}
