@@ -149,7 +149,8 @@ void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(buttons.back());
 }
 
-Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb) : text_box{ tb.t }
+Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb,
+std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
 {
     prompt.setString(get_prompts().labels.front());
 
@@ -158,13 +159,17 @@ Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes
     prompt.setFillColor({ 236,203,180 });
     prompt.setCharacterSize(26);
 
-    ///TODO: Verify this -- positioning math.
-    prompt.setPosition({ ((1000 - 315) / 2) + (315 / 2) - (102 / 2)
-        , ((900 - 180) / 2) + (180 / 2) - 47 });
+    const auto dimensions_window = static_cast<sf::Vector2f>(rws.front().getSize());
+    const auto dimensions_textbox = sf::Vector2f{ text_box.getGlobalBounds().size };
+    const auto dimensions_prompt = prompt.getGlobalBounds().size;
 
-    text_box.setPosition({ (1000 - 315) / 2, (900 - 180) / 2 });
+    prompt.setPosition({ ((dimensions_window.x - dimensions_textbox.x) / 2) + (dimensions_textbox.x / 2) 
+        - (dimensions_prompt.x / 2) , ((dimensions_window.y - dimensions_textbox.y) / 2) 
+        + (dimensions_textbox.y / 2) - dimensions_prompt.y });
 
-    ///TODO: Verify this -- positioning math
+    text_box.setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
+        , (dimensions_window.y - dimensions_textbox.y) / 2 });
+
     buttons.push_back({ gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y + 115}, "Yes" });
     buttons.push_back({ gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y + 115}, "No" });
 }
@@ -187,18 +192,15 @@ auto Confirmation_Menu::release_listener(Refs_Components& r_c
     {
         if (*this && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
         {
-            if (buttons.front().setting == ButtonMode::on) //yes
+            if (buttons.front().setting == ButtonMode::on) ///yes
             {
                 r_c.sp1_b.front() = false;
                 r_c.sp6_rw.front().close();
                 return;
             }
 
-            else if (buttons.back().setting == ButtonMode::on)
-            {
-                r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
-                r_c.sp8_cm.front().mode = ButtonMode::off;
-            }
+            r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
+            r_c.sp8_cm.front().mode = ButtonMode::off;
         }
 
         spn.front().setting = ButtonMode::off;

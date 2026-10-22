@@ -120,7 +120,9 @@ public:
         return messages;
     }
 
-    explicit Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb);
+    explicit Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb
+        , std::span<const sf::RenderWindow>rws);
+
     operator bool() const override { return static_cast<bool>(mode); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

@@ -83,7 +83,7 @@ public:
 
             auto em = Exit_Menu{ gb };
             auto gsm = Game_State_Menu{ gb };
-            auto cm = Confirmation_Menu{ gb,tbs };
+            auto cm = Confirmation_Menu{ gb,tbs,{ &window,1} };
 
             auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
            ,{&mp,1 },{&window,1},{&gsm,1},{&cm,1} };
