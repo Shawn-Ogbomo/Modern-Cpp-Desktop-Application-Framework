@@ -170,8 +170,11 @@ std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
     text_box.setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
         , (dimensions_window.y - dimensions_textbox.y) / 2 });
 
-    buttons.push_back({ gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y + 115}, "Yes" });
-    buttons.push_back({ gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y + 115}, "No" });
+    buttons.push_back({ gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y 
+        + dimensions_textbox.y - 50}, "Yes" });
+    
+    buttons.push_back({ gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y 
+        + dimensions_textbox.y - 50}, "No" });
 }
 
 void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
