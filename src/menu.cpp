@@ -111,11 +111,13 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
             .get_prompts().labels.back());
 
         r_c.sp7_gsm.front().mode = ButtonMode::off;
+        r_c.sp4_em.front().mode = ButtonMode::on;
         r_c.sp8_cm.front().mode = ButtonMode::on;
         break;
     case B_N::Game_State::lose:
         disable_components();
         r_c.sp7_gsm.front().mode = ButtonMode::off;
+        r_c.sp4_em.front().mode = ButtonMode::on;
         break;
     case B_N::Game_State::quit:
         disable_components();
