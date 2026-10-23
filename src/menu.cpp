@@ -200,6 +200,7 @@ auto Confirmation_Menu::release_listener(Refs_Components& r_c
     {
         if (*this && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
         {
+            ///TODO: make this a callable, then everything will go into the component_handler release listener. 
             if (buttons.front().setting == ButtonMode::on) ///yes
             {
                 r_c.sp1_b.front() = false;

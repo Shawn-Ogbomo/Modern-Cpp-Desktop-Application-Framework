@@ -59,18 +59,6 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
         });
 }
 
-//auto Music_Player::click_listener(sf::Vector2f cursor_pos) & -> void
-//{
-//    auto button = rng::find_if(buttons, [&](const auto& b) {
-//        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
-//        });
-//
-//    if (button != std::end(buttons))
-//    {
-//        button->setting = ButtonMode::on;
-//        mbs = { &(*button),1 };
-//    }
-//}
 
 auto Music_Player::release_listener(sf::Vector2f cursor_pos) & -> void
 {
