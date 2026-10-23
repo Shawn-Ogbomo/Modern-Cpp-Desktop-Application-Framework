@@ -5,8 +5,11 @@ namespace rng = std::ranges;
 
 using namespace std::literals;
 
-Game_State_Menu::Game_State_Menu(const General_Buttons& gb) : game_id{ Random_Number_Gen::g() }
+Game_State_Menu::Game_State_Menu(const General_Buttons& gb)  
 {
+    Random_Number_Gen rng{111111,999999};
+    game_id = rng.dst(rng.g);
+
     state_buttons.reserve(Menu::limit);
 
     state_buttons.push_back({ gb.textures,B_N::Game_State::paused, {417,800}, "Pause" });
@@ -60,6 +63,7 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
     target.draw(state_buttons.back());
 }
 
+/// TODO: split this into two functions 
 auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components& r_c) & -> void
 {
     const auto& disable_piles = [&, this]
@@ -101,9 +105,9 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
         enable_components();
         break;
     case B_N::Game_State::paused:
+        disable_components();
         r_c.sp7_gsm.front().mode = ButtonMode::on;
         r_c.sp4_em.front().mode = ButtonMode::on;
-        disable_components();
         break;
     case B_N::Game_State::win:
         disable_components();
@@ -121,7 +125,6 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components
         break;
     case B_N::Game_State::quit:
         disable_components();
-
         r_c.sp8_cm.front().prompt.setString(r_c.sp8_cm.front()
             .get_prompts().labels.front());
         r_c.sp4_em.front().mode = ButtonMode::off;

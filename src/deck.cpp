@@ -23,7 +23,8 @@ Deck::Deck()
 
 auto Deck::shuffle() & -> void
 {
-    rng::shuffle(cards, Random_Number_Gen::g);
+    Random_Number_Gen rng;
+    rng::shuffle(cards, rng.g);
 }
 
 auto Deck::draw() & -> Card
