@@ -7,7 +7,7 @@ using namespace std::literals;
 
 Game_State_Menu::Game_State_Menu(const General_Buttons& gb)  
 {
-    Random_Number_Gen rng{111111,999999};
+    Random_Number_Gen rng{100000,999999};
     game_id = rng.dst(rng.g);
 
     state_buttons.reserve(Menu::limit);
