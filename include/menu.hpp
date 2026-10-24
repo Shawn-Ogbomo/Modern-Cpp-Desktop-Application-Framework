@@ -126,9 +126,8 @@ public:
     operator bool() const override { return static_cast<bool>(mode); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    /// Have it take a callable object as well.
-    auto release_listener(Refs_Components& r_c
-        , std::span<Confirmation_Button> spn, sf::Vector2f cursor_pos) -> void;
+    /// TODO: Give this a better name.
+    auto test(Refs_Components& r_c) & ->void;
 
     std::span<Confirmation_Button> cbs;
     std::vector<Confirmation_Button> buttons{};

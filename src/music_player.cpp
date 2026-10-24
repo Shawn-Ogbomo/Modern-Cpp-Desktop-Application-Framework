@@ -59,22 +59,6 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
         });
 }
 
-
-auto Music_Player::release_listener(sf::Vector2f cursor_pos) & -> void
-{
-    if (!mbs.empty())
-    {
-        if (*this && std::get<0>(mbs.front().forms).getGlobalBounds().contains(cursor_pos))
-        {
-            operator()(mbs.front().name);
-        }
-
-        mbs.front().setting = ButtonMode::off;
-    }
-
-    mbs = std::span<Media_Button>{};
-}
-
 auto Music_Player::idle() & -> void
 {
     if (const auto& done = songs[current_song].second; done.getPlayingOffset()

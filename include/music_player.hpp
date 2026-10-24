@@ -23,8 +23,6 @@ public:
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    auto release_listener(sf::Vector2f cursor_pos) & -> void;
-
     auto idle() & -> void;
     auto next() & -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
     auto prev() & -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };

@@ -5,9 +5,9 @@ namespace rng = std::ranges;
 
 using namespace std::literals;
 
-Game_State_Menu::Game_State_Menu(const General_Buttons& gb)  
+Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
 {
-    Random_Number_Gen rng{100000,999999};
+    Random_Number_Gen rng{ 100000,999999 };
     game_id = rng.dst(rng.g);
 
     state_buttons.reserve(Menu::limit);
@@ -63,7 +63,7 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
     target.draw(state_buttons.back());
 }
 
-/// TODO: split this into two functions 
+/// TODO: split this into two functions
 auto Game_State_Menu::update_game_state(B_N::Game_State g_state, Refs_Components& r_c) & -> void
 {
     const auto& disable_piles = [&, this]
@@ -155,7 +155,7 @@ void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb,
-std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
+    std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
 {
     prompt.setString(get_prompts().labels.front());
 
@@ -168,17 +168,17 @@ std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
     const auto dimensions_textbox = sf::Vector2f{ text_box.getGlobalBounds().size };
     const auto dimensions_prompt = prompt.getGlobalBounds().size;
 
-    prompt.setPosition({ ((dimensions_window.x - dimensions_textbox.x) / 2) + (dimensions_textbox.x / 2) 
-        - (dimensions_prompt.x / 2) , ((dimensions_window.y - dimensions_textbox.y) / 2) 
+    prompt.setPosition({ ((dimensions_window.x - dimensions_textbox.x) / 2) + (dimensions_textbox.x / 2)
+        - (dimensions_prompt.x / 2) , ((dimensions_window.y - dimensions_textbox.y) / 2)
         + (dimensions_textbox.y / 2) - dimensions_prompt.y });
 
     text_box.setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
         , (dimensions_window.y - dimensions_textbox.y) / 2 });
 
-    buttons.push_back({ gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y 
+    buttons.push_back({ gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y
         + dimensions_textbox.y - 50}, "Yes" });
-    
-    buttons.push_back({ gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y 
+
+    buttons.push_back({ gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y
         + dimensions_textbox.y - 50}, "No" });
 }
 
@@ -193,27 +193,15 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
     }
 }
 
-auto Confirmation_Menu::release_listener(Refs_Components& r_c
-    , std::span<Confirmation_Button> spn, sf::Vector2f cursor_pos) -> void
+auto Confirmation_Menu::test(Refs_Components& r_c) & ->void
 {
-    if (!spn.empty())
+    if (buttons.front().setting == ButtonMode::on)
     {
-        if (*this && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
-        {
-            ///TODO: make this a callable, then everything will go into the component_handler release listener. 
-            if (buttons.front().setting == ButtonMode::on) ///yes
-            {
-                r_c.sp1_b.front() = false;
-                r_c.sp6_rw.front().close();
-                return;
-            }
-
-            r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
-            r_c.sp8_cm.front().mode = ButtonMode::off;
-        }
-
-        spn.front().setting = ButtonMode::off;
+        r_c.sp1_b.front() = false;
+        r_c.sp6_rw.front().close();
+        return;
     }
 
-    spn = std::span<Confirmation_Button>{};
+    r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
+    r_c.sp8_cm.front().mode = ButtonMode::off;
 }

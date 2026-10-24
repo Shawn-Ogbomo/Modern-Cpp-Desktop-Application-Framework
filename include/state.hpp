@@ -29,14 +29,16 @@ namespace Button_Names
 
     inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {
+        using m_non_ref = std::remove_cvref_t<decltype(m)>;
+
         const auto& last_button = [m] -> int {
-            return (std::same_as<std::remove_cvref_t<decltype(m)>, Media>) ?
+            return (std::same_as<m_non_ref, Media>) ?
                 static_cast<int>(Media::stop) : static_cast<int>(General::hint);
             };
 
-        return m = (m == static_cast<std::remove_cvref_t<decltype(m)>>(last_button())
-            ? static_cast<std::remove_cvref_t<decltype(m)>>(0)
-            : static_cast<std::remove_cvref_t<decltype(m)>>(static_cast<int>(m) + 1));
+        return m = (m == static_cast<m_non_ref> (last_button())
+            ? static_cast<m_non_ref>(0)
+            : static_cast<m_non_ref>(static_cast<int>(m) + 1));
     }
 };
 

@@ -88,6 +88,43 @@ public:
             auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
            ,{&mp,1 },{&window,1},{&gsm,1},{&cm,1} };
 
+            const auto& component_release_listener = [&](auto& component, Refs_Components& r_c, auto& spn,
+                sf::Vector2f cursor_pos) -> void
+                {
+                    using component_non_ref = std::remove_cvref_t<decltype(component)>;
+                    using spn_type = std::remove_cvref_t<decltype(spn)>::element_type;
+
+                    if (!spn.empty())
+                    {
+                        if (component && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
+                        {
+                            if (std::same_as<component_non_ref, Music_Player>)
+                            {
+                                mp.operator()(mp.mbs.front().name);
+                            }
+
+                            else if (std::same_as<component_non_ref, Game_State_Menu>)
+                            {
+                                gsm.update_game_state(gsm.gsbs.front().name, r_c);
+                            }
+
+                            else if (std::same_as<component_non_ref, Exit_Menu >)
+                            {
+                                gsm.update_game_state(em.gsbs.front().name, r_c);
+                            }
+
+                            else if (std::same_as<component_non_ref, Confirmation_Menu>)
+                            {
+                                cm.test(r_c);
+                            }
+                        }
+
+                        spn.front().setting = ButtonMode::off;
+                    }
+
+                    spn = std::span<spn_type>{};
+                };
+
             // run the program as long as the window is open
             while (window.isOpen())
             {
@@ -135,10 +172,10 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            mp.release_listener(cursor_pos);
-                            component_release_listener(em, rc, em.gsbs, cursor_pos);
+                            component_release_listener(mp, rc, mp.mbs, cursor_pos);
                             component_release_listener(gsm, rc, gsm.gsbs, cursor_pos);
-                            cm.release_listener(rc, cm.cbs, cursor_pos);
+                            component_release_listener(em, rc, em.gsbs, cursor_pos);
+                            component_release_listener(cm, rc, cm.cbs, cursor_pos);
 
                             if (b.source_pile != std::end(b.piles))
                             {
@@ -182,7 +219,7 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            component_click_listener(std::span{mp.buttons}, mp.mbs, cursor_pos);
+                            component_click_listener(std::span{ mp.buttons }, mp.mbs, cursor_pos);
                             component_click_listener(std::span{ em.buttons }, em.gsbs, cursor_pos);
                             component_click_listener(std::span{ gsm.state_buttons }, gsm.gsbs, cursor_pos);
                             component_click_listener(std::span{ cm.buttons }, cm.cbs, cursor_pos);
