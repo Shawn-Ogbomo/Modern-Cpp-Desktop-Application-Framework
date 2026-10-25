@@ -79,14 +79,17 @@ public:
             auto tbs = Text_Boxes{};
 
             auto ts = Time_Status{ };
-            static auto mp = Music_Player{};
 
             auto em = Exit_Menu{ gb };
             auto gsm = Game_State_Menu{ gb };
             auto cm = Confirmation_Menu{ gb,tbs,{ &window,1} };
 
             auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
-           ,{&mp,1 },{&window,1},{&gsm,1},{&cm,1} };
+             ,{&window,1},{&gsm,1},{&cm,1} };
+
+            static auto mp = Music_Player{ rc };
+
+            rc.sp5_mp = { &mp,1 };
 
             const auto& component_release_listener = [&](auto& component, Refs_Components& r_c, auto& spn,
                 sf::Vector2f cursor_pos) -> void
@@ -100,22 +103,22 @@ public:
                         {
                             if (std::same_as<component_non_ref, Music_Player>)
                             {
-                                mp.operator()(mp.mbs.front().name);
+                                component.operator()(mp.mbs, rc);
                             }
 
                             else if (std::same_as<component_non_ref, Game_State_Menu>)
                             {
-                                gsm.update_game_state(gsm.gsbs.front().name, r_c);
+                                component.operator()(gsm.gsbs, r_c);
                             }
 
                             else if (std::same_as<component_non_ref, Exit_Menu >)
                             {
-                                gsm.update_game_state(em.gsbs.front().name, r_c);
+                                component.operator()(em.gsbs, r_c);
                             }
 
                             else if (std::same_as<component_non_ref, Confirmation_Menu>)
                             {
-                                cm.test(r_c);
+                                component.operator()(cm.cbs, r_c);
                             }
                         }
 
@@ -133,7 +136,7 @@ public:
                     break;
                 }
 
-                mp.idle();
+                mp.idle(rc);
 
                 ts.update(clock);
 
