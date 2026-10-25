@@ -16,15 +16,15 @@ struct Media_Button;
 struct  Music_Player : public sf::Drawable
 {
 public:
-    Music_Player(Refs_Components& r_components);
+    Music_Player();
 
     operator bool() const& { return static_cast<bool>(mode); };
 
-    auto operator()(Button_Names::Media name, Refs_Components& r_components) & ->void;
+    auto operator()(Button_Names::Media name) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    auto idle(Refs_Components& r_components) & -> void;
+    auto idle() & -> void;
     auto next() & -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
     auto prev() & -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
     auto stop() & -> void { songs[current_song].second.stop(); };

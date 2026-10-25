@@ -66,7 +66,6 @@ public:
 
     auto operator()(const std::ranges::ref_view<std::deque<Card>> p, Refs_Components& r_c) -> void;
     auto operator()(Button_Names::Game_State g_state, Refs_Components& r_c) -> void;
-    auto operator()(std::span<Game_State_Button> gsb_s, Refs_Components& r_c) -> void;
     auto operator++() & -> const Game_State_Menu&;
 
     operator bool() const override { return static_cast<bool>(mode); }
@@ -96,7 +95,6 @@ struct Exit_Menu : public Menu
 public:
     explicit  Exit_Menu(const General_Buttons& gb);
     operator bool() const override { return static_cast<bool>(mode); }
-    auto operator()(std::span<Game_State_Button>gsb_s, Refs_Components& r_components) & ->void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     std::span<Game_State_Button> gsbs;
@@ -126,12 +124,11 @@ public:
         , std::span<const sf::RenderWindow>rws);
 
     operator bool() const override { return static_cast<bool>(mode); }
-    auto operator()(std::span<Confirmation_Button> cb_s, Refs_Components& r_c) -> void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     /// TODO: Give this a better name.
-    auto test(std::span<Confirmation_Button> cb_s, Refs_Components& r_c) & ->void;
+    auto test(Refs_Components& r_c) & ->void;
 
     std::span<Confirmation_Button> cbs;
     std::vector<Confirmation_Button> buttons{};

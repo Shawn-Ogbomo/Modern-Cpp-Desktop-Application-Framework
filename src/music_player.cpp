@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 namespace B_N = Button_Names;
 namespace rng = std::ranges;
 
-Music_Player::Music_Player(Refs_Components& r_components)
+Music_Player::Music_Player()
 {
     caption.setFillColor({ 236,203,180 });
     caption.setString("Song: ");
@@ -47,7 +47,7 @@ Music_Player::Music_Player(Refs_Components& r_components)
     }
 
     mode = ButtonMode::on;
-    operator()(B_N::Media::play, r_components);
+    operator()(B_N::Media::play);
 }
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -59,17 +59,16 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
         });
 }
 
-auto Music_Player::idle(Refs_Components& r_components) & -> void
+auto Music_Player::idle() & -> void
 {
     if (const auto& done = songs[current_song].second; done.getPlayingOffset()
         >= done.getDuration() - 500000us) [[unlikely]]
     {
-        operator()(B_N::Media::next, r_components);
+        operator()(B_N::Media::next);
     }
 }
 
-auto Music_Player::operator()(Button_Names::Media name
-    , [[maybe_unused]] Refs_Components&) & ->void
+auto Music_Player::operator()(Button_Names::Media name) & ->void
 {
     switch (name)
     {

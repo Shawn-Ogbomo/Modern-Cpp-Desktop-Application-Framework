@@ -47,16 +47,6 @@ auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p, Refs_C
     }
 }
 
-auto Game_State_Menu::operator()(Button_Names::Game_State g_state, Refs_Components& r_c) -> void
-{
-    update_game_state(g_state, r_c);
-}
-
-auto Game_State_Menu::operator()(std::span<Game_State_Button> gsb_s, Refs_Components& r_c) -> void
-{
-    update_game_state(gsb_s.front().name, r_c);
-}
-
 auto Game_State_Menu::operator++() & -> const Game_State_Menu&
 {
     ++move_count;
@@ -164,11 +154,6 @@ void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(buttons.back());
 }
 
-auto Exit_Menu::operator()(std::span<Game_State_Button>gsb_s, Refs_Components& r_c) & -> void
-{
-    r_c.sp7_gsm.front().update_game_state(gsb_s.front().name, r_c);
-}
-
 Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb,
     std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
 {
@@ -208,7 +193,7 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
     }
 }
 
-auto Confirmation_Menu::operator()(std::span<Confirmation_Button>cb_s, Refs_Components& r_c) -> void
+auto Confirmation_Menu::test(Refs_Components& r_c) & ->void
 {
     if (cbs.front().name == Button_Names::General::yes)
     {
@@ -220,16 +205,3 @@ auto Confirmation_Menu::operator()(std::span<Confirmation_Button>cb_s, Refs_Comp
     r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
     r_c.sp8_cm.front().mode = ButtonMode::off;
 }
-
-//auto Confirmation_Menu::test(std::span<Confirmation_Button> cb_s, Refs_Components& r_c) & ->void
-//{
-//    if (cb_s.front().name == Button_Names::General::yes)
-//    {
-//        r_c.sp1_b.front() = false;
-//        r_c.sp6_rw.front().close();
-//        return;
-//    }
-//
-//    r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
-//    r_c.sp8_cm.front().mode = ButtonMode::off;
-//}
