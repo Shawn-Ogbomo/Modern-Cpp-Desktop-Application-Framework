@@ -66,7 +66,7 @@ Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::e
             position_card(face, reverse, rank, index, total_piles);
         }
 
-        pos = std::get<1>(pile).back().img().first.getPosition();
+        pos = cards.back().img().first.getPosition();
 
         ++index;
     }
@@ -91,7 +91,7 @@ auto Board::operator()(sf::Vector2f pos) -> void
         }
 
         if (source_pile != std::end(piles) && face.getGlobalBounds().findIntersection(
-            std::get<1>(*source_pile).back().img().first.getGlobalBounds()))
+            (*source_pile).cards.back().img().first.getGlobalBounds()))
         {
             destination_pile = it;
             return;
@@ -105,22 +105,22 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     for (auto i = 0, pos = 0; i < total_piles; ++i) [[likely]]
     {
-        if (!std::get<0>(piles[i]))
+        if (!(piles[i].active))
         {
-            for (const auto& card : std::get<1>(piles[i]))
+            for (const auto& card : piles[i].cards)
             {
                 target.draw(card);
             }
         }
 
-        else if (std::get<0>(piles[i]))
+        else if ((piles[i]).active)
         {
             pos = i;
         }
 
-        if (std::get<2>(piles[i]) == Rank_Lib::Rank::king)
+        if (piles[i].rank == Rank_Lib::Rank::king)
         {
-            for (const auto& card : std::get<1>(piles[pos]))
+            for (const auto& card : (piles[pos].cards))
             {
                 target.draw(card);
             }

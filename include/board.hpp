@@ -7,19 +7,22 @@
 
 #include "../include/deck.hpp"
 
+struct Pile
+{
+public:
+    bool active{};
+    std::deque<Card> cards;
+    Rank_Lib::Rank rank{};
+    sf::Vector2f location;
+};
+
 struct Board : public sf::Drawable
 {
     static constexpr auto cards_pile = 4;
     static constexpr auto total_piles = 13;
 
-    using Piles = std::array<
-        std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>,
-        total_piles>;
-
-    using Pile_It = std::array<
-        std::tuple<bool, std::deque<Card>, Rank_Lib::Rank, sf::Vector2f>,
-        Board::total_piles>::iterator;
-
+    using Piles = std::array<Pile, total_piles>;
+    using Pile_It = std::array<Pile, Board::total_piles>::iterator;
 public:
     Board() = delete;
     explicit Board(Deck& d);

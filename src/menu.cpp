@@ -67,12 +67,12 @@ auto Game_State_Menu::update_game_state(auto g_state, Refs_Components& r_c) & ->
 {
     const auto& disable_piles = [&, this]
         {
-            std::get<0>(r_c.sp2_b.front().piles[static_cast<int>(r_c.sp2_b.front().pos_prev)]) = false;
+            r_c.sp2_b.front().piles[static_cast<int>(r_c.sp2_b.front().pos_prev)].active = false;
         };
 
     const auto& enable_piles = [&, this]
         {
-            std::get<0>(r_c.sp2_b.front().piles[static_cast<int>(r_c.sp2_b.front().pos_prev)]) = true;
+            r_c.sp2_b.front().piles[static_cast<int>(r_c.sp2_b.front().pos_prev)].active = true;
         };
 
     const auto& enable_components = [&, this]
