@@ -18,23 +18,33 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 };
 
+struct Forms
+{
+public:
+    Forms(const Texture_Forms& txtrs) :form_1{ txtrs.f1 }
+        , form_2{ txtrs.f2 }, form_3{ txtrs.f3 }
+    {}
+
+    sf::Sprite form_1;
+    sf::Sprite form_2;
+    sf::Sprite form_3;
+};
+
 auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
-    , std::tuple<sf::Sprite, sf::Sprite, sf::Sprite>& forms
+    , Forms& forms
     , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos) -> void
 {
     internal_name = val;
 
-    auto& [form_1, form_2, form_3] = forms;
-
-    form_1.setPosition(pos);
-    form_2.setPosition(pos);
-    form_3.setPosition(pos);
+    forms.form_1.setPosition(pos);
+    forms.form_2.setPosition(pos);
+    forms.form_3.setPosition(pos);
 }
 
 auto display_manager(const auto& button, sf::RenderTarget& target) -> void
 {
-    static_cast<bool>(button.setting) ? target.draw(std::get<2>(button.forms))
-        : target.draw(std::get<0>(button.forms));
+    static_cast<bool>(button.setting) ? target.draw(button.forms.form_3)
+        : target.draw(button.forms.form_1);
 }
 
 struct Music_Player;
@@ -42,7 +52,7 @@ struct Music_Player;
 struct Media_Button : public Button
 {
 public:
-    Media_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs, auto val, sf::Vector2f pos) :forms{ txtrs }
+    Media_Button(const Texture_Forms& txtrs, auto val, sf::Vector2f pos) :forms{ txtrs }
     {
         update_button(name, forms, val, pos);
     }
@@ -52,8 +62,7 @@ public:
         display_manager(*this, target);
     }
 
-    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
-        ,default_texture(),default_texture() };
+    Forms forms;
 
     Button_Names::Media name{};
     ButtonMode setting{};
@@ -64,7 +73,7 @@ struct Game_State_Menu;
 struct Game_State_Button : public Button
 {
 public:
-    Game_State_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
+    Game_State_Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
     {
         update_button(name, forms, val, pos);
@@ -81,8 +90,7 @@ public:
         target.draw(label);
     }
 
-    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
-        ,default_texture(),default_texture() };
+    Forms forms;
 
     sf::Text label{ Util::load_font() };
     Button_Names::Game_State name{};
@@ -94,7 +102,7 @@ struct Exit_Menu;
 struct Exit_Menu_Button : public Button
 {
 public:
-    Exit_Menu_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
+    Exit_Menu_Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
     {
         update_button(name, forms, val, pos);
@@ -111,8 +119,7 @@ public:
         target.draw(label);
     }
 
-    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
-        ,default_texture(),default_texture() };
+    Forms forms;
 
     sf::Text label{ Util::load_font() };
     Button_Names::Game_State name{};
@@ -124,7 +131,7 @@ struct Confirmation_Menu;
 struct Confirmation_Button : public Button
 {
 public:
-    Confirmation_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
+    Confirmation_Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
     {
         update_button(name, forms, val, pos);
@@ -141,8 +148,7 @@ public:
         target.draw(label);
     }
 
-    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
-        ,default_texture(),default_texture() };
+    Forms forms;
 
     sf::Text label{ Util::load_font() };
     Button_Names::General name{};

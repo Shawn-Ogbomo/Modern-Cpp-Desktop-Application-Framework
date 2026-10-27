@@ -24,11 +24,11 @@ auto Button_Manager::load_textures() & -> void
     const auto dimmensions_button = sf::Vector2i{ 30, 30 };
     const auto dimmensions_image = sf::Vector2i{ static_cast<sf::Vector2i>(buttons.getSize()) - dimmensions_button };
 
-    const auto& t = [&, this](int x, int y = 0) -> std::tuple<sf::Texture, sf::Texture, sf::Texture>
+    const auto& t = [&, this](int x, int y = 0) -> Texture_Forms
         {
-            return std::make_tuple(sf::Texture{ buttons, false, { { x, y }, dimmensions_button } },
+            return Texture_Forms{ sf::Texture{ buttons, false, { { x, y }, dimmensions_button } },
                 sf::Texture{ buttons, false, { { x, (y + dimmensions_button.y) }, dimmensions_button } },
-                sf::Texture{ buttons, false, { { x, (y + (dimmensions_button.y * 2)) }, dimmensions_button } });
+                sf::Texture{ buttons, false, { { x, (y + (dimmensions_button.y * 2)) }, dimmensions_button } } };
         };
 
     textures.reserve(buttons.getSize().x / dimmensions_button.x);
@@ -41,10 +41,9 @@ auto Button_Manager::load_textures() & -> void
 
 auto General_Buttons::load_textures() & -> void
 {
-    textures = std::make_tuple(
-        sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_1.png" },
-        sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_2.png" },
-        sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_3.png" });
+    textures.f1 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_1.png" };
+    textures.f2 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_2.png" };
+    textures.f3 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_3.png" };
 }
 
 auto Text_Boxes::load_textures() & ->void

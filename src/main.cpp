@@ -107,7 +107,7 @@ public:
             const auto& component_click_listener = [&](auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
                 {
                     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-                        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
+                        return(b.forms.form_1).getGlobalBounds().contains(cursor_pos);
                         });
 
                     if (button != std::end(buttons))
@@ -125,7 +125,7 @@ public:
 
                     if (!spn.empty())
                     {
-                        if (component && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
+                        if (component && spn.front().forms.form_1.getGlobalBounds().contains(cursor_pos))
                         {
                             std::visit(o1, v1);
                         }

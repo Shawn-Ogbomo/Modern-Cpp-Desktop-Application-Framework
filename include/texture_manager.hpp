@@ -26,11 +26,18 @@ public:
     std::vector<std::pair<std::filesystem::path, sf::Texture>> textures;
 };
 
+struct Texture_Forms
+{
+    sf::Texture f1{ default_texture() };
+    sf::Texture f2{ default_texture() };
+    sf::Texture f3{ default_texture() };
+};
+
 struct Button_Manager : public Texture_Manager_Interface
 {
 public:
     auto load_textures() & -> void override;
-    std::vector<std::tuple<sf::Texture, sf::Texture, sf::Texture>> textures;
+    std::vector<Texture_Forms> textures;
 };
 
 struct General_Buttons : public Texture_Manager_Interface
@@ -40,8 +47,7 @@ public:
 
     auto load_textures() & -> void override;
 
-    std::tuple<sf::Texture, sf::Texture, sf::Texture> textures{ default_texture()
-        ,default_texture(),default_texture() };
+    Texture_Forms textures;
 };
 
 struct Text_Boxes : public Texture_Manager_Interface
