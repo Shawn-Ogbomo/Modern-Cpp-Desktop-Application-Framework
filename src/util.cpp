@@ -25,5 +25,5 @@ auto Util::allocate(Pile& stack)
 -> void
 {
     auto& [state, card, rank, pos] = stack;
-    std::ranges::fill_n(std::back_inserter(card), Board::cards_pile, Card{});
+    std::ranges::fill_n(std::back_inserter(card), Board::cards_pile, Card{}); 
 }

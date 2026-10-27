@@ -30,9 +30,9 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
     const auto radius = 300.0f;
     const auto pos_card = front.getLocalBounds().size;
 
-    if (const auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2)
+    if (const auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2) 
         - pos_card.y) / 2 }; rank == Rank_Lib::Rank::king)
-    {
+    {   
         front.setPosition(center);
         back.setPosition(center);
         return;

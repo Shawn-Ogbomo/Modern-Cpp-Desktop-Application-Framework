@@ -17,7 +17,7 @@ Deck::Deck()
     rng::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
         auto& [name, texture] = textures;
         cards.emplace_back(name.string(), std::span<sf::Texture>{&texture, 1}
-        , std::span<sf::Texture>{&back_card, 1}); });
+        , std::span<sf::Texture>{&back_card, 1}); }); [[likely]]
     shuffle();
 }
 
@@ -29,7 +29,7 @@ auto Deck::shuffle() & -> void
 
 auto Deck::draw() & -> Card
 {
-    if (cards.empty())
+    if (cards.empty()) [[unlikely]]
     {
         throw Invalid_card_count{ "Insufficient cards...\n" };
     }

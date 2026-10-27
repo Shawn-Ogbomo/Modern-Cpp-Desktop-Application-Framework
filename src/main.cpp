@@ -98,10 +98,10 @@ public:
 
             auto o1 = overload
             {
-                [&](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().name, rc); },
-                [&](std::span<Exit_Menu_Button>) {gsm.update_game_state(em.embs.front().name, rc);  },
-                [&](std::span<Confirmation_Button>) { cm.state_manager(rc); },
-                [&](std::span<Media_Button>) { mp.operator()(mp.mbs.front().name); }
+                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().name, rc); },
+                [&, this](std::span<Exit_Menu_Button>) {gsm.update_game_state(em.embs.front().name, rc);  },
+                [&, this](std::span<Confirmation_Button>) { cm.state_manager(rc); },
+                [&, this](std::span<Media_Button>) { mp.operator()(mp.mbs.front().name); }
             , };
 
             const auto& component_click_listener = [&](auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
