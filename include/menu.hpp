@@ -10,7 +10,6 @@
 
 #include"../include/board.hpp"
 #include "../include/button.hpp"
-#include "../include/component_handler.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
 #include "../include/refs.hpp"
@@ -65,12 +64,11 @@ public:
     explicit  Game_State_Menu(const General_Buttons& gb);
 
     auto operator()(const std::ranges::ref_view<std::deque<Card>> p, Refs_Components& r_c) -> void;
-    auto operator()(Button_Names::Game_State g_state, Refs_Components& r_c) -> void;
     auto operator++() & -> const Game_State_Menu&;
 
     operator bool() const override { return static_cast<bool>(mode); }
 
-    auto update_game_state(Button_Names::Game_State g_state, Refs_Components& r_c) & ->void;
+    auto update_game_state(auto g_state, Refs_Components& r_c) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -97,8 +95,8 @@ public:
     operator bool() const override { return static_cast<bool>(mode); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    std::span<Game_State_Button> gsbs;
-    std::vector<Game_State_Button> buttons;
+    std::span<Exit_Menu_Button> embs;
+    std::vector<Exit_Menu_Button> buttons;
 
     ButtonMode mode{ ButtonMode::on };
 };

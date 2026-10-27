@@ -89,6 +89,36 @@ public:
     ButtonMode setting{};
 };
 
+struct Exit_Menu;
+
+struct Exit_Menu_Button : public Button
+{
+public:
+    Exit_Menu_Button(const std::tuple<sf::Texture, sf::Texture, sf::Texture>& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
+    {
+        update_button(name, forms, val, pos);
+        label.setString(target_label);
+        label.setFillColor({ 236,203,180 });
+
+        label.setCharacterSize(22);
+        label.setPosition({ pos.x, pos.y });
+    }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        display_manager(*this, target);
+        target.draw(label);
+    }
+
+    std::tuple<sf::Sprite, sf::Sprite, sf::Sprite> forms{ default_texture()
+        ,default_texture(),default_texture() };
+
+    sf::Text label{ Util::load_font() };
+    Button_Names::Game_State name{};
+    ButtonMode setting{};
+};
+
 struct Confirmation_Menu;
 
 struct Confirmation_Button : public Button

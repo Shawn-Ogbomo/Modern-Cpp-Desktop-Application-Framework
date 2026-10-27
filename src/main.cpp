@@ -4,15 +4,20 @@
 #include <chrono>
 #include <iostream>
 #include <iterator>
+#include <variant>
 
 #include "../include/board.hpp"
-#include "../include/component_handler.hpp"
 #include "../include/deck.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/menu.hpp"
 #include "../include/music_player.hpp"
 #include "../include/refs.hpp"
 #include "../include/time_status.hpp"
+
+namespace B_N = Button_Names;
+
+template<typename... Ts>
+struct overload : Ts...{using Ts::operator()...; };
 
 class Application
 {
@@ -75,8 +80,8 @@ public:
             auto de = Deck{};
             auto b = Board{ de };
 
-            auto gb = General_Buttons{};
-            auto tbs = Text_Boxes{};
+            const auto gb = General_Buttons{};
+            const auto tbs = Text_Boxes{};
 
             auto ts = Time_Status{ };
             static auto mp = Music_Player{};
@@ -88,35 +93,41 @@ public:
             auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
            ,{&mp,1 },{&window,1},{&gsm,1},{&cm,1} };
 
-            const auto& component_release_listener = [&](auto& component, Refs_Components& r_c, auto& spn,
+            auto v1 = std::variant<std::span<Game_State_Button>, std::span<Exit_Menu_Button>
+                , std::span<Confirmation_Button>, std::span<Media_Button>>{};
+
+            auto o1 = overload
+            {
+                [&](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().name, rc); },
+                [&](std::span<Exit_Menu_Button>) {gsm.update_game_state(em.embs.front().name, rc);  },
+                [&](std::span<Confirmation_Button>) { cm.test(rc); },
+                [&](std::span<Media_Button>) { mp.operator()(mp.mbs.front().name); }
+            , };
+
+            const auto& component_click_listener = [&](auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
+                {
+                    auto button = std::ranges::find_if(buttons, [&](const auto& b) {
+                        return std::get<0>(b.forms).getGlobalBounds().contains(cursor_pos);
+                        });
+
+                    if (button != std::end(buttons))
+                    {
+                        button->setting = ButtonMode::on;
+                        spn = { &(*button) ,1 };    ///Prevents bad variant access.
+                        v1 = spn;
+                    }
+                };
+
+            const auto& component_release_listener = [&](auto& component, auto& spn,
                 sf::Vector2f cursor_pos) -> void
                 {
-                    using component_non_ref = std::remove_cvref_t<decltype(component)>;
                     using spn_type = std::remove_cvref_t<decltype(spn)>::element_type;
 
                     if (!spn.empty())
                     {
                         if (component && std::get<0>(spn.front().forms).getGlobalBounds().contains(cursor_pos))
                         {
-                            if (std::same_as<component_non_ref, Music_Player>)
-                            {
-                                mp.operator()(mp.mbs.front().name);
-                            }
-
-                            else if (std::same_as<component_non_ref, Game_State_Menu>)
-                            {
-                                gsm.update_game_state(gsm.gsbs.front().name, r_c);
-                            }
-
-                            else if (std::same_as<component_non_ref, Exit_Menu >)
-                            {
-                                gsm.update_game_state(em.gsbs.front().name, r_c);
-                            }
-
-                            else if (std::same_as<component_non_ref, Confirmation_Menu>)
-                            {
-                                cm.test(r_c);
-                            }
+                            std::visit(o1, v1);
                         }
 
                         spn.front().setting = ButtonMode::off;
@@ -124,6 +135,7 @@ public:
 
                     spn = std::span<spn_type>{};
                 };
+
             // run the program as long as the window is open
             while (window.isOpen())
             {
@@ -171,10 +183,10 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            component_release_listener(mp, rc, mp.mbs, cursor_pos);
-                            component_release_listener(gsm, rc, gsm.gsbs, cursor_pos);
-                            component_release_listener(em, rc, em.gsbs, cursor_pos);
-                            component_release_listener(cm, rc, cm.cbs, cursor_pos);
+                            component_release_listener(mp, mp.mbs, cursor_pos);
+                            component_release_listener(gsm, gsm.gsbs, cursor_pos);
+                            component_release_listener(em, em.embs, cursor_pos);
+                            component_release_listener(cm, cm.cbs, cursor_pos);
 
                             if (b.source_pile != std::end(b.piles))
                             {
@@ -219,7 +231,7 @@ public:
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
                             component_click_listener(std::span{ mp.buttons }, mp.mbs, cursor_pos);
-                            component_click_listener(std::span{ em.buttons }, em.gsbs, cursor_pos);
+                            component_click_listener(std::span{ em.buttons }, em.embs, cursor_pos);
                             component_click_listener(std::span{ gsm.state_buttons }, gsm.gsbs, cursor_pos);
                             component_click_listener(std::span{ cm.buttons }, cm.cbs, cursor_pos);
                             b.operator()(cursor_pos);
