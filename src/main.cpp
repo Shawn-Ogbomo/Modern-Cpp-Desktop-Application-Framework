@@ -113,7 +113,7 @@ public:
                     if (button != std::end(buttons))
                     {
                         button->setting = ButtonMode::on;
-                        spn = { &(*button) ,1 };    ///Prevents bad variant access.
+                        spn = { &(*button) ,1 };
                         v1 = spn;
                     }
                 };
