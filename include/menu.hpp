@@ -126,7 +126,7 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     /// TODO: Give this a better name.
-    auto test(Refs_Components& r_c) & ->void;
+    auto state_manager(Refs_Components& r_c) & ->void;
 
     std::span<Confirmation_Button> cbs;
     std::vector<Confirmation_Button> buttons{};

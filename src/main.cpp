@@ -100,7 +100,7 @@ public:
             {
                 [&](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().name, rc); },
                 [&](std::span<Exit_Menu_Button>) {gsm.update_game_state(em.embs.front().name, rc);  },
-                [&](std::span<Confirmation_Button>) { cm.test(rc); },
+                [&](std::span<Confirmation_Button>) { cm.state_manager(rc); },
                 [&](std::span<Media_Button>) { mp.operator()(mp.mbs.front().name); }
             , };
 

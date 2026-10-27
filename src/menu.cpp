@@ -63,7 +63,6 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
     target.draw(state_buttons.back());
 }
 
-/// TODO: split this into two functions
 auto Game_State_Menu::update_game_state(auto g_state, Refs_Components& r_c) & -> void
 {
     const auto& disable_piles = [&, this]
@@ -193,7 +192,7 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
     }
 }
 
-auto Confirmation_Menu::test(Refs_Components& r_c) & ->void
+auto Confirmation_Menu::state_manager(Refs_Components& r_c) & ->void
 {
     if (buttons.front().setting == ButtonMode::on)
     {
