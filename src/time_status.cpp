@@ -8,12 +8,12 @@ namespace chr = std::chrono;
 
 auto Time_Status::update(const sf::Clock& c) & -> void
 {
-    auto elapsed = sf::Time{ std::chrono::microseconds(c.getElapsedTime()) };
+    auto elapsed = sf::Time{ chr::microseconds(c.getElapsedTime()) };
 
-    h = chr::duration_cast<std::chrono::hours>(static_cast<chr::microseconds>(elapsed));
+    h = chr::duration_cast<chr::hours>(static_cast<chr::microseconds>(elapsed));
     elapsed -= h;
 
-    m = chr::duration_cast<std::chrono::minutes>(static_cast<chr::microseconds>(elapsed));
+    m = chr::duration_cast<chr::minutes>(static_cast<chr::microseconds>(elapsed));
     elapsed -= m;
 
     s = chr::duration_cast<chr::seconds>(static_cast<chr::microseconds>(elapsed));
