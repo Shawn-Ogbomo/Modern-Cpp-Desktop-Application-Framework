@@ -1,6 +1,7 @@
 set(VCPKG_TARGET_TRIPLET "none" CACHE STRING "" FORCE) 
 cmake_minimum_required(VERSION 3.28)
-project(clock_solitaire LANGUAGES CXX)
+project(clock_solitaire LANGUAGES C CXX)
+
 
 # 1. Global Language Configurations
 set(CMAKE_CXX_STANDARD 20)
@@ -38,8 +39,12 @@ set(GAME_SOURCES
     "src/menu.cpp"
 )
 
+set(DATABASE "src/sqlite3.c")
+
 # 4. Create the Executable Target
-add_executable(main ${GAME_SOURCES})
+add_executable(main ${GAME_SOURCES} ${DATABASE})
+ 
+target_include_directories(main PRIVATE src)
 
 # 5. Compiler-specific warning flags attached to our target
 if(MSVC)
