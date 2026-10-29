@@ -135,8 +135,8 @@ auto Game_State_Menu::update_game_state(auto g_state, Refs_Components& r_c) & ->
 
 auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
 {
-    return card.value().front() == Rank_Lib::Rank::king &&
-        card.position().front() == Card_State::face_up;
+    return card.rank== Rank_Lib::Rank::king &&
+        card.state == Card_State::face_up;
 }
 
 Exit_Menu::Exit_Menu(const General_Buttons& gb)

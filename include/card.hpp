@@ -12,7 +12,7 @@
 #include "../include/suit.hpp"
 #include "../include/texture_manager.hpp"
 
-class Card : public sf::Drawable
+struct Card : public sf::Drawable
 {
 public:
     Card() = default;
@@ -20,11 +20,7 @@ public:
         , std::span<const sf::Texture>re
         , Card_State st = Card_State::face_down);
 
-    auto position() & -> std::span<Card_State> { return { &state, 1 }; }
-    auto position()const& -> std::span<const Card_State> { return { &state,1 }; }
-    auto value() const& -> std::span<const Rank_Lib::Rank> { return { &rank, 1 }; }
     auto img() & -> std::pair<sf::Sprite&, sf::Sprite&> { return { std::ref(face),std::ref(reverse) }; }
-private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     
     Suit suit{};

@@ -74,7 +74,7 @@ Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::e
     auto& [pile_active, cards, rank, pos] = piles.back();
     pile_active = true;
 
-    cards.back().position().front() = Card_State::face_up;
+    cards.back().state = Card_State::face_up;
 }
 
 auto Board::operator()(sf::Vector2f pos) -> void
