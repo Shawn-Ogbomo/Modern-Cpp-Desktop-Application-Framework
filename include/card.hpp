@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <functional>
 #include <span>
 #include <utility>
 

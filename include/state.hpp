@@ -42,11 +42,6 @@ namespace Button_Names
     }
 };
 
-enum class ButtonState
-{
-    idle, touched, pushed
-};
-
 enum class ButtonMode
 {
     off, on
