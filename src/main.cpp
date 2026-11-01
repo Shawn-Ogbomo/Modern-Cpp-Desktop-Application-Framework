@@ -74,6 +74,11 @@ public:
 
     auto run() -> void
     {
+        sf::Texture t_test{ sf::Texture{ std::filesystem::path{ "C:/Dev/clock_solitaire/assets/overlay/background.png" } } };
+        sf::Sprite test{ t_test };
+
+        Database_Manager db;
+
         while (running)
         {
             auto clock = sf::Clock{};
@@ -93,13 +98,13 @@ public:
             auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
            ,{&mp,1 },{&window,1},{&gsm,1},{&cm,1} };
 
-            auto v1 = std::variant<std::span<Game_State_Button>, std::span<Exit_Menu_Button>
+            auto v1 = std::variant<std::span<Game_State_Button>, std::span<Exit_Button>
                 , std::span<Confirmation_Button>, std::span<Media_Button>>{};
 
             auto o1 = overload
             {
                 [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().name, rc); },
-                [&, this](std::span<Exit_Menu_Button>) {gsm.update_game_state(em.embs.front().name, rc);  },
+                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.embs.front().name, rc);  },
                 [&, this](std::span<Confirmation_Button>) { cm.state_manager(rc); },
                 [&, this](std::span<Media_Button>) { mp.operator()(mp.mbs.front().name); }
             , };
@@ -172,7 +177,7 @@ public:
                         {
                             b.update_position((*b.source_pile).cards.back().img(), sf::Vector2f{ mouseMoved->position.x
                                 + .0f, mouseMoved->position.y + .0f });
-                            b.operator()();
+                            b.operator()(); 
                         }
                     }
 
@@ -220,7 +225,7 @@ public:
 
                                 b.update_position(dst_cards.front().img(), (*b.destination_pile).location, true);
                             }
-                        }
+                        }     
                     }
 
                     else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
@@ -240,19 +245,20 @@ public:
                 }
 
                 // clear the window with blue color
-                window.clear({ 33, 46, 82 });
-
+                window.clear({ 33, 46, 82 });  
+                
                 // draw to window
-
                 enable_shader(b);
+
+                //window.draw(test);   /// overlay toggle this on and off depending on the game_state
+                //get paused, win, lose, and waiting to blink
 
                 window.draw(gsm);
                 window.draw(ts);
                 window.draw(mp);
                 window.draw(em);
-
-                window.draw(b);
                 window.draw(cm);
+                window.draw(b);
 
                 // end the current frame
                 window.display();

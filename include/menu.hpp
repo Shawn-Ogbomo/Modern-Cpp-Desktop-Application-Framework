@@ -16,6 +16,7 @@
 #include "../include/state.hpp"
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
+#include "../include/sqlite3.h"
 
 using namespace std::literals::string_literals;
 
@@ -29,8 +30,9 @@ public:
 };
 
 struct Game_State_Button;
-struct Exit_Menu_Button;
+struct Exit_Button;
 struct Confirmation_Button;
+struct Database_Button;
 
 template<typename T>
 concept Is_Valid_Menu = std::derived_from<T, Menu>;
@@ -95,8 +97,8 @@ public:
     operator bool() const override { return static_cast<bool>(mode); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    std::span<Exit_Menu_Button> embs;
-    std::vector<Exit_Menu_Button> buttons;
+    std::span<Exit_Button> embs;
+    std::vector<Exit_Button> buttons;
 
     ButtonMode mode{ ButtonMode::on };
 };
@@ -135,5 +137,38 @@ public:
 
     ButtonMode mode{ ButtonMode::off };
 };
+
+struct Record
+{
+public:
+    //game id
+    //game state
+    
+    // elapsed time
+    //date -- includes local time 
+};
+
+struct Database_Manager : public Menu
+{
+public: 
+    Database_Manager();     //create the table here.. evaluate it against exists table sqlite command 
+    operator bool() const override{ return static_cast<bool>(mode); };
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    sf::Sprite text_box{default_texture()};
+    sf::Text indicator{Util::load_font()};       //perhaps make this its own type with state and draw
+
+    sf::RectangleShape text_field;
+
+    std::unique_ptr<sqlite3*> conn;
+    std::span<Database_Button> dbbs{};
+    
+    std::vector<Database_Button> buttons;
+    std::vector<Record> recs;
+    ButtonMode mode{};
+};
+
+auto read(Database_Manager&dmb);
+auto write(Database_Manager& dbm);
 
 #endif //MENU_HPP

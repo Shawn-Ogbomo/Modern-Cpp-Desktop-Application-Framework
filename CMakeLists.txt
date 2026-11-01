@@ -2,7 +2,6 @@ set(VCPKG_TARGET_TRIPLET "none" CACHE STRING "" FORCE)
 cmake_minimum_required(VERSION 3.28)
 project(clock_solitaire LANGUAGES C CXX)
 
-
 # 1. Global Language Configurations
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -50,6 +49,14 @@ target_include_directories(main PRIVATE src)
 if(MSVC)
     target_compile_options(main PRIVATE /W4 /permissive-)
     target_compile_options(main PRIVATE /external:W0)
+    
+    # --- AUTOMATED C++ CORE GUIDELINES CHECKING ---
+    # This instructs MSVC to execute the C++ Core Check ruleset during the build phase
+    set_target_properties(main PROPERTIES
+        VS_GLOBAL_EnableMicrosoftCodeAnalysis "true"
+        VS_GLOBAL_RunCodeAnalysis "true"
+        VS_GLOBAL_CodeAnalysisRuleSet "CppCoreCheckRules.ruleset"
+    )
     
     # 6. ONLY set Visual Studio GUI properties if we are generating a Visual Studio Solution!
     if(CMAKE_GENERATOR MATCHES "Visual Studio")

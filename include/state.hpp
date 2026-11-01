@@ -8,12 +8,12 @@ namespace Button_Names
 {
     enum class Media
     {
-        prev, pause, play, next, stop = 4
+        prev, pause, play, next, stop
     };
 
     enum class General
     {
-        no, yes, ok, hint
+        no, yes, ok, up, down, hint
     };
 
     enum class Game_State

@@ -204,3 +204,25 @@ auto Confirmation_Menu::state_manager(Refs_Components& r_c) & ->void
     r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().state_prev, r_c);
     r_c.sp8_cm.front().mode = ButtonMode::off;
 }
+
+Database_Manager::Database_Manager()
+{
+    /// TODO: open a database connection
+    /// Create a table and evaluate it against exists. 
+    /// What to name the table? 
+    /// schema? 
+    
+}
+
+void Database_Manager::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    if (mode == ButtonMode::on)
+    {
+        target.draw(text_box);
+        target.draw(text_field);
+        target.draw(indicator);
+        target.draw(buttons.front());
+        target.draw(*(buttons.begin() +1));
+        target.draw(buttons.back());
+    }
+ }

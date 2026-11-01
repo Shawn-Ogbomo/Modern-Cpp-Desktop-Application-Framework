@@ -99,10 +99,10 @@ public:
 
 struct Exit_Menu;
 
-struct Exit_Menu_Button : public Button
+struct Exit_Button : public Button
 {
 public:
-    Exit_Menu_Button(const Texture_Forms& txtrs
+    Exit_Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
     {
         update_button(name, forms, val, pos);
@@ -155,4 +155,32 @@ public:
     ButtonMode setting{};
 };
 
+struct Database_Manager;
+
+struct Database_Button : public Button
+{
+public:
+    Database_Button(const Texture_Forms& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) :forms{ txtrs }
+    {
+        update_button(name, forms, val, pos);
+        label.setString(target_label);
+        label.setFillColor({ 236,203,180 });
+
+        label.setCharacterSize(22);
+        label.setPosition({ pos.x, pos.y });
+    }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        display_manager(*this, target);
+        target.draw(label);
+    }
+
+    Forms forms;
+
+    sf::Text label{ Util::load_font() };
+    Button_Names::General name{};
+    ButtonMode setting{};
+};
 #endif //BUTTON_HPP

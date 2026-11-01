@@ -101,9 +101,9 @@ auto Board::operator()(sf::Vector2f pos) -> void
     destination_pile = std::end(piles);
 }
 
-void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const  
 {
-    for (auto i = 0, pos = 0; i < total_piles; ++i) [[likely]]
+    for (auto i = 0; i < total_piles; ++i) [[likely]]
     {
         if (!(piles[i].active))
         {
@@ -113,14 +113,9 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
             }
         }
 
-        else if ((piles[i]).active)
-        {
-            pos = i;
-        }
-
         if (piles[i].rank == Rank_Lib::Rank::king)
         {
-            for (const auto& card : (piles[pos].cards))
+            for (const auto& card : (piles[static_cast<int>(pos_prev)].cards))  
             {
                 target.draw(card);
             }
