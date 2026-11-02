@@ -105,7 +105,7 @@ auto Board::operator()(sf::Vector2f pos) -> void
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const  
 {
-    const auto inactive = [&, this](const auto& p) -> bool { return !(p.active); };
+    const auto& inactive = [&, this](const auto& p) -> bool { return !(p.active); };
 
     for (auto& stack : piles | rng::views::filter(inactive))
      {
