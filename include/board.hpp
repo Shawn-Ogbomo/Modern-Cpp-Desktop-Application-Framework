@@ -22,7 +22,6 @@ struct Board : public sf::Drawable
     static constexpr auto total_piles = 13;
 
     using Piles = std::array<Pile, total_piles>;
-    using Pile_It = std::array<Pile, Board::total_piles>::iterator;
 public:
     Board() = delete;
     explicit Board(Deck& d);
@@ -34,8 +33,9 @@ public:
 
     Rank_Lib::Rank pos_prev{};
 
-    Pile_It source_pile;
-    Pile_It destination_pile;
+    std::span<Pile> source_pile;
+    std::span<Pile> destination_pile;
+
     Piles piles{};
 };
 
