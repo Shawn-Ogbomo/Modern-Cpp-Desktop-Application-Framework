@@ -59,10 +59,10 @@ public:
 
     auto enable_shader(const Board& b) -> void
     {
-        if (b.destination_pile != std::end(b.piles) && b.source_pile != std::end(b.piles)
-            && (*b.destination_pile).rank == (*b.source_pile).cards.back().rank)
+        if (!b.destination_pile.empty() && !b.source_pile.empty()
+            && b.destination_pile.front().rank == b.source_pile.front().cards.back().rank)
         {
-            const auto pos = (*b.destination_pile).cards.front().img().first.getPosition();
+            const auto pos = b.destination_pile.front().cards.front().img().first.getPosition();
             glow_rect.setPosition(sf::Vector2f{ pos.x - 10, pos.y - 10 });
             window.draw(glow_rect, &glow_shader);
             shader_enabled = true;
@@ -173,9 +173,9 @@ public:
 
                     else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
                     {
-                        if (b.source_pile != std::end(b.piles))
+                        if (!b.source_pile.empty())
                         {
-                            b.update_position((*b.source_pile).cards.back().img(), sf::Vector2f{ mouseMoved->position.x
+                            b.update_position(b.source_pile.front().cards.back().img(), sf::Vector2f{ mouseMoved->position.x
                                 + .0f, mouseMoved->position.y + .0f });
                             b.operator()(); 
                         }
@@ -193,28 +193,28 @@ public:
                             component_release_listener(em, em.embs, cursor_pos);
                             component_release_listener(cm, cm.cbs, cursor_pos);
 
-                            if (b.source_pile != std::end(b.piles))
+                            if (!b.source_pile.empty())
                             {
                                 if (!shader_enabled)
                                 {
-                                    b.update_position((*b.source_pile).cards.back().img()
-                                        , (*b.source_pile).location, true);
+                                    b.update_position(b.source_pile.front().cards.back().img()
+                                        , b.source_pile.front().location, true);
 
                                     continue;
                                 }
 
-                                auto& src_cards = (*b.source_pile).cards;
-                                auto& dst_cards = (*b.destination_pile).cards;
+                                auto& src_cards = b.source_pile.front().cards;
+                                auto& dst_cards = b.destination_pile.front().cards;
 
                                 dst_cards.emplace_front(src_cards.back());
                                 src_cards.pop_back();
 
                                 dst_cards.back().state = Card_State::face_up;
 
-                                auto& src_pile_state = (*b.source_pile).active;
-                                auto& dst_pile_state = (*b.destination_pile).active;
+                                auto& src_pile_state = b.source_pile.front().active;
+                                auto& dst_pile_state = b.destination_pile.front().active;
 
-                                b.pos_prev = (*b.destination_pile).rank;
+                                b.pos_prev = b.destination_pile.front().rank;
 
                                 src_pile_state = false;
                                 dst_pile_state = true;
@@ -223,7 +223,7 @@ public:
 
                                 gsm(b.piles.back().cards, rc);
 
-                                b.update_position(dst_cards.front().img(), (*b.destination_pile).location, true);
+                                b.update_position(dst_cards.front().img(), b.destination_pile.front().location, true);
                             }
                         }     
                     }
@@ -257,8 +257,8 @@ public:
                 window.draw(ts);
                 window.draw(mp);
                 window.draw(em);
-                window.draw(cm);
                 window.draw(b);
+                window.draw(cm);
 
                 // end the current frame
                 window.display();

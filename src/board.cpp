@@ -20,8 +20,8 @@ auto Board::update_position(std::pair<sf::Sprite&, sf::Sprite&> img, sf::Vector2
 
     if (update_It_state)
     {
-        source_pile = std::end(piles);
-        destination_pile = std::end(piles);
+        source_pile = std::span<Pile>{};
+        destination_pile = std::span<Pile>{};
     }
 }
 
@@ -50,8 +50,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
     back.setPosition(pos);
 }
 
-Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::end(piles) }
-, pos_prev{ Rank_Lib::ranks.back() }
+Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }
 {
     for (auto index = 0; auto& pile : piles) [[likely]]
     {
@@ -81,26 +80,26 @@ Board::Board(Deck& d) : source_pile{ std::end(piles) }, destination_pile{ std::e
 
 auto Board::operator()(sf::Vector2f pos) -> void
 {
-    for (auto it = piles.begin(); it != piles.end(); ++it) [[likely]]
+    for ( auto& stack: piles) [[likely]]
     {
-        auto& [pile_active, pile, rank, internal_pos] = *it;
+        auto& [pile_active, pile, rank, internal_pos] = stack;
         const auto& [face, reverse] = pile.front().img();
 
         if (pile_active && face.getGlobalBounds().contains(pos))
         {
-            source_pile = it;
+            source_pile = { &stack,1 };
             return;
         }
 
-        if (source_pile != std::end(piles) && face.getGlobalBounds().findIntersection(
-            (*source_pile).cards.back().img().first.getGlobalBounds()))
+        if (!source_pile.empty() && face.getGlobalBounds().findIntersection(
+            (source_pile).front().cards.back().img().first.getGlobalBounds()))
         {
-            destination_pile = it;
+            destination_pile = { &stack, 1 };
             return;
         }
     }
 
-    destination_pile = std::end(piles);
+    destination_pile = std::span<Pile>{};
 }
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const  
