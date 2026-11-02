@@ -52,7 +52,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
 
 Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }
 {
-    for (auto index = 0; auto& pile : piles) [[likely]]
+    for (auto index = 0; auto& pile : piles)
     {
         Util::allocate(pile);
 
@@ -114,7 +114,7 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
         }
      }
     
-    for (const auto& card : (piles[static_cast<int>(pos_prev)].cards)) 
+    for (const auto& card : (piles[static_cast<int>(pos_prev)].cards))
     {
         target.draw(card);
     }

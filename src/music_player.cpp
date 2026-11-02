@@ -18,7 +18,7 @@ Music_Player::Music_Player()
     caption.setPosition({ 600, 842 });
 
     for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir()
-        / "audio" }) [[likely]]
+        / "audio" }) 
     {
         songs.emplace_back(sf::Text{ Util::load_font(), song.path().filename().stem().string() }, song);
 
@@ -39,7 +39,7 @@ Music_Player::Music_Player()
 
     auto button_pos = sf::Vector2f{ 452.0f - 35.0f, 842.0f };
 
-    for (auto internal_index = B_N::Media{}; const auto& texture : bm.textures) [[likely]]
+    for (auto internal_index = B_N::Media{}; const auto& texture : bm.textures)
     {
         buttons.push_back({ texture, internal_index, button_pos });
         ++internal_index;
@@ -54,7 +54,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(caption);
     target.draw(songs[current_song].first);
-    rng::for_each(buttons, [&target](const auto& button) { [[likely]]
+    rng::for_each(buttons, [&target](const auto& button) { 
         target.draw(button);
         });
 }

@@ -11,7 +11,7 @@ auto Card_Manager::load_textures() & -> void
 {
     textures.reserve((Board::total_piles * Board::cards_pile) + 1);
 
-    for (const auto& dir_entry : fs::directory_iterator{ Directory_Manager::assets_dir() / "images" }) [[likely]]
+    for (const auto& dir_entry : fs::directory_iterator{ Directory_Manager::assets_dir() / "images" })
     { 
         auto& card_name = dir_entry.path();
         textures.emplace_back(std::pair{ card_name.filename().stem(), sf::Texture{ card_name } });
@@ -33,7 +33,7 @@ auto Button_Manager::load_textures() & -> void
 
     textures.reserve(buttons.getSize().x / dimmensions_button.x);
 
-    for (auto i = 0; i <= dimmensions_image.x; i += dimmensions_button.x) [[likely]]
+    for (auto i = 0; i <= dimmensions_image.x; i += dimmensions_button.x)
     {
         textures.emplace_back(t(i));
     }
