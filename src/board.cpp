@@ -2,11 +2,13 @@
 #include <cmath>
 #include <iterator>
 #include <numbers>
+#include <ranges>
 
 #include "../include/board.hpp"
 #include "../include/util.hpp"
 
 using namespace std::numbers;
+namespace rng = std::ranges;
 
 auto Board::update_position(std::pair<sf::Sprite&, sf::Sprite&> img, sf::Vector2f dest_pos
     , bool update_It_state) & -> void
@@ -103,22 +105,18 @@ auto Board::operator()(sf::Vector2f pos) -> void
 
 void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const  
 {
-    for (auto i = 0; i < total_piles; ++i) [[likely]]
-    {
-        if (!(piles[i].active))
-        {
-            for (const auto& card : piles[i].cards)
-            {
-                target.draw(card);
-            }
-        }
+    const auto inactive = [&, this](const auto& p) -> bool { return !(p.active); };
 
-        if (piles[i].rank == Rank_Lib::Rank::king)
+    for (auto& stack : piles | rng::views::filter(inactive))
+     {
+        for (const auto& card : stack.cards)  
         {
-            for (const auto& card : (piles[static_cast<int>(pos_prev)].cards))  
-            {
-                target.draw(card);
-            }
+           target.draw(card);
         }
+     }
+    
+    for (const auto& card : (piles[static_cast<int>(pos_prev)].cards)) 
+    {
+        target.draw(card);
     }
 }
