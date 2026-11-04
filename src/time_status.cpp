@@ -18,8 +18,9 @@ auto Time_Status::update(const sf::Clock& c) & -> void
 
     s = chr::duration_cast<chr::seconds>(static_cast<chr::microseconds>(elapsed));
 
-    elapsed_time.setString("Elapsed Time: " + std::to_string(h.count()) + " hours: " + std::to_string(m.count())
-        + " minutes: " + std::to_string(s.count()) + " seconds");
+    elapsed_time.setString(std::format(
+        "Elapsed Time: {} hours: {} minutes: {} seconds"
+        , h.count(), m.count(), s.count()));
 
     date.setString("Date: " + Util::local_time());
 }
