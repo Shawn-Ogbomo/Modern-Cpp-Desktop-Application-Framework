@@ -10,13 +10,13 @@ auto Time_Status::update(const sf::Clock& c) & -> void
 {
     auto elapsed = sf::Time{ chr::microseconds(c.getElapsedTime()) };
 
-    h = chr::duration_cast<chr::hours>(static_cast<chr::microseconds>(elapsed));
+    h = chr::duration_cast<chr::hours>(elapsed.toDuration());
     elapsed -= h;
 
-    m = chr::duration_cast<chr::minutes>(static_cast<chr::microseconds>(elapsed));
+    m = chr::duration_cast<chr::minutes>(elapsed.toDuration());
     elapsed -= m;
 
-    s = chr::duration_cast<chr::seconds>(static_cast<chr::microseconds>(elapsed));
+    s = chr::duration_cast<chr::seconds>(elapsed.toDuration());
 
     elapsed_time.setString(std::format(
         "Elapsed Time: {} hours: {} minutes: {} seconds"
