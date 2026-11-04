@@ -11,7 +11,7 @@
 namespace Util
 {
     auto load_font() -> const sf::Font&;
-    auto local_time() -> std::string;
+    auto date_time() -> std::string;
     auto allocate(Pile& stack) -> void;
 }
 
