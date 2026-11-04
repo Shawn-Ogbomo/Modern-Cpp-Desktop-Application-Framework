@@ -52,8 +52,10 @@ Music_Player::Music_Player()
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    const auto& [song_name, texture] = songs[current_song];
+
     target.draw(caption);
-    target.draw(songs[current_song].first);
+    target.draw(song_name);
     rng::for_each(buttons, [&target](const auto& button) { 
         target.draw(button);
         });
