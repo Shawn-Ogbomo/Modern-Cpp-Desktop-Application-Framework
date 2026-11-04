@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
+#include <format>
 #include <ranges>
 #include <string>
 #include <vector>
@@ -13,12 +14,10 @@
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
 #include "../include/refs.hpp"
+#include "../include/sqlite3.h"
 #include "../include/state.hpp"
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
-#include "../include/sqlite3.h"
-
-using namespace std::literals::string_literals;
 
 struct Menu : public sf::Drawable
 {
@@ -48,12 +47,12 @@ public:
     struct State_Label
     {
         std::array <std::string, 6> states{
-            "State"s.append(16, ' ') + ": " + "Paused",
-            "State"s.append(16, ' ') + ": " + "Playing",
-            "State"s.append(16, ' ') + ": " + "Win",
-            "State"s.append(16, ' ') + ": " + "Lose",
-            "State"s.append(16, ' ') + ": " + "Restart",
-            "State"s.append(16, ' ') + ": " + "Waiting..."
+            std::format("State{:>17}{:>7}" , ':' ,"Paused"),
+            std::format("State{:>17}{:>8}" , ':' ,"Playing"),
+            std::format("State{:>17}{:>4}" , ':' ,"Win"),
+            std::format("State{:>17}{:>5}" , ':' ,"Lose"),
+            std::format("State{:>17}{:>8}" , ':' ,"Restart"),
+            std::format("State{:>17}{:>11}" ,':' ,"Waiting...")
         };
     };
 
