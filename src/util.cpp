@@ -9,7 +9,7 @@ auto Util::load_font() -> const sf::Font&
     return f;
 }
 
-auto Util::local_time() -> std::string
+auto Util::date_time() -> std::string
 {
     const auto time_now = std::chrono::zoned_time<std::chrono::system_clock::duration
         , const std::chrono::time_zone*>
@@ -18,7 +18,7 @@ auto Util::local_time() -> std::string
         std::chrono::system_clock::now()
     };
 
-    return std::format("{:%a:%b:%d:%y %I:%M %p}", time_now.get_local_time());
+    return std::format("Date: {:%a:%b:%d:%y %I:%M %p}", time_now.get_local_time());
 }
 
 auto Util::allocate(Pile& stack)

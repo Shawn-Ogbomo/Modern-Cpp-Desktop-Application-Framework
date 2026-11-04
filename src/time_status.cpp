@@ -22,7 +22,7 @@ auto Time_Status::update(const sf::Clock& c) & -> void
         "Elapsed Time: {} hours: {} minutes: {} seconds"
         , h.count(), m.count(), s.count()));
 
-    date.setString("Date: " + Util::local_time());
+    date.setString(Util::date_time());
 }
 
 Time_Status::Time_Status()
