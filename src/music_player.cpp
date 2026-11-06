@@ -1,5 +1,3 @@
-#include <ranges>
-
 #include "../include/directory_manager.hpp"
 #include "../include/music_player.hpp"
 #include "../include/util.hpp"
@@ -10,28 +8,28 @@ namespace fs = std::filesystem;
 namespace B_N = Button_Names;
 namespace rng = std::ranges;
 
-Music_Player::Music_Player()
+Music_Player::Music_Player() : songs{ std::make_unique<sf::Music[]> (limit)}
 {
-    caption.setFillColor({ 236,203,180 });
     caption.setString("Song: ");
     caption.setCharacterSize(26);
     caption.setPosition({ 600, 842 });
+    caption.setFillColor({ 236,203,180 });
 
-    for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir()
-        / "audio" }) 
+    song_names.reserve(limit);
+
+    for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir() / "audio" })
     {
-        songs.emplace_back(sf::Text{ Util::load_font(), song.path().filename().stem().string() }, song);
+        song_names.push_back({ Util::load_font()
+            , song.path().filename().stem().string() });
 
-        auto& [name, file] = songs[index];
+        songs[index] = sf::Music{ song };
 
-        name.setFillColor({ 236,203,180 });
-        name.setPosition({ 674, 842 });
-        name.setCharacterSize(26);
+        song_names[index].setCharacterSize(26);
+        song_names[index].setPosition({674, 842});
+        song_names[index].setFillColor({236,203,180});
 
         ++index;
     }
-
-    limit = songs.size();
 
     bm.load_textures();
 
@@ -52,10 +50,8 @@ Music_Player::Music_Player()
 
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    const auto& [song_name, texture] = songs[current_song];
-
     target.draw(caption);
-    target.draw(song_name);
+    target.draw(song_names[current_song]);
     rng::for_each(buttons, [&target](const auto& button) { 
         target.draw(button);
         });
@@ -63,7 +59,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 auto Music_Player::idle() & -> void
 {
-    if (const auto& done = songs[current_song].second; done.getPlayingOffset()
+    if (const auto& done = songs[current_song]; done.getPlayingOffset()
         >= done.getDuration() - 500000us) [[unlikely]]
     {
         operator()(B_N::Media::next);
