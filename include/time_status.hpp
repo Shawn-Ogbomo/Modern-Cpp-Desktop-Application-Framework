@@ -18,12 +18,7 @@ public:
 
     sf::Text date{ Util::load_font() };
     sf::Text elapsed_time{ Util::load_font() };
-
     std::string date_today;
-
-    std::chrono::hours h{};
-    std::chrono::minutes m{};
-    std::chrono::seconds s{};
 };
 
 #endif // TIME_STATUS_HPP
