@@ -8,7 +8,7 @@ namespace chr = std::chrono;
 
 auto Time_Status::update(const sf::Clock& c) & -> void
 {
-    auto t1 = chr::hh_mm_ss{ c.getElapsedTime().toDuration() };
+    const auto t1 = chr::hh_mm_ss{ c.getElapsedTime().toDuration() };
     
     elapsed_time.setString(std::format(
         "Elapsed Time: {}:{}:{} "
