@@ -4,6 +4,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <memory>
+
 #include "../include/button.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/state.hpp"
@@ -15,6 +17,7 @@ struct Media_Button;
 
 struct  Music_Player : public sf::Drawable
 {
+    static constexpr auto limit = 10;
 public:
     Music_Player();
 
@@ -27,16 +30,17 @@ public:
     auto idle() & -> void;
     auto next() & -> void { current_song = current_song < limit - 1 ? ++current_song : 0; };
     auto prev() & -> void { current_song = current_song > 0 ? --current_song : current_song = limit - 1; };
-    auto stop() & -> void { songs[current_song].second.stop(); };
-    auto pause() & -> void { songs[current_song].second.pause(); };
-    auto play() & -> void { songs[current_song].second.play(); };
+    auto stop() & -> void { songs[current_song].stop(); };
+    auto pause() & -> void { songs[current_song].pause(); };
+    auto play() & -> void { songs[current_song].play(); };
 
     sf::Text caption{ Util::load_font() };
 
-    std::size_t limit{};
     std::size_t current_song{};
 
-    std::vector<std::pair<sf::Text, sf::Music>> songs;
+    std::unique_ptr<sf::Music[]> songs;
+    
+    std::vector<sf::Text> song_names;
     std::vector<Media_Button> buttons;
 
     Button_Manager bm;
