@@ -8,19 +8,11 @@ namespace chr = std::chrono;
 
 auto Time_Status::update(const sf::Clock& c) & -> void
 {
-    auto elapsed = sf::Time{ c.getElapsedTime().toDuration()};
-
-    h = chr::duration_cast<chr::hours>(elapsed.toDuration());
-    elapsed -= h;
-
-    m = chr::duration_cast<chr::minutes>(elapsed.toDuration());
-    elapsed -= m;
-
-    s = chr::duration_cast<chr::seconds>(elapsed.toDuration());
-
+    auto t1 = chr::hh_mm_ss{ c.getElapsedTime().toDuration() };
+    
     elapsed_time.setString(std::format(
-        "Elapsed Time: {} hours: {} minutes: {} seconds"
-        , h.count(), m.count(), s.count()));
+        "Elapsed Time: {}:{}:{} "
+        , t1.hours(), t1.minutes(), t1.seconds()));
 
     date.setString(Util::date_time());
 }
