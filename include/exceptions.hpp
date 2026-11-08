@@ -3,9 +3,8 @@
 
 #include <iostream>
 
-class Invalid_card_count : public std::invalid_argument
+struct Invalid_card_count : public std::invalid_argument
 {
-public:
     using std::invalid_argument::invalid_argument;
 };
 
