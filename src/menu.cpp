@@ -1,3 +1,5 @@
+#include <format>
+
 #include "../include/menu.hpp"
 
 namespace B_N = Button_Names;
@@ -18,13 +20,13 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     game_id_t.setCharacterSize(26);
     game_id_t.setPosition({ 0, 790 });
     game_id_t.setFillColor({ 236,203,180 });
-    game_id_t.setString("Game Id"s.append(11, ' ') + ": " + std::to_string(game_id));
+    game_id_t.setString(std::format("Game Id{:>12}{:>7}" , ':' ,game_id));
 
     move.setCharacterSize(26);
 
     move.setPosition({ 0, 842 });
     move.setFillColor({ 236,203,180 });
-    move.setString("Move"s.append(15, ' ') + ": " + std::to_string(move_count));
+    move.setString(std::format( "Move{:>16}{:>2}",':' , move_count));
 
     state = B_N::Game_State::playing;
 
@@ -36,12 +38,13 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p, Refs_Components& r_c) -> void
 {
-    if (move_count == Board::cards_pile * Board::total_piles)
+    if (move_count == Board::cards_pile * Board::total_piles) [[unlikely]]
     {
         update_game_state(B_N::Game_State::win, r_c);
+        return;
     }
 
-    else if (const auto num_kings = rng::count_if(p, Lose_Condition()); num_kings == Board::cards_pile)
+    if (const auto num_kings = rng::count_if(p, Lose_Condition()); num_kings == Board::cards_pile)
     {
         update_game_state(B_N::Game_State::lose, r_c);
     }
@@ -50,7 +53,8 @@ auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p, Refs_C
 auto Game_State_Menu::operator++() & -> const Game_State_Menu&
 {
     ++move_count;
-    move.setString("Move"s.append(15, ' ') + ": " + std::to_string(move_count));
+    move_count > 9 ? move.setString(std::format("Move{:>16}{:>3}", ':', move_count)) 
+        : move.setString(std::format("Move{:>16}{:>2}", ':', move_count));
     return *this;
 }
 
@@ -194,7 +198,7 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
 
 auto Confirmation_Menu::state_manager(Refs_Components& r_c) & ->void
 {
-    if (buttons.front().setting == ButtonMode::on)
+    if (buttons.front().contents.setting == ButtonMode::on) 
     {
         r_c.sp1_b.front() = false;
         r_c.sp6_rw.front().close();
@@ -205,13 +209,53 @@ auto Confirmation_Menu::state_manager(Refs_Components& r_c) & ->void
     r_c.sp8_cm.front().mode = ButtonMode::off;
 }
 
-Database_Manager::Database_Manager()
+Database_Manager::Database_Manager() :conn{ std::make_unique<sqlite3*>() }
 {
     /// TODO: open a database connection
-    /// Create a table and evaluate it against exists. 
-    /// What to name the table? 
-    /// schema? 
+    /// Create a table, if it exists sqlite won't create it. 
+    /// Try implementing a user-defined delete to avoid calling close() on the database connection explicitly. 
+
+    ///TODO: Don't use a raw path for parameter 1. 
+    if (const auto fail= sqlite3_open("../../../../data/data.db", &(*conn)); fail)
+    {
+        /// TODO:Throw an exception...
+        /// Provide a meaningful diagnostic. Use std::Path
+        throw std::invalid_argument{ "Invalid File...\n" };
+    }
+
+    ///TODO: Prepare SQLite commands by converting them to byte code before use.
+    const auto create_query = std::format(
+        "CREATE TABLE IF NOT EXISTS LEADERBOARD("
+        "alias TEXT NOT NULL,"
+        "game_id INTEGER PRIMARY KEY UNIQUE,"
+        "game_state TEXT NOT NULL,"
+        "elapsed_time TEXT NOT NULL,"
+        "local_time TEXT NOT NULL)");
     
+    ///Construct a query to read, write, and sort by date -- order by. 
+    /// with write if the database is full -- 20 records, overwrite the oldest record
+    /// create another query to sort the database by date. 
+    /// Date should be YY/MM/DD it will be easier to sort this way -- year num, month num 00 Jan is 1st since it is 01
+    ///Dec is last since it is 12 
+    ///write your query to the database using your time status local time to help then parse it? 
+    
+    ///When writing a record to database validate the alias against duplicates.
+    
+    ///Create a function to store all of your queries, compile, and execute them. 
+    
+    ///Create query is compiled here.
+    sqlite3_stmt* converted_create_query{};
+
+    ///End of last query goes here,
+    const char** nothing{};
+
+    /// Returns 26. The if file is empty and not in SQLite format. 
+    /// Don't create the file yourself.
+    
+    sqlite3_prepare_v2(*conn, create_query.c_str(), -1, &converted_create_query, nothing);
+    
+    /// Executes query and advances the pointer.
+    sqlite3_step(converted_create_query);
 }
 
 void Database_Manager::draw(sf::RenderTarget& target, sf::RenderStates states) const
