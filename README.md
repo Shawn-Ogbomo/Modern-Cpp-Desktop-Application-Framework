@@ -1,6 +1,6 @@
-# ⚙️ Modern C++ 4-Tier Application Framework (SFML 3 + C++20)
+# ⚙️ High-Performance C++20 Solitaire Simulation Engine (SFML 3 + SQLite3)
 
-A performance-focused native desktop application layout implemented in modern C++20 using the SFML graphics/audio library framework. This repository serves as a modular application blueprint that separates the visual interface, event handling, core logic, and data persistence layers.
+A memory-safe, hardware-accelerated desktop application layout engineered in native C++20 using the SFML 3 graphics and audio framework. This repository serves as a modular application architecture demonstrating clean separation of concerns across visual rendering layers, discrete event streams, type-erased menu state handlers, and persistent telemetry layers.
 
 ---
 
@@ -14,14 +14,14 @@ A performance-focused native desktop application layout implemented in modern C+
 
 ## 🚀 Architectural & Technical Highlights
 
-This application serves as a concrete portfolio project showcasing decoupling patterns, modern ISO guidelines, compile-time optimization, and resource safety:
+This application serves as a production-grade portfolio project showcasing decoupled design patterns, modern ISO C++ core guidelines, zero-allocation memory constraints, and strict resource safety:
 
-* **Static Dispatch & Compile-Time Constraints:** Leverages C++20 `<concepts>` to validate template type traits across real-time user interface events. Features a custom constraint (`Is_Valid_Enum`) to bound state-button configurations, providing clean compiler diagnostics and eliminating runtime exception pathways.
-* **Initialization Order Protection:** Integrates explicit C++20 compile-time initialization variables (`constinit`) across application configuration layers to protect static tracking objects and prevent runtime initialization sequence vulnerabilities across independent source files.
-* **Hybrid Stable Memory Architecture:** Implements a calculated container arrangement pairing a contiguous asset registry with individual pile layout structures. By utilizing `std::vector::reserve` alongside `std::deque` allocations, the engine achieves true O(1) front/back insertions without element-shifting penalties or iterator invalidation.
-* **Data Locality & Resource Decoupling:** Prioritizes object locality by storing visual elements sequentially in block allocations to maximize CPU L1/L2 cache-line retention. Telemetry evaluations are decoupled from the tight frame rendering pass by sharing a clock resource via smart pointers, restricting state checks strictly to active menu boundaries to reduce background CPU cycles.
-* **Modern Idioms & Clean Interfaces:** Eliminates raw pointer indirection by leveraging standard library customization points, structured bindings, directory iterators (`std::filesystem`), and ranges algorithms (`std::ranges::find_if`) to process layout maps safely.
-* **Data Layer Persistence:** Incorporates a modular persistence interface embedding the SQLite C-API wrapped inside clean, deterministic RAII structures to serialize execution state transactions natively (In Active Development).
+* **Type Erasure & Variant-Visitor Paradigm:** Replaced heavy, pointer-chasing virtual method tables (VTABLEs) and standard inheritance with type-safe heterogeneous rendering blocks using `std::variant` and `std::visit`. By executing button state updates via a structured compile-time overload pattern, the engine packs distinct UI components contiguously in memory—maximizing CPU L1/L2 instruction cache locality while preserving true value semantics.
+* **Compile-Time Domain Constraints:** Leverages modern C++20 `<concepts>` and template type traits (`std::is_enum_v`, `std::same_as`) to strictly gate and validate user interface interaction pathways. Custom structural constraints like `Is_Valid_Enum` ensure your button configurations bound cleanly, generating descriptive compiler diagnostic tracks and entirely eliminating runtime exception vectors.
+* **Cache-Stable & Non-Owning Memory Views:** Enforces explicit memory boundary management across the simulation layout using non-owning views (`std::span`). Combined with targeted pre-allocations (`std::vector::reserve`) and double-ended queue mappings (`std::deque::assign`), the engine completely eliminates runtime iterator invalidation risks and prevents mid-game heap fragmentation spikes during heavy allocation cycles.
+* **Decoupled Data Locality & GPU Shaders:** Visual assets are moved natively into place via zero-copy forwarding constructors (`emplace_back`), eliminating real-time system memory bus contention. The rendering path decouples expensive game-over checks from the frame loop, offloading active location-match indicators directly to the graphics pipeline via a custom hardware-accelerated GLSL fragment shader.
+* **Modern Idioms & Clean Interfaces:** Adheres to modern native conventions by completely stripping out raw pointer indirection and manual resource leaks. Features comprehensive use of structural bindings, zero-allocation string parsing (`std::string_view`, `std::from_chars`), dynamic directory loops (`std::filesystem`), and ranges algorithms (`std::ranges::find_if`) to handle execution mechanics safely.
+* **Native Transaction Persistence:** Incorporates a robust persistence layer interface embedding the native SQLite3 C-API. Connection streams and core table schemas are wrapped securely inside documentation-ready, smart-managed RAII constructs, ensuring high-integrity serialization of historical game telemetry records without background deadlocks or handle leaks.
 
 ---
 
