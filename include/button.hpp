@@ -33,7 +33,6 @@ struct Properties
 {
     T name{};
     ButtonMode setting{};
-   sf::Text label{Util::load_font() }; 
 };
 
 auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
@@ -50,10 +49,10 @@ auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
 auto configure_button(auto& button, auto val, std::string_view target_label, sf::Vector2f pos) -> void
 {
     update_button(button.contents.name, button.forms, val, pos);
-    button.contents.label.setString(target_label);
-    button.contents.label.setFillColor({ 236,203,180 });
-    button.contents.label.setCharacterSize(22);
-    button.contents.label.setPosition({ pos.x, pos.y });
+    button.label.setString(target_label);
+    button.label.setFillColor({ 236,203,180 });
+    button.label.setCharacterSize(22);
+    button.label.setPosition({ pos.x, pos.y });
 }
 
 auto display_manager(const auto& button, sf::RenderTarget& target) -> void
@@ -93,10 +92,11 @@ struct Game_State_Button : public Button
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
         display_manager(*this, target);
-        target.draw(contents.label);
+        target.draw(label);
     }
     
     Forms forms;
+    sf::Text label{ Util::load_font() };
     Properties<Button_Names::Game_State> contents;
 };
 
@@ -113,10 +113,11 @@ struct Exit_Button : public Button
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
         display_manager(*this, target);
-        target.draw(contents.label);
+        target.draw(label);
     }
 
     Forms forms;
+    sf::Text label{ Util::load_font() };
     Properties<Button_Names::Game_State> contents;
 };
 
@@ -133,10 +134,11 @@ struct Confirmation_Button : public Button
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
         display_manager(*this, target);
-        target.draw(contents.label);
+        target.draw(label);
     }
     
     Forms forms;
+    sf::Text label{ Util::load_font() };
     Properties<Button_Names::General> contents;
 };
 
@@ -153,10 +155,11 @@ struct Database_Button : public Button
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
         display_manager(*this, target);
-        target.draw(contents.label);
+        target.draw(label);
     }
 
     Forms forms;
+    sf::Text label{ Util::load_font() };
     Properties<Button_Names::General> contents;
 };
 
