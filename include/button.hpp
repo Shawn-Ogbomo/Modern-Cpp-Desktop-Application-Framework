@@ -4,8 +4,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "../include/menu.hpp"
-#include "../include/music_player.hpp"
 #include "../include/state.hpp"
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
@@ -60,107 +58,5 @@ auto display_manager(const auto& button, sf::RenderTarget& target) -> void
     static_cast<bool>(button.contents.setting) ? target.draw(button.forms.form_3)
         : target.draw(button.forms.form_1);
 }
-
-struct Music_Player;
-
-struct Media_Button : public Button
-{
-    Media_Button(const Texture_Forms& txtrs, auto val, sf::Vector2f pos) : forms{ txtrs }
-    {
-        update_button(contents.name, forms, val, pos);
-    }
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        display_manager(*this, target);
-    }
-
-    Forms forms;
-    Properties<Button_Names::Media> contents;
-};
-
-struct Game_State_Menu;
-
-struct Game_State_Button : public Button
-{
-    Game_State_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
-    {
-        configure_button(*this, val, target_label, pos);
-    }
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        display_manager(*this, target);
-        target.draw(label);
-    }
-    
-    Forms forms;
-    sf::Text label{ Util::load_font() };
-    Properties<Button_Names::Game_State> contents;
-};
-
-struct Exit_Menu;
-
-struct Exit_Button : public Button
-{
-    Exit_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
-    {
-        configure_button(*this, val, target_label, pos);
-    }
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        display_manager(*this, target);
-        target.draw(label);
-    }
-
-    Forms forms;
-    sf::Text label{ Util::load_font() };
-    Properties<Button_Names::Game_State> contents;
-};
-
-struct Confirmation_Menu;
-
-struct Confirmation_Button : public Button
-{
-    Confirmation_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
-    {
-        configure_button(*this, val, target_label, pos);
-    }
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        display_manager(*this, target);
-        target.draw(label);
-    }
-    
-    Forms forms;
-    sf::Text label{ Util::load_font() };
-    Properties<Button_Names::General> contents;
-};
-
-struct Database_Manager;
-
-struct Database_Button : public Button
-{
-    Database_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
-    {
-        configure_button(*this, val, target_label, pos);
-    }
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        display_manager(*this, target);
-        target.draw(label);
-    }
-
-    Forms forms;
-    sf::Text label{ Util::load_font() };
-    Properties<Button_Names::General> contents;
-};
 
 #endif //BUTTON_HPP

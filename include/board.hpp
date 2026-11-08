@@ -9,7 +9,6 @@
 
 struct Pile
 {
-public:
     bool active{};
     std::deque<Card> cards;
     Rank_Lib::Rank rank{};
@@ -22,7 +21,7 @@ struct Board : public sf::Drawable
     static constexpr auto total_piles = 13;
 
     using Piles = std::array<Pile, total_piles>;
-public:
+
     Board() = delete;
     explicit Board(Deck& d);
     auto operator()(sf::Vector2f pos = {}) -> void;

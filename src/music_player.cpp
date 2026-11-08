@@ -8,19 +8,19 @@ namespace fs = std::filesystem;
 namespace B_N = Button_Names;
 namespace rng = std::ranges;
 
-Music_Player::Music_Player() : songs{ std::make_unique<sf::Music[]> (limit)}
+Music_Player::Music_Player() : songs{ std::make_unique<sf::Music[]> (song_limit)}
 {
     caption.setString("Song: ");
     caption.setCharacterSize(26);
     caption.setPosition({ 600, 842 });
     caption.setFillColor({ 236,203,180 });
 
-    song_names.reserve(limit);
+    song_names.reserve(song_limit);
 
     for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir() / "audio" })
     {
         song_names.push_back({ Util::load_font()
-            , song.path().filename().stem().string() });
+            ,song.path().filename().stem().string() } );
 
         songs[index] = sf::Music{ song };
 
@@ -33,13 +33,13 @@ Music_Player::Music_Player() : songs{ std::make_unique<sf::Music[]> (limit)}
 
     bm.load_textures();
 
-    buttons.reserve(bm.textures.size());
-
     auto button_pos = sf::Vector2f{ 452.0f - 35.0f, 842.0f };
 
     for (auto internal_index = B_N::Media{}; const auto& texture : bm.textures)
     {
-        buttons.push_back({ texture, internal_index, button_pos });
+        buttons[static_cast<int>(internal_index)] 
+            = {texture, internal_index, button_pos};
+        
         ++internal_index;
         button_pos.x += 35;
     }

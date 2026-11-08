@@ -74,9 +74,6 @@ public:
 
     auto run() -> void
     {
-        sf::Texture t_test{ sf::Texture{ std::filesystem::path{ "C:/Dev/clock_solitaire/assets/overlay/background.png" } } };
-        sf::Sprite test{ t_test };
-
         Database_Manager db;
 
         while (running)
@@ -103,21 +100,21 @@ public:
 
             auto o1 = overload
             {
-                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().name, rc); },
-                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.embs.front().name, rc);  },
+                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().contents.name, rc); },
+                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.embs.front().contents.name, rc);  },
                 [&, this](std::span<Confirmation_Button>) { cm.state_manager(rc); },
-                [&, this](std::span<Media_Button>) { mp.operator()(mp.mbs.front().name); }
+                [&, this](std::span<Media_Button>) { mp.operator()(mp.mbs.front().contents.name); }
             , };
 
             const auto& component_click_listener = [&](auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
                 {
                     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-                        return(b.forms.form_1).getGlobalBounds().contains(cursor_pos);
+                        return(b.forms.form_1.getGlobalBounds().contains(cursor_pos));
                         });
 
                     if (button != std::end(buttons))
                     {
-                        button->setting = ButtonMode::on;
+                        button->contents.setting = ButtonMode::on;
                         spn = { &(*button) ,1 };
                         v1 = spn;
                     }
@@ -135,7 +132,7 @@ public:
                             std::visit(o1, v1);
                         }
 
-                        spn.front().setting = ButtonMode::off;
+                        spn.front().contents.setting = ButtonMode::off;
                     }
 
                     spn = std::span<spn_type>{};
@@ -249,9 +246,6 @@ public:
                 
                 // draw to window
                 enable_shader(b);
-
-                //window.draw(test);   /// overlay toggle this on and off depending on the game_state
-                //get paused, win, lose, and waiting to blink
 
                 window.draw(gsm);
                 window.draw(ts);

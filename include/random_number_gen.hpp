@@ -5,7 +5,6 @@
 
 struct Random_Number_Gen
 {
-public:
     Random_Number_Gen(int min = 0, int max = 51) : dst{min,max}
     {
         std::generate(std::begin(seed_data), std::end(seed_data),

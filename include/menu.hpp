@@ -22,23 +22,36 @@
 struct Menu : public sf::Drawable
 {
     static constexpr auto limit = 2;
-public:
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual operator bool() const = 0;
     virtual ~Menu() = default;
 };
 
-struct Game_State_Button;
-struct Exit_Button;
-struct Confirmation_Button;
-struct Database_Button;
-
 template<typename T>
 concept Is_Valid_Menu = std::derived_from<T, Menu>;
 
+struct Game_State_Button : public Button
+{
+    Game_State_Button(const Texture_Forms& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+    {
+        configure_button(*this, val, target_label, pos);
+    }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        display_manager(*this, target);
+        target.draw(label);
+    }
+
+    Forms forms;
+    sf::Text label{ Util::load_font() };
+    Properties<Button_Names::Game_State> contents;
+};
+
 struct Game_State_Menu : public Menu
 {
-public:
     struct Lose_Condition
     {
         auto operator()(const Card& card)const ->bool;
@@ -89,9 +102,27 @@ public:
     ButtonMode mode{ ButtonMode::on };
 };
 
+struct Exit_Button : public Button
+{
+    Exit_Button(const Texture_Forms& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+    {
+        configure_button(*this, val, target_label, pos);
+    }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        display_manager(*this, target);
+        target.draw(label);
+    }
+
+    Forms forms;
+    sf::Text label{ Util::load_font() };
+    Properties<Button_Names::Game_State> contents;
+};
+
 struct Exit_Menu : public Menu
 {
-public:
     explicit  Exit_Menu(const General_Buttons& gb);
     operator bool() const override { return static_cast<bool>(mode); }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -102,9 +133,27 @@ public:
     ButtonMode mode{ ButtonMode::on };
 };
 
+struct Confirmation_Button : public Button
+{
+    Confirmation_Button(const Texture_Forms& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+    {
+        configure_button(*this, val, target_label, pos);
+    }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        display_manager(*this, target);
+        target.draw(label);
+    }
+
+    Forms forms;
+    sf::Text label{ Util::load_font() };
+    Properties<Button_Names::General> contents;
+};
+
 struct Confirmation_Menu : public Menu
 {
-public:
     struct Prompts
     {
         std::array <std::string, 2> labels{
@@ -139,7 +188,6 @@ public:
 
 struct Record
 {
-public:
     //game id
     //game state
     
@@ -147,15 +195,33 @@ public:
     //date -- includes local time 
 };
 
+struct Database_Button : public Button
+{
+    Database_Button(const Texture_Forms& txtrs
+        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+    {
+        configure_button(*this, val, target_label, pos);
+    }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        display_manager(*this, target);
+        target.draw(label);
+    }
+
+    Forms forms;
+    sf::Text label{ Util::load_font() };
+    Properties<Button_Names::General> contents;
+};
+
 struct Database_Manager : public Menu
 {
-public: 
-    Database_Manager();     //create the table here.. evaluate it against exists table sqlite command 
+    Database_Manager();  ///create the table here.. evaluate it against exists table sqlite command 
     operator bool() const override{ return static_cast<bool>(mode); };
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     sf::Sprite text_box{default_texture()};
-    sf::Text indicator{Util::load_font()};       //perhaps make this its own type with state and draw
+    sf::Text indicator{Util::load_font()};  ///perhaps make this its own type with state and draw
 
     sf::RectangleShape text_field;
 

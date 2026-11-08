@@ -10,7 +10,6 @@
 
 struct Time_Status : public sf::Drawable
 {
-public:
     Time_Status();
     auto update(const sf::Clock& c) & -> void;
 

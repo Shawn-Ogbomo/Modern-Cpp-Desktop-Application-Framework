@@ -13,7 +13,6 @@
 
 struct Card : public sf::Drawable
 {
-public:
     Card() = default;
     explicit Card(std::string_view card_name, std::span<const sf::Texture> f
         , std::span<const sf::Texture>re

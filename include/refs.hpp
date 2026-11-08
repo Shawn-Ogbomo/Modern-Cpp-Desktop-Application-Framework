@@ -7,17 +7,14 @@
 #include <span>
 
 #include "../include/board.hpp"
-#include "../include/menu.hpp"
 #include "../include/music_player.hpp"
 
 struct Exit_Menu;
-struct Music_Player;
 struct Game_State_Menu;
 struct Confirmation_Menu;
 
 struct Refs_Components
 {
-public:
     Refs_Components(std::span<bool> bsas, std::span<Board> bs, std::span<sf::Clock> cs,
         std::span<Exit_Menu>ems, std::span<Music_Player> mps, std::span<sf::RenderWindow> rws
         , std::span<Game_State_Menu> gsms, std::span<Confirmation_Menu> cms)
