@@ -38,9 +38,10 @@ struct  Music_Player : public sf::Drawable
     static constexpr auto song_limit = 10;
 
     Music_Player();
+    Music_Player(Music_Player&&) = default;
 
+    auto operator =(Music_Player&&) noexcept -> Music_Player & = default;
     operator bool() const& { return static_cast<bool>(mode); };
-
     auto operator()(Button_Names::Media name) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
