@@ -99,7 +99,6 @@ struct Game_State_Menu : public Menu
     Button_Names::Game_State state_prev{};
 
     std::span<Game_State_Button> gsbs{};
-    //std::vector<Game_State_Button> state_buttons;
     std::array<Game_State_Button,Menu::limit> state_buttons;
 
     ButtonMode mode{ ButtonMode::on };
