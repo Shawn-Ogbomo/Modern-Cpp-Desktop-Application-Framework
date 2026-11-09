@@ -33,6 +33,8 @@ concept Is_Valid_Menu = std::derived_from<T, Menu>;
 
 struct Game_State_Button : public Button
 {
+    Game_State_Button() = default;
+
     Game_State_Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
     {
@@ -97,13 +99,16 @@ struct Game_State_Menu : public Menu
     Button_Names::Game_State state_prev{};
 
     std::span<Game_State_Button> gsbs{};
-    std::vector<Game_State_Button> state_buttons;
+    //std::vector<Game_State_Button> state_buttons;
+    std::array<Game_State_Button,Menu::limit> state_buttons;
 
     ButtonMode mode{ ButtonMode::on };
 };
 
 struct Exit_Button : public Button
 {
+    Exit_Button() = default;
+
     Exit_Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
     {
@@ -128,13 +133,15 @@ struct Exit_Menu : public Menu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     std::span<Exit_Button> embs;
-    std::vector<Exit_Button> buttons;
+    std::array<Exit_Button,Menu::limit> buttons;
 
     ButtonMode mode{ ButtonMode::on };
 };
 
 struct Confirmation_Button : public Button
 {
+    Confirmation_Button() = default;
+    
     Confirmation_Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
     {
@@ -178,7 +185,7 @@ struct Confirmation_Menu : public Menu
     auto state_manager(Refs_Components& r_c) & ->void;
 
     std::span<Confirmation_Button> cbs;
-    std::vector<Confirmation_Button> buttons{};
+    std::array<Confirmation_Button,Menu::limit> buttons{};
 
     sf::Text prompt{ Util::load_font() };
     sf::Sprite text_box{ default_texture() };

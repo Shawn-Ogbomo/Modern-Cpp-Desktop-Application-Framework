@@ -12,10 +12,8 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     Random_Number_Gen rng{ 100'000,999'999 };
     game_id = rng.dst(rng.g);
 
-    state_buttons.reserve(Menu::limit);
-
-    state_buttons.push_back({ gb.textures,B_N::Game_State::paused, {417,800}, "Pause" });
-    state_buttons.push_back({ gb.textures,B_N::Game_State::playing, {502,800}, "Resume" });
+    state_buttons.front() = { gb.textures,B_N::Game_State::paused, {417,800}, "Pause" };
+    state_buttons.back() = { gb.textures,B_N::Game_State::playing, {502,800}, "Resume" };
 
     game_id_t.setCharacterSize(26);
     game_id_t.setPosition({ 0, 790 });
@@ -53,8 +51,11 @@ auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p, Refs_C
 auto Game_State_Menu::operator++() & -> const Game_State_Menu&
 {
     ++move_count;
-    move_count > 9 ? move.setString(std::format("Move{:>16}{:>3}", ':', move_count)) 
+    
+    move_count > 9 
+        ? move.setString(std::format("Move{:>16}{:>3}", ':', move_count)) 
         : move.setString(std::format("Move{:>16}{:>2}", ':', move_count));
+
     return *this;
 }
 
@@ -145,10 +146,8 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
 
 Exit_Menu::Exit_Menu(const General_Buttons& gb)
 {
-    buttons.reserve(Menu::limit);
-
-    buttons.push_back({ gb.textures, B_N::Game_State::restart, {5, 0}, "Reset" });
-    buttons.push_back({ gb.textures, B_N::Game_State::quit, {5, 40}, "Quit" });
+    buttons.front() = { gb.textures, B_N::Game_State::restart, {5, 0}, "Reset" };
+    buttons.back() = { gb.textures, B_N::Game_State::quit, {5, 40}, "Quit" };
 }
 
 void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -161,8 +160,6 @@ Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes
     std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
 {
     prompt.setString(get_prompts().labels.front());
-
-    buttons.reserve(Menu::limit);
 
     prompt.setFillColor({ 236,203,180 });
     prompt.setCharacterSize(26);
@@ -178,11 +175,11 @@ Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes
     text_box.setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
         , (dimensions_window.y - dimensions_textbox.y) / 2 });
 
-    buttons.push_back({ gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y
-        + dimensions_textbox.y - 50}, "Yes" });
+    buttons.front() = { gb.textures, B_N::General::yes, {417, text_box.getGlobalBounds().position.y
+        + dimensions_textbox.y - 50}, "Yes" };
 
-    buttons.push_back({ gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y
-        + dimensions_textbox.y - 50}, "No" });
+    buttons.back() = { gb.textures, B_N::General::no, {502,  text_box.getGlobalBounds().position.y
+        + dimensions_textbox.y - 50}, "No" };
 }
 
 void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
