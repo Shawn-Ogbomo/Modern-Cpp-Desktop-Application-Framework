@@ -58,9 +58,6 @@ struct  Music_Player : public sf::Drawable
 
     std::unique_ptr<sf::Music[]> songs;
 
-    /// There are no constraints preventing copying or moving. 
-    /// The managed type is not default constructable
-    /// Wrap sf::Text in a custom type to use std::array; measure the cost against vector. 
     std::vector<sf::Text> song_names; 
     std::array<Media_Button,Media_Button::limit> buttons{};
 
