@@ -49,9 +49,9 @@ struct  Music_Player : public sf::Drawable
     auto idle() & -> void;
     auto next() & -> void { current_song = current_song < song_limit - 1 ? ++current_song : 0; };
     auto prev() & -> void { current_song = current_song > 0 ? --current_song : current_song = song_limit - 1; };
-    auto stop() & -> void { songs[current_song].stop(); };
-    auto pause() & -> void { songs[current_song].pause(); };
-    auto play() & -> void { songs[current_song].play(); };
+    auto stop() const & -> void { songs[current_song].stop(); };
+    auto pause() const & -> void { songs[current_song].pause(); };
+    auto play() const & -> void { songs[current_song].play(); };
 
     sf::Text caption{ Util::load_font() };
     std::size_t current_song{};
