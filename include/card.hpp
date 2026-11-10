@@ -18,7 +18,6 @@ struct Card : public sf::Drawable
         , std::span<const sf::Texture>re
         , Card_State st = Card_State::face_down);
 
-    auto img() & -> std::pair<sf::Sprite&, sf::Sprite&> { return { std::ref(face),std::ref(reverse) }; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     
     Suit suit{};

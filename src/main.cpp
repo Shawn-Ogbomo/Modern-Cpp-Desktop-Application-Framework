@@ -62,7 +62,7 @@ public:
         if (!b.destination_pile.empty() && !b.source_pile.empty()
             && b.destination_pile.front().rank == b.source_pile.front().cards.back().rank)
         {
-            const auto pos = b.destination_pile.front().cards.front().img().first.getPosition();
+            const auto pos = b.destination_pile.front().cards.front().face.getPosition();
             glow_rect.setPosition(sf::Vector2f{ pos.x - 10, pos.y - 10 });
             window.draw(glow_rect, &glow_shader);
             shader_enabled = true;
@@ -172,8 +172,10 @@ public:
                     {
                         if (!b.source_pile.empty())
                         {
-                            b.update_position(b.source_pile.front().cards.back().img(), sf::Vector2f{ mouseMoved->position.x
+                            b.update_position({ &b.source_pile.front().cards.back().face,1 }
+                                , { &b.source_pile.front().cards.back().reverse,1 }, sf::Vector2f{ mouseMoved->position.x
                                 + .0f, mouseMoved->position.y + .0f });
+                            
                             b.operator()(); 
                         }
                     }
@@ -194,8 +196,9 @@ public:
                             {
                                 if (!shader_enabled)
                                 {
-                                    b.update_position(b.source_pile.front().cards.back().img()
-                                        , b.source_pile.front().location, true);
+                                    b.update_position({&b.source_pile.front().cards.back().face, 1}
+                                    , { &b.source_pile.front().cards.back().reverse,1 }
+                                    , b.source_pile.front().location, true);
 
                                     continue;
                                 }
@@ -220,7 +223,8 @@ public:
 
                                 gsm(b.piles.back().cards, rc);
 
-                                b.update_position(dst_cards.front().img(), b.destination_pile.front().location, true);
+                                b.update_position({ &dst_cards.front().face,1 }, { &dst_cards.front().reverse ,1 }
+                                , b.destination_pile.front().location, true);
                             }
                         }     
                     }

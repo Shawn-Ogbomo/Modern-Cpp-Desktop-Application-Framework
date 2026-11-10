@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <cmath>
-#include <iterator>
 #include <numbers>
 #include <ranges>
 
@@ -10,13 +9,11 @@
 using namespace std::numbers;
 namespace rng = std::ranges;
 
-auto Board::update_position(std::pair<sf::Sprite&, sf::Sprite&> img, sf::Vector2f dest_pos
-    , bool update_It_state) & -> void
+auto Board::update_position(std::span<sf::Sprite> img_f, 
+std::span<sf::Sprite> img_b, sf::Vector2f dest_pos, bool update_It_state) & -> void
 {
-    auto& [face, reverse] = img;
-
-    face.setPosition(dest_pos);
-    reverse.setPosition(dest_pos);
+    img_f.front().setPosition(dest_pos);
+    img_b.front().setPosition(dest_pos);
 
     if (update_It_state)
     {
@@ -63,11 +60,11 @@ Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }
         {
             card = d.draw();
 
-            auto [face, reverse] = card.img();
-            position_card(face, reverse, rank, index, total_piles);
+            position_card(card.face, card.reverse
+                , rank, index, total_piles);
         }
 
-        pos = cards.back().img().first.getPosition();
+        pos = cards.back().face.getPosition();
 
         ++index;
     }
@@ -83,7 +80,7 @@ auto Board::operator()(sf::Vector2f pos) -> void
     for ( auto& stack: piles) [[likely]]
     {
         auto& [pile_active, pile, rank, internal_pos] = stack;
-        const auto& [face, reverse] = pile.front().img();
+        const auto& face = pile.front().face;
 
         if (pile_active && face.getGlobalBounds().contains(pos))
         {
@@ -92,7 +89,7 @@ auto Board::operator()(sf::Vector2f pos) -> void
         }
 
         if (!source_pile.empty() && face.getGlobalBounds().findIntersection(
-            (source_pile).front().cards.back().img().first.getGlobalBounds()))
+            (source_pile).front().cards.back().face.getGlobalBounds()))
         {
             destination_pile = { &stack, 1 };
             return;

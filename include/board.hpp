@@ -26,7 +26,7 @@ struct Board : public sf::Drawable
     explicit Board(Deck& d);
     auto operator()(sf::Vector2f pos = {}) -> void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    auto update_position(std::pair<sf::Sprite&, sf::Sprite&> img,
+    auto update_position(std::span<sf::Sprite>img_f, std::span<sf::Sprite> img_b,
         sf::Vector2f dest_pos, bool update_It_state = false)
         & -> void;
 
