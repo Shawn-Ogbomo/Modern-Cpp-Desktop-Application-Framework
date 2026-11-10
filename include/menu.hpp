@@ -197,11 +197,9 @@ struct Confirmation_Menu : public Menu
 
 struct Record
 {
-    //game id
-    //game state
-    
-    // elapsed time
-    //date -- includes local time 
+    int game_id;
+    Button_Names::Game_State game_id;
+    std::string_view elapsed_time;
 };
 
 struct Database_Button : public Button
