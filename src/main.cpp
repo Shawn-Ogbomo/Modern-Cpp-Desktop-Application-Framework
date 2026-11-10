@@ -223,8 +223,9 @@ public:
 
                                 gsm(b.piles.back().cards, rc);
 
-                                b.update_position({ &dst_cards.front().face,1 }, { &dst_cards.front().reverse ,1 }
-                                , b.destination_pile.front().location, true);
+                                b.update_position({ &dst_cards.front().face,1 }
+                                    , { &dst_cards.front().reverse ,1 }
+                                    , b.destination_pile.front().location, true);
                             }
                         }     
                     }
