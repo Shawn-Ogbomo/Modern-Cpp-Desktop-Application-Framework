@@ -197,8 +197,8 @@ struct Confirmation_Menu : public Menu
 
 struct Record
 {
-    int game_id;
-    Button_Names::Game_State game_id;
+    int id{};
+    Button_Names::Game_State state{};
     std::string_view elapsed_time;
 };
 
