@@ -198,8 +198,12 @@ struct Confirmation_Menu : public Menu
 struct Record
 {
     int id{};
-    Button_Names::Game_State state{};
+    int moves{};
+
+    std::string alias;
     std::string_view elapsed_time;
+
+    Button_Names::Game_State state{};
 };
 
 struct Database_Button : public Button
