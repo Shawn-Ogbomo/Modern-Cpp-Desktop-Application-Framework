@@ -18,7 +18,8 @@ struct Media_Button : public Button
 
     Media_Button() = default;
 
-    Media_Button(const Texture_Forms& txtrs, auto val, sf::Vector2f pos) : forms{ txtrs }
+    Media_Button(const Texture_Forms& txtrs, Button_Names::Media val
+        , sf::Vector2f pos) : forms{ txtrs }
     {
         update_button(contents.name, forms, val, pos);
     }

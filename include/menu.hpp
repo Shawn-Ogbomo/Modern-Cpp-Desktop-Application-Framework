@@ -33,7 +33,7 @@ struct Game_State_Button : public Button
     Game_State_Button() = default;
 
     Game_State_Button(const Texture_Forms& txtrs
-        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , Button_Names::Game_State val, sf::Vector2f pos
         , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
@@ -110,7 +110,7 @@ struct Exit_Button : public Button
     Exit_Button() = default;
 
     Exit_Button(const Texture_Forms& txtrs
-        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , Button_Names::Game_State val, sf::Vector2f pos
         , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
@@ -144,7 +144,7 @@ struct Confirmation_Button : public Button
     Confirmation_Button() = default;
     
     Confirmation_Button(const Texture_Forms& txtrs
-        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , Button_Names::General val, sf::Vector2f pos
         , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
@@ -207,7 +207,7 @@ struct Record
 struct Database_Button : public Button
 {
     Database_Button(const Texture_Forms& txtrs
-        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , Button_Names::General val, sf::Vector2f pos
         , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
@@ -226,7 +226,7 @@ struct Database_Button : public Button
 
 struct Database_Manager : public Menu
 {
-    Database_Manager();  ///create the table here.. evaluate it against exists table sqlite command 
+    Database_Manager();  ///Create the table here.. evaluate it against exists table SQLlite command 
     operator bool() const override{ return static_cast<bool>(mode); };
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
