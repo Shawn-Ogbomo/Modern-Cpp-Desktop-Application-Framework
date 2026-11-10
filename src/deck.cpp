@@ -18,6 +18,7 @@ Deck::Deck()
         auto& [name, texture] = textures;
         cards.emplace_back(name.string(), std::span{&texture, 1}
         , std::span{&back_card, 1}); }); [[likely]]
+
     shuffle();
 }
 
