@@ -44,7 +44,8 @@ auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
     forms.form_3.setPosition(pos);
 }
 
-auto configure_button(auto& button, auto val, std::string_view target_label, sf::Vector2f pos) -> void
+auto configure_button(auto& button, Button_Names::Is_Valid_Enum auto val
+    , std::string_view target_label, sf::Vector2f pos) -> void
 {
     update_button(button.contents.name, button.forms, val, pos);
     button.label.setString(target_label);

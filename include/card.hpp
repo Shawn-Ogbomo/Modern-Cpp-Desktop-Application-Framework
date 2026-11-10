@@ -18,7 +18,8 @@ struct Card : public sf::Drawable
         , std::span<const sf::Texture>re
         , Card_State st = Card_State::face_down);
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    virtual void draw(sf::RenderTarget& target
+        , sf::RenderStates states) const;
     
     Suit suit{};
     Card_State state{};

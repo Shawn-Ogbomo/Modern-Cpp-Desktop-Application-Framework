@@ -68,7 +68,8 @@ void Game_State_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) co
     target.draw(state_buttons.back());
 }
 
-auto Game_State_Menu::update_game_state(auto g_state, Refs_Components& r_c) & -> void
+auto Game_State_Menu::update_game_state( B_N::Game_State g_state
+, Refs_Components& r_c) & -> void
 {
     const auto& disable_piles = [&, this]
         {

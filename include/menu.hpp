@@ -28,15 +28,13 @@ struct Menu : public sf::Drawable
     virtual ~Menu() = default;
 };
 
-template<typename T>
-concept Is_Valid_Menu = std::derived_from<T, Menu>;
-
 struct Game_State_Button : public Button
 {
     Game_State_Button() = default;
 
     Game_State_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
     }
@@ -79,12 +77,15 @@ struct Game_State_Menu : public Menu
 
     explicit  Game_State_Menu(const General_Buttons& gb);
 
-    auto operator()(const std::ranges::ref_view<std::deque<Card>> p, Refs_Components& r_c) -> void;
+    auto operator()(const std::ranges::ref_view<std::deque<Card>> p
+        , Refs_Components& r_c) -> void;
+
     auto operator++() & -> const Game_State_Menu&;
 
     operator bool() const override { return static_cast<bool>(mode); }
 
-    auto update_game_state(auto g_state, Refs_Components& r_c) & ->void;
+    auto update_game_state(Button_Names::Game_State g_state
+        , Refs_Components& r_c) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -109,7 +110,8 @@ struct Exit_Button : public Button
     Exit_Button() = default;
 
     Exit_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
     }
@@ -142,7 +144,8 @@ struct Confirmation_Button : public Button
     Confirmation_Button() = default;
     
     Confirmation_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
     }
@@ -204,7 +207,8 @@ struct Record
 struct Database_Button : public Button
 {
     Database_Button(const Texture_Forms& txtrs
-        , auto val, sf::Vector2f pos, std::string_view target_label) : forms{ txtrs }
+        , Button_Names::Is_Valid_Enum auto val, sf::Vector2f pos
+        , std::string_view target_label) : forms{ txtrs }
     {
         configure_button(*this, val, target_label, pos);
     }
