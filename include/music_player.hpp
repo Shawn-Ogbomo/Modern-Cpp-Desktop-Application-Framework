@@ -33,36 +33,47 @@ struct Media_Button : public Button
     Properties<Button_Names::Media> contents;
 };
 
-struct  Music_Player : public sf::Drawable
+struct Track_Title
+{
+    Track_Title() = default;
+    Track_Title(std::string s) :name{ Util::load_font(),std::move(s) } {}
+    Track_Title(Track_Title&&) = default;
+    auto operator =(Track_Title&&) noexcept -> Track_Title & = default;
+    sf::Text name{ Util::load_font() };
+};
+
+class  Music_Player : public sf::Drawable
 {
     static constexpr auto song_limit = 10;
-
+    using Media_Buttons = std::array<Media_Button, Media_Button::limit>;
+public:
     Music_Player();
     Music_Player(Music_Player&&) = default;
 
     auto operator =(Music_Player&&) noexcept -> Music_Player & = default;
-    operator bool() const& { return static_cast<bool>(mode); };
+    operator bool() const& { return static_cast<bool>(mode); }
     auto operator()(Button_Names::Media name) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     auto idle() & -> void;
-    auto next() & -> void { current_song = current_song < song_limit - 1 ? ++current_song : 0; };
-    auto prev() & -> void { current_song = current_song > 0 ? --current_song : current_song = song_limit - 1; };
-    auto stop() const & -> void { songs[current_song].stop(); };
-    auto pause() const & -> void { songs[current_song].pause(); };
-    auto play() const & -> void { songs[current_song].play(); };
-
+    auto buttons() & -> Media_Buttons& { return internal_buttons; }
+    auto clicked_button() & -> std::span<Media_Button>& { return mbs; }
+private:
     sf::Text caption{ Util::load_font() };
     std::size_t current_song{};
 
     std::unique_ptr<sf::Music[]> songs;
 
-    std::vector<sf::Text> song_names; 
-    std::array<Media_Button,Media_Button::limit> buttons{};
+    std::unique_ptr<Track_Title[]> song_names;
+    Media_Buttons internal_buttons{};
 
+    /// TODO: Button_Manager doesn't belong here. Create another type to manage all of your textures
+    ///Give Music_player a span to the Texture manager getter that returns the Media_Button textures.
+    /// through a getter to prevent Music_Player from accessing what it shouldn't.
     Button_Manager bm;
     ButtonMode mode{};
+
     std::span<Media_Button> mbs;
 };
 

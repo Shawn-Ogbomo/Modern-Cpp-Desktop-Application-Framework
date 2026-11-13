@@ -1,32 +1,30 @@
 #include "../include/directory_manager.hpp"
 #include "../include/music_player.hpp"
-#include "../include/util.hpp"
 
 using namespace std::chrono_literals;
 namespace D_M = Directory_Manager;
 namespace fs = std::filesystem;
 namespace B_N = Button_Names;
 namespace rng = std::ranges;
+using namespace std::string_literals;
 
-Music_Player::Music_Player() : songs{ std::make_unique<sf::Music[]> (song_limit)}
+Music_Player::Music_Player() : songs{ std::make_unique <sf::Music[]>(song_limit)}
+, song_names{std::make_unique<Track_Title[]>(song_limit)}
 {
     caption.setString("Song: ");
     caption.setCharacterSize(26);
     caption.setPosition({ 600, 842 });
     caption.setFillColor({ 236,203,180 });
 
-    song_names.reserve(song_limit);
-
     for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir() / "audio" })
     {
-        song_names.push_back({ Util::load_font()
-            ,song.path().filename().stem().string() } );
+        song_names[index] = {song.path().filename().stem().string() };
 
         songs[index] = sf::Music{ song };
 
-        song_names[index].setCharacterSize(26);
-        song_names[index].setPosition({674, 842});
-        song_names[index].setFillColor({236,203,180});
+        song_names[index].name.setCharacterSize(26);
+        song_names[index].name.setPosition({ 674, 842 });
+        song_names[index].name.setFillColor({ 236,203,180 });
 
         ++index;
     }
@@ -37,7 +35,7 @@ Music_Player::Music_Player() : songs{ std::make_unique<sf::Music[]> (song_limit)
 
     for (auto internal_index = B_N::Media{}; const auto& texture : bm.textures)
     {
-        buttons[static_cast<int>(internal_index)] 
+        internal_buttons[static_cast<int>(internal_index)] 
             = {texture, internal_index, button_pos};
         
         ++internal_index;
@@ -51,8 +49,8 @@ Music_Player::Music_Player() : songs{ std::make_unique<sf::Music[]> (song_limit)
 void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(caption);
-    target.draw(song_names[current_song]);
-    rng::for_each(buttons, [&target](const auto& button) { 
+    target.draw(song_names[current_song].name);
+    rng::for_each(internal_buttons, [&target](const auto& button) { 
         target.draw(button);
         });
 }
@@ -68,6 +66,12 @@ auto Music_Player::idle() & -> void
 
 auto Music_Player::operator()(Button_Names::Media name) & ->void
 {
+    const auto& stop = [&,this]{ songs[current_song].stop(); };
+    const auto& play = [&,this] { songs[current_song].play(); };
+    const auto& pause = [&, this] { songs[current_song].pause(); };
+    const auto& next = [&, this] { current_song = (current_song < song_limit - 1) ? ++current_song : 0; };
+    const auto& prev = [&, this] { current_song = (current_song > 0) ? --current_song : current_song = song_limit - 1; };
+
     switch (name)
     {
     case B_N::Media::prev:
