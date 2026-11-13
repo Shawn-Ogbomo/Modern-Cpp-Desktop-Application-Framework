@@ -11,7 +11,7 @@
 #include "../include/directory_manager.hpp"
 #include "../include/menu.hpp"
 #include "../include/music_player.hpp"
-#include "../include/refs.hpp"
+#include "../include/component_manager.hpp"
 #include "../include/time_status.hpp"
 
 namespace B_N = Button_Names;
@@ -85,28 +85,28 @@ public:
             const auto gb = General_Buttons{};
             const auto tbs = Text_Boxes{};
 
-            auto ts = Time_Status{ };
+            auto ts = Time_Status{};
             static auto mp = Music_Player{};
 
             auto em = Exit_Menu{ gb };
             auto gsm = Game_State_Menu{ gb };
-            auto cm = Confirmation_Menu{ gb,tbs,{ &window,1} };
+            auto cm = Confirmation_Menu{ gb,tbs,{ &window,1 } };
 
-            auto rc = Refs_Components{ {&running,1},{&b,1},{&clock,1},{&em,1}
-           ,{&mp,1 },{&window,1},{&gsm,1},{&cm,1} };
+            auto rc = Component_Manager{ { &running,1 },{ &b,1 },{ &clock,1 },{ &em,1 }
+           ,{ &mp,1 },{ &window,1 },{ &gsm,1 },{ &cm,1 } };
 
             auto v1 = std::variant<std::span<Game_State_Button>, std::span<Exit_Button>
                 , std::span<Confirmation_Button>, std::span<Media_Button>>{};
 
             auto o1 = overload
             {
-                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.gsbs.front().contents.name, rc); },
-                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.embs.front().contents.name, rc);  },
+                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.clicked_button().front().contents.name, rc); },
+                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.clicked_button().front().contents.name, rc);  },
                 [&, this](std::span<Confirmation_Button>) { cm.state_manager(rc); },
-                [&, this](std::span<Media_Button>) { mp.operator()(mp.mbs.front().contents.name); }
+                [&, this](std::span<Media_Button>) { mp.operator()(mp.clicked_button().front().contents.name); }
             , };
 
-            const auto& component_click_listener = [&](auto buttons, auto& spn, sf::Vector2f cursor_pos) -> void
+            const auto& component_click_listener = [&](auto& buttons, auto& spn, sf::Vector2f cursor_pos) -> void
                 {
                     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
                         return(b.forms.form_1.getGlobalBounds().contains(cursor_pos));
@@ -141,7 +141,7 @@ public:
             // run the program as long as the window is open
             while (window.isOpen())
             {
-                if (gsm.state == Button_Names::Game_State::restart)
+                if (gsm.status() == Button_Names::Game_State::restart)
                 {
                     break;
                 }
@@ -175,8 +175,8 @@ public:
                             b.update_position({ &b.source_pile.front().cards.back().face,1 }
                                 , { &b.source_pile.front().cards.back().reverse,1 }, sf::Vector2f{ mouseMoved->position.x
                                 + .0f, mouseMoved->position.y + .0f });
-                            
-                            b.operator()(); 
+
+                            b.operator()();
                         }
                     }
 
@@ -187,17 +187,17 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            component_release_listener(mp, mp.mbs, cursor_pos);
-                            component_release_listener(gsm, gsm.gsbs, cursor_pos);
-                            component_release_listener(em, em.embs, cursor_pos);
-                            component_release_listener(cm, cm.cbs, cursor_pos);
+                            component_release_listener(mp, mp.clicked_button(), cursor_pos);
+                            component_release_listener(gsm, gsm.clicked_button(), cursor_pos);
+                            component_release_listener(em, em.clicked_button(), cursor_pos);
+                            component_release_listener(cm, cm.clicked_button(), cursor_pos);
 
                             if (!b.source_pile.empty())
                             {
                                 if (!shader_enabled)
                                 {
-                                    b.update_position({&b.source_pile.front().cards.back().face, 1}
-                                    , { &b.source_pile.front().cards.back().reverse,1 }
+                                    b.update_position({ &b.source_pile.front().cards.back().face, 1 }
+                                        , { &b.source_pile.front().cards.back().reverse,1 }
                                     , b.source_pile.front().location, true);
 
                                     continue;
@@ -225,9 +225,9 @@ public:
 
                                 b.update_position({ &dst_cards.front().face,1 }
                                     , { &dst_cards.front().reverse ,1 }
-                                    , b.destination_pile.front().location, true);
+                                , b.destination_pile.front().location, true);
                             }
-                        }     
+                        }
                     }
 
                     else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
@@ -237,18 +237,18 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            component_click_listener(std::span{ mp.buttons }, mp.mbs, cursor_pos);
-                            component_click_listener(std::span{ em.buttons }, em.embs, cursor_pos);
-                            component_click_listener(std::span{ gsm.state_buttons }, gsm.gsbs, cursor_pos);
-                            component_click_listener(std::span{ cm.buttons }, cm.cbs, cursor_pos);
+                            component_click_listener(mp.buttons(), mp.clicked_button(), cursor_pos);
+                            component_click_listener(em.buttons(), em.clicked_button(), cursor_pos);
+                            component_click_listener(gsm.buttons(), gsm.clicked_button(), cursor_pos);
+                            component_click_listener(cm.buttons(), cm.clicked_button(), cursor_pos);
                             b.operator()(cursor_pos);
                         }
                     }
                 }
 
                 // clear the window with blue color
-                window.clear({ 33, 46, 82 });  
-                
+                window.clear({ 33, 46, 82 });
+
                 // draw to window
                 enable_shader(b);
 

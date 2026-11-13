@@ -84,20 +84,25 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
             cm.sp2_b.front().piles[static_cast<int>(cm.sp2_b.front().pos_prev)].active = true;
         };
 
+    auto& exit_menu = cm.sp4_em.front();
+    auto& music_player = cm.sp5_mp.front();
+    auto& time = cm.sp3_c.front();
+    auto& game_state_menu = cm.sp7_gsm.front();
+
     const auto& enable_components = [&, this]
         {
             enable_piles();
             cm.sp3_c.front().start();
-            cm.enable(cm.sp4_em.front());
-            cm.enable(cm.sp5_mp.front());
-            mode = ButtonMode::on;
+            cm.enable(exit_menu);
+            cm.enable(music_player);
+            cm.enable(game_state_menu);
         };
 
     const auto& disable_components = [&, this]
         {
             disable_piles();
             cm.sp3_c.front().stop();
-            cm.disable(cm.sp5_mp.front());
+            cm.disable(music_player);
         };
 
     state_prev = internal_state;
@@ -105,6 +110,9 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
 
     game_state.setString(get_labels()
         .states[static_cast<int>(internal_state)]);
+
+    auto& board = cm.sp2_b.front();
+    auto& confirmation_menu = cm.sp8_cm.front();
 
     switch (internal_state)
     {
@@ -114,26 +122,26 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
         break;
     case B_N::Game_State::paused:
         disable_components();
-        mode = ButtonMode::on;
-        cm.enable(cm.sp4_em.front());
+        cm.enable(game_state_menu);
+        cm.enable(exit_menu);
         break;
     case B_N::Game_State::win:
         disable_components();
         game_state.setString(get_prompts().labels.back());
-        mode = ButtonMode::off;
-        cm.enable(cm.sp4_em.front());
-        cm.enable(cm.sp8_cm.front());
+        cm.disable(game_state_menu);
+        cm.enable(exit_menu);
+        cm.enable(confirmation_menu);
         break;
     case B_N::Game_State::lose:
         disable_components();
-        mode = ButtonMode::off;
-        cm.enable(cm.sp4_em.front());
+        cm.disable(game_state_menu);
+        cm.enable(exit_menu);
         break;
     case B_N::Game_State::quit:
         disable_components();
-        mode = ButtonMode::off;
-        cm.disable(cm.sp4_em.front());
-        cm.enable(cm.sp8_cm.front());
+        cm.disable(game_state_menu);
+        cm.disable(exit_menu);
+        cm.enable(confirmation_menu);
         game_state.setString(get_labels().states.back());
         break;
     }
