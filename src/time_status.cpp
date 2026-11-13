@@ -28,7 +28,8 @@ Time_Status::Time_Status()
     date.setFillColor({ 236,203,180 });
 }
 
-void Time_Status::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Time_Status::draw(sf::RenderTarget& target
+    , sf::RenderStates states) const
 {
     target.draw(date);
     target.draw(elapsed_time);

@@ -58,6 +58,7 @@ public:
 
     auto idle() & -> void;
     auto buttons() & -> Media_Buttons& { return internal_buttons; }
+    auto state() & -> ButtonMode& { return mode; };
     auto clicked_button() & -> std::span<Media_Button>& { return mbs; }
 private:
     sf::Text caption{ Util::load_font() };
@@ -72,6 +73,7 @@ private:
     ///Give Music_player a span to the Texture manager getter that returns the Media_Button textures.
     /// through a getter to prevent Music_Player from accessing what it shouldn't.
     Button_Manager bm;
+
     ButtonMode mode{};
 
     std::span<Media_Button> mbs;

@@ -98,7 +98,6 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
             disable_piles();
             cm.sp3_c.front().stop();
             cm.disable(cm.sp5_mp.front());
-            cm.disable(cm.sp5_mp.front());
         };
 
     state_prev = internal_state;
@@ -132,10 +131,10 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
         break;
     case B_N::Game_State::quit:
         disable_components();
-        game_state.setString(get_prompts().labels.front());
-        cm.disable(cm.sp4_em.front());
         mode = ButtonMode::off;
+        cm.disable(cm.sp4_em.front());
         cm.enable(cm.sp8_cm.front());
+        game_state.setString(get_labels().states.back());
         break;
     }
 }
@@ -195,17 +194,17 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
     }
 }
 
-auto Confirmation_Menu::state_manager(Component_Manager& r_c) & ->void
+auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 {
     if (internal_buttons.front().contents.setting == ButtonMode::on)
     {
-        r_c.sp1_b.front() = false;
-        r_c.sp6_rw.front().close();
+        cm.sp1_b.front() = false;
+        cm.sp6_rw.front().close();
         return;
     }
 
-    r_c.sp7_gsm.front().update_game_state(r_c.sp7_gsm.front().previous_status(), r_c);
-    r_c.sp8_cm.front().mode = ButtonMode::off;
+    cm.sp7_gsm.front().update_game_state(cm.sp7_gsm.front().previous_status(), cm);
+    cm.disable(cm.sp8_cm.front());
 }
 
 Database_Manager::Database_Manager() :conn{ std::make_unique<sqlite3*>() }

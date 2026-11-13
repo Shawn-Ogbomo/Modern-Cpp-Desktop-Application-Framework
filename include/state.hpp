@@ -52,4 +52,36 @@ enum class Card_State
     face_down, face_up
 };
 
+struct State_Label
+{
+    std::array <std::string, 6> states{
+        std::format("State{:>17}{:>7}" , ':' ,"Paused"),
+        std::format("State{:>17}{:>8}" , ':' ,"Playing"),
+        std::format("State{:>17}{:>4}" , ':' ,"Win"),
+        std::format("State{:>17}{:>5}" , ':' ,"Lose"),
+        std::format("State{:>17}{:>8}" , ':' ,"Restart"),
+        std::format("State{:>17}{:>11}" ,':' ,"Waiting...")
+    };
+};
+
+inline auto get_labels() -> const State_Label&
+{
+    static const auto labels = State_Label{};
+    return labels;
+}
+
+struct Prompts
+{
+    std::array <std::string, 2> labels{
+        "Are You\nSure?",
+        "Log Win To\nDatabase?"
+    };
+};
+
+inline auto get_prompts() -> const Prompts&
+{
+    static const auto messages = Prompts{};
+    return messages;
+}
+
 #endif // STATE_HPP
