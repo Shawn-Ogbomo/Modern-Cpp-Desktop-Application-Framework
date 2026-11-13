@@ -9,11 +9,10 @@
 #include <string>
 #include <vector>
 
-#include"../include/board.hpp"
 #include "../include/button.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
-#include "../include/refs.hpp"
+#include "../include/component_manager.hpp"
 #include "../include/sqlite3.h"
 #include "../include/state.hpp"
 #include "../include/texture_manager.hpp"
@@ -50,44 +49,39 @@ struct Game_State_Button : public Button
     Properties<Button_Names::Game_State> contents;
 };
 
-struct Game_State_Menu : public Menu
+class Game_State_Menu : public Menu
 {
-    struct Lose_Condition
-    {
-        auto operator()(const Card& card)const ->bool;
-    };
-
-    struct State_Label
-    {
-        std::array <std::string, 6> states{
-            std::format("State{:>17}{:>7}" , ':' ,"Paused"),
-            std::format("State{:>17}{:>8}" , ':' ,"Playing"),
-            std::format("State{:>17}{:>4}" , ':' ,"Win"),
-            std::format("State{:>17}{:>5}" , ':' ,"Lose"),
-            std::format("State{:>17}{:>8}" , ':' ,"Restart"),
-            std::format("State{:>17}{:>11}" ,':' ,"Waiting...")
-        };
-    };
-
-    auto get_labels() & -> const State_Label&
-    {
-        static const auto labels = State_Label{};
-        return labels;
-    }
-
+    using Game_State_Buttons = std::array<Game_State_Button, Menu::limit>;
+public:
     explicit  Game_State_Menu(const General_Buttons& gb);
 
+    auto operator = (Game_State_Menu&&)
+        -> Game_State_Menu & = delete;
+
     auto operator()(const std::ranges::ref_view<std::deque<Card>> p
-        , Refs_Components& r_c) -> void;
+        , Component_Manager& cm) -> void;
 
     auto operator++() & -> const Game_State_Menu&;
 
     operator bool() const override { return static_cast<bool>(mode); }
 
+    auto clicked_button() & -> std::span<Game_State_Button>& { return gsbs; }
+
     auto update_game_state(Button_Names::Game_State g_state
-        , Refs_Components& r_c) & ->void;
+        , Component_Manager& cm) & ->void;
+
+    auto state() & -> ButtonMode& { return mode; };
+    auto status() const& -> const Button_Names::Game_State& { return internal_state; }
+    auto previous_status() const& -> const Button_Names::Game_State& { return state_prev; }
+
+    auto buttons() & -> Game_State_Buttons& { return state_buttons; }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+private:
+    struct Lose_Condition
+    {
+        auto operator()(const Card& card)const ->bool;
+    };
 
     sf::Text move{ Util::load_font() };
     sf::Text game_id_t{ Util::load_font() };
@@ -96,11 +90,11 @@ struct Game_State_Menu : public Menu
     std::size_t game_id{};
     std::size_t move_count{};
 
-    Button_Names::Game_State state{};
+    Button_Names::Game_State internal_state{};
     Button_Names::Game_State state_prev{};
 
     std::span<Game_State_Button> gsbs{};
-    std::array<Game_State_Button,Menu::limit> state_buttons;
+    Game_State_Buttons state_buttons;
 
     ButtonMode mode{ ButtonMode::on };
 };
@@ -121,28 +115,37 @@ struct Exit_Button : public Button
         display_manager(*this, target);
         target.draw(label);
     }
-
     Forms forms;
     sf::Text label{ Util::load_font() };
     Properties<Button_Names::Game_State> contents;
 };
 
-struct Exit_Menu : public Menu
+class Exit_Menu : public Menu
 {
+    using Exit_Buttons = std::array<Exit_Button, Menu::limit>;
+public:
     explicit  Exit_Menu(const General_Buttons& gb);
+
+    auto operator = (Exit_Menu&&)
+        -> Exit_Menu & = delete;
+
     operator bool() const override { return static_cast<bool>(mode); }
+
+    auto clicked_button() & -> std::span<Exit_Button>& { return embs; }
+    auto buttons() & -> Exit_Buttons& { return internal_buttons; }
+    auto state() & -> ButtonMode& { return mode; };
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
+private:
     std::span<Exit_Button> embs;
-    std::array<Exit_Button,Menu::limit> buttons;
-
+    Exit_Buttons internal_buttons;
     ButtonMode mode{ ButtonMode::on };
 };
 
 struct Confirmation_Button : public Button
 {
     Confirmation_Button() = default;
-    
+
     Confirmation_Button(const Texture_Forms& txtrs
         , Button_Names::General val, sf::Vector2f pos
         , std::string_view target_label) : forms{ txtrs }
@@ -161,33 +164,27 @@ struct Confirmation_Button : public Button
     Properties<Button_Names::General> contents;
 };
 
-struct Confirmation_Menu : public Menu
+class Confirmation_Menu : public Menu
 {
-    struct Prompts
-    {
-        std::array <std::string, 2> labels{
-            "Are You\nSure?",
-            "Log Win To\nDatabase?"
-        };
-    };
-
-    auto get_prompts() & -> const Prompts&
-    {
-        static const auto messages = Prompts{};
-        return messages;
-    }
-
+    using Confirmation_Buttons = std::array<Confirmation_Button, Menu::limit>;
+public:
     explicit Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb
         , std::span<const sf::RenderWindow>rws);
+
+    auto operator = (Confirmation_Menu&&)
+        -> Confirmation_Menu & = delete;
 
     operator bool() const override { return static_cast<bool>(mode); }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    auto state_manager(Refs_Components& r_c) & ->void;
-
+    auto clicked_button() & -> std::span<Confirmation_Button>& { return cbs; }
+    auto buttons() & -> Confirmation_Buttons& { return internal_buttons; }
+    auto state() & -> ButtonMode& { return mode; };
+    auto state_manager(Component_Manager& r_c) & ->void;
+private:
     std::span<Confirmation_Button> cbs;
-    std::array<Confirmation_Button,Menu::limit> buttons{};
+    Confirmation_Buttons internal_buttons{};
 
     sf::Text prompt{ Util::load_font() };
     sf::Sprite text_box{ default_texture() };
@@ -199,15 +196,15 @@ struct Record
 {
     int id{};
     int moves{};
-
     std::string alias;
     std::string_view elapsed_time;
-
     Button_Names::Game_State state{};
 };
 
 struct Database_Button : public Button
 {
+    Database_Button() = default;
+
     Database_Button(const Texture_Forms& txtrs
         , Button_Names::General val, sf::Vector2f pos
         , std::string_view target_label) : forms{ txtrs }
@@ -226,26 +223,35 @@ struct Database_Button : public Button
     Properties<Button_Names::General> contents;
 };
 
-struct Database_Manager : public Menu
+class Database_Manager : public Menu
 {
-    Database_Manager();  ///Create the table here.. evaluate it against exists table SQLlite command 
-    operator bool() const override{ return static_cast<bool>(mode); };
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    using Database_Buttons = std::array<Database_Button, limit + 1>;
+public:
+    Database_Manager();  ///Create the table here.. evaluate it against exists table SQLlite command
 
-    sf::Sprite text_box{default_texture()};
-    sf::Text indicator{Util::load_font()};  ///perhaps make this its own type with state and draw
+    auto operator = (Database_Manager&&)
+        -> Database_Manager & = delete;
+
+    operator bool() const override { return static_cast<bool>(mode); };
+
+    auto state() & -> ButtonMode& { return mode; };
+    auto clicked_button() & -> std::span<Database_Button>& { return dbbs; }
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+private:
+    sf::Sprite text_box{ default_texture() };
+    sf::Text indicator{ Util::load_font() };  ///perhaps make this its own type with state and draw
 
     sf::RectangleShape text_field;
 
     std::unique_ptr<sqlite3*> conn;
     std::span<Database_Button> dbbs{};
-    
-    std::vector<Database_Button> buttons;
+
+    Database_Buttons buttons;
     std::vector<Record> recs;
     ButtonMode mode{};
 };
 
-auto read(Database_Manager&dmb);
+auto read(Database_Manager& dmb);
 auto write(Database_Manager& dbm);
 
 #endif //MENU_HPP
