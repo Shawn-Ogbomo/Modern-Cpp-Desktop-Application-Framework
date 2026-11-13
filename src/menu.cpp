@@ -93,6 +93,7 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
         {
             enable_piles();
             cm.sp3_c.front().start();
+            //cm.enable(time);
             cm.enable(exit_menu);
             cm.enable(music_player);
             cm.enable(game_state_menu);
@@ -102,6 +103,7 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
         {
             disable_piles();
             cm.sp3_c.front().stop();
+            //cm.disable(time);
             cm.disable(music_player);
         };
 

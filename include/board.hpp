@@ -22,12 +22,17 @@ struct Board : public sf::Drawable
 
     using Piles = std::array<Pile, total_piles>;
 
-    Board() = delete;
     explicit Board(Deck& d);
+
+    auto operator = (Board&&) 
+        -> Board& = delete;
+
     auto operator()(sf::Vector2f pos = {}) -> void;
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    auto update_position(std::span<sf::Sprite>img_f, std::span<sf::Sprite> img_b,
-        sf::Vector2f dest_pos, bool update_It_state = false)
+
+    auto update_position(std::span<sf::Sprite>img_f, std::span<sf::Sprite> img_b
+        ,sf::Vector2f dest_pos, bool update_It_state = false)
         & -> void;
 
     Rank_Lib::Rank pos_prev{};
