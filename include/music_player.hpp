@@ -47,7 +47,7 @@ class  Music_Player : public sf::Drawable
     static constexpr auto song_limit = 10;
     using Media_Buttons = std::array<Media_Button, Media_Button::limit>;
 public:
-    Music_Player();
+    Music_Player(const Button_Manager& bm);
     Music_Player(Music_Player&&) = default;
 
     auto operator =(Music_Player&&) noexcept -> Music_Player & = default;
@@ -68,11 +68,6 @@ private:
 
     std::unique_ptr<Track_Title[]> song_names;
     Media_Buttons internal_buttons{};
-
-    /// TODO: Button_Manager doesn't belong here. Create another type to manage all of your textures
-    ///Give Music_player a span to the Texture manager getter that returns the Media_Button textures.
-    /// through a getter to prevent Music_Player from accessing what it shouldn't.
-    Button_Manager bm;
 
     ButtonMode mode{};
 

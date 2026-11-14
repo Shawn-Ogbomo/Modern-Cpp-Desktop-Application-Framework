@@ -8,7 +8,7 @@ namespace B_N = Button_Names;
 namespace rng = std::ranges;
 using namespace std::string_literals;
 
-Music_Player::Music_Player() : songs{ std::make_unique <sf::Music[]>(song_limit)}
+Music_Player::Music_Player(const Button_Manager& bm) : songs{ std::make_unique <sf::Music[]>(song_limit)}
 , song_names{std::make_unique<Track_Title[]>(song_limit)}
 {
     caption.setString("Song: ");
@@ -27,8 +27,6 @@ Music_Player::Music_Player() : songs{ std::make_unique <sf::Music[]>(song_limit)
 
         ++index;
     }
-
-    bm.load_textures();
 
     auto button_pos = sf::Vector2f{ 452.0f - 35.0f, 842.0f };
 

@@ -82,15 +82,14 @@ public:
             auto de = Deck{};
             auto b = Board{ de };
 
-            const auto gb = General_Buttons{};
-            const auto tbs = Text_Boxes{};
-
+            auto tm = Texture_Manager{};
+           
             auto ts = Time_Status{};
-            static auto mp = Music_Player{};
+            static auto mp = Music_Player{tm.media_buttons()};
 
-            auto em = Exit_Menu{ gb };
-            auto gsm = Game_State_Menu{ gb };
-            auto cm = Confirmation_Menu{ gb,tbs,{ &window,1 } };
+            auto em = Exit_Menu{ tm.general_buttons()};
+            auto gsm = Game_State_Menu{ tm.general_buttons()};
+            auto cm = Confirmation_Menu{ tm.general_buttons(),tm.text_boxes(),{&window,1}};
 
             auto c_m = Component_Manager{ { &running,1 },{ &b,1 },{ &clock,1 },{ &em,1 }
            ,{ &mp,1 },{ &window,1 },{ &gsm,1 },{ &cm,1 } };

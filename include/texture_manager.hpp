@@ -27,6 +27,7 @@ struct Texture_Forms
 
 struct Button_Manager
 {
+    Button_Manager() { load_textures(); }
     auto load_textures() & -> void;
     std::vector<Texture_Forms> textures;
 };
@@ -49,10 +50,10 @@ class Texture_Manager
 {
 public:
     Texture_Manager() = default;
-    auto cards() const { return card_manager.textures; }
-    auto media_buttons() const{ return button_manager.textures; }
-    auto general_buttons() const{ return internal_general_buttons.textures; }
-    auto text_boxes() const{ return internal_text_boxes.t; }
+    auto cards() const& -> const Card_Manager&{ return card_manager; }
+    auto media_buttons() const& -> const Button_Manager&{ return button_manager; }
+    auto general_buttons() const& ->const General_Buttons&{ return internal_general_buttons; }
+    auto text_boxes() const& -> const Text_Boxes&{ return internal_text_boxes; }
 private:
     Card_Manager card_manager;
     Button_Manager button_manager;
