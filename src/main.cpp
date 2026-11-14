@@ -59,10 +59,10 @@ public:
 
     auto enable_shader(const Board& b) -> void
     {
-        if (!b.destination_pile.empty() && !b.source_pile.empty()
-            && b.destination_pile.front().rank == b.source_pile.front().cards.back().rank)
+        if (!b.destination_pile().empty() && !b.source_pile().empty()
+            && b.destination_pile().front().rank == b.source_pile().front().cards.back().rank)
         {
-            const auto pos = b.destination_pile.front().cards.front().face.getPosition();
+            const auto pos = b.destination_pile().front().cards.front().face.getPosition();
             glow_rect.setPosition(sf::Vector2f{ pos.x - 10, pos.y - 10 });
             window.draw(glow_rect, &glow_shader);
             shader_enabled = true;
@@ -92,7 +92,7 @@ public:
             auto gsm = Game_State_Menu{ gb };
             auto cm = Confirmation_Menu{ gb,tbs,{ &window,1 } };
 
-            auto rc = Component_Manager{ { &running,1 },{ &b,1 },{ &clock,1 },{ &em,1 }
+            auto c_m = Component_Manager{ { &running,1 },{ &b,1 },{ &clock,1 },{ &em,1 }
            ,{ &mp,1 },{ &window,1 },{ &gsm,1 },{ &cm,1 } };
 
             auto v1 = std::variant<std::span<Game_State_Button>, std::span<Exit_Button>
@@ -100,9 +100,9 @@ public:
 
             auto o1 = overload
             {
-                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.clicked_button().front().contents.name, rc); },
-                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.clicked_button().front().contents.name, rc);  },
-                [&, this](std::span<Confirmation_Button>) { cm.state_manager(rc); },
+                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.clicked_button().front().contents.name, c_m); },
+                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.clicked_button().front().contents.name, c_m);  },
+                [&, this](std::span<Confirmation_Button>) { cm.state_manager(c_m); },
                 [&, this](std::span<Media_Button>) { mp.operator()(mp.clicked_button().front().contents.name); }
             , };
 
@@ -170,11 +170,11 @@ public:
 
                     else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
                     {
-                        if (!b.source_pile.empty())
+                        if (!b.source_pile().empty())
                         {
-                            b.update_position({ &b.source_pile.front().cards.back().face,1 }
-                                , { &b.source_pile.front().cards.back().reverse,1 }, sf::Vector2f{ mouseMoved->position.x
-                                + .0f, mouseMoved->position.y + .0f });
+                            move_card(b.source_pile().front().cards.back().face
+                                , b.source_pile().front().cards.back().reverse, sf::Vector2f{ mouseMoved->position.x
+                               + .0f, mouseMoved->position.y + .0f }, b.source_pile(), b.destination_pile());
 
                             b.operator()();
                         }
@@ -192,40 +192,40 @@ public:
                             component_release_listener(em, em.clicked_button(), cursor_pos);
                             component_release_listener(cm, cm.clicked_button(), cursor_pos);
 
-                            if (!b.source_pile.empty())
+                            if (!b.source_pile().empty())
                             {
                                 if (!shader_enabled)
                                 {
-                                    b.update_position({ &b.source_pile.front().cards.back().face, 1 }
-                                        , { &b.source_pile.front().cards.back().reverse,1 }
-                                    , b.source_pile.front().location, true);
+                                    move_card(b.source_pile().front().cards.back().face
+                                        , b.source_pile().front().cards.back().reverse,
+                                        b.source_pile().front().location, b.source_pile(), b.destination_pile(), true);
 
                                     continue;
                                 }
 
-                                auto& src_cards = b.source_pile.front().cards;
-                                auto& dst_cards = b.destination_pile.front().cards;
+                                auto& src_cards = b.source_pile().front().cards;
+                                auto& dst_cards = b.destination_pile().front().cards;
 
                                 dst_cards.emplace_front(src_cards.back());
                                 src_cards.pop_back();
 
                                 dst_cards.back().state = Card_State::face_up;
 
-                                auto& src_pile_state = b.source_pile.front().active;
-                                auto& dst_pile_state = b.destination_pile.front().active;
+                                auto& src_pile_state = b.source_pile().front().active;
+                                auto& dst_pile_state = b.destination_pile().front().active;
 
-                                b.pos_prev = b.destination_pile.front().rank;
+                                b.active_pile() = b.destination_pile().front().rank;
 
                                 src_pile_state = false;
                                 dst_pile_state = true;
 
                                 ++gsm;
 
-                                gsm(b.piles.back().cards, rc);
+                                gsm(b.piles().back().cards, c_m);
 
-                                b.update_position({ &dst_cards.front().face,1 }
-                                    , { &dst_cards.front().reverse ,1 }
-                                , b.destination_pile.front().location, true);
+                                move_card(dst_cards.front().face
+                                    , dst_cards.front().reverse,
+                                    b.destination_pile().front().location, b.source_pile(), b.destination_pile(), true);
                             }
                         }
                     }
