@@ -23,17 +23,19 @@ public:
         , sp5_mp{ mps }, sp6_rw{ rws }, sp7_gsm{ gsms }, sp8_cm{ cms }
     {}
 
-    auto operator = (Component_Manager&&)
-        ->Component_Manager & = delete;
-
-    /// TODO: Define a concept to prevent invalid parameters in both functions.
-    auto enable(auto& component) & ->void { component.state() = ButtonMode::on; }
-    auto disable(auto& component) & -> void { component.state() = ButtonMode::off; }
-    //private:
+    auto enable_exit_menu() const& ->void;
+    auto enable_game_state_menu()const& ->void;
+    auto enable_confirmation_menu()const& ->void;
+    auto enable_components()const& ->void;
+    auto close_window()const& ->void;
+    auto disable_automatic_restart()const& ->void;
+    auto disable_components()const& -> void;
+    auto disable_confirmation_menu()const& ->void;
+    auto previous_game_state() & -> void;
+private:
     std::span<bool> sp1_b;
     std::span<Board> sp2_b;
     std::span<sf::Clock> sp3_c;
-
     std::span<Exit_Menu> sp4_em;
     std::span<Music_Player> sp5_mp;
     std::span<sf::RenderWindow>sp6_rw;
