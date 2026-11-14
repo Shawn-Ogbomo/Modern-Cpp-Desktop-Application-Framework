@@ -76,7 +76,6 @@ Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }, mode{ ButtonMode::on
 
 auto Board::operator()(sf::Vector2f pos) -> void
 {
-    ///TODO: Work on removing this and getting it into the universal click and release listener.
     if (mode == ButtonMode::on)
     {
         for (auto& stack : internal_piles) [[likely]]
