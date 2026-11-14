@@ -168,7 +168,6 @@ auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 {
     if (internal_buttons.front().contents.setting == ButtonMode::on)
     {
-        cm.disable_automatic_restart();
         cm.close_window();
         return;
     }
