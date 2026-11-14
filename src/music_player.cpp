@@ -19,7 +19,6 @@ Music_Player::Music_Player() : songs{ std::make_unique <sf::Music[]>(song_limit)
     for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir() / "audio" })
     {
         song_names[index] = {song.path().filename().stem().string() };
-
         songs[index] = sf::Music{ song };
 
         song_names[index].name.setCharacterSize(26);

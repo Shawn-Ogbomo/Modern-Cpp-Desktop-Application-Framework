@@ -12,14 +12,14 @@ inline auto default_texture() -> const sf::Texture&
     return t;
 }
 
-struct Texture_Manager_Interface
+struct Texture_Interface
 {
 public:
-    virtual ~Texture_Manager_Interface() = default;
+    virtual ~Texture_Interface() = default;
     virtual auto load_textures() & -> void = 0;
 };
 
-struct Card_Manager : public Texture_Manager_Interface
+struct Card_Manager : public Texture_Interface
 {
 public:
     auto load_textures() & -> void override;
@@ -33,14 +33,14 @@ struct Texture_Forms
     sf::Texture f3{ default_texture() };
 };
 
-struct Button_Manager : public Texture_Manager_Interface
+struct Button_Manager : public Texture_Interface
 {
 public:
     auto load_textures() & -> void override;
     std::vector<Texture_Forms> textures;
 };
 
-struct General_Buttons : public Texture_Manager_Interface
+struct General_Buttons : public Texture_Interface
 {
 public:
     General_Buttons() { load_textures(); }
@@ -50,7 +50,7 @@ public:
     Texture_Forms textures;
 };
 
-struct Text_Boxes : public Texture_Manager_Interface
+struct Text_Boxes : public Texture_Interface
 {
 public:
     Text_Boxes() { load_textures(); };
@@ -59,4 +59,20 @@ public:
 
     sf::Texture t{ default_texture() };
 };
+
+class Texture_Manager
+{
+public:
+    Texture_Manager() = default;
+    auto cards();
+    auto media_buttons();
+    auto general_buttons();
+    auto text_boxes();
+private:
+    Card_Manager internal_card_manager;
+    Button_Manager internal_button_manager;
+    General_Buttons internal_general_buttons;
+    Text_Boxes internal_text_boxes;
+};
+
 #endif // TEXTURE_MANAGER_HPP
