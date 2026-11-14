@@ -74,76 +74,36 @@ void Game_State_Menu::draw(sf::RenderTarget& target
 auto Game_State_Menu::update_game_state(B_N::Game_State g_state
     , Component_Manager& cm) & -> void
 {
-    const auto& disable_piles = [&, this]
-        {
-            cm.sp2_b.front().piles[static_cast<int>(cm.sp2_b.front().pos_prev)].active = false;
-        };
-
-    const auto& enable_piles = [&, this]
-        {
-            cm.sp2_b.front().piles[static_cast<int>(cm.sp2_b.front().pos_prev)].active = true;
-        };
-
-    auto& exit_menu = cm.sp4_em.front();
-    auto& music_player = cm.sp5_mp.front();
-    auto& time = cm.sp3_c.front();
-    auto& game_state_menu = cm.sp7_gsm.front();
-
-    const auto& enable_components = [&, this]
-        {
-            enable_piles();
-            cm.sp3_c.front().start();
-            //cm.enable(time);
-            cm.enable(exit_menu);
-            cm.enable(music_player);
-            cm.enable(game_state_menu);
-        };
-
-    const auto& disable_components = [&, this]
-        {
-            disable_piles();
-            cm.sp3_c.front().stop();
-            //cm.disable(time);
-            cm.disable(music_player);
-        };
-
     state_prev = internal_state;
     internal_state = g_state;
 
     game_state.setString(get_labels()
         .states[static_cast<int>(internal_state)]);
 
-    auto& board = cm.sp2_b.front();
-    auto& confirmation_menu = cm.sp8_cm.front();
-
     switch (internal_state)
     {
     case B_N::Game_State::playing:
     case B_N::Game_State::restart:
-        enable_components();
+        cm.enable_components();
         break;
     case B_N::Game_State::paused:
-        disable_components();
-        cm.enable(game_state_menu);
-        cm.enable(exit_menu);
+        cm.disable_components();
+        cm.enable_game_state_menu();
+        cm.enable_exit_menu();
         break;
     case B_N::Game_State::win:
-        disable_components();
+        cm.disable_components();
+        cm.enable_exit_menu();
+        cm.enable_confirmation_menu();
         game_state.setString(get_prompts().labels.back());
-        cm.disable(game_state_menu);
-        cm.enable(exit_menu);
-        cm.enable(confirmation_menu);
         break;
     case B_N::Game_State::lose:
-        disable_components();
-        cm.disable(game_state_menu);
-        cm.enable(exit_menu);
+        cm.disable_components();
+        cm.enable_exit_menu();
         break;
     case B_N::Game_State::quit:
-        disable_components();
-        cm.disable(game_state_menu);
-        cm.disable(exit_menu);
-        cm.enable(confirmation_menu);
+        cm.disable_components();
+        cm.enable_confirmation_menu();
         game_state.setString(get_labels().states.back());
         break;
     }
@@ -208,13 +168,13 @@ auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 {
     if (internal_buttons.front().contents.setting == ButtonMode::on)
     {
-        cm.sp1_b.front() = false;
-        cm.sp6_rw.front().close();
+        cm.disable_automatic_restart();
+        cm.close_window();
         return;
     }
 
-    cm.sp7_gsm.front().update_game_state(cm.sp7_gsm.front().previous_status(), cm);
-    cm.disable(cm.sp8_cm.front());
+    cm.previous_game_state();
+    cm.disable_confirmation_menu();
 }
 
 Database_Manager::Database_Manager() :conn{ std::make_unique<sqlite3*>() }

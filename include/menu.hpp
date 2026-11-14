@@ -62,7 +62,6 @@ public:
         , Component_Manager& cm) -> void;
 
     auto operator++() & -> const Game_State_Menu&;
-
     operator bool() const override { return static_cast<bool>(mode); }
 
     auto clicked_button() & -> std::span<Game_State_Button>& { return gsbs; }
@@ -73,9 +72,7 @@ public:
     auto state() & -> ButtonMode& { return mode; };
     auto status() const& -> const Button_Names::Game_State& { return internal_state; }
     auto previous_status() const& -> const Button_Names::Game_State& { return state_prev; }
-
     auto buttons() & -> Game_State_Buttons& { return state_buttons; }
-
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     struct Lose_Condition
