@@ -8,16 +8,16 @@
 using namespace std::numbers;
 namespace rng = std::ranges;
 
-auto Board::update_position(std::span<sf::Sprite> img_f, 
-std::span<sf::Sprite> img_b, sf::Vector2f dest_pos, bool update_It_state) & -> void
+auto move_card(sf::Sprite& card_img_f, sf::Sprite& card_img_b, sf::Vector2f dest_pos
+    , std::span<Pile>& src_p, std::span<Pile>& dst_p, bool update_It_state) -> void
 {
-    img_f.front().setPosition(dest_pos);
-    img_b.front().setPosition(dest_pos);
+    card_img_f.setPosition(dest_pos);
+    card_img_b.setPosition(dest_pos);
 
     if (update_It_state)
     {
-        source_pile = std::span<Pile>{};
-        destination_pile = std::span<Pile>{};
+        src_p = std::span<Pile>{};
+        dst_p = std::span<Pile>{};
     }
 }
 
@@ -28,9 +28,9 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
     const auto radius = 300.0f;
     const auto pos_card = front.getLocalBounds().size;
 
-    if (const auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2) 
+    if (const auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2)
         - pos_card.y) / 2 }; rank == Rank_Lib::Rank::king)
-    {   
+    {
         front.setPosition(center);
         back.setPosition(center);
         return;
@@ -46,9 +46,9 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
     back.setPosition(pos);
 }
 
-Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }
+Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }, mode{ ButtonMode::on }
 {
-    for (auto index = 0; auto& pile : piles)
+    for (auto index = 0; auto& pile : internal_piles)
     {
         Util::allocate(pile);
 
@@ -68,7 +68,7 @@ Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }
         ++index;
     }
 
-    auto& [pile_active, cards, rank, pos] = piles.back();
+    auto& [pile_active, cards, rank, pos] = internal_piles.back();
     pile_active = true;
 
     cards.back().state = Card_State::face_up;
@@ -76,41 +76,45 @@ Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }
 
 auto Board::operator()(sf::Vector2f pos) -> void
 {
-    for ( auto& stack: piles) [[likely]]
+    ///TODO: Work on removing this and getting it into the universal click and release listener.
+    if (mode == ButtonMode::on)
     {
-        auto& [pile_active, pile, rank, internal_pos] = stack;
-        const auto& face = pile.front().face;
-
-        if (pile_active && face.getGlobalBounds().contains(pos))
+        for (auto& stack : internal_piles) [[likely]]
         {
-            source_pile = { &stack,1 };
-            return;
+            auto& [pile_active, pile, rank, internal_pos] = stack;
+            const auto& face = pile.front().face;
+
+            if (pile_active && face.getGlobalBounds().contains(pos))
+            {
+                internal_source_pile = { &stack,1 };
+                return;
+            }
+
+            if (!internal_source_pile.empty() && face.getGlobalBounds().findIntersection(
+                (internal_source_pile).front().cards.back().face.getGlobalBounds()))
+            {
+                internal_destination_pile = { &stack, 1 };
+                return;
+            }
         }
 
-        if (!source_pile.empty() && face.getGlobalBounds().findIntersection(
-            (source_pile).front().cards.back().face.getGlobalBounds()))
-        {
-            destination_pile = { &stack, 1 };
-            return;
-        }
+        internal_destination_pile = std::span<Pile>{};
     }
-
-    destination_pile = std::span<Pile>{};
 }
 
-void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const  
+void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     const auto& inactive = [&, this](const auto& p) -> bool { return !(p.active); };
 
-    for (auto& stack : piles | rng::views::filter(inactive))
-     {
-        for (const auto& card : stack.cards)  
+    for (auto& stack : internal_piles | rng::views::filter(inactive))
+    {
+        for (const auto& card : stack.cards)
         {
-           target.draw(card);
+            target.draw(card);
         }
-     }
-    
-    for (const auto& card : (piles[static_cast<int>(pos_prev)].cards))
+    }
+
+    for (const auto& card : (internal_piles[static_cast<int>(active_pile())].cards))
     {
         target.draw(card);
     }
