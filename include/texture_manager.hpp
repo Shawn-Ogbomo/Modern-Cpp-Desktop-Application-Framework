@@ -12,15 +12,9 @@ inline auto default_texture() -> const sf::Texture&
     return t;
 }
 
-struct Texture_Interface
+struct Card_Manager
 {
-    virtual ~Texture_Interface() = default;
-    virtual auto load_textures() & -> void = 0;
-};
-
-struct Card_Manager : public Texture_Interface
-{
-    auto load_textures() & -> void override;
+    auto load_textures() & -> void;
     std::vector<std::pair<std::filesystem::path, sf::Texture>> textures;
 };
 
@@ -31,27 +25,23 @@ struct Texture_Forms
     sf::Texture f3{ default_texture() };
 };
 
-struct Button_Manager : public Texture_Interface
+struct Button_Manager
 {
-    auto load_textures() & -> void override;
+    auto load_textures() & -> void;
     std::vector<Texture_Forms> textures;
 };
 
-struct General_Buttons : public Texture_Interface
+struct General_Buttons
 {
     General_Buttons() { load_textures(); }
-
-    auto load_textures() & -> void override;
-
+    auto load_textures() & -> void;
     Texture_Forms textures;
 };
 
-struct Text_Boxes : public Texture_Interface
+struct Text_Boxes
 {
     Text_Boxes() { load_textures(); };
-
-    auto load_textures() & -> void override;
-
+    auto load_textures() & -> void;
     sf::Texture t{ default_texture() };
 };
 
