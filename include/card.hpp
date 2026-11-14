@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <span>
 #include <utility>
 
 #include "../include/rank.hpp"
@@ -14,8 +13,8 @@
 struct Card : public sf::Drawable
 {
     Card() = default;
-    explicit Card(std::string_view card_name, std::span<const sf::Texture> f
-        , std::span<const sf::Texture>re
+    explicit Card(std::string_view card_name, const sf::Texture& f
+        , const sf::Texture& re
         , Card_State st = Card_State::face_down);
 
     virtual void draw(sf::RenderTarget& target
