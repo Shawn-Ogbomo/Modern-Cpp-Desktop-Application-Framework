@@ -36,6 +36,7 @@ set(GAME_SOURCES
     "src/time_status.cpp"
     "src/music_player.cpp"
     "src/menu.cpp"
+    "src/component_manager.cpp"
 )
 
 set(DATABASE "src/sqlite3.c")
