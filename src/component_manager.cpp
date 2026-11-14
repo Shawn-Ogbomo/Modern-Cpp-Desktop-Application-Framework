@@ -42,12 +42,8 @@ auto Component_Manager::disable_confirmation_menu()const& ->void
 
 auto Component_Manager::close_window() const& ->void
 {
-    sp6_rw.front().close();
-}
-
-auto Component_Manager::disable_automatic_restart() const& -> void
-{
     sp1_b.front() = false;
+    sp6_rw.front().close();
 }
 
 auto Component_Manager::previous_game_state() & -> void

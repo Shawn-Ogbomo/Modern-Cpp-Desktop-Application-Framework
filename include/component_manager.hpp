@@ -28,7 +28,6 @@ public:
     auto enable_confirmation_menu()const& ->void;
     auto enable_components()const& ->void;
     auto close_window()const& ->void;
-    auto disable_automatic_restart()const& ->void;
     auto disable_components()const& -> void;
     auto disable_confirmation_menu()const& ->void;
     auto previous_game_state() & -> void;
