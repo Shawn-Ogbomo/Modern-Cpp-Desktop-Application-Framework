@@ -75,7 +75,7 @@ public:
     auto run() -> void
     {
         Database_Manager db;
-        auto tm = Texture_Manager{};
+        const auto tm = Texture_Manager{};
 
         while (running)
         {
