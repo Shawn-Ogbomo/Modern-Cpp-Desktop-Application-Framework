@@ -14,6 +14,7 @@ inline auto default_texture() -> const sf::Texture&
 
 struct Card_Manager
 {
+    Card_Manager() { load_textures(); }
     auto load_textures() & -> void;
     std::vector<std::pair<std::filesystem::path, sf::Texture>> textures;
 };

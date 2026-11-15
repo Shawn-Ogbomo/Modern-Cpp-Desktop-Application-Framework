@@ -10,11 +10,10 @@
 class Deck
 {
 public:
-    Deck();
+    Deck(const Card_Manager&cm);
     auto draw() & ->Card;
 private:
     auto shuffle() & -> void;
-    Card_Manager cm;
     std::vector<Card> cards;
 };
 
