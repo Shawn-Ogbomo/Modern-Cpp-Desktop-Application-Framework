@@ -79,10 +79,12 @@ public:
         while (running)
         {
             auto clock = sf::Clock{};
-            auto de = Deck{};
-            auto b = Board{ de };
 
             auto tm = Texture_Manager{};
+
+            auto de = Deck{tm.cards()};
+            auto b = Board{ de };
+
            
             auto ts = Time_Status{};
             static auto mp = Music_Player{tm.media_buttons()};

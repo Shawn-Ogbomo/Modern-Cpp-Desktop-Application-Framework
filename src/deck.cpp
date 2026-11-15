@@ -8,9 +8,8 @@
 
 namespace rng = std::ranges;
 
-Deck::Deck()
+Deck::Deck(const Card_Manager& cm)
 {
-    cm.load_textures();
     auto& [name, back_card] = cm.textures.front();
     cards.reserve(Board::total_piles * Board::cards_pile);
 
