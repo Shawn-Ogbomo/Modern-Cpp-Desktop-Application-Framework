@@ -75,17 +75,14 @@ public:
     auto run() -> void
     {
         Database_Manager db;
+        auto tm = Texture_Manager{};
 
         while (running)
         {
             auto clock = sf::Clock{};
 
-            auto tm = Texture_Manager{};
-
             auto de = Deck{tm.cards()};
             auto b = Board{ de };
-
-           
             auto ts = Time_Status{};
             static auto mp = Music_Player{tm.media_buttons()};
 
