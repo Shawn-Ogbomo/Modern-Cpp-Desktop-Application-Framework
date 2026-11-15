@@ -194,7 +194,7 @@ struct Record
     int id{};
     int moves{};
     std::string alias;
-    std::string_view elapsed_time;
+    std::string elapsed_time;
     Button_Names::Game_State state{};
 };
 
