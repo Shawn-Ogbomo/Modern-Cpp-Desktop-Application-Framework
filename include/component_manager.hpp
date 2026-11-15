@@ -1,5 +1,5 @@
-#ifndef REFS_HPP
-#define REFS_HPP
+#ifndef COMPONENT_MANAGER_HPP
+#define COMPONENT_MANAGER_HPP
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -42,4 +42,4 @@ private:
     std::span<Confirmation_Menu>sp8_cm;
 };
 
-#endif // REFS_HPP
+#endif // COMPONENT_MANAGER_HPP
