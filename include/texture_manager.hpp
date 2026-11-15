@@ -12,11 +12,17 @@ inline auto default_texture() -> const sf::Texture&
     return t;
 }
 
-struct Card_Manager
+class Card_Manager
 {
+    static constexpr auto limit = 53;
+    using Pair_Path_Texture = std::pair<std::filesystem::path, sf::Texture>;
+    using Card_Textures = std::array<Pair_Path_Texture, limit>;
+public:
     Card_Manager() { load_textures(); }
+    auto textures()const -> const Card_Textures& { return internal_textures; }
+private:
     auto load_textures() & -> void;
-    std::vector<std::pair<std::filesystem::path, sf::Texture>> textures;
+    Card_Textures internal_textures;
 };
 
 struct Texture_Forms
@@ -26,18 +32,30 @@ struct Texture_Forms
     sf::Texture f3{ default_texture() };
 };
 
-struct Button_Manager
+class Button_Manager
 {
+    static constexpr auto limit = 5;
+    using Media_Textures = std::array<Texture_Forms, limit>;
+public:
     Button_Manager() { load_textures(); }
+    
+    auto textures()const 
+        -> const Media_Textures& { return internal_textures; }
+private:
     auto load_textures() & -> void;
-    std::vector<Texture_Forms> textures;
+    Media_Textures internal_textures;
 };
 
-struct General_Buttons
+class General_Buttons
 {
+public:
     General_Buttons() { load_textures(); }
+
+    auto textures() const 
+        -> const Texture_Forms& { return internal_textures; }
+private:
     auto load_textures() & -> void;
-    Texture_Forms textures;
+    Texture_Forms internal_textures;
 };
 
 struct Text_Boxes

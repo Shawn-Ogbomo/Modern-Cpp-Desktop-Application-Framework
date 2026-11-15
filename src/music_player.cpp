@@ -30,7 +30,7 @@ Music_Player::Music_Player(const Button_Manager& bm) : songs{ std::make_unique <
 
     auto button_pos = sf::Vector2f{ 452.0f - 35.0f, 842.0f };
 
-    for (auto internal_index = B_N::Media{}; const auto& texture : bm.textures)
+    for (auto internal_index = B_N::Media{}; const auto& texture : bm.textures())
     {
         internal_buttons[static_cast<int>(internal_index)] 
             = {texture, internal_index, button_pos};

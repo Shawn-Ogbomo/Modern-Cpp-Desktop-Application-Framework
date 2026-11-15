@@ -9,12 +9,14 @@ namespace fs = std::filesystem;
 
 auto Card_Manager::load_textures() & -> void
 {
-    textures.reserve((Board::total_piles * Board::cards_pile) + 1);
-
-    for (const auto& dir_entry : fs::directory_iterator{ Directory_Manager::assets_dir() / "images" })
+    for (auto index = 0; const auto& dir_entry 
+        : fs::directory_iterator{ Directory_Manager::assets_dir() / "images" })
     { 
         auto& card_name = dir_entry.path();
-        textures.emplace_back(std::pair{ card_name.filename().stem(), sf::Texture{ card_name } });
+        internal_textures[index] 
+            = (std::pair{ card_name.filename().stem(), sf::Texture{ card_name } });
+        
+        ++index;
     }
 }
 
@@ -31,19 +33,18 @@ auto Button_Manager::load_textures() & -> void
                 sf::Texture{ buttons, false, { { x, (y + (dimmensions_button.y * 2)) }, dimmensions_button } } };
         };
 
-    textures.reserve(buttons.getSize().x / dimmensions_button.x);
-
-    for (auto i = 0; i <= dimmensions_image.x; i += dimmensions_button.x)
+    for (auto index = 0; auto& texture : internal_textures)
     {
-        textures.emplace_back(t(i));
+        texture = (t(index));
+        index += dimmensions_button.x;
     }
 }
 
 auto General_Buttons::load_textures() & -> void
 {
-    textures.f1 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_1.png" };
-    textures.f2 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_2.png" };
-    textures.f3 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_3.png" };
+    internal_textures.f1 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_1.png" };
+    internal_textures.f2 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_2.png" };
+    internal_textures.f3 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_3.png" };
 }
 
 auto Text_Boxes::load_textures() & ->void

@@ -4,16 +4,14 @@
 #include "../include/deck.hpp"
 #include "../include/exceptions.hpp"
 #include "../include/texture_manager.hpp"
-#include "../include/util.hpp"
 
 namespace rng = std::ranges;
 
 Deck::Deck(const Card_Manager& cm)
 {
-    auto& [name, back_card] = cm.textures.front();
-    cards.reserve(Board::total_piles * Board::cards_pile);
+    auto& [name, back_card] = cm.textures().front();
 
-    rng::for_each(cm.textures.begin() + 1, cm.textures.end(), [&](auto& textures) {
+    rng::for_each(cm.textures().begin() + 1, cm.textures().end(), [&](auto& textures) {
         auto& [name, texture] = textures;
         cards.emplace_back(name.string(), texture
         , back_card); }); [[likely]]
