@@ -7,7 +7,8 @@ namespace rng = std::ranges;
 
 using namespace std::literals;
 
-Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
+Game_State_Menu::Game_State_Menu(const General_Buttons& gb) 
+    : internal_state{ B_N::Game_State::playing }
 {
     Random_Number_Gen rng{ 100'000,999'999 };
     game_id = rng.dst(rng.g);
@@ -28,8 +29,6 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     move.setPosition({ 0, 842 });
     move.setFillColor({ 236,203,180 });
     move.setString(std::format("Move{:>16}{:>2}", ':', move_count));
-
-    internal_state = B_N::Game_State::playing;
 
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
@@ -77,7 +76,6 @@ void Game_State_Menu::draw(sf::RenderTarget& target
 auto Game_State_Menu::update_game_state(B_N::Game_State g_state
     , Component_Manager& cm) & -> void
 {
-    //state_prev = internal_state;
     internal_state = g_state;
 
     game_state.setString(get_labels()
@@ -185,26 +183,10 @@ auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
     if (menu_properties.state_buttons.front().contents.setting == ButtonMode::on)
     {
         ///was state win? write to database
-        ///else close application
         cm.close_window();
         return;
     }
 
-    ///TODO: To fix win bug
-    ///If game state is not a win
-    /// disable confirmation menu and go to previous state
-
-    /// If state is win and no is clicked
-    /// disable confirmation menu and return
-
-    /// It is better to search for the correct text box that corresponds to the yes or no button you clicked and
-    /// invoke the correct functions associated with it, then you don't have to program multiple ifs
-
-    /// Or if you have access to the string that was set in game state menu evaluate that and invoke the correct functions
-    /// this will be easier
-
-    cm.previous_game_state();       ///cm shouldn't have access to previous game state
-    
     cm.disable_confirmation_menu();
 }
 

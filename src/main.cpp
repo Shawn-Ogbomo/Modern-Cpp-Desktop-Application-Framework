@@ -101,8 +101,9 @@ public:
                 [&, this](std::span<GSB>) { gsm.update_game_state(gsm.clicked_button()
                     .front().contents.name, c_m); },
 
-                [&, this](std::span<EMB>) {em.state_manager(c_m); },
-                [&, this](std::span<CMB>) { cm.state_manager(c_m); },
+                [&, this](std::span<EMB>) {em.state_manager(c_m);  }
+
+                ,[&, this](std::span<CMB>) { cm.state_manager(c_m); gsm.update_game_state(gsm.status(),c_m); },
 
                     [&, this](std::span<MB>) { mp.operator()(mp.clicked_button()
                     .front().contents.name); }

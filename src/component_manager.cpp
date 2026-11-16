@@ -50,8 +50,3 @@ auto Component_Manager::close_window() const& ->void
     sp1_b.front() = false;
     sp6_rw.front().close();
 }
-
-auto Component_Manager::previous_game_state() & -> void
-{
-    sp7_gsm.front().update_game_state(sp7_gsm.front().previous_status(), *this);
-}

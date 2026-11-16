@@ -8,12 +8,6 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
-struct Button : public sf::Drawable
-{
-    virtual ~Button() = default;
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-};
-
 struct Forms
 {
     Forms() = default;
@@ -57,11 +51,11 @@ auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
 }
 
 template <typename T>
-struct Buttons : Button
+struct Button : sf::Drawable
 {
-    Buttons() = default;
+    Button() = default;
 
-    Buttons(const Texture_Forms& txtrs
+    Button(const Texture_Forms& txtrs
         , auto val, sf::Vector2f pos
         , std::string_view target_label = "") : forms{ txtrs }
     {
@@ -80,7 +74,11 @@ struct Buttons : Button
 };
 
 template<typename T>
-concept Is_Valid_Button = std::derived_from<T, Button>;
+concept Is_Valid_Button = std::is_same_v<T, Button<Button_Names::Exit>> 
+|| std::is_same_v<T, Button<Button_Names::Game_State>> 
+|| std::is_same_v<T, Button<Button_Names::Confirm>> 
+|| std::is_same_v<T, Button<Button_Names::Media>>
+|| std::is_same_v<T, Button<Button_Names::General>>;
 
 auto configure_button(Is_Valid_Button auto& button, Button_Names::Is_Valid_Enum auto val
     , std::string_view target_label, sf::Vector2f pos) -> void

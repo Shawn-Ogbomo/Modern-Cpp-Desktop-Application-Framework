@@ -21,61 +21,16 @@
 struct Menu : public sf::Drawable
 {
     static constexpr auto limit = 2;
+    virtual operator bool() const = 0;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-    virtual operator bool() const = 0;
     virtual ~Menu() = default;
 };
 
-//template <typename T>
-//struct Buttons : Button
-//{
-//    Buttons() = default;
-//
-//    Buttons(const Texture_Forms& txtrs
-//        , Button_Names::Game_State val, sf::Vector2f pos
-//        , std::string_view target_label) : forms{ txtrs }
-//    {
-//        configure_button(*this, val, target_label, pos);
-//    }
-//
-//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-//    {
-//        display_manager(*this, target);
-//        target.draw(label);
-//    }
-//
-//    Forms forms;
-//    sf::Text label{ Util::load_font() };
-//    Properties<T> contents;
-//};
-
-//struct Game_State_Button : public Button
-//{
-//    Game_State_Button() = default;
-//
-//    Game_State_Button(const Texture_Forms& txtrs
-//        , Button_Names::Game_State val, sf::Vector2f pos
-//        , std::string_view target_label) : forms{ txtrs }
-//    {
-//        configure_button(*this, val, target_label, pos);
-//    }
-//
-//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-//    {
-//        display_manager(*this, target);
-//        target.draw(label);
-//    }
-//
-//    Forms forms;
-//    sf::Text label{ Util::load_font() };
-//    Properties<Button_Names::Game_State> contents;
-//};
-
-using CMB = Buttons <Button_Names::Confirm>;
-using GSB = Buttons<Button_Names::Game_State>;
-using EMB = Buttons < Button_Names::Exit>;
-using DBB = Buttons<Button_Names::General>;
+using CMB = Button <Button_Names::Confirm>;
+using GSB = Button <Button_Names::Game_State>;
+using EMB = Button < Button_Names::Exit>;
+using DBB = Button <Button_Names::General>;
 
 class Game_State_Menu : public Menu
 {
@@ -100,7 +55,6 @@ public:
 
     auto state() & -> ButtonMode& { return menu_properties.mode; };
     auto status() const& -> const Button_Names::Game_State& { return internal_state; }
-    auto previous_status() const& -> const Button_Names::Game_State& { return state_prev; }
     auto buttons() & -> Game_State_Buttons& { return menu_properties.state_buttons; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
@@ -117,31 +71,9 @@ private:
     std::size_t move_count{};
 
     Button_Names::Game_State internal_state{};
-    Button_Names::Game_State state_prev{};
 
     M_P menu_properties{ ButtonMode::on };
 };
-
-//struct Exit_Button : public Button
-//{
-//    Exit_Button() = default;
-//
-//    Exit_Button(const Texture_Forms& txtrs
-//        , Button_Names::Game_State val, sf::Vector2f pos
-//        , std::string_view target_label) : forms{ txtrs }
-//    {
-//        configure_button(*this, val, target_label, pos);
-//    }
-//
-//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-//    {
-//        display_manager(*this, target);
-//        target.draw(label);
-//    }
-//    Forms forms;
-//    sf::Text label{ Util::load_font() };
-//    Properties<Button_Names::Game_State> contents;
-//};
 
 class Exit_Menu : public Menu
 {
@@ -166,28 +98,6 @@ private:
     bool internal_status{};
     M_P menu_properties{ ButtonMode::on };
 };
-
-//struct Confirmation_Button : public Button
-//{
-//    Confirmation_Button() = default;
-//
-//    Confirmation_Button(const Texture_Forms& txtrs
-//        , Button_Names::General val, sf::Vector2f pos
-//        , std::string_view target_label) : forms{ txtrs }
-//    {
-//        configure_button(*this, val, target_label, pos);
-//    }
-//
-//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-//    {
-//        display_manager(*this, target);
-//        target.draw(label);
-//    }
-//
-//    Forms forms;
-//    sf::Text label{ Util::load_font() };
-//    Properties<Button_Names::General> contents;
-//};
 
 class Confirmation_Menu : public Menu
 {
@@ -222,28 +132,6 @@ struct Record
     std::string elapsed_time;
     Button_Names::Game_State state{};
 };
-
-//struct Database_Button : public Button
-//{
-//    Database_Button() = default;
-//
-//    Database_Button(const Texture_Forms& txtrs
-//        , Button_Names::General val, sf::Vector2f pos
-//        , std::string_view target_label) : forms{ txtrs }
-//    {
-//        configure_button(*this, val, target_label, pos);
-//    }
-//
-//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-//    {
-//        display_manager(*this, target);
-//        target.draw(label);
-//    }
-//
-//    Forms forms;
-//    sf::Text label{ Util::load_font() };
-//    Properties<Button_Names::General> contents;
-//};
 
 class Database_Manager : public Menu
 {

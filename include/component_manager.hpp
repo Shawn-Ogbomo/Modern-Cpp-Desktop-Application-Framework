@@ -31,7 +31,6 @@ public:
     auto close_window()const& ->void;
     auto disable_components()const& -> void;
     auto disable_confirmation_menu()const& ->void;
-    auto previous_game_state() & -> void;
 private:
     std::span<bool> sp1_b;
     std::span<Board> sp2_b;

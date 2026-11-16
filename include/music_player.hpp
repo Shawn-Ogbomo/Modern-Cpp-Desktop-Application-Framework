@@ -12,25 +12,6 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
-//struct Media_Button : public Button
-//{
-//    Media_Button() = default;
-//
-//    Media_Button(const Texture_Forms& txtrs, Button_Names::Media val
-//        , sf::Vector2f pos) : forms{ txtrs }
-//    {
-//        update_button(contents.name, forms, val, pos);
-//    }
-//
-//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-//    {
-//        display_manager(*this, target);
-//    }
-//
-//    Forms forms;
-//    Properties<Button_Names::Media> contents;
-//};
-
 struct Track_Title
 {
     Track_Title() = default;
@@ -40,7 +21,7 @@ struct Track_Title
     sf::Text name{ Util::load_font() };
 };
 
-using MB = Buttons <Button_Names::Media>;
+using MB = Button <Button_Names::Media>;
 
 class  Music_Player : public sf::Drawable
 {
