@@ -3,9 +3,9 @@
 
 #include "../include/directory_manager.hpp"
 #include "../include/texture_manager.hpp"
-#include "../include/util.hpp"
 
 namespace fs = std::filesystem;
+namespace D_M = Directory_Manager;
 
 auto Card_Manager::load_textures() & -> void
 {
@@ -42,9 +42,9 @@ auto Button_Manager::load_textures() & -> void
 
 auto General_Buttons::load_textures() & -> void
 {
-    internal_textures.f1 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_1.png" };
-    internal_textures.f2 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_2.png" };
-    internal_textures.f3 = sf::Texture{ Directory_Manager::assets_dir() / "buttons" / "general_button_state_3.png" };
+    internal_textures.f1 = sf::Texture{ D_M::assets_dir() / "buttons" / "general_button_state_1.png" };
+    internal_textures.f2 = sf::Texture{ D_M::assets_dir() / "buttons" / "general_button_state_2.png" };
+    internal_textures.f3 = sf::Texture{ D_M::assets_dir() / "buttons" / "general_button_state_3.png" };
 }
 
 auto Text_Boxes::load_textures() & ->void

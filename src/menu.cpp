@@ -12,8 +12,11 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     Random_Number_Gen rng{ 100'000,999'999 };
     game_id = rng.dst(rng.g);
 
-    state_buttons.front() = { gb.textures(),B_N::Game_State::paused,{417,800}, "Pause"};
-    state_buttons.back() = { gb.textures(),B_N::Game_State::playing,{502,800}, "Resume"};
+    menu_properties.state_buttons.front() 
+        = { gb.textures(),B_N::Game_State::paused,{417,800}, "Pause"};
+    
+    menu_properties.state_buttons.back() 
+        = { gb.textures(),B_N::Game_State::playing,{502,800}, "Resume"};
 
     game_id_t.setCharacterSize(26);
     game_id_t.setPosition({ 0, 790 });
@@ -67,8 +70,8 @@ void Game_State_Menu::draw(sf::RenderTarget& target
     target.draw(game_id_t);
     target.draw(move);
     target.draw(game_state);
-    target.draw(state_buttons.front());
-    target.draw(state_buttons.back());
+    target.draw(menu_properties.state_buttons.front());
+    target.draw(menu_properties.state_buttons.back());
 }
 
 auto Game_State_Menu::update_game_state(B_N::Game_State g_state
@@ -95,7 +98,6 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
         cm.disable_components();
         cm.enable_exit_menu();
         cm.enable_confirmation_menu();
-        game_state.setString(get_prompts().labels.back());
         break;
     case B_N::Game_State::lose:
         cm.disable_components();
@@ -104,7 +106,6 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
     case B_N::Game_State::quit:
         cm.disable_components();
         cm.enable_confirmation_menu();
-        game_state.setString(get_labels().states.back());
         break;
     }
 }
@@ -117,21 +118,23 @@ auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
 
 Exit_Menu::Exit_Menu(const General_Buttons& gb)
 {
-    internal_buttons.front() = { gb.textures(), B_N::Game_State::restart,{5, 0}, "Reset"};
-    internal_buttons.back() = { gb.textures(), B_N::Game_State::quit,{5, 40}, "Quit"};
+    menu_properties.state_buttons.front() 
+        = { gb.textures(), B_N::Game_State::restart,{5, 0}, "Reset"};
+
+    menu_properties.state_buttons.back() 
+        = { gb.textures(), B_N::Game_State::quit,{5, 40}, "Quit"};
 }
 
 void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(internal_buttons.front());
-    target.draw(internal_buttons.back());
+    target.draw(menu_properties.state_buttons.front());
+    target.draw(menu_properties.state_buttons.back());
 }
 
 Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb,
     std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
 {
     prompt.setString(get_prompts().labels.front());
-
     prompt.setFillColor({ 236,203,180 });
     prompt.setCharacterSize(26);
 
@@ -146,33 +149,50 @@ Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes
     text_box.setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
         , (dimensions_window.y - dimensions_textbox.y) / 2 });
 
-    internal_buttons.front() = { gb.textures(), B_N::General::yes,{417, text_box.getGlobalBounds().position.y
+    menu_properties.state_buttons.front() 
+        = { gb.textures(), B_N::General::yes,{417, text_box.getGlobalBounds().position.y
         + dimensions_textbox.y - 50 }, "Yes" };
 
-    internal_buttons.back() = { gb.textures(), B_N::General::no,{502,  text_box.getGlobalBounds().position.y
+    menu_properties.state_buttons.back() 
+        = { gb.textures(), B_N::General::no,{502,  text_box.getGlobalBounds().position.y
         + dimensions_textbox.y - 50 }, "No" };
 }
 
 void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    if (mode == ButtonMode::on)
+    if (menu_properties.mode == ButtonMode::on)
     {
         target.draw(text_box);
         target.draw(prompt);
-        target.draw(internal_buttons.front());
-        target.draw(internal_buttons.back());
+        target.draw(menu_properties.state_buttons.front());
+        target.draw(menu_properties.state_buttons.back());
     }
 }
 
 auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 {
-    if (internal_buttons.front().contents.setting == ButtonMode::on)
+    if (menu_properties.state_buttons.front().contents.setting == ButtonMode::on)
     {
+        ///was state win? write to database 
+        ///else close application 
         cm.close_window();
         return;
     }
 
-    cm.previous_game_state();
+    ///TODO: To fix win bug 
+    ///If game state is not a win 
+    /// disable confirmation menu and go to previous state
+    
+    /// If state is win and no is clicked 
+    /// disable confirmation menu and return 
+  
+    /// It is better to search for the correct text box that corresponds to the yes or no button you clicked and 
+    /// invoke the correct functions associated with it, then you don't have to program multiple ifs
+    
+    /// Or if you have access to the string that was set in game state menu evaluate that and invoke the correct functions
+    /// this will be easier 
+    
+    cm.previous_game_state();       ///cm shouldn't have access to previous game state
     cm.disable_confirmation_menu();
 }
 
@@ -227,13 +247,13 @@ Database_Manager::Database_Manager() :conn{ std::make_unique<sqlite3*>() }
 
 void Database_Manager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    if (mode == ButtonMode::on)
+    if (menu_properties.mode == ButtonMode::on)
     {
         target.draw(text_box);
         target.draw(text_field);
         target.draw(indicator);
-        target.draw(buttons.front());
-        target.draw(*(buttons.begin() + 1));
-        target.draw(buttons.back());
+        target.draw(menu_properties.state_buttons.front());
+        target.draw(*(menu_properties.state_buttons.begin() + 1));
+        target.draw(menu_properties.state_buttons.back());
     }
 }

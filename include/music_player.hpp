@@ -65,13 +65,11 @@ private:
     std::size_t current_song{};
 
     std::unique_ptr<sf::Music[]> songs;
-
     std::unique_ptr<Track_Title[]> song_names;
-    Media_Buttons internal_buttons{};
-
+    
     ButtonMode mode{};
-
     std::span<Media_Button> mbs;
+    Media_Buttons internal_buttons{};
 };
 
 #endif // MUSIC_PLAYER_HPP

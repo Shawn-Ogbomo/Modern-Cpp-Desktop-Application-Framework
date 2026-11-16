@@ -19,7 +19,7 @@ class Card_Manager
     using Card_Textures = std::array<Pair_Path_Texture, limit>;
 public:
     Card_Manager() { load_textures(); }
-    auto textures()const -> const Card_Textures& { return internal_textures; }
+    auto textures()const& -> const Card_Textures& { return internal_textures; }
 private:
     auto load_textures() & -> void;
     Card_Textures internal_textures;
@@ -39,7 +39,7 @@ class Button_Manager
 public:
     Button_Manager() { load_textures(); }
     
-    auto textures()const 
+    auto textures()const& 
         -> const Media_Textures& { return internal_textures; }
 private:
     auto load_textures() & -> void;
@@ -51,7 +51,7 @@ class General_Buttons
 public:
     General_Buttons() { load_textures(); }
 
-    auto textures() const 
+    auto textures() const& 
         -> const Texture_Forms& { return internal_textures; }
 private:
     auto load_textures() & -> void;

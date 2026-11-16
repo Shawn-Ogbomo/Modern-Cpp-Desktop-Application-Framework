@@ -49,9 +49,21 @@ struct Game_State_Button : public Button
     Properties<Button_Names::Game_State> contents;
 };
 
+template<typename T1, typename T2>
+struct Menu_Properties
+{
+    Menu_Properties(ButtonMode bm 
+        = ButtonMode::off) :mode{ bm}{}
+
+    T1 state_buttons;
+    std::span<T2> spn;
+    ButtonMode mode{ };
+};
+
 class Game_State_Menu : public Menu
 {
     using Game_State_Buttons = std::array<Game_State_Button, Menu::limit>;
+    using M_P = Menu_Properties<Game_State_Buttons, Game_State_Button>;
 public:
     explicit  Game_State_Menu(const General_Buttons& gb);
 
@@ -62,17 +74,17 @@ public:
         , Component_Manager& cm) -> void;
 
     auto operator++() & -> const Game_State_Menu&;
-    operator bool() const override { return static_cast<bool>(mode); }
+    operator bool() const override { return static_cast<bool>(menu_properties.mode); }
 
-    auto clicked_button() & -> std::span<Game_State_Button>& { return gsbs; }
+    auto clicked_button() & -> std::span<Game_State_Button>& { return menu_properties.spn; }
 
     auto update_game_state(Button_Names::Game_State g_state
         , Component_Manager& cm) & ->void;
 
-    auto state() & -> ButtonMode& { return mode; };
+    auto state() & -> ButtonMode& { return menu_properties.mode; };
     auto status() const& -> const Button_Names::Game_State& { return internal_state; }
     auto previous_status() const& -> const Button_Names::Game_State& { return state_prev; }
-    auto buttons() & -> Game_State_Buttons& { return state_buttons; }
+    auto buttons() & -> Game_State_Buttons& { return menu_properties.state_buttons; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     struct Lose_Condition
@@ -90,10 +102,7 @@ private:
     Button_Names::Game_State internal_state{};
     Button_Names::Game_State state_prev{};
 
-    std::span<Game_State_Button> gsbs{};
-    Game_State_Buttons state_buttons;
-
-    ButtonMode mode{ ButtonMode::on };
+    M_P menu_properties{ButtonMode::on};
 };
 
 struct Exit_Button : public Button
@@ -120,23 +129,22 @@ struct Exit_Button : public Button
 class Exit_Menu : public Menu
 {
     using Exit_Buttons = std::array<Exit_Button, Menu::limit>;
+    using M_P = Menu_Properties<Exit_Buttons, Exit_Button>;
 public:
     explicit  Exit_Menu(const General_Buttons& gb);
 
     auto operator = (Exit_Menu&&)
         -> Exit_Menu & = delete;
 
-    operator bool() const override { return static_cast<bool>(mode); }
+    operator bool() const override { return static_cast<bool>(menu_properties.mode); }
 
-    auto clicked_button() & -> std::span<Exit_Button>& { return embs; }
-    auto buttons() & -> Exit_Buttons& { return internal_buttons; }
-    auto state() & -> ButtonMode& { return mode; };
+    auto clicked_button() & -> std::span<Exit_Button>& { return menu_properties.spn; }
+    auto buttons() & -> Exit_Buttons& { return menu_properties.state_buttons; }
+    auto state() & -> ButtonMode& { return menu_properties.mode; };
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
-    std::span<Exit_Button> embs;
-    Exit_Buttons internal_buttons;
-    ButtonMode mode{ ButtonMode::on };
+    M_P menu_properties{ButtonMode::on};
 };
 
 struct Confirmation_Button : public Button
@@ -164,6 +172,7 @@ struct Confirmation_Button : public Button
 class Confirmation_Menu : public Menu
 {
     using Confirmation_Buttons = std::array<Confirmation_Button, Menu::limit>;
+    using M_P = Menu_Properties<Confirmation_Buttons, Confirmation_Button>;
 public:
     explicit Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb
         , std::span<const sf::RenderWindow>rws);
@@ -171,22 +180,18 @@ public:
     auto operator = (Confirmation_Menu&&)
         -> Confirmation_Menu & = delete;
 
-    operator bool() const override { return static_cast<bool>(mode); }
+    operator bool() const override { return static_cast<bool>(menu_properties.mode); }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    auto clicked_button() & -> std::span<Confirmation_Button>& { return cbs; }
-    auto buttons() & -> Confirmation_Buttons& { return internal_buttons; }
-    auto state() & -> ButtonMode& { return mode; };
+    auto clicked_button() & -> std::span<Confirmation_Button>& { return menu_properties.spn; }
+    auto buttons() & -> Confirmation_Buttons& { return menu_properties.state_buttons; }
+    auto state() & -> ButtonMode& { return menu_properties.mode; };
     auto state_manager(Component_Manager& r_c) & ->void;
 private:
-    std::span<Confirmation_Button> cbs;
-    Confirmation_Buttons internal_buttons{};
-
     sf::Text prompt{ Util::load_font() };
     sf::Sprite text_box{ default_texture() };
-
-    ButtonMode mode{ ButtonMode::off };
+    M_P menu_properties;    
 };
 
 struct Record
@@ -223,29 +228,27 @@ struct Database_Button : public Button
 class Database_Manager : public Menu
 {
     using Database_Buttons = std::array<Database_Button, limit + 1>;
+    using M_P = Menu_Properties<Database_Buttons, Database_Button>;
 public:
     Database_Manager();  ///Create the table here.. evaluate it against exists table SQLlite command
 
     auto operator = (Database_Manager&&)
         -> Database_Manager & = delete;
 
-    operator bool() const override { return static_cast<bool>(mode); };
+    operator bool() const override { return static_cast<bool>(menu_properties.mode); };
 
-    auto state() & -> ButtonMode& { return mode; };
-    auto clicked_button() & -> std::span<Database_Button>& { return dbbs; }
+    auto state() & -> ButtonMode& { return menu_properties.mode; };
+    auto clicked_button() & -> std::span<Database_Button>& { return menu_properties.spn; }
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     sf::Sprite text_box{ default_texture() };
     sf::Text indicator{ Util::load_font() };  ///perhaps make this its own type with state and draw
-
     sf::RectangleShape text_field;
 
-    std::unique_ptr<sqlite3*> conn;
-    std::span<Database_Button> dbbs{};
+    M_P menu_properties;
 
-    Database_Buttons buttons;
+    std::unique_ptr<sqlite3*> conn;
     std::vector<Record> recs;
-    ButtonMode mode{};
 };
 
 auto read(Database_Manager& dmb);
