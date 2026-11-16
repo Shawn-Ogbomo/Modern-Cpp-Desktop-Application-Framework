@@ -81,28 +81,33 @@ public:
         {
             auto clock = sf::Clock{};
 
-            auto de = Deck{tm.cards()};
+            auto de = Deck{ tm.cards() };
             auto b = Board{ de };
             auto ts = Time_Status{};
-            static auto mp = Music_Player{tm.media_buttons()};
+            static auto mp = Music_Player{ tm.media_buttons() };
 
-            auto em = Exit_Menu{ tm.general_buttons()};
-            auto gsm = Game_State_Menu{ tm.general_buttons()};
-            auto cm = Confirmation_Menu{ tm.general_buttons(),tm.text_boxes(),{&window,1}};
+            auto em = Exit_Menu{ tm.general_buttons() };
+            auto gsm = Game_State_Menu{ tm.general_buttons() };
+            auto cm = Confirmation_Menu{ tm.general_buttons(),tm.text_boxes(),{ &window,1 } };
 
             auto c_m = Component_Manager{ { &running,1 },{ &b,1 },{ &clock,1 },{ &em,1 }
            ,{ &mp,1 },{ &window,1 },{ &gsm,1 },{ &cm,1 } };
 
-            auto v1 = std::variant<std::span<Game_State_Button>, std::span<Exit_Button>
-                , std::span<Confirmation_Button>, std::span<Media_Button>>{};
+            auto v1 = std::variant<std::span<GSB>, std::span<EMB>
+                , std::span<CMB>, std::span<MB >>{};
 
             auto o1 = overload
             {
-                [&, this](std::span<Game_State_Button>) { gsm.update_game_state(gsm.clicked_button().front().contents.name, c_m); },
-                [&, this](std::span<Exit_Button>) {gsm.update_game_state(em.clicked_button().front().contents.name, c_m);  },
-                [&, this](std::span<Confirmation_Button>) { cm.state_manager(c_m); },
-                [&, this](std::span<Media_Button>) { mp.operator()(mp.clicked_button().front().contents.name); }
-            , };
+                [&, this](std::span<GSB>) { gsm.update_game_state(gsm.clicked_button()
+                    .front().contents.name, c_m); },
+
+                [&, this](std::span<EMB>) {em.state_manager(c_m); },
+                [&, this](std::span<CMB>) { cm.state_manager(c_m); },
+
+                    [&, this](std::span<MB>) { mp.operator()(mp.clicked_button()
+                    .front().contents.name); }
+                ,
+            };
 
             const auto& component_click_listener = [&](auto& buttons, auto& spn, sf::Vector2f cursor_pos) -> void
                 {
@@ -139,7 +144,7 @@ public:
             // run the program as long as the window is open
             while (window.isOpen())
             {
-                if (gsm.status() == Button_Names::Game_State::restart)
+                if (em.restart())
                 {
                     break;
                 }

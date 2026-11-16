@@ -21,8 +21,8 @@ struct Forms
         , form_2{ txtrs.f2 }, form_3{ txtrs.f3 }
     {}
 
-    sf::Sprite form_1{default_texture()};
-    sf::Sprite form_2{ default_texture()};
+    sf::Sprite form_1{ default_texture() };
+    sf::Sprite form_2{ default_texture() };
     sf::Sprite form_3{ default_texture() };
 };
 
@@ -31,6 +31,18 @@ struct Properties
 {
     T name{};
     ButtonMode setting{};
+};
+
+template<typename T1, typename T2>
+struct Menu_Properties
+{
+    Menu_Properties(ButtonMode bm
+        = ButtonMode::off) :mode{ bm }
+    {}
+
+    T1 state_buttons;
+    std::span<T2> spn;
+    ButtonMode mode{};
 };
 
 auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
@@ -43,6 +55,29 @@ auto update_button(Button_Names::Is_Valid_Enum auto& internal_name
     forms.form_2.setPosition(pos);
     forms.form_3.setPosition(pos);
 }
+
+template <typename T>
+struct Buttons : Button
+{
+    Buttons() = default;
+
+    Buttons(const Texture_Forms& txtrs
+        , auto val, sf::Vector2f pos
+        , std::string_view target_label = "") : forms{ txtrs }
+    {
+        configure_button(*this, val, target_label, pos);
+    }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        display_manager(*this, target);
+        target.draw(label);
+    }
+
+    Forms forms;
+    sf::Text label{ Util::load_font() };
+    Properties<T> contents;
+};
 
 template<typename T>
 concept Is_Valid_Button = std::derived_from<T, Button>;

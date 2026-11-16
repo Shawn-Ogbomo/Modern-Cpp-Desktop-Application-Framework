@@ -38,9 +38,12 @@ class Button_Manager
     using Media_Textures = std::array<Texture_Forms, limit>;
 public:
     Button_Manager() { load_textures(); }
-    
-    auto textures()const& 
-        -> const Media_Textures& { return internal_textures; }
+
+    auto textures()const&
+        -> const Media_Textures&
+    {
+        return internal_textures;
+    }
 private:
     auto load_textures() & -> void;
     Media_Textures internal_textures;
@@ -51,8 +54,11 @@ class General_Buttons
 public:
     General_Buttons() { load_textures(); }
 
-    auto textures() const& 
-        -> const Texture_Forms& { return internal_textures; }
+    auto textures() const&
+        -> const Texture_Forms&
+    {
+        return internal_textures;
+    }
 private:
     auto load_textures() & -> void;
     Texture_Forms internal_textures;
@@ -69,10 +75,10 @@ class Texture_Manager
 {
 public:
     Texture_Manager() = default;
-    auto cards() const& -> const Card_Manager&{ return card_manager; }
-    auto media_buttons() const& -> const Button_Manager&{ return button_manager; }
-    auto general_buttons() const& ->const General_Buttons&{ return internal_general_buttons; }
-    auto text_boxes() const& -> const Text_Boxes&{ return internal_text_boxes; }
+    auto cards() const& -> const Card_Manager& { return card_manager; }
+    auto media_buttons() const& -> const Button_Manager& { return button_manager; }
+    auto general_buttons() const& ->const General_Buttons& { return internal_general_buttons; }
+    auto text_boxes() const& -> const Text_Boxes& { return internal_text_boxes; }
 private:
     Card_Manager card_manager;
     Button_Manager button_manager;

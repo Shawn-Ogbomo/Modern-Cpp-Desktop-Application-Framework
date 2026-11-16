@@ -12,26 +12,24 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
-struct Media_Button : public Button
-{
-    static constexpr auto limit = 5;
-
-    Media_Button() = default;
-
-    Media_Button(const Texture_Forms& txtrs, Button_Names::Media val
-        , sf::Vector2f pos) : forms{ txtrs }
-    {
-        update_button(contents.name, forms, val, pos);
-    }
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        display_manager(*this, target);
-    }
-
-    Forms forms;
-    Properties<Button_Names::Media> contents;
-};
+//struct Media_Button : public Button
+//{
+//    Media_Button() = default;
+//
+//    Media_Button(const Texture_Forms& txtrs, Button_Names::Media val
+//        , sf::Vector2f pos) : forms{ txtrs }
+//    {
+//        update_button(contents.name, forms, val, pos);
+//    }
+//
+//    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+//    {
+//        display_manager(*this, target);
+//    }
+//
+//    Forms forms;
+//    Properties<Button_Names::Media> contents;
+//};
 
 struct Track_Title
 {
@@ -42,34 +40,37 @@ struct Track_Title
     sf::Text name{ Util::load_font() };
 };
 
+using MB = Buttons <Button_Names::Media>;
+
 class  Music_Player : public sf::Drawable
 {
     static constexpr auto song_limit = 10;
-    using Media_Buttons = std::array<Media_Button, Media_Button::limit>;
+    static constexpr auto button_limit = 5;
+
+    using Media_Buttons = std::array<MB, button_limit>;
+    using M_P = Menu_Properties<Media_Buttons, MB>;
 public:
     Music_Player(const Button_Manager& bm);
     Music_Player(Music_Player&&) = default;
 
     auto operator =(Music_Player&&) noexcept -> Music_Player & = default;
-    operator bool() const& { return static_cast<bool>(mode); }
+    operator bool() const& { return static_cast<bool>(menu_properties.mode); }
     auto operator()(Button_Names::Media name) & ->void;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     auto idle() & -> void;
-    auto buttons() & -> Media_Buttons& { return internal_buttons; }
-    auto state() & -> ButtonMode& { return mode; };
-    auto clicked_button() & -> std::span<Media_Button>& { return mbs; }
+    auto buttons() & -> Media_Buttons& { return menu_properties.state_buttons; }
+    auto state() & -> ButtonMode& { return menu_properties.mode; };
+    auto clicked_button() & -> std::span<MB>& { return menu_properties.spn; }
 private:
     sf::Text caption{ Util::load_font() };
     std::size_t current_song{};
 
     std::unique_ptr<sf::Music[]> songs;
     std::unique_ptr<Track_Title[]> song_names;
-    
-    ButtonMode mode{};
-    std::span<Media_Button> mbs;
-    Media_Buttons internal_buttons{};
+
+    M_P menu_properties{ ButtonMode::on };
 };
 
 #endif // MUSIC_PLAYER_HPP

@@ -25,6 +25,11 @@ auto::Component_Manager::enable_components()const& ->void
     sp7_gsm.front().state() = ButtonMode::on;
 };
 
+auto Component_Manager::restart_game() & ->void
+{
+    sp4_em.front().restart() = true;
+}
+
 auto::Component_Manager::disable_components()const& -> void
 {
     sp3_c.front().stop();

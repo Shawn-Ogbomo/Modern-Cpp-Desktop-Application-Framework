@@ -11,21 +11,33 @@ namespace Button_Names
         prev, pause, play, next, stop
     };
 
+    enum class Confirm
+    {
+        no, yes
+    };
+
+    enum class Exit
+    {
+       restart, quit
+    };
+
     enum class General
     {
-        no, yes, ok, up, down, hint
+        ok, up, down, hint
     };
 
     enum class Game_State
     {
-        paused, playing, win, lose, restart, quit
+        paused, playing, win, lose
     };
 
     template<typename T>
     concept Is_Valid_Enum = std::is_enum_v<T>
         && (std::same_as<T, Button_Names::Media>
             || std::same_as<T, Game_State>
-            || std::same_as<T, Button_Names::General>);
+            || std::same_as<T, Button_Names::General>
+            || std::same_as<T, Button_Names::Confirm>
+            || std::same_as<T, Button_Names::Exit>);
 
     inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {
@@ -54,13 +66,11 @@ enum class Card_State
 
 struct State_Label
 {
-    std::array <std::string, 6> states{
+    std::array <std::string, 4> states{
         std::format("State{:>17}{:>7}" , ':' ,"Paused"),
         std::format("State{:>17}{:>8}" , ':' ,"Playing"),
         std::format("State{:>17}{:>4}" , ':' ,"Win"),
-        std::format("State{:>17}{:>5}" , ':' ,"Lose"),
-        std::format("State{:>17}{:>8}" , ':' ,"Restart"),
-        std::format("State{:>17}{:>11}" ,':' ,"Waiting...")
+        std::format("State{:>17}{:>5}" , ':' ,"Lose")
     };
 };
 
