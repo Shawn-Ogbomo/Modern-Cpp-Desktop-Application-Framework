@@ -76,15 +76,14 @@ public:
     {
         Database_Manager db;
         const auto tm = Texture_Manager{};
+        auto mp = Music_Player{ tm.media_buttons() };
 
         while (running)
         {
             auto clock = sf::Clock{};
-
             auto de = Deck{ tm.cards() };
             auto b = Board{ de };
             auto ts = Time_Status{};
-            static auto mp = Music_Player{ tm.media_buttons() };
 
             auto em = Exit_Menu{ tm.general_buttons() };
             auto gsm = Game_State_Menu{ tm.general_buttons() };
