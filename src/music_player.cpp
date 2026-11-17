@@ -15,9 +15,17 @@ Music_Player::Music_Player(const Button_Manager& bm) : songs{ std::make_unique <
     caption.setCharacterSize(26);
     caption.setPosition({ 600, 842 });
     caption.setFillColor({ 236,203,180 });
+    
+    auto index = 0;
+    const auto& audio_dir = D_M::assets_dir() / "audio";
 
-    for (auto index = 0; const auto& song : fs::directory_iterator{ D_M::assets_dir() / "audio" })
+    for (const auto& song : fs::directory_iterator{ audio_dir })
     {
+        if (index == song_limit)
+        {
+            throw std::out_of_range{"Song limit exceeded.\n"};
+        }
+
         song_names[index] = { song.path().filename().stem().string() };
         songs[index] = sf::Music{ song };
 
@@ -26,6 +34,12 @@ Music_Player::Music_Player(const Button_Manager& bm) : songs{ std::make_unique <
         song_names[index].name.setFillColor({ 236,203,180 });
 
         ++index;
+    }
+
+    if (fs::is_empty(audio_dir) || index < song_limit)
+    {
+        throw std::invalid_argument{ std::format("Song limit unfulfilled: {}"
+        ,song_limit) };
     }
 
     auto button_pos = sf::Vector2f{ 452.0f - 35.0f, 842.0f };
