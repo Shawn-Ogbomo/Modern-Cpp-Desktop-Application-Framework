@@ -7,11 +7,10 @@ namespace rng = std::ranges;
 
 using namespace std::literals;
 
-Game_State_Menu::Game_State_Menu(const General_Buttons& gb) 
+Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     : internal_state{ B_N::Game_State::playing }
 {
-    Random_Number_Gen rng{ 100'000,999'999 };
-    game_id = rng.dst(rng.g);
+    game_id = Random_Number_Gen{ 100'000,999'999 }.random_number();
 
     menu_properties.state_buttons.front()
         = { gb.textures(),B_N::Game_State::paused,{ 417,800 }, "Pause" };
@@ -105,8 +104,8 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
 
 auto Game_State_Menu::Lose_Condition::operator()(const Card& card)const ->bool
 {
-    return card.rank == Rank_Lib::Rank::king &&
-        card.state == Card_State::face_up;
+    return card.rank() == Rank_Lib::Rank::king &&
+        card.state() == Card_State::face_up;
 }
 
 Exit_Menu::Exit_Menu(const General_Buttons& gb)
