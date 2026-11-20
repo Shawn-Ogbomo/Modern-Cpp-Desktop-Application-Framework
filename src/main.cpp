@@ -60,9 +60,9 @@ public:
     auto enable_shader(const Board& b) -> void
     {
         if (!b.destination_pile().empty() && !b.source_pile().empty()
-            && b.destination_pile().front().rank == b.source_pile().front().cards.back().rank)
+            && b.destination_pile().front().rank == b.source_pile().front().cards.back().rank())
         {
-            const auto pos = b.destination_pile().front().cards.front().face.getPosition();
+            const auto pos = b.destination_pile().front().cards.front().face().getPosition();
             glow_rect.setPosition(sf::Vector2f{ pos.x - 10, pos.y - 10 });
             window.draw(glow_rect, &glow_shader);
             shader_enabled = true;
@@ -175,8 +175,8 @@ public:
                     {
                         if (!b.source_pile().empty())
                         {
-                            move_card(b.source_pile().front().cards.back().face
-                                , b.source_pile().front().cards.back().reverse, sf::Vector2f{ mouseMoved->position.x
+                            move_card(b.source_pile().front().cards.back().face()
+                                , b.source_pile().front().cards.back().reverse(), sf::Vector2f{ mouseMoved->position.x
                                + .0f, mouseMoved->position.y + .0f }, b.source_pile(), b.destination_pile());
 
                             b.operator()();
@@ -199,8 +199,8 @@ public:
                             {
                                 if (!shader_enabled)
                                 {
-                                    move_card(b.source_pile().front().cards.back().face
-                                        , b.source_pile().front().cards.back().reverse,
+                                    move_card(b.source_pile().front().cards.back().face()
+                                        , b.source_pile().front().cards.back().reverse(),
                                         b.source_pile().front().location, b.source_pile(), b.destination_pile(), true);
 
                                     continue;
@@ -212,7 +212,7 @@ public:
                                 dst_cards.emplace_front(src_cards.back());
                                 src_cards.pop_back();
 
-                                dst_cards.back().state = Card_State::face_up;
+                                dst_cards.back().state() = Card_State::face_up;
 
                                 auto& src_pile_state = b.source_pile().front().active;
                                 auto& dst_pile_state = b.destination_pile().front().active;
@@ -226,8 +226,8 @@ public:
 
                                 gsm(b.piles().back().cards, c_m);
 
-                                move_card(dst_cards.front().face
-                                    , dst_cards.front().reverse,
+                                move_card(dst_cards.front().face()
+                                    , dst_cards.front().reverse(),
                                     b.destination_pile().front().location, b.source_pile(), b.destination_pile(), true);
                             }
                         }

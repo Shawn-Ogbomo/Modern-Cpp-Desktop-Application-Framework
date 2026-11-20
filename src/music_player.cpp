@@ -15,7 +15,7 @@ Music_Player::Music_Player(const Button_Manager& bm) : songs{ std::make_unique <
     caption.setCharacterSize(26);
     caption.setPosition({ 600, 842 });
     caption.setFillColor({ 236,203,180 });
-    
+
     auto index = 0;
     const auto& audio_dir = D_M::assets_dir() / "audio";
 
@@ -23,7 +23,7 @@ Music_Player::Music_Player(const Button_Manager& bm) : songs{ std::make_unique <
     {
         if (index == song_limit)
         {
-            throw std::out_of_range{"Song limit exceeded.\n"};
+            throw std::out_of_range{ "Song limit exceeded.\n" };
         }
 
         song_names[index] = { song.path().filename().stem().string() };
@@ -80,8 +80,12 @@ auto Music_Player::operator()(Button_Names::Media name) & ->void
     const auto& stop = [&, this] { songs[current_song].stop(); };
     const auto& play = [&, this] { songs[current_song].play(); };
     const auto& pause = [&, this] { songs[current_song].pause(); };
-    const auto& next = [&, this] { current_song = (current_song < song_limit - 1) ? ++current_song : 0; };
-    const auto& prev = [&, this] { current_song = (current_song > 0) ? --current_song : current_song = song_limit - 1; };
+
+    const auto& next = [&, this] { current_song = (current_song < song_limit - 1)
+        ? ++current_song : 0; };
+
+    const auto& prev = [&, this] { current_song = (current_song > 0)
+        ? --current_song : current_song = song_limit - 1; };
 
     switch (name)
     {

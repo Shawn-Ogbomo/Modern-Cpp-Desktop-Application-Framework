@@ -3,8 +3,8 @@
 #include "../include/card.hpp"
 #include "../include/suit.hpp"
 
-Card::Card(std::string_view card_name, const sf::Texture&f, const sf::Texture& re, Card_State st)
-    : face{ f }, reverse{ re}, state{ st }
+Card::Card(std::string_view card_name, const sf::Texture& f, const sf::Texture& re, Card_State st)
+    : internal_face{ f }, internal_reverse{ re }, internal_state{ st }
 {
     const auto pos_suite_name_begin = (card_name.find_first_of("-") + 1);
     const auto count = (card_name.find_last_of("-") - 1) - (pos_suite_name_begin)+1;
@@ -16,10 +16,11 @@ Card::Card(std::string_view card_name, const sf::Texture&f, const sf::Texture& r
 
     std::from_chars(card_name.data() + (card_name.find_last_of("-") + 1), card_name.data() + card_name.size(), result);
 
-    rank = static_cast<Rank_Lib::Rank>(result);
+    internal_rank = static_cast<Rank_Lib::Rank>(result);
 }
 
 void Card::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    state == Card_State::face_up ? target.draw(face) : target.draw(reverse);
+    internal_state == Card_State::face_up ? target.draw(internal_face)
+        : target.draw(internal_reverse);
 }

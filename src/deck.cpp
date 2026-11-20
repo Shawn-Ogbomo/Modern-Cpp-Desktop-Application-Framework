@@ -14,15 +14,14 @@ Deck::Deck(const Card_Manager& cm)
     rng::for_each(cm.textures().begin() + 1, cm.textures().end(), [&](auto& textures) {
         auto& [name, texture] = textures;
         cards.emplace_back(name.string(), texture
-        , back_card); }); [[likely]]
+            , back_card); }); [[likely]]
 
-    shuffle();
+            shuffle();
 }
 
 auto Deck::shuffle() & -> void
 {
-    Random_Number_Gen rng;
-    rng::shuffle(cards, rng.g);
+    rng::shuffle(cards, Random_Number_Gen{}.generator());
 }
 
 auto Deck::draw() & -> Card
