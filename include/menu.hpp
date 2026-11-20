@@ -10,11 +10,12 @@
 #include <vector>
 
 #include "../include/button.hpp"
+#include "../include/component_manager.hpp"
 #include "../include/directory_manager.hpp"
 #include "../include/random_number_gen.hpp"
-#include "../include/component_manager.hpp"
 #include "../include/sqlite3.h"
 #include "../include/state.hpp"
+#include "../include/text_box.hpp"
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
@@ -91,7 +92,7 @@ public:
     auto buttons() & -> Exit_Buttons& { return menu_properties.state_buttons; }
     auto state() & -> ButtonMode& { return menu_properties.mode; }
     auto restart() const& ->  bool { return internal_status; }
-    [[nodiscard]] auto restart() & -> bool& { return internal_status; }
+    auto restart() & -> bool& { return internal_status; }
     auto state_manager(Component_Manager& c_m) & ->void;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
@@ -136,6 +137,7 @@ struct Record
 class Database_Manager : public Menu
 {
     using Database_Buttons = std::array<DBB, limit + 1>;
+    using M_P = Menu_Properties<Database_Buttons, DBB>;
     using M_P = Menu_Properties<Database_Buttons, DBB>;
 public:
     Database_Manager();  ///Create the table here.. evaluate it against exists table SQLlite command
