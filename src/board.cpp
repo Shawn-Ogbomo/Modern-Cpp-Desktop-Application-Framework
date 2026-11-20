@@ -59,11 +59,11 @@ Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }, mode{ ButtonMode::on
         {
             card = d.draw();
 
-            position_card(card.face, card.reverse
+            position_card(card.face(), card.reverse()
                 , rank, index, total_piles);
         }
 
-        pos = cards.back().face.getPosition();
+        pos = cards.back().face().getPosition();
 
         ++index;
     }
@@ -71,7 +71,7 @@ Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }, mode{ ButtonMode::on
     auto& [pile_active, cards, rank, pos] = internal_piles.back();
     pile_active = true;
 
-    cards.back().state = Card_State::face_up;
+    cards.back().state() = Card_State::face_up;
 }
 
 auto Board::operator()(sf::Vector2f pos) -> void
@@ -81,7 +81,7 @@ auto Board::operator()(sf::Vector2f pos) -> void
         for (auto& stack : internal_piles) [[likely]]
         {
             auto& [pile_active, pile, rank, internal_pos] = stack;
-            const auto& face = pile.front().face;
+            const auto& face = pile.front().face();
 
             if (pile_active && face.getGlobalBounds().contains(pos))
             {
@@ -90,7 +90,7 @@ auto Board::operator()(sf::Vector2f pos) -> void
             }
 
             if (!internal_source_pile.empty() && face.getGlobalBounds().findIntersection(
-                (internal_source_pile).front().cards.back().face.getGlobalBounds()))
+                (internal_source_pile).front().cards.back().face().getGlobalBounds()))
             {
                 internal_destination_pile = { &stack, 1 };
                 return;
