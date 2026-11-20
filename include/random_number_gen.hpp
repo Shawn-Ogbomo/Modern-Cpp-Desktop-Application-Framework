@@ -3,9 +3,10 @@
 
 #include <random>
 
-struct Random_Number_Gen
+class Random_Number_Gen
 {
-    Random_Number_Gen(int min = 0, int max = 51) : dst{min,max}
+public:
+    Random_Number_Gen(int min = 0, int max = 51) : dst{ min,max }
     {
         std::generate(std::begin(seed_data), std::end(seed_data),
             std::ref(rd));
@@ -15,9 +16,14 @@ struct Random_Number_Gen
         g = std::mt19937{ seq };
     }
 
+    auto random_number() -> int { return dst(g); }
+
+    auto generator() -> std::mt19937 { return g; }
+private:
     std::random_device rd;
-    std::mt19937 g{ };
+    std::mt19937 g{};
     std::uniform_int_distribution<> dst{};
     std::array<int, std::mt19937::state_size> seed_data{};
 };
+
 #endif // RANDOM_NUMBER_GEN_HPP
