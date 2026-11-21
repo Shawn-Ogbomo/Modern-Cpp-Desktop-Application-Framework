@@ -37,6 +37,7 @@ set(GAME_SOURCES
     "src/music_player.cpp"
     "src/menu.cpp"
     "src/component_manager.cpp"
+    "src/text_box.cpp"
 )
 
 set(DATABASE "src/sqlite3.c")
