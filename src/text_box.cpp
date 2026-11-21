@@ -79,4 +79,9 @@ void Text_Box::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         target.draw(*internal_prompt);
     }
+
+    else if (field)
+    {
+        target.draw(*field);
+    }
 }
