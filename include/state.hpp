@@ -33,7 +33,7 @@ namespace Button_Names
 
     const auto confirm_button_pos = std::unordered_map<std::string, float>
     {
-        { "Yes",417.0f },{ "No",502.0f },{ "OK", (587.0f / 2.0f) - 42.5f }
+        { "No",502.0f },{ "Yes",417.0f },{ "OK", (417.0f + 42.5f) }
     };
 
     template<typename T>
