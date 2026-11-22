@@ -22,6 +22,7 @@
 struct Menu : public sf::Drawable
 {
     static constexpr auto limit = 2;
+    static constexpr auto text_box_limit = 3;
     virtual operator bool() const = 0;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
@@ -102,10 +103,10 @@ private:
 
 class Confirmation_Menu : public Menu
 {
-    using Confirmation_Buttons = std::array<CMB, Menu::limit>;
+    using Confirmation_Buttons = std::array<CMB, text_box_limit>;
     using M_P = Menu_Properties<Confirmation_Buttons, CMB>;
 public:
-    explicit Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb
+    explicit Confirmation_Menu(const General_Buttons& gb, sf::Sprite& tb
         , std::span<const sf::RenderWindow>rws);
 
     auto operator = (Confirmation_Menu&&)
@@ -119,9 +120,12 @@ public:
     auto buttons() & -> Confirmation_Buttons& { return menu_properties.state_buttons; }
     auto state() & -> ButtonMode& { return menu_properties.mode; };
     auto state_manager(Component_Manager& c_m) & ->void;
+    auto text_boxes() & -> std::array<Text_Box, limit>& { return internal_text_boxes; }
 private:
-    sf::Text prompt{ Util::load_font() };
-    sf::Sprite text_box{ default_texture() };
+    auto initialize(sf::Sprite& tb
+        , std::span<const sf::RenderWindow>rws) & ->std::array< Text_Box, limit>;
+
+    std::array<Text_Box, limit> internal_text_boxes;
     M_P menu_properties;
 };
 

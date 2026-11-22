@@ -92,7 +92,6 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
         break;
     case B_N::Game_State::win:
         cm.disable_components();
-        cm.enable_exit_menu();
         cm.enable_confirmation_menu();
         break;
     case B_N::Game_State::lose:
@@ -119,14 +118,12 @@ Exit_Menu::Exit_Menu(const General_Buttons& gb)
 
 auto Exit_Menu::state_manager(Component_Manager& cm) & ->void
 {
-    if (const auto reset = menu_properties.state_buttons.front()
-        .contents.setting == ButtonMode::on; reset)
+    if (const auto& reset = menu_properties.state_buttons.front())
     {
         cm.restart_game();
     }
 
-    else if (const auto quit = menu_properties.state_buttons
-        .back().contents.setting == ButtonMode::on; quit)
+    else if (const auto& quit = menu_properties.state_buttons.back())
     {
         cm.disable_components();
         cm.enable_confirmation_menu();
@@ -139,54 +136,67 @@ void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(menu_properties.state_buttons.back());
 }
 
-Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, const Text_Boxes& tb,
-    std::span<const sf::RenderWindow>rws) : text_box{ tb.t }
+auto Confirmation_Menu::initialize(sf::Sprite& tb
+    , std::span<const sf::RenderWindow>rws) & -> std::array< Text_Box, limit>
 {
-    prompt.setString(get_prompts().labels.front());
-    prompt.setFillColor({ 236,203,180 });
-    prompt.setCharacterSize(26);
+    return { Text_Box{ get_prompts().labels.front(), tb, rws, std::nullopt },
+                { get_prompts().labels.back(), tb, rws, sf::RectangleShape{} } };
+}
 
-    const auto dimensions_window = static_cast<sf::Vector2f>(rws.front().getSize());
-    const auto dimensions_textbox = sf::Vector2f{ text_box.getGlobalBounds().size };
-    const auto dimensions_prompt = prompt.getGlobalBounds().size;
+Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, sf::Sprite& tb,
+    std::span<const sf::RenderWindow>rws) : internal_text_boxes{ initialize(tb, rws) }
+{
+    const auto dimensions_textbox = sf::Vector2f{ tb.getGlobalBounds().size };
 
-    prompt.setPosition({ ((dimensions_window.x - dimensions_textbox.x) / 2) + (dimensions_textbox.x / 2)
-        - (dimensions_prompt.x / 2) , ((dimensions_window.y - dimensions_textbox.y) / 2)
-        + (dimensions_textbox.y / 2) - dimensions_prompt.y });
+    internal_text_boxes.back().prompt().move({ 0,-30 });
+    
+    for (auto index = B_N::Confirm{}; const auto& [key, val] :B_N::confirm_button_pos)
+    {
+        const auto pos = static_cast<int>(index);
 
-    text_box.setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
-        , (dimensions_window.y - dimensions_textbox.y) / 2 });
+        menu_properties.state_buttons[pos]
+            = { gb.textures(), index
+            ,{ val , internal_text_boxes.front().img().getGlobalBounds().position.y
+            + dimensions_textbox.y - 50.0f }, key };
 
-    menu_properties.state_buttons.front()
-        = { gb.textures(), B_N::Confirm::yes,{ 417, text_box.getGlobalBounds().position.y
-        + dimensions_textbox.y - 50 }, "Yes" };
+        menu_properties.state_buttons[pos]
+            .label.move({(85.0f - menu_properties.state_buttons
+           [pos].label.getGlobalBounds().size.x) / 2 , 0 });
 
-    menu_properties.state_buttons.back()
-        = { gb.textures(), B_N::Confirm::no,{ 502,  text_box.getGlobalBounds().position.y
-        + dimensions_textbox.y - 50 }, "No" };
+        ++index;
+    }
 }
 
 void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     if (menu_properties.mode == ButtonMode::on)
     {
-        target.draw(text_box);
-        target.draw(prompt);
-        target.draw(menu_properties.state_buttons.front());
+        if (internal_text_boxes.front().state() == ButtonMode::on)
+        {
+            target.draw(internal_text_boxes.front());
+            target.draw(menu_properties.state_buttons.front());
+            target.draw(*(menu_properties.state_buttons.begin() + 1));
+            return;
+        }
+
+        target.draw(internal_text_boxes.back());
         target.draw(menu_properties.state_buttons.back());
+
     }
 }
 
 auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 {
-    if (menu_properties.state_buttons.front().contents.setting == ButtonMode::on)
+    cm.disable_confirmation_menus();
+
+    if (menu_properties.state_buttons
+        [static_cast<int>(B_N::Confirm::yes)])
     {
-        ///was state win? write to database
-        cm.close_window();
+        ///TODO: If win, render enter your alias box
+        cm.enable_confirmation_menu();
+        /*      cm.close_window();*/
         return;
     }
-
-    cm.disable_confirmation_menu();
 }
 
 Database_Manager::Database_Manager() :conn{ std::make_unique<sqlite3*>() }

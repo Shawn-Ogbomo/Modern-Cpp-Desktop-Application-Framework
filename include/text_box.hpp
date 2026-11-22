@@ -6,7 +6,7 @@
 #include "../include/state.hpp"
 #include "../include/util.hpp"
 
-class Caret : sf::Drawable
+class Caret : public sf::Drawable
 {
 public:
     Caret()
@@ -33,13 +33,13 @@ private:
     ButtonMode state{};
 };
 
-class Text_Field : sf::Drawable
+class Text_Field : public sf::Drawable
 {
     static constexpr auto character_limit = 3;
 public:
-    Text_Field() : field{ { 170,30 } }
+    Text_Field(sf::RectangleShape) : field{ { 170,30 } }
     {
-        field.setPosition({ 500,50 });
+        field.setPosition({ 425,440 });
         field.setFillColor({ 236, 203, 180 });
         text.setPosition({ 500,50 });
     }
@@ -59,12 +59,17 @@ private:
     std::array<char, character_limit> buffer{};
 };
 
+enum class MSG
+{
+    are_you_sure, log_database, enter_name
+};
+
 struct Prompts
 {
     std::array <std::string, 3> labels{
         "Are You\nSure?",
         "Log Win To\nDatabase?",
-        "Enter Your Alias: "
+        "Enter Name:"
     };
 };
 
@@ -74,13 +79,14 @@ inline auto get_prompts() -> const Prompts&
     return messages;
 }
 
-class Text_Box : sf::Drawable
+class Text_Box : public sf::Drawable
 {
 public:
     Text_Box() = default;
 
     Text_Box(std::string_view text, sf::Sprite& tb
-        , std::span<const sf::RenderWindow>rws);
+        , std::span<const sf::RenderWindow>rws
+        , std::optional<sf::RectangleShape> ors);
 
     auto prompt() const& ->const sf::Text&;
     auto prompt() & ->sf::Text&;
@@ -90,13 +96,16 @@ public:
 
     auto state() const& -> ButtonMode { return internal_state; }
     auto state() & ->ButtonMode& { return internal_state; }
+
+    auto field() const& ->std::optional<Text_Field> { return internal_field; }
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     ButtonMode internal_state{};
     std::span<sf::Sprite> internal_img;
 
-    std::optional<Text_Field> field;
-    std::optional< sf::Text> internal_prompt;
+    std::optional<Text_Field> internal_field;
+    sf::Text internal_prompt{ Util::load_font() };
 };
 
 #endif // TEXT_BOX_HPP

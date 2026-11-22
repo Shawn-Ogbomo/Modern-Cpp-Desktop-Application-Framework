@@ -31,25 +31,23 @@ auto Text_Field::operator -=(char c) & -> void
 }
 
 Text_Box::Text_Box(std::string_view text, sf::Sprite& tb
-    , std::span<const sf::RenderWindow>rws) : internal_img{ &tb,1 }
+    , std::span<const sf::RenderWindow>rws
+    , std::optional<sf::RectangleShape> ors) : internal_img{ &tb,1 }
+    , internal_field{std::move(ors)}
 {
     const auto dimensions_window = static_cast<sf::Vector2f>(rws.front().getSize());
     const auto dimensions_textbox = sf::Vector2f{ internal_img.front().getGlobalBounds().size };
 
-    if (!text.empty())
-    {
-        internal_prompt = Util::load_font();
-        internal_prompt->setString(text);
-        internal_prompt->setCharacterSize(26);
-        internal_prompt->setFillColor({ 236,203,180 });
+    internal_prompt.setString(text);
+    internal_prompt.setCharacterSize(26);
+    internal_prompt.setFillColor({ 236,203,180 });
 
-        const auto dimensions_prompt = internal_prompt->getGlobalBounds().size;
+    const auto dimensions_prompt = internal_prompt.getGlobalBounds().size;
 
-        internal_prompt->setPosition({ ((dimensions_window.x - dimensions_textbox.x) / 2)
-            + (dimensions_textbox.x / 2)
-            - (dimensions_prompt.x / 2) , ((dimensions_window.y - dimensions_textbox.y) / 2)
-            + (dimensions_textbox.y / 2) - dimensions_prompt.y });
-    }
+    internal_prompt.setPosition({ ((dimensions_window.x - dimensions_textbox.x) / 2)
+        + (dimensions_textbox.x / 2)- (dimensions_prompt.x / 2) 
+        , ((dimensions_window.y - dimensions_textbox.y) / 2)
+        + (dimensions_textbox.y / 2) - dimensions_prompt.y });
 
     internal_img.front().setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
         , (dimensions_window.y - dimensions_textbox.y) / 2 });
@@ -57,31 +55,21 @@ Text_Box::Text_Box(std::string_view text, sf::Sprite& tb
 
 auto Text_Box::prompt() const& ->const sf::Text&
 {
-    if (internal_prompt)
-    {
-        return *internal_prompt;
-    }
+    return internal_prompt;
 }
 
 auto Text_Box::prompt() & ->sf::Text&
 {
-    if (internal_prompt)
-    {
-        return *internal_prompt;
-    }
+    return internal_prompt;
 }
 
 void Text_Box::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(internal_img.front());
+    target.draw(internal_prompt);
 
-    if (internal_prompt)
+    if (internal_field)
     {
-        target.draw(*internal_prompt);
-    }
-
-    else if (field)
-    {
-        target.draw(*field);
+        target.draw(*internal_field);
     }
 }
