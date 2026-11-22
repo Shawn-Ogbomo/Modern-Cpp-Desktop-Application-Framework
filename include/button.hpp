@@ -62,6 +62,8 @@ struct Button : sf::Drawable
         configure_button(*this, val, target_label, pos);
     }
 
+    operator bool() const { return static_cast<bool>(contents.setting); }
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
         display_manager(*this, target);
@@ -74,9 +76,9 @@ struct Button : sf::Drawable
 };
 
 template<typename T>
-concept Is_Valid_Button = std::is_same_v<T, Button<Button_Names::Exit>> 
-|| std::is_same_v<T, Button<Button_Names::Game_State>> 
-|| std::is_same_v<T, Button<Button_Names::Confirm>> 
+concept Is_Valid_Button = std::is_same_v<T, Button<Button_Names::Exit>>
+|| std::is_same_v<T, Button<Button_Names::Game_State>>
+|| std::is_same_v<T, Button<Button_Names::Confirm>>
 || std::is_same_v<T, Button<Button_Names::Media>>
 || std::is_same_v<T, Button<Button_Names::General>>;
 
