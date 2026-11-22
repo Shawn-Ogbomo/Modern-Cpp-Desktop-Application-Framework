@@ -23,7 +23,7 @@ auto::Component_Manager::enable_confirmation_menu()const& ->void
         {
             cm.front().text_boxes().back().state() = ButtonMode::on;
 
-            cm.front().text_boxes().front().prompt()
+            cm.front().text_boxes().back().prompt()
                 .setString((get_prompts().labels.back()));
 
             return;
@@ -69,7 +69,7 @@ auto::Component_Manager::disable_components()const& -> void
     cm.front().state() = ButtonMode::off;
 };
 
-auto Component_Manager::disable_confirmation_menu()const& ->void
+auto Component_Manager::disable_confirmation_menus()const& ->void
 {
     cm.front().state() = ButtonMode::off;
     cm.front().text_boxes().front().state() = ButtonMode::off;

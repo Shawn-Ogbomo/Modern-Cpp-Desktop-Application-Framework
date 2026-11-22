@@ -29,7 +29,7 @@ public:
     auto enable_components()const& ->void;
     auto restart_game() & -> void;
     auto disable_components()const& -> void;
-    auto disable_confirmation_menu()const& ->void;
+    auto disable_confirmation_menus()const& ->void;
     auto close_window()const& ->void;
 private:
     std::span<bool> app_state;
