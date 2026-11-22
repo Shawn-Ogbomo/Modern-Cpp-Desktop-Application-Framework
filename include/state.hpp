@@ -13,12 +13,12 @@ namespace Button_Names
 
     enum class Confirm
     {
-        no, yes
+        no, yes, ok
     };
 
     enum class Exit
     {
-       restart, quit
+        restart, quit
     };
 
     enum class General
@@ -29,6 +29,11 @@ namespace Button_Names
     enum class Game_State
     {
         paused, playing, win, lose
+    };
+
+    const auto confirm_button_pos = std::unordered_map<std::string, float>
+    {
+        { "Yes",417.0f },{ "No",502.0f },{ "OK", (587.0f / 2.0f) - 42.5f }
     };
 
     template<typename T>
@@ -78,20 +83,6 @@ inline auto get_labels() -> const State_Label&
 {
     static const auto labels = State_Label{};
     return labels;
-}
-
-struct Prompts
-{
-    std::array <std::string, 2> labels{
-        "Are You\nSure?",
-        "Log Win To\nDatabase?"
-    };
-};
-
-inline auto get_prompts() -> const Prompts&
-{
-    static const auto messages = Prompts{};
-    return messages;
 }
 
 #endif // STATE_HPP
