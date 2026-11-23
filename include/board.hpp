@@ -28,8 +28,8 @@ public:
     auto operator()(sf::Vector2f pos = {}) -> void;
 
     auto state() & ->ButtonMode& { return mode; }
-    auto active_pile() -> Rank_Lib::Rank& { return pos_prev; }
-    auto active_pile() const -> const Rank_Lib::Rank& { return pos_prev; }
+    auto active_pile()& -> Rank_Lib::Rank& { return pos_prev; }
+    auto active_pile() const& -> int { return static_cast<int>(pos_prev); }
 
     auto source_pile() -> std::span<Pile>& { return internal_source_pile; }
     auto destination_pile() -> std::span<Pile>& { return internal_destination_pile; }
@@ -46,8 +46,8 @@ private:
     std::span<Pile> internal_destination_pile;
 };
 
-auto move_card(sf::Sprite& card_img_f, sf::Sprite& card_img_b
-    , sf::Vector2f dest_pos, std::span<Pile>& src_p, std::span<Pile>& dst_p,
+auto move_card(sf::Sprite& img_f, sf::Sprite& img_b
+    , sf::Vector2f pos, std::span<Pile>& src, std::span<Pile>& dst,
     bool update_It_state = false)
     -> void;
 

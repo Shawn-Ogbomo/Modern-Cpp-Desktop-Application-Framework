@@ -6,22 +6,23 @@
 #include "../include/util.hpp"
 
 using namespace std::numbers;
+namespace R_L = Rank_Lib;
 namespace rng = std::ranges;
 
-auto move_card(sf::Sprite& card_img_f, sf::Sprite& card_img_b, sf::Vector2f dest_pos
-    , std::span<Pile>& src_p, std::span<Pile>& dst_p, bool update_It_state) -> void
+auto move_card(sf::Sprite& img_f, sf::Sprite& img_b, sf::Vector2f pos
+    , std::span<Pile>& src, std::span<Pile>& dst, bool update_It_state) -> void
 {
-    card_img_f.setPosition(dest_pos);
-    card_img_b.setPosition(dest_pos);
+    img_f.setPosition(pos);
+    img_b.setPosition(pos);
 
     if (update_It_state)
     {
-        src_p = std::span<Pile>{};
-        dst_p = std::span<Pile>{};
+        src = std::span<Pile>{};
+        dst = std::span<Pile>{};
     }
 }
 
-auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int v1, int v2) -> void
+auto position_card(sf::Sprite& front, sf::Sprite& back, R_L::Rank rank, int v1, int v2) -> void
 {
     const auto center_x = 500.0f;
     const auto center_y = 385.0f;
@@ -46,14 +47,14 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, Rank_Lib::Rank rank, int
     back.setPosition(pos);
 }
 
-Board::Board(Deck& d) : pos_prev{ Rank_Lib::ranks.back() }, mode{ ButtonMode::on }
+Board::Board(Deck& d) : pos_prev{ R_L::ranks.back() }, mode{ ButtonMode::on }
 {
     for (auto index = 0; auto& pile : internal_piles)
     {
         Util::allocate(pile);
 
         auto& [pile_active, cards, rank, pos] = pile;
-        rank = Rank_Lib::ranks[index];
+        rank = R_L::ranks[index];
 
         for (auto& card : cards)
         {
@@ -113,7 +114,7 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
         }
     }
 
-    for (const auto& card : (internal_piles[static_cast<int>(active_pile())].cards))
+    for (const auto& card : internal_piles[active_pile()].cards)
     {
         target.draw(card);
     }
