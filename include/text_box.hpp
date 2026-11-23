@@ -85,7 +85,7 @@ public:
         , std::span<const sf::RenderWindow>rws
         , std::optional<sf::RectangleShape> ors);
 
-    operator bool()const { return static_cast<bool>(internal_state); }
+    operator bool()const& { return static_cast<bool>(internal_state); }
 
     auto prompt() const& ->const sf::Text&;
     auto prompt() & ->sf::Text&;
