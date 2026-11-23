@@ -62,7 +62,7 @@ struct Button : sf::Drawable
         configure_button(*this, val, target_label, pos);
     }
 
-    operator bool() const { return static_cast<bool>(contents.setting); }
+    operator bool() const& { return static_cast<bool>(contents.setting); }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
