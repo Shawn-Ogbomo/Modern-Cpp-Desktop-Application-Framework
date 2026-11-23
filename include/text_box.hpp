@@ -61,11 +61,6 @@ private:
     std::array<char, character_limit> buffer{};
 };
 
-enum class MSG
-{
-    are_you_sure, log_database, enter_name
-};
-
 struct Prompts
 {
     std::array <std::string, 3> labels{

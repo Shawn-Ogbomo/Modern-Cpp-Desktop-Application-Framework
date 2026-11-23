@@ -19,7 +19,7 @@ auto::Component_Manager::enable_confirmation_menu()const& ->void
 
     if (gsm.front().status() == B_N::Game_State::win)
     {
-        if (cm.front().buttons()[static_cast<int>(B_N::Confirm::yes)])
+        if (const auto& yes = (*(cm.front().buttons().begin()+1)))
         {
             cm.front().text_boxes().back().state() = ButtonMode::on;
 
@@ -32,11 +32,11 @@ auto::Component_Manager::enable_confirmation_menu()const& ->void
         cm.front().text_boxes().front().state() = ButtonMode::on;
 
         cm.front().text_boxes().front().prompt()
-            .setString(get_prompts()
-                .labels[static_cast<int>(MSG::log_database)]);
+            .setString(*(get_prompts()
+                .labels.begin()+1));
     }
 
-    else if (em.front().buttons()[static_cast<int>(B_N::Exit::quit)])
+    else if (const auto& quit = em.front().buttons().back())
     {
         cm.front().text_boxes().front().state() = ButtonMode::on;
 
