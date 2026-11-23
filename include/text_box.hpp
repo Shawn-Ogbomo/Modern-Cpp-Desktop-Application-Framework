@@ -85,13 +85,14 @@ public:
         , std::span<const sf::RenderWindow>rws
         , std::optional<sf::RectangleShape> ors);
 
+    operator bool()const { return static_cast<bool>(internal_state); }
+
     auto prompt() const& ->const sf::Text&;
     auto prompt() & ->sf::Text&;
 
     auto img() const& -> const sf::Sprite& { return internal_img.front(); }
     auto img() & -> sf::Sprite& { return internal_img.front(); }
 
-    auto state() const& -> ButtonMode { return internal_state; }
     auto state() & ->ButtonMode& { return internal_state; }
 
     auto field() const& ->std::optional<Text_Field> { return internal_field; }
