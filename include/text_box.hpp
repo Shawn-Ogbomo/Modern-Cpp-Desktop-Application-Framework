@@ -36,7 +36,6 @@ private:
 
 class Text_Field : public sf::Drawable
 {
-    static constexpr auto character_limit = 3;
 public:
     Text_Field(sf::RectangleShape) : field{ { 170,30 } }
     {
@@ -58,12 +57,12 @@ private:
     std::size_t pos{};
     sf::RectangleShape field;
     sf::Text text{ Util::load_font() };
-    std::array<char, character_limit> buffer{};
+    std::array<char, limit+1> buffer{};
 };
 
 struct Prompts
 {
-    std::array <std::string, 3> labels{
+    std::array <std::string, limit+1> labels{
         "Are You\nSure?",
         "Log Win To\nDatabase?",
         "Enter Name:"
@@ -101,7 +100,6 @@ public:
 private:
     ButtonMode internal_state{};
     std::span<sf::Sprite> internal_img;
-
     std::optional<Text_Field> internal_field;
     sf::Text internal_prompt{ Util::load_font() };
 };
