@@ -3,6 +3,7 @@
 
 #include <span>
 #include <SFML/Graphics.hpp>
+
 #include "../include/state.hpp"
 #include "../include/util.hpp"
 
@@ -57,12 +58,12 @@ private:
     std::size_t pos{};
     sf::RectangleShape field;
     sf::Text text{ Util::load_font() };
-    std::array<char, limit+1> buffer{};
+    std::array<char, 3> buffer{};
 };
 
 struct Prompts
 {
-    std::array <std::string, limit+1> labels{
+    std::array <std::string, 3> labels{
         "Are You\nSure?",
         "Log Win To\nDatabase?",
         "Enter Name:"
