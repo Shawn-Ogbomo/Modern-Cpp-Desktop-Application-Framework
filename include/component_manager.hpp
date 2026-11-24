@@ -16,8 +16,9 @@ class Confirmation_Menu;
 class Component_Manager
 {
 public:
-    Component_Manager(std::span<bool> bsas, std::span<Board> bs, std::span<sf::Clock> cs,
-        std::span<Exit_Menu>ems, std::span<Music_Player> mps, std::span<sf::RenderWindow> rws
+    Component_Manager(std::span<bool> bsas, std::span<Board> bs
+        , std::span<sf::Clock> cs,std::span<Exit_Menu>ems
+        , std::span<Music_Player> mps, std::span<sf::RenderWindow> rws
         , std::span<Game_State_Menu> gsms, std::span<Confirmation_Menu> cms)
         : app_state{ bsas }, board{ bs }, cl{ cs }, em{ ems }
         , mp{ mps }, rw{ rws }, gsm{ gsms }, cm{ cms }
@@ -26,10 +27,23 @@ public:
     auto enable_exit_menu() const& ->void;
     auto enable_game_state_menu()const& ->void;
     auto enable_confirmation_menu()const& ->void;
-    auto enable_components()const& ->void;
+
+    auto disable_exit_menu() const& -> void;
+    auto disable_game_state_menu() const& -> void;
+    auto disable_confirmation_menu() const& -> void;
+
+    auto enable_clock() const& ->void;
+    auto enable_board() const& ->void;
+    auto enable_music_player() const& ->void;
+
+    auto disable_clock() const& -> void;
+    auto disable_board() const& -> void;
+    auto disable_music_player() const& -> void;
+    
+    auto disable_text_box() const& ->void;
+    auto disable_text_box_input() const& ->void;
+
     auto restart_game() & -> void;
-    auto disable_components()const& -> void;
-    auto disable_confirmation_menus()const& ->void;
     auto close_window()const& ->void;
 private:
     std::span<bool> app_state;
@@ -41,5 +55,9 @@ private:
     std::span<Game_State_Menu>gsm;
     std::span<Confirmation_Menu>cm;
 };
+
+auto enable_components(Component_Manager& cm) -> void;
+auto disable_components(Component_Manager& cm) -> void;
+auto disable_confirmation_menus(Component_Manager& cm) -> void;
 
 #endif // COMPONENT_MANAGER_HPP
