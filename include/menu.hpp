@@ -19,14 +19,10 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
-struct Menu : public sf::Drawable
+namespace 
 {
-    static constexpr auto limit = 2;
-    static constexpr auto text_box_limit = 3;
-    virtual operator bool() const = 0;
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-    virtual ~Menu() = default;
+     constexpr auto limit = 2;
+     constexpr auto text_box_limit = 3;
 };
 
 using CMB = Button <Button_Names::Confirm>;
@@ -34,9 +30,9 @@ using GSB = Button <Button_Names::Game_State>;
 using EMB = Button < Button_Names::Exit>;
 using DBB = Button <Button_Names::General>;
 
-class Game_State_Menu : public Menu
+class Game_State_Menu : public sf::Drawable
 {
-    using Game_State_Buttons = std::array<GSB, Menu::limit>;
+    using Game_State_Buttons = std::array<GSB, limit>;
     using M_P = Menu_Properties<Game_State_Buttons, GSB>;
 public:
     explicit  Game_State_Menu(const General_Buttons& gb);
@@ -48,7 +44,7 @@ public:
         , Component_Manager& cm) -> void;
 
     auto operator++() & -> const Game_State_Menu&;
-    operator bool() const override { return static_cast<bool>(menu_properties.mode); }
+    operator bool() const { return static_cast<bool>(menu_properties.mode); }
 
     auto clicked_button() & -> std::span<GSB>& { return menu_properties.spn; }
 
@@ -77,9 +73,9 @@ private:
     M_P menu_properties{ ButtonMode::on };
 };
 
-class Exit_Menu : public Menu
+class Exit_Menu : public sf::Drawable
 {
-    using Exit_Buttons = std::array<EMB, Menu::limit>;
+    using Exit_Buttons = std::array<EMB, limit>;
     using M_P = Menu_Properties<Exit_Buttons, EMB>;
 public:
     explicit  Exit_Menu(const General_Buttons& gb);
@@ -87,7 +83,7 @@ public:
     auto operator = (Exit_Menu&&)
         -> Exit_Menu & = delete;
 
-    operator bool() const override { return static_cast<bool>(menu_properties.mode); }
+    operator bool() const { return static_cast<bool>(menu_properties.mode); }
 
     auto clicked_button() & -> std::span<EMB>& { return menu_properties.spn; }
     auto buttons() & -> Exit_Buttons& { return menu_properties.state_buttons; }
@@ -101,7 +97,7 @@ private:
     M_P menu_properties{ ButtonMode::on };
 };
 
-class Confirmation_Menu : public Menu
+class Confirmation_Menu : public sf::Drawable
 {
     using Confirmation_Buttons = std::array<CMB, text_box_limit>;
     using M_P = Menu_Properties<Confirmation_Buttons, CMB>;
@@ -112,7 +108,7 @@ public:
     auto operator = (Confirmation_Menu&&)
         -> Confirmation_Menu & = delete;
 
-    operator bool() const override { return static_cast<bool>(menu_properties.mode); }
+    operator bool() const { return static_cast<bool>(menu_properties.mode); }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -138,7 +134,7 @@ struct Record
     Button_Names::Game_State state{};
 };
 
-class Database_Manager : public Menu
+class Database_Manager : public sf::Drawable
 {
     using Database_Buttons = std::array<DBB, limit + 1>;
     using M_P = Menu_Properties<Database_Buttons, DBB>;
@@ -149,7 +145,7 @@ public:
     auto operator = (Database_Manager&&)
         -> Database_Manager & = delete;
 
-    operator bool() const override { return static_cast<bool>(menu_properties.mode); };
+    operator bool() const { return static_cast<bool>(menu_properties.mode); };
 
     auto state() & -> ButtonMode& { return menu_properties.mode; };
     auto clicked_button() & -> std::span<DBB>& { return menu_properties.spn; }
