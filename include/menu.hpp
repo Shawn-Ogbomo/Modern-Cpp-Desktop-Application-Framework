@@ -23,12 +23,11 @@ namespace
 {
      constexpr auto limit = 2;
      constexpr auto text_box_limit = 3;
+     using CMB = Button <Button_Names::Confirm>;
+     using GSB = Button <Button_Names::Game_State>;
+     using EMB = Button < Button_Names::Exit>;
+     using DBB = Button <Button_Names::General>;
 };
-
-using CMB = Button <Button_Names::Confirm>;
-using GSB = Button <Button_Names::Game_State>;
-using EMB = Button < Button_Names::Exit>;
-using DBB = Button <Button_Names::General>;
 
 class Game_State_Menu : public sf::Drawable
 {
@@ -64,12 +63,9 @@ private:
     sf::Text move{ Util::load_font() };
     sf::Text game_id_t{ Util::load_font() };
     sf::Text game_state{ Util::load_font() };
-
     std::size_t game_id{};
     std::size_t move_count{};
-
     Button_Names::Game_State internal_state{};
-
     M_P menu_properties{ ButtonMode::on };
 };
 
@@ -138,7 +134,6 @@ class Database_Manager : public sf::Drawable
 {
     using Database_Buttons = std::array<DBB, limit + 1>;
     using M_P = Menu_Properties<Database_Buttons, DBB>;
-    using M_P = Menu_Properties<Database_Buttons, DBB>;
 public:
     Database_Manager();  ///Create the table here.. evaluate it against exists table SQLlite command
 
@@ -154,9 +149,7 @@ private:
     sf::Sprite text_box{ default_texture() };
     sf::Text indicator{ Util::load_font() };  ///perhaps make this its own type with state and draw
     sf::RectangleShape text_field;
-
     M_P menu_properties;
-
     std::unique_ptr<sqlite3*> conn;
     std::vector<Record> recs;
 };

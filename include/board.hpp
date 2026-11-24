@@ -15,11 +15,15 @@ struct Pile
     sf::Vector2f location;
 };
 
+namespace 
+{
+    constexpr auto cards_pile = 4;
+    constexpr auto total_piles = 13;
+    using Piles = std::array<Pile, total_piles>;
+};
+
 struct Board : public sf::Drawable
 {
-    static constexpr auto cards_pile = 4;
-    static constexpr auto total_piles = 13;
-    using Piles = std::array<Pile, total_piles>;
 public:
     explicit Board(Deck& d);
     operator bool() const { return static_cast<bool>(mode); }
