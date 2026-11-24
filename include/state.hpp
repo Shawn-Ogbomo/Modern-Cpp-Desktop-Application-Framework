@@ -23,7 +23,7 @@ namespace Button_Names
 
     enum class General
     {
-        ok, up, down, hint
+        ok, up, down
     };
 
     enum class Game_State
@@ -50,7 +50,7 @@ namespace Button_Names
 
         const auto& last_button = [m] -> int {
             return (std::same_as<m_non_ref, Media>) ?
-                static_cast<int>(Media::stop) : static_cast<int>(General::hint);
+                static_cast<int>(Media::stop) : static_cast<int>(General::down);
             };
 
         return m = (m == static_cast<m_non_ref> (last_button())
