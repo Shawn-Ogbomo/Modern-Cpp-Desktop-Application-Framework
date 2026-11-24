@@ -27,6 +27,7 @@ auto position_card(sf::Sprite& front, sf::Sprite& back, R_L::Rank rank, int v1, 
     constexpr auto center_x = 500.0f;
     constexpr auto center_y = 385.0f;
     constexpr auto radius = 300.0f;
+
     const auto pos_card = front.getLocalBounds().size;
 
     if (const auto center = sf::Vector2f{ ((center_x * 2) - pos_card.x) / 2, ((center_y * 2)
