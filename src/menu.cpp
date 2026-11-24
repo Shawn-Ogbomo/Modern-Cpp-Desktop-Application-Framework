@@ -32,7 +32,7 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
-    game_state.setString(get_labels().states[static_cast<int>(internal_state)]);
+    game_state.setString(*(get_labels().states.begin()+1));
 }
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p
@@ -83,19 +83,19 @@ auto Game_State_Menu::update_game_state(B_N::Game_State g_state
     switch (internal_state)
     {
     case B_N::Game_State::playing:
-        cm.enable_components();
+        enable_components(cm);
         break;
     case B_N::Game_State::paused:
-        cm.disable_components();
+        disable_components(cm);
         cm.enable_game_state_menu();
         cm.enable_exit_menu();
         break;
     case B_N::Game_State::win:
-        cm.disable_components();
+        disable_components(cm);
         cm.enable_confirmation_menu();
         break;
     case B_N::Game_State::lose:
-        cm.disable_components();
+        disable_components(cm);
         cm.enable_exit_menu();
         break;
     }
@@ -125,7 +125,7 @@ auto Exit_Menu::state_manager(Component_Manager& cm) & ->void
 
     else if (const auto& quit = menu_properties.state_buttons.back())
     {
-        cm.disable_components();
+        disable_components(cm);
         cm.enable_confirmation_menu();
     }
 }
@@ -171,7 +171,7 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
 {
     if (menu_properties.mode == ButtonMode::on)
     {
-        if (internal_text_boxes.front().state() == ButtonMode::on)
+        if (internal_text_boxes.front())
         {
             target.draw(internal_text_boxes.front());
             target.draw(menu_properties.state_buttons.front());
@@ -181,22 +181,34 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
 
         target.draw(internal_text_boxes.back());
         target.draw(menu_properties.state_buttons.back());
-
     }
 }
 
 auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 {
-    cm.disable_confirmation_menus();
+    disable_confirmation_menus(cm);
 
-    if (menu_properties.state_buttons
-        [static_cast<int>(B_N::Confirm::yes)])
-    {
-        ///TODO: If win, render enter your alias box
-        cm.enable_confirmation_menu();
-        /*      cm.close_window();*/
-        return;
-    }
+    const auto& clicked_button = [&, this](const auto& b) -> bool 
+        { return b; };
+
+    auto found = rng::find_if(menu_properties.state_buttons
+            ,clicked_button);
+
+        switch (found->contents.name)
+        {
+        case B_N::Confirm::no:
+            ///Go back to previous state
+            break;
+        case B_N::Confirm::yes:
+            ///check if quit is confirmation is enabled 
+                ///close application 
+            cm.enable_confirmation_menu();
+            break;
+        case B_N::Confirm::ok:
+            ///Write record to database
+            ///Enable database menu if string is valid
+            break;
+        }
 }
 
 Database_Manager::Database_Manager() :conn{ std::make_unique<sqlite3*>() }
