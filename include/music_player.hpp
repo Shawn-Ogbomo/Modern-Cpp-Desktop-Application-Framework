@@ -21,15 +21,17 @@ struct Track_Title
     sf::Text name{ Util::load_font() };
 };
 
-using MB = Button <Button_Names::Media>;
+namespace 
+{
+    constexpr auto song_limit = 10;
+    constexpr auto button_limit = 5;
+    using MB = Button <Button_Names::Media>;
+    using Media_Buttons = std::array<MB, button_limit>;
+    using M_P = Menu_Properties<Media_Buttons, MB>;
+}
 
 class  Music_Player : public sf::Drawable
 {
-    static constexpr auto song_limit = 10;
-    static constexpr auto button_limit = 5;
-
-    using Media_Buttons = std::array<MB, button_limit>;
-    using M_P = Menu_Properties<Media_Buttons, MB>;
 public:
     Music_Player(const Button_Manager& bm);
     Music_Player(Music_Player&&) = default;
@@ -47,10 +49,8 @@ public:
 private:
     sf::Text caption{ Util::load_font() };
     std::size_t current_song{};
-
     std::unique_ptr<sf::Music[]> songs;
     std::unique_ptr<Track_Title[]> song_names;
-
     M_P menu_properties{ ButtonMode::on };
 };
 
