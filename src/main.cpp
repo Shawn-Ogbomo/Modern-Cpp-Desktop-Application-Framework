@@ -75,7 +75,7 @@ public:
     auto run() -> void
     {
         Database_Manager db;
-        const auto tm = Texture_Manager{};
+        auto tm = Texture_Manager{};
         auto mp = Music_Player{ tm.media_buttons() };
 
         while (running)
@@ -102,7 +102,8 @@ public:
 
                 [&, this](std::span<EMB>) {em.state_manager(c_m);  }
 
-                ,[&, this](std::span<CMB>) { cm.state_manager(c_m); gsm.update_game_state(gsm.status(),c_m); },
+                    ///TODO: Remove update game_State statement from CMB visitor.
+                ,[&, this](std::span<CMB>) { cm.state_manager(c_m); /*gsm.update_game_state(gsm.status(),c_m);*/ },
 
                     [&, this](std::span<MB>) { mp.operator()(mp.clicked_button()
                     .front().contents.name); }

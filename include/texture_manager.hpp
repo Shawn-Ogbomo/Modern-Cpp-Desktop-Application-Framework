@@ -78,12 +78,13 @@ public:
     auto cards() const& -> const Card_Manager& { return card_manager; }
     auto media_buttons() const& -> const Button_Manager& { return button_manager; }
     auto general_buttons() const& ->const General_Buttons& { return internal_general_buttons; }
-    auto text_boxes() const& -> const Text_Boxes& { return internal_text_boxes; }
+    auto text_boxes() & ->  sf::Sprite& { return text_box; }
 private:
     Card_Manager card_manager;
     Button_Manager button_manager;
     General_Buttons internal_general_buttons;
     Text_Boxes internal_text_boxes;
+    sf::Sprite text_box{ internal_text_boxes.t };
 };
 
 #endif // TEXTURE_MANAGER_HPP
