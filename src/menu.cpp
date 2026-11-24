@@ -5,8 +5,6 @@
 namespace B_N = Button_Names;
 namespace rng = std::ranges;
 
-using namespace std::literals;
-
 Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     : internal_state{ B_N::Game_State::playing }
 {
