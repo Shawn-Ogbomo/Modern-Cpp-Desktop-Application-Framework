@@ -36,14 +36,14 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p
     , Component_Manager& r_c) -> void
 {
-    if (move_count == Board::cards_pile * Board::total_piles) [[unlikely]]
+    if (move_count == cards_pile * total_piles) [[unlikely]]
     {
         update_game_state(B_N::Game_State::win, r_c);
         return;
     }
 
     if (const auto num_kings = rng::count_if(p, Lose_Condition()); num_kings
-        == Board::cards_pile)
+        == cards_pile)
     {
         update_game_state(B_N::Game_State::lose, r_c);
     }
