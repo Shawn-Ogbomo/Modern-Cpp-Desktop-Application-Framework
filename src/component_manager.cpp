@@ -27,6 +27,7 @@ auto::Component_Manager::enable_confirmation_menu()const& ->void
             im.front().text_box().prompt()
                 .setString((get_prompts().labels.back()));
 
+            im.front().text_box().field().caret().timer().start();
             return;
         }
 
