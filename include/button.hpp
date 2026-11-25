@@ -80,7 +80,8 @@ concept Is_Valid_Button = std::is_same_v<T, Button<Button_Names::Exit>>
 || std::is_same_v<T, Button<Button_Names::Game_State>>
 || std::is_same_v<T, Button<Button_Names::Confirm>>
 || std::is_same_v<T, Button<Button_Names::Media>>
-|| std::is_same_v<T, Button<Button_Names::General>>;
+|| std::is_same_v<T, Button<Button_Names::General>>
+|| std::is_same_v<T, Button<Button_Names::Confirm_Input>>;
 
 auto configure_button(Is_Valid_Button auto& button, Button_Names::Is_Valid_Enum auto val
     , std::string_view target_label, sf::Vector2f pos) -> void

@@ -36,10 +36,16 @@ namespace Button_Names
         paused, playing, win, lose
     };
 
-    const auto confirm_button_pos = std::unordered_map<std::string, float>
+    inline auto buttons(std::string_view sv1, std::string_view sv2)
+        -> std::unordered_map<std::string_view, float>
     {
-        { "No",502.0f },{ "Yes",417.0f }
-    };
+        const auto confirm_button_pos = std::unordered_map<std::string_view, float>
+        {
+            { sv1,502.0f },{ sv2,417.0f }
+        };
+
+        return confirm_button_pos;
+    }
 
     template<typename T>
     concept Is_Valid_Enum = std::is_enum_v<T>
@@ -47,7 +53,8 @@ namespace Button_Names
             || std::same_as<T, Game_State>
             || std::same_as<T, Button_Names::General>
             || std::same_as<T, Button_Names::Confirm>
-            || std::same_as<T, Button_Names::Exit>);
+            || std::same_as<T, Button_Names::Exit>
+            || std::same_as<T, Button_Names::Confirm_Input>);
 
     inline auto operator++(Is_Valid_Enum auto& m) -> decltype(m)
     {

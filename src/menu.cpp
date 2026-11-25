@@ -5,6 +5,8 @@
 namespace B_N = Button_Names;
 namespace rng = std::ranges;
 
+using namespace std::string_view_literals;
+
 Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     : internal_state{ B_N::Game_State::playing }
 {
@@ -140,21 +142,8 @@ Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, sf::Sprite& tb,
 {
     const auto dimensions_textbox = sf::Vector2f{ tb.getGlobalBounds().size };
 
-    for (auto index = B_N::Confirm{}; const auto& [key, val] :B_N::confirm_button_pos)
-    {
-        const auto pos = static_cast<int>(index);
-
-        menu_properties.state_buttons[pos]
-            = { gb.textures(), index
-            ,{ val , internal_text_box.img().getGlobalBounds().position.y
-            + dimensions_textbox.y - 50.0f }, key };
-
-        menu_properties.state_buttons[pos]
-            .label.move({ (85.0f - menu_properties.state_buttons
-           [pos].label.getGlobalBounds().size.x) / 2 , 0 });
-
-        ++index;
-    }
+    configure_buttons("No"sv, "Yes"sv, menu_properties.state_buttons
+        , gb, internal_text_box, B_N::Confirm::no);
 }
 
 void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -196,7 +185,10 @@ auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 Input_Menu::Input_Menu(const General_Buttons& gb, sf::Sprite& tb
     , const sf::RenderWindow& rws) : internal_text_box{ get_prompts().labels.back(),tb,
     rws, sf::RectangleShape{} }
-{}
+{
+    configure_buttons("Cancel"sv, "OK"sv, menu_properties.state_buttons
+        , gb, internal_text_box, B_N::Confirm_Input::cancel);
+}
 
 auto Input_Menu::state_manager(Component_Manager& c_m) & ->void
 {}

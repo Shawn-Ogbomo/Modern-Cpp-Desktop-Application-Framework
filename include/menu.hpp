@@ -180,4 +180,27 @@ private:
 auto read(Database_Manager& dmb);
 auto write(Database_Manager& dbm);
 
+auto configure_buttons(std::string_view sv1, std::string_view sv2,
+    auto& state_buttons, const General_Buttons& gb, auto& text_box, auto button) -> void
+{
+    const auto dimensions_textbox = sf::Vector2f{ text_box.img()
+        .getGlobalBounds().size };
+
+    auto index = decltype(button){};
+
+    for (const auto& [key, val] : Button_Names::buttons(sv1, sv2))
+    {
+        const auto pos = static_cast<int>(index);
+
+        state_buttons[pos] = { gb.textures(), index
+            ,{ val , text_box.img().getGlobalBounds().position.y
+            + dimensions_textbox.y - 50.0f }, key };
+
+        state_buttons[pos].label.move({ (85.0f - state_buttons
+           [pos].label.getGlobalBounds().size.x) / 2 , 0 });
+
+        ++index;
+    }
+}
+
 #endif //MENU_HPP

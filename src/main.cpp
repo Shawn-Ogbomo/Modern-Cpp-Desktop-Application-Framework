@@ -145,7 +145,7 @@ public:
                 };
 
             // run the program as long as the window is open
-            gsm.update_game_state(B_N::Game_State::win, c_m);
+            //gsm.update_game_state(B_N::Game_State::win, c_m);
             while (window.isOpen())
             {
                 if (em.restart())
