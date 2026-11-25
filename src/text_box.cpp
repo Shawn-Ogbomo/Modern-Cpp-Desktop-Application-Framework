@@ -1,5 +1,7 @@
 #include "../include/text_box.hpp"
 
+using namespace std::chrono_literals;
+
 auto Text_Field::operator +=(char c) & -> void
 {
     if (pos != buffer.size())
@@ -97,4 +99,25 @@ void Input_Box::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(internal_img.front());
     target.draw(internal_prompt);
     target.draw(internal_field);
+}
+
+auto Caret::idle() & -> void
+{
+    if (internal_clock.isRunning() &&
+        internal_clock.getElapsedTime() >= 1'000'000us)
+    {
+        if (state == ButtonMode::on)
+        {
+            indicator.setString("");
+            state = ButtonMode::off;
+        }
+
+        else if (state == ButtonMode::off)
+        {
+            indicator.setString("|");
+            state = ButtonMode::on;
+        }
+
+        internal_clock.restart();
+    }
 }
