@@ -186,9 +186,8 @@ auto configure_buttons(std::string_view sv1, std::string_view sv2,
     const auto dimensions_textbox = sf::Vector2f{ text_box.img()
         .getGlobalBounds().size };
 
-    auto index = decltype(button){};
-
-    for (const auto& [key, val] : Button_Names::buttons(sv1, sv2))
+    for (auto index = decltype(button){};
+        const auto& [key, val] : Button_Names::buttons(sv1, sv2))
     {
         const auto pos = static_cast<int>(index);
 
