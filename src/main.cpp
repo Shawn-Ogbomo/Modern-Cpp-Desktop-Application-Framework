@@ -112,7 +112,8 @@ public:
                          ,[&, this](std::span<IMB>) { im.state_manager(c_m); }
             };
 
-            const auto& component_click_listener = [&](auto& component, auto& buttons, auto& spn, sf::Vector2f cursor_pos) -> void
+            const auto& component_click_listener = [&](auto& component, auto& buttons, auto& spn
+                , sf::Vector2f cursor_pos) -> void
                 {
                     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
                         return(component && b.forms.form_1.getGlobalBounds().contains(cursor_pos));
