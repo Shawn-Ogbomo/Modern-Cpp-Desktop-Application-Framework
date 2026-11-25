@@ -112,10 +112,10 @@ public:
                          ,[&, this](std::span<IMB>) { im.state_manager(c_m); }
             };
 
-            const auto& component_click_listener = [&](auto& buttons, auto& spn, sf::Vector2f cursor_pos) -> void
+            const auto& component_click_listener = [&](auto& component, auto& buttons, auto& spn, sf::Vector2f cursor_pos) -> void
                 {
                     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-                        return(b.forms.form_1.getGlobalBounds().contains(cursor_pos));
+                        return(component && b.forms.form_1.getGlobalBounds().contains(cursor_pos));
                         });
 
                     if (button != std::end(buttons))
@@ -145,7 +145,7 @@ public:
                 };
 
             // run the program as long as the window is open
-            //gsm.update_game_state(B_N::Game_State::win, c_m);
+            gsm.update_game_state(B_N::Game_State::win, c_m);
             while (window.isOpen())
             {
                 if (em.restart())
@@ -198,6 +198,7 @@ public:
                             component_release_listener(gsm, gsm.clicked_button(), cursor_pos);
                             component_release_listener(em, em.clicked_button(), cursor_pos);
                             component_release_listener(cm, cm.clicked_button(), cursor_pos);
+                            component_release_listener(im, im.clicked_button(), cursor_pos);
 
                             if (!b.source_pile().empty())
                             {
@@ -244,10 +245,11 @@ public:
                             const auto cursor_pos = sf::Vector2f{ sf::Mouse::getPosition(window).x
                                 + .0f, sf::Mouse::getPosition(window).y + .0f };
 
-                            component_click_listener(mp.buttons(), mp.clicked_button(), cursor_pos);
-                            component_click_listener(em.buttons(), em.clicked_button(), cursor_pos);
-                            component_click_listener(gsm.buttons(), gsm.clicked_button(), cursor_pos);
-                            component_click_listener(cm.buttons(), cm.clicked_button(), cursor_pos);
+                            component_click_listener(mp, mp.buttons(), mp.clicked_button(), cursor_pos);
+                            component_click_listener(em, em.buttons(), em.clicked_button(), cursor_pos);
+                            component_click_listener(gsm, gsm.buttons(), gsm.clicked_button(), cursor_pos);
+                            component_click_listener(cm, cm.buttons(), cm.clicked_button(), cursor_pos);
+                            component_click_listener(im, im.buttons(), im.clicked_button(), cursor_pos);
                             b.operator()(cursor_pos);
                         }
                     }
