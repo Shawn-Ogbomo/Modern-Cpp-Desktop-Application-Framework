@@ -30,7 +30,7 @@ Game_State_Menu::Game_State_Menu(const General_Buttons& gb)
     game_state.setCharacterSize(26);
     game_state.setPosition({ 0, 816 });
     game_state.setFillColor({ 236,203,180 });
-    game_state.setString(*(get_labels().states.begin()+1));
+    game_state.setString(*(get_labels().states.begin() + 1));
 }
 
 auto Game_State_Menu::operator()(const rng::ref_view<std::deque<Card>> p
@@ -134,31 +134,23 @@ void Exit_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(menu_properties.state_buttons.back());
 }
 
-auto Confirmation_Menu::initialize(sf::Sprite& tb
-    , std::span<const sf::RenderWindow>rws) & -> std::array< Text_Box, limit>
-{
-    return { Text_Box{ get_prompts().labels.front(), tb, rws, std::nullopt },
-                { get_prompts().labels.back(), tb, rws, sf::RectangleShape{} } };
-}
-
 Confirmation_Menu::Confirmation_Menu(const General_Buttons& gb, sf::Sprite& tb,
-    std::span<const sf::RenderWindow>rws) : internal_text_boxes{ initialize(tb, rws) }
+    const sf::RenderWindow& rws)
+    : internal_text_box{ get_prompts().labels.front(),tb, rws }
 {
     const auto dimensions_textbox = sf::Vector2f{ tb.getGlobalBounds().size };
 
-    internal_text_boxes.back().prompt().move({ 0,-30 });
-    
     for (auto index = B_N::Confirm{}; const auto& [key, val] :B_N::confirm_button_pos)
     {
         const auto pos = static_cast<int>(index);
 
         menu_properties.state_buttons[pos]
             = { gb.textures(), index
-            ,{ val , internal_text_boxes.front().img().getGlobalBounds().position.y
+            ,{ val , internal_text_box.img().getGlobalBounds().position.y
             + dimensions_textbox.y - 50.0f }, key };
 
         menu_properties.state_buttons[pos]
-            .label.move({(85.0f - menu_properties.state_buttons
+            .label.move({ (85.0f - menu_properties.state_buttons
            [pos].label.getGlobalBounds().size.x) / 2 , 0 });
 
         ++index;
@@ -169,15 +161,8 @@ void Confirmation_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) 
 {
     if (menu_properties.mode == ButtonMode::on)
     {
-        if (internal_text_boxes.front())
-        {
-            target.draw(internal_text_boxes.front());
-            target.draw(menu_properties.state_buttons.front());
-            target.draw(*(menu_properties.state_buttons.begin() + 1));
-            return;
-        }
-
-        target.draw(internal_text_boxes.back());
+        target.draw(internal_text_box);
+        target.draw(menu_properties.state_buttons.front());
         target.draw(menu_properties.state_buttons.back());
     }
 }
@@ -186,27 +171,44 @@ auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
 {
     disable_confirmation_menus(cm);
 
-    const auto& clicked_button = [&, this](const auto& b) -> bool 
+    const auto& clicked_button = [&, this](const auto& b) -> bool
         { return b; };
 
     auto found = rng::find_if(menu_properties.state_buttons
-            ,clicked_button);
+        , clicked_button);
 
-        switch (found->contents.name)
+    if (found != std::end(menu_properties.state_buttons))
+    {
+        if (found->contents.name == B_N::Confirm::no)
         {
-        case B_N::Confirm::no:
             ///Go back to previous state
-            break;
-        case B_N::Confirm::yes:
-            ///check if quit is confirmation is enabled 
-                ///close application 
-            cm.enable_confirmation_menu();
-            break;
-        case B_N::Confirm::ok:
-            ///Write record to database
-            ///Enable database menu if string is valid
-            break;
         }
+
+        else if (found->contents.name == B_N::Confirm::yes)
+        {
+            ///check if quit is confirmation is enabled
+            ///close application
+            cm.enable_confirmation_menu();
+        }
+    }
+}
+
+Input_Menu::Input_Menu(const General_Buttons& gb, sf::Sprite& tb
+    , const sf::RenderWindow& rws) : internal_text_box{ get_prompts().labels.back(),tb,
+    rws, sf::RectangleShape{} }
+{}
+
+auto Input_Menu::state_manager(Component_Manager& c_m) & ->void
+{}
+
+void Input_Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    if (menu_properties.mode == ButtonMode::on)
+    {
+        target.draw(internal_text_box);
+        target.draw(menu_properties.state_buttons.front());
+        target.draw(menu_properties.state_buttons.back());
+    }
 }
 
 Database_Manager::Database_Manager() :conn{ std::make_unique<sqlite3*>() }

@@ -19,14 +19,15 @@
 #include "../include/texture_manager.hpp"
 #include "../include/util.hpp"
 
-namespace 
+namespace
 {
-     constexpr auto limit = 2;
-     constexpr auto text_box_limit = 3;
-     using CMB = Button <Button_Names::Confirm>;
-     using GSB = Button <Button_Names::Game_State>;
-     using EMB = Button < Button_Names::Exit>;
-     using DBB = Button <Button_Names::General>;
+    constexpr auto limit = 2;
+    constexpr auto text_box_limit = 3;
+    using CMB = Button <Button_Names::Confirm>;
+    using IMB = Button <Button_Names::Confirm_Input>;
+    using GSB = Button <Button_Names::Game_State>;
+    using EMB = Button < Button_Names::Exit>;
+    using DBB = Button <Button_Names::General>;
 };
 
 class Game_State_Menu : public sf::Drawable
@@ -95,11 +96,11 @@ private:
 
 class Confirmation_Menu : public sf::Drawable
 {
-    using Confirmation_Buttons = std::array<CMB, text_box_limit>;
+    using Confirmation_Buttons = std::array<CMB, limit>;
     using M_P = Menu_Properties<Confirmation_Buttons, CMB>;
 public:
     explicit Confirmation_Menu(const General_Buttons& gb, sf::Sprite& tb
-        , std::span<const sf::RenderWindow>rws);
+        , const sf::RenderWindow& rws);
 
     auto operator = (Confirmation_Menu&&)
         -> Confirmation_Menu & = delete;
@@ -112,12 +113,34 @@ public:
     auto buttons() & -> Confirmation_Buttons& { return menu_properties.state_buttons; }
     auto state() & -> ButtonMode& { return menu_properties.mode; };
     auto state_manager(Component_Manager& c_m) & ->void;
-    auto text_boxes() & -> std::array<Text_Box, limit>& { return internal_text_boxes; }
+    auto text_box() & -> Text_Box& { return internal_text_box; }
 private:
-    auto initialize(sf::Sprite& tb
-        , std::span<const sf::RenderWindow>rws) & ->std::array< Text_Box, limit>;
+    Text_Box internal_text_box;
+    M_P menu_properties;
+};
 
-    std::array<Text_Box, limit> internal_text_boxes;
+class Input_Menu : public sf::Drawable
+{
+    using Input_Buttons = std::array<IMB, limit>;
+    using M_P = Menu_Properties<Input_Buttons, IMB>;
+public:
+    explicit Input_Menu(const General_Buttons& gb, sf::Sprite& tb
+        , const sf::RenderWindow& rw);
+
+    auto operator = (Input_Menu&&)
+        -> Input_Menu & = delete;
+
+    operator bool() const { return static_cast<bool>(menu_properties.mode); }
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    auto clicked_button() & -> std::span<IMB>& { return menu_properties.spn; }
+    auto buttons() & -> Input_Buttons& { return menu_properties.state_buttons; }
+    auto state() & -> ButtonMode& { return menu_properties.mode; };
+    auto state_manager(Component_Manager& c_m) & ->void;
+    auto text_box() & -> Input_Box& { return internal_text_box; }
+private:
+    Input_Box internal_text_box;
     M_P menu_properties;
 };
 

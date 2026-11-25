@@ -15,14 +15,14 @@ struct Pile
     sf::Vector2f location;
 };
 
-namespace 
+namespace
 {
     constexpr auto cards_pile = 4;
     constexpr auto total_piles = 13;
     using Piles = std::array<Pile, total_piles>;
 };
 
-struct Board : public sf::Drawable
+class Board : public sf::Drawable
 {
 public:
     explicit Board(Deck& d);
@@ -32,7 +32,7 @@ public:
     auto operator()(sf::Vector2f pos = {}) -> void;
 
     auto state() & ->ButtonMode& { return mode; }
-    auto active_pile()& -> Rank_Lib::Rank& { return pos_prev; }
+    auto active_pile() & -> Rank_Lib::Rank& { return pos_prev; }
     auto active_pile() const& -> int { return static_cast<int>(pos_prev); }
 
     auto source_pile() -> std::span<Pile>& { return internal_source_pile; }

@@ -30,27 +30,32 @@ auto Text_Field::operator -=(char c) & -> void
     }
 }
 
-Text_Box::Text_Box(std::string_view text, sf::Sprite& tb
-    , std::span<const sf::RenderWindow>rws
-    , std::optional<sf::RectangleShape> ors) : internal_img{ &tb,1 }
-    , internal_field{std::move(ors)}
+auto configure_text_box(std::string_view text, const sf::RenderWindow& rws
+    , sf::Sprite& img, sf::Text& prompt, sf::Vector2f offset = {}) -> void
 {
-    const auto dimensions_window = static_cast<sf::Vector2f>(rws.front().getSize());
-    const auto dimensions_textbox = sf::Vector2f{ internal_img.front().getGlobalBounds().size };
+    const auto dimensions_window = static_cast<sf::Vector2f>(rws.getSize());
+    const auto dimensions_textbox = sf::Vector2f{ img.getGlobalBounds().size };
 
-    internal_prompt.setString(text);
-    internal_prompt.setCharacterSize(26);
-    internal_prompt.setFillColor({ 236,203,180 });
+    prompt.setString(text);
+    prompt.setCharacterSize(26);
+    prompt.setFillColor({ 236,203,180 });
 
-    const auto dimensions_prompt = internal_prompt.getGlobalBounds().size;
+    const auto dimensions_prompt = prompt.getGlobalBounds().size;
 
-    internal_prompt.setPosition({ ((dimensions_window.x - dimensions_textbox.x) / 2)
-        + (dimensions_textbox.x / 2)- (dimensions_prompt.x / 2) 
+    prompt.setPosition({ (((dimensions_window.x - dimensions_textbox.x) / 2)
+        + (dimensions_textbox.x / 2) - (dimensions_prompt.x / 2)) + offset.x
         , ((dimensions_window.y - dimensions_textbox.y) / 2)
-        + (dimensions_textbox.y / 2) - dimensions_prompt.y });
+        + (dimensions_textbox.y / 2) - dimensions_prompt.y + offset.y });
 
-    internal_img.front().setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
+    img.setPosition({ (dimensions_window.x - dimensions_textbox.x) / 2
         , (dimensions_window.y - dimensions_textbox.y) / 2 });
+}
+
+Text_Box::Text_Box(std::string_view text, sf::Sprite& tb
+    , const sf::RenderWindow& rws) : internal_img{ &tb,1 }
+{
+    configure_text_box(text, rws, internal_img.front()
+        , internal_prompt);
 }
 
 auto Text_Box::prompt() const& ->const sf::Text&
@@ -67,9 +72,29 @@ void Text_Box::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(internal_img.front());
     target.draw(internal_prompt);
+}
 
-    if (internal_field)
-    {
-        target.draw(*internal_field);
-    }
+Input_Box::Input_Box(std::string_view text, sf::Sprite& tb
+    , const sf::RenderWindow& rws
+    , sf::RectangleShape rs) : internal_field{ std::move(rs) }, internal_img{ &tb,1 }
+{
+    configure_text_box(text, rws, internal_img.front()
+        , internal_prompt, { 0,-30 });
+}
+
+auto Input_Box::prompt() const& ->const sf::Text&
+{
+    return internal_prompt;
+}
+
+auto Input_Box::prompt() & ->sf::Text&
+{
+    return internal_prompt;
+}
+
+void Input_Box::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    target.draw(internal_img.front());
+    target.draw(internal_prompt);
+    target.draw(internal_field);
 }

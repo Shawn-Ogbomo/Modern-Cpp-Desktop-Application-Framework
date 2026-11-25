@@ -87,27 +87,29 @@ public:
 
             auto em = Exit_Menu{ tm.general_buttons() };
             auto gsm = Game_State_Menu{ tm.general_buttons() };
-            auto cm = Confirmation_Menu{ tm.general_buttons(),tm.text_boxes(),{ &window,1 } };
+            auto cm = Confirmation_Menu{ tm.general_buttons(),tm.text_boxes(), window };
+            auto im = Input_Menu{ tm.general_buttons(),tm.text_boxes(), window };
 
             auto c_m = Component_Manager{ { &running,1 },{ &b,1 },{ &clock,1 },{ &em,1 }
-           ,{ &mp,1 },{ &window,1 },{ &gsm,1 },{ &cm,1 } };
+           ,{ &mp,1 },{ &window,1 },{ &gsm,1 },{ &cm,1 },{ &im,1 } };
 
             auto v1 = std::variant<std::span<GSB>, std::span<EMB>
-                , std::span<CMB>, std::span<MB >>{};
+                , std::span<CMB>, std::span<MB >, std::span<IMB>>{};
 
             auto o1 = overload
             {
                 [&, this](std::span<GSB>) { gsm.update_game_state(gsm.clicked_button()
-                    .front().contents.name, c_m); },
+                    .front().contents.name, c_m); }
 
-                [&, this](std::span<EMB>) {em.state_manager(c_m);  }
+                    ,[&, this](std::span<EMB>) {em.state_manager(c_m);  }
 
-                    ///TODO: Remove update game_State statement from CMB visitor.
-                ,[&, this](std::span<CMB>) { cm.state_manager(c_m); /*gsm.update_game_state(gsm.status(),c_m);*/ },
+                        ///TODO: Remove update game_State statement from CMB visitor.
+                        ,[&, this](std::span<CMB>) { cm.state_manager(c_m); /*gsm.update_game_state(gsm.status(),c_m);*/ }
 
-                    [&, this](std::span<MB>) { mp.operator()(mp.clicked_button()
-                    .front().contents.name); }
-                ,
+                        ,[&, this](std::span<MB>) { mp.operator()(mp.clicked_button()
+                            .front().contents.name); }
+
+                         ,[&, this](std::span<IMB>) { im.state_manager(c_m); }
             };
 
             const auto& component_click_listener = [&](auto& buttons, auto& spn, sf::Vector2f cursor_pos) -> void
@@ -143,6 +145,7 @@ public:
                 };
 
             // run the program as long as the window is open
+            gsm.update_game_state(B_N::Game_State::win, c_m);
             while (window.isOpen())
             {
                 if (em.restart())
@@ -262,6 +265,7 @@ public:
                 window.draw(em);
                 window.draw(b);
                 window.draw(cm);
+                window.draw(im);
 
                 // end the current frame
                 window.display();

@@ -13,7 +13,12 @@ namespace Button_Names
 
     enum class Confirm
     {
-        no, yes, ok
+        no, yes
+    };
+
+    enum class Confirm_Input
+    {
+        cancel, ok
     };
 
     enum class Exit
@@ -33,7 +38,7 @@ namespace Button_Names
 
     const auto confirm_button_pos = std::unordered_map<std::string, float>
     {
-        { "No",502.0f },{ "Yes",417.0f },{ "OK", (417.0f + 42.5f) }
+        { "No",502.0f },{ "Yes",417.0f }
     };
 
     template<typename T>

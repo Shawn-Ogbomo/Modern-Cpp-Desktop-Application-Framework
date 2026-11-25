@@ -13,7 +13,7 @@ public:
     Caret()
     {
         indicator.setCharacterSize(22);
-        indicator.setPosition({ 425,440});
+        indicator.setPosition({ 425,440 });
         indicator.setFillColor({ 21,73,120 });
         indicator.rotate(sf::degrees(-11.3f));
     }
@@ -38,6 +38,8 @@ private:
 class Text_Field : public sf::Drawable
 {
 public:
+    Text_Field() = default;
+
     Text_Field(sf::RectangleShape) : field{ { 170,30 } }
     {
         field.setPosition({ 425,440 });
@@ -82,8 +84,7 @@ public:
     Text_Box() = default;
 
     Text_Box(std::string_view text, sf::Sprite& tb
-        , std::span<const sf::RenderWindow>rws
-        , std::optional<sf::RectangleShape> ors);
+        , const sf::RenderWindow& rws);
 
     operator bool()const& { return static_cast<bool>(internal_state); }
 
@@ -95,13 +96,39 @@ public:
 
     auto state() & ->ButtonMode& { return internal_state; }
 
-    auto field() const& ->std::optional<Text_Field> { return internal_field; }
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+private:
+    ButtonMode internal_state{};
+    std::span<sf::Sprite> internal_img;
+    sf::Text internal_prompt{ Util::load_font() };
+};
+
+class Input_Box : public sf::Drawable
+{
+public:
+    Input_Box() = default;
+
+    Input_Box(std::string_view text, sf::Sprite& tb
+        , const sf::RenderWindow& rws
+        , sf::RectangleShape rs);
+
+    operator bool()const& { return static_cast<bool>(internal_state); }
+
+    auto prompt() const& ->const sf::Text&;
+    auto prompt() & ->sf::Text&;
+
+    auto img() const& -> const sf::Sprite& { return internal_img.front(); }
+    auto img() & -> sf::Sprite& { return internal_img.front(); }
+
+    auto state() & ->ButtonMode& { return internal_state; }
+
+    auto field() const& ->Text_Field { return internal_field; }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     ButtonMode internal_state{};
     std::span<sf::Sprite> internal_img;
-    std::optional<Text_Field> internal_field;
+    Text_Field internal_field;
     sf::Text internal_prompt{ Util::load_font() };
 };
 

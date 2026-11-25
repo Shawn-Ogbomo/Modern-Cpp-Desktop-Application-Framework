@@ -12,6 +12,7 @@
 class Exit_Menu;
 class Game_State_Menu;
 class Confirmation_Menu;
+class Input_Menu;
 
 class Component_Manager
 {
@@ -19,9 +20,10 @@ public:
     Component_Manager(std::span<bool> bsas, std::span<Board> bs
         , std::span<sf::Clock> cs,std::span<Exit_Menu>ems
         , std::span<Music_Player> mps, std::span<sf::RenderWindow> rws
-        , std::span<Game_State_Menu> gsms, std::span<Confirmation_Menu> cms)
+        , std::span<Game_State_Menu> gsms, std::span<Confirmation_Menu> cms
+        ,std::span<Input_Menu> ims)
         : app_state{ bsas }, board{ bs }, cl{ cs }, em{ ems }
-        , mp{ mps }, rw{ rws }, gsm{ gsms }, cm{ cms }
+        , mp{ mps }, rw{ rws }, gsm{ gsms }, cm{ cms }, im{ims}
     {}
 
     auto enable_exit_menu() const& ->void;
@@ -54,6 +56,7 @@ private:
     std::span<sf::RenderWindow>rw;
     std::span<Game_State_Menu>gsm;
     std::span<Confirmation_Menu>cm;
+    std::span<Input_Menu>im;
 };
 
 auto enable_components(Component_Manager& cm) -> void;

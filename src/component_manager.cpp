@@ -19,28 +19,29 @@ auto::Component_Manager::enable_confirmation_menu()const& ->void
 
     if (gsm.front().status() == B_N::Game_State::win)
     {
-        if (const auto& yes = (*(cm.front().buttons().begin()+1)))
+        if (const auto& yes = (*(cm.front().buttons().begin() + 1)))
         {
-            cm.front().text_boxes().back().state() = ButtonMode::on;
+            im.front().state() = ButtonMode::on;
+            im.front().text_box().state() = ButtonMode::on;
 
-            cm.front().text_boxes().back().prompt()
+            im.front().text_box().prompt()
                 .setString((get_prompts().labels.back()));
 
             return;
         }
 
-        cm.front().text_boxes().front().state() = ButtonMode::on;
+        cm.front().text_box().state() = ButtonMode::on;
 
-        cm.front().text_boxes().front().prompt()
+        cm.front().text_box().prompt()
             .setString(*(get_prompts()
-                .labels.begin()+1));
+                .labels.begin() + 1));
     }
 
     else if (const auto& quit = em.front().buttons().back())
     {
-        cm.front().text_boxes().front().state() = ButtonMode::on;
+        cm.front().text_box().state() = ButtonMode::on;
 
-        cm.front().text_boxes().front().prompt()
+        cm.front().text_box().prompt()
             .setString((get_prompts().labels.front()));
     }
 }
@@ -48,7 +49,6 @@ auto::Component_Manager::enable_confirmation_menu()const& ->void
 auto Component_Manager::disable_exit_menu() const& -> void
 {
     em.front().state() = ButtonMode::off;
-
 }
 auto Component_Manager::disable_game_state_menu() const& -> void
 {
@@ -93,12 +93,12 @@ auto enable_components(Component_Manager& cm) -> void
 
 auto Component_Manager::disable_text_box() const& ->void
 {
-    cm.front().text_boxes().front().state() = ButtonMode::off;
+    cm.front().text_box().state() = ButtonMode::off;
 }
 
 auto Component_Manager::disable_text_box_input() const& ->void
 {
-    cm.front().text_boxes().back().state() = ButtonMode::off;
+    im.front().text_box().state() = ButtonMode::off;
 }
 
 auto Component_Manager::restart_game() & ->void
