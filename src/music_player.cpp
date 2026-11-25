@@ -69,7 +69,7 @@ void Music_Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 auto Music_Player::idle() & -> void
 {
     if (const auto& done = songs[current_song]; done.getPlayingOffset()
-        >= done.getDuration() - 500000us) [[unlikely]]
+        >= done.getDuration() - 500'000us) [[unlikely]]
     {
         operator()(B_N::Media::next);
     }
