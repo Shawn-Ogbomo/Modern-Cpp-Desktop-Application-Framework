@@ -116,7 +116,8 @@ public:
                 , sf::Vector2f cursor_pos) -> void
                 {
                     auto button = std::ranges::find_if(buttons, [&](const auto& b) {
-                        return(component && b.forms.form_1.getGlobalBounds().contains(cursor_pos));
+                        return(component && b.forms.form_1.getGlobalBounds()
+                            .contains(cursor_pos));
                         });
 
                     if (button != std::end(buttons))
@@ -134,7 +135,8 @@ public:
 
                     if (!spn.empty())
                     {
-                        if (component && spn.front().forms.form_1.getGlobalBounds().contains(cursor_pos))
+                        if (component && spn.front().forms.form_1.getGlobalBounds()
+                            .contains(cursor_pos))
                         {
                             std::visit(o1, v1);
                         }
@@ -156,6 +158,8 @@ public:
 
                 mp.idle();
 
+                im.text_box().field().caret().idle();
+
                 ts.update(clock);
 
                 // check all the window's events that were triggered since the last iteration of the loop
@@ -174,6 +178,27 @@ public:
                             running = false;
                             window.close();
                         }
+
+                        constexpr auto a = sf::Keyboard::Scancode::A;
+                        constexpr auto z = sf::Keyboard::Scancode::Z;
+
+                        if (const auto input_menu_active = im.operator bool())
+                        {
+                            if (keyPressed->scancode >= a && keyPressed->scancode <= z)
+                            {
+                                im.text_box().field().operator+=(keyPressed->scancode);
+                            }
+
+                            else if (keyPressed->scancode >= sf::Keyboard::Scancode::Backspace)
+                            {
+                                im.text_box().field().operator-=(keyPressed->scancode);
+                            }
+                        }
+                    }
+
+                    else if (const auto* keyRelease = event->getIf<sf::Event::KeyReleased>())
+                    {
+                        ///TODO: Return the caret to idle state
                     }
 
                     else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
