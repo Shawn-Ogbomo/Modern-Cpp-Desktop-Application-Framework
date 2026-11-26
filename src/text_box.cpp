@@ -103,21 +103,19 @@ void Input_Box::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 auto Caret::idle() & -> void
 {
-    if (internal_clock.isRunning() &&
-        internal_clock.getElapsedTime() >= 1'000'000us)
+    if (internal_clock.isRunning() && internal_clock.getElapsedTime()
+        >= 400'000us) [[unlikely]]
     {
         if (state == ButtonMode::on)
         {
             indicator.setString("");
+            internal_clock.restart();
             state = ButtonMode::off;
+            return;
         }
 
-        else if (state == ButtonMode::off)
-        {
-            indicator.setString("|");
-            state = ButtonMode::on;
-        }
-
+        indicator.setString("|");
         internal_clock.restart();
+        state = ButtonMode::on;
     }
 }

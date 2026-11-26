@@ -9,13 +9,13 @@ namespace D_M = Directory_Manager;
 
 auto Card_Manager::load_textures() & -> void
 {
-    for (auto index = 0; const auto& dir_entry 
+    for (auto index = 0; const auto& dir_entry
         : fs::directory_iterator{ Directory_Manager::assets_dir() / "images" })
-    { 
+    {
         auto& card_name = dir_entry.path();
-        internal_textures[index] 
+        internal_textures[index]
             = (std::pair{ card_name.filename().stem(), sf::Texture{ card_name } });
-        
+
         ++index;
     }
 }
@@ -28,9 +28,9 @@ auto Button_Manager::load_textures() & -> void
 
     const auto& t = [&, this](int x, int y = 0) -> Texture_Forms
         {
-            return Texture_Forms{ sf::Texture{ buttons, false, { { x, y }, dimmensions_button } },
-                sf::Texture{ buttons, false, { { x, (y + dimmensions_button.y) }, dimmensions_button } },
-                sf::Texture{ buttons, false, { { x, (y + (dimmensions_button.y * 2)) }, dimmensions_button } } };
+            return Texture_Forms{ sf::Texture{ buttons, false,{ { x, y }, dimmensions_button } },
+                sf::Texture{ buttons, false,{ { x, (y + dimmensions_button.y) }, dimmensions_button } },
+                sf::Texture{ buttons, false,{ { x, (y + (dimmensions_button.y * 2)) }, dimmensions_button } } };
         };
 
     for (auto index = 0; auto& texture : internal_textures)
@@ -50,5 +50,5 @@ auto General_Buttons::load_textures() & -> void
 auto Text_Boxes::load_textures() & ->void
 {
     t = sf::Texture{ Directory_Manager::assets_dir() / "text_box"
-    / "confirmation_menu.png", false, { {05,435}, {315,165 } } };
+    / "confirmation_menu.png", false,{ { 05,435 },{ 315,165 } } };
 }
