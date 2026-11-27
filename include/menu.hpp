@@ -170,8 +170,6 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     sf::Sprite text_box{ default_texture() };
-    sf::Text indicator{ Util::load_font() };  ///perhaps make this its own type with state and draw
-    sf::RectangleShape text_field;
     M_P menu_properties;
     std::unique_ptr<sqlite3*> conn;
     std::vector<Record> recs;
