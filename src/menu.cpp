@@ -170,13 +170,13 @@ auto Confirmation_Menu::state_manager(Component_Manager& cm) & ->void
     {
         if (found->contents.name == B_N::Confirm::no)
         {
-            ///Go back to previous state
+            ///TODO: Go back to previous state
         }
 
         else if (found->contents.name == B_N::Confirm::yes)
         {
-            ///check if quit is confirmation is enabled
-            ///close application
+            ///TODO: check if quit is confirmation is enabled
+            ///TODO: close application
             cm.enable_confirmation_menu();
         }
     }

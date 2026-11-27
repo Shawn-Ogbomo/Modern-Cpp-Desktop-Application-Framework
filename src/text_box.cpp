@@ -2,33 +2,34 @@
 
 using namespace std::chrono_literals;
 
-auto Text_Field::operator +=(char c) & -> void
+auto configure_text(sf::Text& text, std::string_view buf
+    , sf::Text& caret, int sign = 1) -> void
 {
-    if (pos != buffer.size())
+    text.setString(buf);
+
+    text.getShapedGlyphs().empty() ?
+        caret.setPosition(caret_start_pos) : caret.move({ text.getShapedGlyphs()
+            .back().glyph.advance * sign,0 });
+}
+
+auto Text_Field::operator +=(sf::Keyboard::Scancode c) & -> void
+{
+    if (buffer.size() < character_limit)
     {
-        buffer[pos] += c;
-        text.setString(buffer[pos]);
-        ++pos;
+        const auto letter = static_cast<int>(c) + 65;
+
+        buffer += static_cast<char>(letter);
+
+        configure_text(text, buffer, caret().symbol());
     }
 }
 
-/// TODO: The caret needs to blink while clearing characters
-auto Text_Field::operator -=(char c) & -> void
+auto Text_Field::operator -=(sf::Keyboard::Scancode) & -> void
 {
-    char backspace = 8;
-
-    if (c == backspace)
+    if (const auto& glyphs = text.getShapedGlyphs(); !glyphs.empty())
     {
-        if (!pos)
-        {
-            buffer[pos] = char{};
-            text.setString(buffer[pos]);
-            return;
-        }
-
-        buffer[pos] = char{};
-        text.setString(buffer[pos]);
-        --pos;
+        buffer.pop_back();
+        configure_text(text, buffer, caret().symbol(), -1);
     }
 }
 
@@ -40,7 +41,7 @@ auto configure_text_box(std::string_view text, const sf::RenderWindow& rws
 
     prompt.setString(text);
     prompt.setCharacterSize(26);
-    prompt.setFillColor({ 236,203,180 });
+    prompt.setFillColor(peach_beige);
 
     const auto dimensions_prompt = prompt.getGlobalBounds().size;
 
