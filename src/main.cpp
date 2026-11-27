@@ -31,23 +31,23 @@ public:
 
         static const auto dummyTexture = sf::Texture(sf::Vector2u(1, 1));
 
-        const auto innerSize = sf::Vector2f(96, 144);
+        constexpr auto innerSize = sf::Vector2f(96, 144);
 
-        const auto glowWidth = 10.f;
+        constexpr auto glowWidth = 10.f;
 
-        const auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2, glowWidth * 2) };
+        constexpr auto outerSize = sf::Vector2f{ innerSize + sf::Vector2f(glowWidth * 2, glowWidth * 2) };
 
         glow_rect.setSize(outerSize);
 
         glow_rect.setTexture(&dummyTexture); // Forces SFML to supply UV map coordinates
 
-        const auto ratioX = innerSize.x / outerSize.x;
-        const auto ratioY = innerSize.y / outerSize.y;
+        constexpr auto ratioX = innerSize.x / outerSize.x;
+        constexpr auto ratioY = innerSize.y / outerSize.y;
 
         glow_shader.setUniform("u_glowRatioX", ratioX);
         glow_shader.setUniform("u_glowRatioY", ratioY);
 
-        const auto parchment_white = sf::Color{ 240, 245, 245 };
+        constexpr auto parchment_white = sf::Color{ 240, 245, 245 };
 
         glow_shader.setUniform("u_glowColor", sf::Glsl::Vec4(parchment_white.r / 255.f, parchment_white.g
             / 255.f, parchment_white.b / 255.f, parchment_white.a / 255.f));
