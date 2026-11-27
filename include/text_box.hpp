@@ -9,6 +9,14 @@
 #include "../include/state.hpp"
 #include "../include/util.hpp"
 
+namespace
+{
+    constexpr auto character_limit = 3;
+    constexpr auto caret_start_pos = sf::Vector2f{ 425.0f, 440.0f };
+    constexpr auto cerulean_blue = sf::Color{ 21,73,120 };
+    constexpr auto peach_beige = sf::Color{ 236,203,180 };
+};
+
 class Caret : public sf::Drawable
 {
 public:
@@ -16,27 +24,20 @@ public:
     {
         internal_clock.stop();
         indicator.setCharacterSize(22);
-        indicator.setPosition({ 425,440 });
-        indicator.setFillColor({ 21,73,120 });
+        indicator.setPosition(caret_start_pos);
+        indicator.setFillColor(cerulean_blue);
         indicator.rotate(sf::degrees(-11.3f));
-        ///TODO: This should start running when the input_box is enabled and disabled when the input box is turned off
-        ///TODO: if the input box is turned off stop the clock and return the timer to 0 sec
-        ///TODO: if it is turned on start the timer from 0
     }
 
     auto idle() & -> void;
     auto timer() & ->sf::Clock& { return internal_clock; }
+    auto symbol() & -> sf::Text& { return indicator; };
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
     {
         target.draw(indicator);
     }
 private:
-    /// synced with time... to blink every second if text box is active and idle
-    /// Advance the indicator past the size of the character entered
-    /// Decrement the indicator when pressing backspace and clear the length of the letter
-    /// Indicator cant go past bounds of text field
-
     sf::Clock internal_clock;
     ButtonMode state{};
     sf::Text indicator{ Util::load_font(), '|' };
@@ -49,9 +50,11 @@ public:
 
     Text_Field(sf::RectangleShape) : field{ { 170,30 } }
     {
-        field.setPosition({ 425,440 });
-        field.setFillColor({ 236, 203, 180 });
-        text.setPosition({ 500,50 });
+        field.setPosition({ caret_start_pos });
+        field.setFillColor(peach_beige);
+        text.setPosition({ caret_start_pos });
+        text.setCharacterSize(26);
+        text.setFillColor(cerulean_blue);
     }
 
     auto caret() & -> Caret& { return internal_caret; }
@@ -59,24 +62,25 @@ public:
     {
         target.draw(field);
         target.draw(internal_caret);
+        target.draw(text);
     }
 
-    auto operator +=(char c) & -> void;
-    auto operator -=(char c) & -> void;
+    auto operator +=(sf::Keyboard::Scancode c) & -> void;
+    auto operator -=(sf::Keyboard::Scancode) & -> void;
 private:
     Caret internal_caret;
     std::size_t pos{};
     sf::RectangleShape field;
     sf::Text text{ Util::load_font() };
-    std::array<char, 3> buffer{};
+    std::string buffer;
 };
 
 struct Prompts
 {
-    std::array <std::string, 3> labels{
+    std::array <std::string, character_limit> labels{
         "Are You\nSure?",
         "Log Win To\nDatabase?",
-        "Enter Name:"
+        "Enter Alias:"
     };
 };
 
