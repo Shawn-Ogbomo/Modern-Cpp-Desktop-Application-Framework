@@ -257,8 +257,6 @@ void Database_Manager::draw(sf::RenderTarget& target, sf::RenderStates states) c
     if (menu_properties.mode == ButtonMode::on)
     {
         target.draw(text_box);
-        target.draw(text_field);
-        target.draw(indicator);
         target.draw(menu_properties.state_buttons.front());
         target.draw(*(menu_properties.state_buttons.begin() + 1));
         target.draw(menu_properties.state_buttons.back());
