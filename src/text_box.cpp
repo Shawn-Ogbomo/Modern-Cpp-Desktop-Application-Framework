@@ -1,6 +1,7 @@
 #include "../include/text_box.hpp"
 
 using namespace std::chrono_literals;
+namespace B_N = Button_Names;
 
 auto configure_text(sf::Text& text, std::string_view buf
     , sf::Text& caret, int sign = 1) -> void
@@ -21,6 +22,9 @@ auto Text_Field::operator +=(sf::Keyboard::Scancode c) & -> void
         buffer += static_cast<char>(letter);
 
         configure_text(text, buffer, caret().symbol());
+
+        caret().symbol().setString("|");
+        caret().key_entered() = B_N::Confirm::yes;
     }
 }
 
@@ -104,19 +108,24 @@ void Input_Box::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 auto Caret::idle() & -> void
 {
-    if (internal_clock.isRunning() && internal_clock.getElapsedTime()
+    if (no_input() && internal_clock.getElapsedTime()
         >= 400'000us) [[unlikely]]
     {
         if (state == ButtonMode::on)
         {
-            indicator.setString("");
+            indicator.setString("|");
             internal_clock.restart();
             state = ButtonMode::off;
             return;
         }
 
-        indicator.setString("|");
+        indicator.setString("");
         internal_clock.restart();
         state = ButtonMode::on;
     }
+}
+
+void Caret::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    target.draw(indicator);
 }

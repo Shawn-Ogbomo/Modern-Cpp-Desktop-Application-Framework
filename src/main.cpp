@@ -198,7 +198,10 @@ public:
 
                     else if (const auto* keyRelease = event->getIf<sf::Event::KeyReleased>())
                     {
-                        ///TODO: Return the caret to idle state
+                        if (const auto input_menu_active = im.operator bool())
+                        {
+                            im.text_box().field().caret().key_entered() = B_N::Confirm::no;
+                        }
                     }
 
                     else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())

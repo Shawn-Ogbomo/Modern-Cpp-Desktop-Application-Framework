@@ -32,15 +32,14 @@ public:
     auto idle() & -> void;
     auto timer() & ->sf::Clock& { return internal_clock; }
     auto symbol() & -> sf::Text& { return indicator; };
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        target.draw(indicator);
-    }
+    auto key_entered() & ->Button_Names::Confirm& { return key_pressed; }
+    auto no_input() const& ->bool { return !static_cast<bool>(key_pressed); }
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     sf::Clock internal_clock;
     ButtonMode state{};
     sf::Text indicator{ Util::load_font(), '|' };
+    Button_Names::Confirm key_pressed{};
 };
 
 class Text_Field : public sf::Drawable
